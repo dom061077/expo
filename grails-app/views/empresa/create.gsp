@@ -98,6 +98,15 @@
                                 </td>
                             </tr> 
                         
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="vendedor">Vendedor:</label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'vendedor','errors')}">
+                                    <g:select optionKey="id" from="${com.rural.Vendedor.list()}" name="vendedor.id" value="${empresaInstance?.vendedor?.id}" ></g:select>
+                                </td>
+                            </tr> 
+                        
                         </tbody>
                     </table>
                 </div>

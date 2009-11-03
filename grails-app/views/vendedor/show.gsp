@@ -36,6 +36,19 @@
                             
                         </tr>
                     
+                        <tr class="prop">
+                            <td valign="top" class="name">Empresas:</td>
+                            
+                            <td  valign="top" style="text-align:left;" class="value">
+                                <ul>
+                                <g:each var="e" in="${vendedorInstance.empresas}">
+                                    <li><g:link controller="empresa" action="show" id="${e.id}">${e?.encodeAsHTML()}</g:link></li>
+                                </g:each>
+                                </ul>
+                            </td>
+                            
+                        </tr>
+                    
                     </tbody>
                 </table>
             </div>

@@ -38,6 +38,22 @@
                                 </td>
                             </tr> 
                         
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="empresas">Empresas:</label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean:vendedorInstance,field:'empresas','errors')}">
+                                    
+<ul>
+<g:each var="e" in="${vendedorInstance?.empresas?}">
+    <li><g:link controller="empresa" action="show" id="${e.id}">${e?.encodeAsHTML()}</g:link></li>
+</g:each>
+</ul>
+<g:link controller="empresa" params="['vendedor.id':vendedorInstance?.id]" action="create">Add Empresa</g:link>
+
+                                </td>
+                            </tr> 
+                        
                         </tbody>
                     </table>
                 </div>
