@@ -85,6 +85,13 @@
                             
                         </tr>
                     
+                        <tr class="prop">
+                            <td valign="top" class="name">Vendedor:</td>
+                            
+                            <td valign="top" class="value"><g:link controller="vendedor" action="show" id="${empresaInstance?.vendedor?.id}">${empresaInstance?.vendedor?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
                     </tbody>
                 </table>
             </div>

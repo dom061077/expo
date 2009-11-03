@@ -10,7 +10,9 @@ class Empresa {
 	String direccion
 	String localidad
 	String provincia
+	Vendedor vendedor
 	
     static constraints = {
     }
+	static belongs = [vendedor:Vendedor]
 }
