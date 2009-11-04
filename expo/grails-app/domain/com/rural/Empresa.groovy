@@ -8,11 +8,12 @@ class Empresa {
 	String telefono2
 	String cuit
 	String direccion
-	String localidad
+	//String localidad
 	String provincia
 	Vendedor vendedor
+	Localidad localidad
 	
     static constraints = {
     }
-	static belongs = [vendedor:Vendedor]
+	static belongs = [vendedor:Vendedor, localidad:Localidad]
 }

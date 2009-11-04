@@ -49,7 +49,7 @@
                                     <label for="localidad">Localidad:</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'localidad','errors')}">
-                                    <input type="text" id="localidad" name="localidad" value="${fieldValue(bean:empresaInstance,field:'localidad')}"/>
+                                    <g:select optionKey="id" from="${com.rural.Localidad.list()}" name="localidad.id" value="${empresaInstance?.localidad?.id}" ></g:select>
                                 </td>
                             </tr> 
                         
