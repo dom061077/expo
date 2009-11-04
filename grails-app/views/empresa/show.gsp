@@ -46,7 +46,7 @@
                         <tr class="prop">
                             <td valign="top" class="name">Localidad:</td>
                             
-                            <td valign="top" class="value">${fieldValue(bean:empresaInstance, field:'localidad')}</td>
+                            <td valign="top" class="value"><g:link controller="localidad" action="show" id="${empresaInstance?.localidad?.id}">${empresaInstance?.localidad?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     

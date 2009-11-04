@@ -27,8 +27,8 @@
                         
                    	        <g:sortableColumn property="direccion" title="Direccion" />
                         
-                   	        <g:sortableColumn property="localidad" title="Localidad" />
-                        
+                   	        <th>Localidad</th>
+                   	    
                    	        <g:sortableColumn property="nombre" title="Nombre" />
                         
                    	        <g:sortableColumn property="nombreRepresentante" title="Nombre Representante" />
