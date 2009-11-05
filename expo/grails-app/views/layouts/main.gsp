@@ -4,8 +4,13 @@
         <link rel="stylesheet" href="${resource(dir:'css',file:'style.css')}" />
         <link rel="stylesheet" href="${resource(dir:'css',file:'form.css')}" />        
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
+        <g:javascript library="ext"  />
+        	
+        <ext:javascript dir="" file="ext-all.js"/>
+        <ext:stylesheet dir="resources/css" file="ext-all.css"/>
+        
         <g:layoutHead />
-        <g:javascript library="application" />				
+        			
 
 </head>
 <body>

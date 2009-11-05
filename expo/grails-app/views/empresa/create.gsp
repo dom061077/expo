@@ -4,8 +4,36 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>Create Empresa</title>         
+        <title>Create Empresa</title>
+        
+        <script type="text/javascript">
+	        Ext.onReady(function(){
+	        	var movie_form = new Ext.FormPanel({
+	        	url: 'movie-form-submit.php',
+	        	renderTo: document.body,
+	        	frame: true,
+	        	title: 'Movie Information Form',
+	        	width: 250,
+	        	items: [{
+	        	xtype: 'textfield',
+	        	fieldLabel: 'Title',
+	        	name: 'title'
+	        	},{
+	        	xtype: 'textfield',
+	        	fieldLabel: 'Director',
+	        	name: 'director'
+	        	},{
+	        	xtype: 'datefield',
+	        	fieldLabel: 'Released',
+	        	name: 'released'
+	        	}]
+	        	});
+	        	movie_form.render('formulario_extjs');
+        	});
+        </script>
+                 
     </head>
+    
     <body>
         <div class="nav">
             <span class="menuButton"><a class="home" href="${resource(dir:'')}">Home</a></span>
@@ -105,6 +133,9 @@
                                 <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'vendedor','errors')}">
                                     <g:select optionKey="id" from="${com.rural.Vendedor.list()}" name="vendedor.id" value="${empresaInstance?.vendedor?.id}" ></g:select>
                                 </td>
+                                
+                                <td>
+                                </td>
                             </tr> 
                         
                         </tbody>
@@ -115,5 +146,9 @@
                 </div>
             </g:form>
         </div>
+		<div id="formulario_extjs">
+		</div>        
     </body>
+    
+    
 </html>
