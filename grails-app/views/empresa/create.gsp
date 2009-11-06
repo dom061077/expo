@@ -8,27 +8,45 @@
         
         <script type="text/javascript">
 	        Ext.onReady(function(){
-	        	var movie_form = new Ext.FormPanel({
+	        	var empresa_form = new Ext.FormPanel({
 	        	url: 'movie-form-submit.php',
-	        	renderTo: document.body,
+	        	renderTo: 'formulario_extjs',
 	        	frame: true,
-	        	title: 'Movie Information Form',
+	        	title: 'Alta de Empresa',
 	        	width: 250,
 	        	items: [{
 	        	xtype: 'textfield',
-	        	fieldLabel: 'Title',
-	        	name: 'title'
+	        	fieldLabel: 'Nombre',
+	        	name: 'nombre'
 	        	},{
 	        	xtype: 'textfield',
-	        	fieldLabel: 'Director',
-	        	name: 'director'
+	        	fieldLabel: 'C.U.I.T',
+	        	name: 'cuit'
 	        	},{
-	        	xtype: 'datefield',
-	        	fieldLabel: 'Released',
-	        	name: 'released'
-	        	}]
+	        	xtype: 'textfield',
+	        	fieldLabel: 'Representante',
+	        	name: 'nombreRepresentante'
+	        	}],
+	        	buttons:  	[
+	        				 { 	text: 'Guardar',
+	        				 	handler:	function(){
+	        				 					empresa_form.getForm().submit({
+	        				 							success: function(f,a){
+	        				 									Ext.Msg.alert('Success','Funciona');
+	        				 								},
+	        				 							failure: function(f,a){
+	        				 									Ext.Msg.alert('Advertencia',a.result.errors);
+	        				 								}	
+	        				 							
+	        				 						});
+	        				 				}
+	        				  },
+	        				 {	text: 'Cancelar'
+	        				 }
+	        	
+	        				]
 	        	});
-	        	movie_form.render('formulario_extjs');
+	        	
         	});
         </script>
                  
@@ -40,114 +58,9 @@
             <span class="menuButton"><g:link class="list" action="list">Empresa List</g:link></span>
         </div>
         <div class="body">
-            <h1>Create Empresa</h1>
-            <g:if test="${flash.message}">
-            <div class="message">${flash.message}</div>
-            </g:if>
-            <g:hasErrors bean="${empresaInstance}">
-            <div class="errors">
-                <g:renderErrors bean="${empresaInstance}" as="list" />
-            </div>
-            </g:hasErrors>
-            <g:form action="save" method="post" >
-                <div class="dialog">
-                    <table>
-                        <tbody>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="cuit">Cuit:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'cuit','errors')}">
-                                    <input type="text" id="cuit" name="cuit" value="${fieldValue(bean:empresaInstance,field:'cuit')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="direccion">Direccion:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'direccion','errors')}">
-                                    <input type="text" id="direccion" name="direccion" value="${fieldValue(bean:empresaInstance,field:'direccion')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="localidad">Localidad:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'localidad','errors')}">
-                                    <g:select optionKey="id" from="${com.rural.Localidad.list()}" name="localidad.id" value="${empresaInstance?.localidad?.id}" ></g:select>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="nombre">Nombre:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'nombre','errors')}">
-                                    <input type="text" id="nombre" name="nombre" value="${fieldValue(bean:empresaInstance,field:'nombre')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="nombreRepresentante">Nombre Representante:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'nombreRepresentante','errors')}">
-                                    <input type="text" id="nombreRepresentante" name="nombreRepresentante" value="${fieldValue(bean:empresaInstance,field:'nombreRepresentante')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="provincia">Provincia:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'provincia','errors')}">
-                                    <input type="text" id="provincia" name="provincia" value="${fieldValue(bean:empresaInstance,field:'provincia')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="telefono1">Telefono1:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'telefono1','errors')}">
-                                    <input type="text" id="telefono1" name="telefono1" value="${fieldValue(bean:empresaInstance,field:'telefono1')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="telefono2">Telefono2:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'telefono2','errors')}">
-                                    <input type="text" id="telefono2" name="telefono2" value="${fieldValue(bean:empresaInstance,field:'telefono2')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="vendedor">Vendedor:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'vendedor','errors')}">
-                                    <g:select optionKey="id" from="${com.rural.Vendedor.list()}" name="vendedor.id" value="${empresaInstance?.vendedor?.id}" ></g:select>
-                                </td>
-                                
-                                <td>
-                                </td>
-                            </tr> 
-                        
-                        </tbody>
-                    </table>
-                </div>
-                <div class="buttons">
-                    <span class="button"><input class="save" type="submit" value="Create" /></span>
-                </div>
-            </g:form>
+			<div id="formulario_extjs">
+			</div>        
         </div>
-		<div id="formulario_extjs">
-		</div>        
     </body>
     
     
