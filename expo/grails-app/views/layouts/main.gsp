@@ -10,6 +10,16 @@
         <ext:stylesheet dir="resources/css" file="ext-all.css"/>
         
         <g:layoutHead />
+        
+        <script type="text/javascript">
+        	/*var viewport = new Ext.Viewport(
+						layout: "border",
+						items: [
+						        {region:}
+						]
+
+                	);*/
+        </script>
         			
 
 </head>
