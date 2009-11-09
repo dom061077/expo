@@ -14,6 +14,8 @@ class Empresa {
 	Localidad localidad
 	
     static constraints = {
+		vendedor(blank:true,nullable:true)
+		localidad(blank:true,nullable:true)
     }
 	static belongs = [vendedor:Vendedor, localidad:Localidad]
 }
