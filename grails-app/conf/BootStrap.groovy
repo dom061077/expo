@@ -1,4 +1,7 @@
 import grails.util.Environment;
+import com.rural.Provincia;
+import com.rural.Departamento;
+import com.rural.Localidad;
 
 class BootStrap {
 	 def authenticateService
@@ -40,7 +43,25 @@ class BootStrap {
 				new Requestmap(url:"/images/**",configAttribute:"IS_AUTHENTICATED_ANONYMOUSLY").save()
 				new Requestmap(url:"/plugins/**",configAttribute:"IS_AUTHENTICATED_ANONYMOUSLY").save()
 				new Requestmap(url:"/**",configAttribute:"IS_AUTHENTICATED_REMEMBERED").save()
-
+				Provincia provincia
+				Departamento departamento
+				
+				
+				provincia = new Provincia(nombre:"TUCUMAN").save()
+				//tucuman
+				departamento = new Departamento(nombre:"CAPITAL",provincia:provincia).save()
+				new Localidad(nombre:"SEOC",departamento:departamento).save()
+				departamento = new Departamento(nombre:"LEALES",provincia:provincia).save()
+				new Localidad(nombre:"ESQUINA - MANCOPA",departamento:departamento).save()
+				
+				//
+				provincia = new Provincia(nombre:"SALTA").save()
+				//salta
+				
+				
+				provincia = new Provincia(nombre:"CATAMARCA").save()
+				provincia = new Provincia(nombre:"BUENOS AIRES").save()
+				
 				
 			} else {
 				println "Existing admin user, skipping creation"

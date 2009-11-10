@@ -9,6 +9,7 @@
         <ext:javascript dir="" file="ext-all.js"/>
         <ext:javascript dir="build/locale" file="ext-lang-es.js"/>
         <ext:stylesheet dir="resources/css" file="ext-all.css"/>
+        <ext:javascript dir="build/locale" file="ext-lang-es.js"/>
         
         <g:layoutHead />
         
