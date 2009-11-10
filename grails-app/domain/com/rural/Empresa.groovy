@@ -9,7 +9,7 @@ class Empresa {
 	String cuit
 	String direccion
 	//String localidad
-	String provincia
+	
 	Vendedor vendedor
 	Localidad localidad
 	
