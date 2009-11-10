@@ -8,6 +8,21 @@ class DepartamentoController {
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
+	
+	def listjson = {
+		def c = Departamento.createCriteria()
+		def departamentos = c.list{
+		    eq('provincia.id',new Long (params.provinciaid))
+}
+		
+    	render(contentType:'text/json'){
+    		rows{
+    			departamentos.each{
+    				row(id:it.id,nombre:it.nombre,sort_order:0)
+    			}
+    		}
+    	}			
+	}
 
     def list = {
         params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)

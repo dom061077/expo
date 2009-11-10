@@ -9,6 +9,17 @@ class LocalidadController {
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
+	def listjson = {
+		def localidades = Localidad.list(params)
+    	render(contentType:'text/json'){
+    		rows{
+    			localidades.each{
+    				row(id:it.id,nombre:it.nombre,sort_order:0)
+    			}
+    		}
+    	}		
+	}
+
     def list = {
         params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
         [ localidadInstanceList: Localidad.list( params ), localidadInstanceTotal: Localidad.count() ]
