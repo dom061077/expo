@@ -90,25 +90,19 @@ class EmpresaController {
 
     def save = {
         def empresaInstance = new Empresa(params)
+        
         if(!empresaInstance.hasErrors() && empresaInstance.save()) {
             //flash.message = "Empresa ${empresaInstance.id} created"
             //redirect(action:show,id:empresaInstance.id)
             render(contentType:"text/json") {
 					success true
-					errors {
-						empresaInstance.errors.allErrors.each {
-							 title it.defaultMessage	
-							 }
-						/*for(alb in a.albums) {
-							album name:alb.title
-						}*/
-					}
+					
 				}
         }
         else {
             //render(view:'create',model:[empresaInstance:empresaInstance])
             render(contentType:"text/json") {
-					success true
+					success false
 					errors {
 						empresaInstance.errors.allErrors.each {
 							 title it.defaultMessage	

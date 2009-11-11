@@ -8,6 +8,48 @@
         
         <script type="text/javascript">
 	        Ext.onReady(function(){
+	        	var win;
+	        	var button = Ext.get('show-btn');
+				var formLocalidad =  new Ext.FormPanel({
+										url:'../localidad/create',
+				                		renderTo: 'form-panel-localidad',
+							        	frame: true,
+							        	//title: 'Alta de Empresa',
+							        	width: 500,
+							        	items: [{
+							        	xtype: 'textfield',
+							        	id: 'nombreId',
+							        	fieldLabel: 'Nombre',
+							        	allowBlank: false,
+							        	name: 'nombre'
+							        	}]							        	
+				                		});
+	        
+				   button.on('click', function(){
+				        // create the window on the first click and reuse on subsequent clicks
+				        if(!win){
+				            win = new Ext.Window({
+				                applyTo:'hello-win',
+				                layout:'fit',
+				                width:500,
+				                height:300,
+				                closeAction:'hide',
+				                plain: true,
+				                buttons: [{
+				                    text:'Submit',
+				                    disabled:true
+				                },{
+				                    text: 'Close',
+				                    handler: function(){
+				                        win.hide();
+				                    }
+				                }]
+				            });
+				        }
+				        win.show(this);
+				    });
+	        
+	        
 	        	var provinciasStore = new Ext.data.JsonStore({
 	        			autoLoad:true,
 	        			url:'../provincia/listjson',
@@ -30,13 +72,15 @@
 	        		
 	        	
 	        	var empresa_form = new Ext.FormPanel({
-	        	url: 'movie-form-submit.php',
+	        	url: 'save',
+	        	id:'empresaFormId',
 	        	renderTo: 'formulario_extjs',
 	        	frame: true,
 	        	title: 'Alta de Empresa',
 	        	width: 400,
 	        	items: [{
 	        	xtype: 'textfield',
+	        	id: 'nombreId',
 	        	fieldLabel: 'Nombre',
 	        	allowBlank: false,
 	        	name: 'nombre'
@@ -68,9 +112,9 @@
 		        	name:'telefono2'
 	        	},{
 	        		xtype: 'combo',
-	        		fieldLabel: 'provincia',
+	        		fieldLabel: 'Provincia',
 	        		id:'idProvincia',
-	        		name: 'provincia',
+	        		name: 'provinciaLn',
 	        		displayField:'nombre',
 	        		mode:'local',
 	        		store: provinciasStore,
@@ -94,7 +138,7 @@
 	        		xtype: 'combo',
 	        		fieldLabel: 'Departamento',
 	        		id: 'idDepartamento',
-	        		name: 'departamento',
+	        		name: 'departamentoLn',
 	        		displayField:'nombre',
 	        		mode:'local',
 	        		store: departamentosStore,
@@ -113,8 +157,10 @@
 	        		xtype: 'combo',
 	        		id: 'idLocalidad',
 	        		fieldLabel: 'Localidad',
-	        		name: 'localidad',
+	        		name: 'localidadAux',
+	        		hiddenName:'localidad.id',
 	        		displayField:'nombre',
+	        		valueField: 'id',
 	        		mode:'local',
 	        		store: localidadesStore,
 	        		width: 200
@@ -123,7 +169,7 @@
 	        	buttons: [
 	        	          	  {
 		        	          	text:'Guardar',handler: function(){
-			        	          		movie_form.getForm().submit({
+			        	          		empresa_form.getForm().submit({
 				        	          			//waitMsg:'Guardando Datos...',
 					        	          		success: function(f,a){
 				        	          					Ext.Msg.alert('Mensaje','Los datos se guardaron correctamente',
@@ -154,8 +200,10 @@
 	        	          {text:'Cancelar'}
 	      	        ]
 	        	});
-	        	
+	        	Ext.getCmp('nombreId').focus('', 10);	
         	});
+        	 
+        	
         </script>
                  
     </head>
@@ -169,6 +217,14 @@
 			<div id="formulario_extjs">
 			</div>        
         </div>
+        
+        <input type="button" id="show-btn" value="Mostrar Windows" />
+        
+		<div id="hello-win" class="x-hidden">
+			<div id="form-panel-localidad">
+				
+			</div>
+		</div>
     </body>
     
     
