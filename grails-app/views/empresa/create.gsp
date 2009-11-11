@@ -38,15 +38,34 @@
 	        	items: [{
 	        	xtype: 'textfield',
 	        	fieldLabel: 'Nombre',
+	        	allowBlank: false,
 	        	name: 'nombre'
 	        	},{
 	        	xtype: 'textfield',
 	        	fieldLabel: 'C.U.I.T',
+	        	allowBlank: false,
 	        	name: 'cuit'
 	        	},{
 	        	xtype: 'textfield',
 	        	fieldLabel: 'Representante',
+	        	allowBlank: false,
+	        	
 	        	name: 'nombreRepresentante'
+	        	},{
+		        	xtype: 'textfield',
+		            fieldLabel: 'Direcci&#243;n',
+		            allowBlank: false,
+		            name:'direccion'
+	        	},{
+		        	xtype: 'textfield',
+		        	fieldLabel:'Telefono 1',
+		        	allowBlank:false,
+		        	name:'telefono1'
+	        	},{
+		        	xtype: 'textfield',
+		        	fieldLabel: 'Telefono 2',
+		        	allowBlank: true,
+		        	name:'telefono2'
 	        	},{
 	        		xtype: 'combo',
 	        		fieldLabel: 'provincia',
@@ -62,7 +81,7 @@
 					           
 					           dep.clearValue();
 					           dep.store.load({
-					              params: {'provinciaid': Ext.getCmp('idProvincia').getValue() }
+					              params: {'provincianombre': Ext.getCmp('idProvincia').getValue() }
 					           });
 					           dep.enable();
 					           var loc = Ext.getCmp('idLocalidad');
@@ -79,7 +98,17 @@
 	        		displayField:'nombre',
 	        		mode:'local',
 	        		store: departamentosStore,
-	        		width: 120
+	        		width: 120,
+	        		listeners: {
+	        				'select' : function (cmb,rec,idx){
+    							var loc = Ext.getCmp('idLocalidad');
+    							loc.clearValue();
+    							loc.store.load({
+        							params: {'departamentonombre':Ext.getCmp('idDepartamento').getValue()}
+    							});
+    							loc.enable();
+	        				}
+	        		}
 	        	},{
 	        		xtype: 'combo',
 	        		id: 'idLocalidad',
@@ -91,24 +120,39 @@
 	        		width: 200
 	        		
 	        	}],
-	        	buttons:  	[
-	        				 { 	text: 'Guardar',
-	        				 	handler:	function(){
-	        				 					empresa_form.getForm().submit({
-	        				 							success: function(f,a){
-	        				 									Ext.Msg.alert('Success','Funciona');
-	        				 								},
-	        				 							failure: function(f,a){
-	        				 									Ext.Msg.alert('Advertencia',a.result.errors);
-	        				 								}	
-	        				 							
-	        				 						});
-	        				 				}
-	        				  },
-	        				 {	text: 'Cancelar'
-	        				 }
-	        	
-	        				]
+	        	buttons: [
+	        	          	  {
+		        	          	text:'Guardar',handler: function(){
+			        	          		movie_form.getForm().submit({
+				        	          			//waitMsg:'Guardando Datos...',
+					        	          		success: function(f,a){
+				        	          					Ext.Msg.alert('Mensaje','Los datos se guardaron correctamente',
+																function(btn,text){
+																	if(btn=='ok'){
+																		window.location='create';	
+																	}
+				        	          							}
+								        	          	);
+				        	          					
+			        	          						},
+			        	          				failure: function(f,a){
+						        	          				//Ext.Msg.alert('Warning',(a.result.errors[1]).title);
+						        	          				//Ext.Msg.alert('Warning',(a.result.errors[0]).title);
+														    //for(var i=0;i<a.result.errors.length;i++){
+															//    Ext.Msg.alert('Advertencia',a.result.errors[i].title);
+														    //}
+						        							Ext.Msg.alert('Advertencia','Se produjo un error en la carga');          				
+				        	          						/*Ext.each(a.result.errors,function(error,index){
+					        	          								Ext.Msg.alert('Advertencia',error.title)
+			        	          								}
+						        	          				);*/
+			        	          						}
+			        	          				});
+	        	          	  			}
+	        	          	  		 
+		        	          },
+	        	          {text:'Cancelar'}
+	      	        ]
 	        	});
 	        	
         	});
