@@ -12,7 +12,9 @@ class DepartamentoController {
 	def listjson = {
 		def c = Departamento.createCriteria()
 		def departamentos = c.list{
-		    eq('provincia.id',new Long (params.provinciaid))
+		    provincia{
+		    	eq('nombre',params.provincianombre)
+		    }
 }
 		
     	render(contentType:'text/json'){
