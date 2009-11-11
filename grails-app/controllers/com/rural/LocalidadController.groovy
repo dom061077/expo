@@ -10,7 +10,12 @@ class LocalidadController {
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
 	def listjson = {
-		def localidades = Localidad.list(params)
+		def c = Localidad.createCriteria()
+		def localidades = c.list{
+			departamento{
+				eq('nombre',params.nombredepartamento)
+			}
+		}
     	render(contentType:'text/json'){
     		rows{
     			localidades.each{
