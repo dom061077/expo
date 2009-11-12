@@ -8,20 +8,23 @@
         
         <script type="text/javascript">
 	        Ext.onReady(function(){
+		        Ext.QuickTips.init();
 	        	var win;
 	        	var button = Ext.get('show-btn');
-				var formLocalidad =  new Ext.FormPanel({
+				var formDepartamento =  new Ext.FormPanel({
 										url:'../localidad/create',
-				                		renderTo: 'form-panel-localidad',
+				                		//renderTo: 'form-panel-departamento',
 							        	frame: true,
 							        	//title: 'Alta de Empresa',
 							        	width: 500,
+							        	height:300,
 							        	items: [{
 							        	xtype: 'textfield',
-							        	id: 'nombreId',
-							        	fieldLabel: 'Nombre',
+							        	id: 'nombreFormDepId',
+							        	fieldLabel: 'Nombre Departamento',
 							        	allowBlank: false,
-							        	name: 'nombre'
+							        	name: 'nombreFormDep',
+								        hiddenname: 'nombre'	
 							        	}]							        	
 				                		});
 	        
@@ -30,11 +33,15 @@
 				        if(!win){
 				            win = new Ext.Window({
 				                applyTo:'hello-win',
-				                layout:'fit',
+				                title:'Carga de Departamentos',
+				                resizable:false,
+				                modal:true,
+				                formPanel: null,
 				                width:500,
 				                height:300,
 				                closeAction:'hide',
 				                plain: true,
+				                items:[formDepartamento],
 				                buttons: [{
 				                    text:'Submit',
 				                    disabled:true
@@ -221,7 +228,7 @@
         <input type="button" id="show-btn" value="Mostrar Windows" />
         
 		<div id="hello-win" class="x-hidden">
-			<div id="form-panel-localidad">
+			<div id="form-panel-departamento">
 				
 			</div>
 		</div>
