@@ -106,13 +106,15 @@ class DepartamentoController {
     }
 
     def save = {
-        def departamentoInstance = new Departamento(params)
+    	println('HOLAAAA')
+    	println(params)
+        /*def departamentoInstance = new Departamento(params)
         if(!departamentoInstance.hasErrors() && departamentoInstance.save()) {
             flash.message = "Departamento ${departamentoInstance.id} created"
             redirect(action:show,id:departamentoInstance.id)
         }
         else {
             render(view:'create',model:[departamentoInstance:departamentoInstance])
-        }
+        }*/
     }
 }
