@@ -62,7 +62,7 @@ background: #85ACF7 url('/expo/images/hidr.jpg');
 	margin: 0 10px;
 	padding: 1% 1%;
 	text-align: justify;
-	border:solid;
+	
 }
 
 .right {
@@ -70,7 +70,6 @@ background: #85ACF7 url('/expo/images/hidr.jpg');
 	width: 15%;
 	margin: 0 10px;
 	padding: 1% 1%;
-	border:solid;
 }
 
 .right ul {

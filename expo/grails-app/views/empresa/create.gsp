@@ -10,26 +10,8 @@
 	        Ext.onReady(function(){
 		        Ext.QuickTips.init();
 	        	var win;
-	        	var button = Ext.get('show-btn');
-				var formDepartamento =  new Ext.FormPanel({
-										url:'../localidad/create',
-				                		//renderTo: 'form-panel-departamento',
-							        	frame: true,
-							        	//title: 'Alta de Empresa',
-							        	width: 500,
-							        	height:300,
-							        	items: [{
-							        	xtype: 'textfield',
-							        	id: 'nombreFormDepId',
-							        	fieldLabel: 'Nombre Departamento',
-							        	allowBlank: false,
-							        	name: 'nombreFormDep',
-								        hiddenname: 'nombre'	
-							        	}]							        	
-				                		});
-	        
-				   button.on('click', function(){
-				        // create the window on the first click and reuse on subsequent clicks
+	        	
+	        	var showAddDep = function(){
 				        if(!win){
 				            win = new Ext.Window({
 				                applyTo:'hello-win',
@@ -37,32 +19,83 @@
 				                resizable:false,
 				                modal:true,
 				                formPanel: null,
-				                width:500,
-				                height:300,
+				                width:400,
+				                height:200,
 				                closeAction:'hide',
 				                plain: true,
-				                items:[formDepartamento],
-				                buttons: [{
-				                    text:'Submit',
-				                    disabled:true
-				                },{
-				                    text: 'Close',
-				                    handler: function(){
-				                        win.hide();
-				                    }
-				                }]
+				                items:[formDepartamento]
 				            });
 				        }
 				        win.show(this);
-				    });
-	        
-	        
+	        	}
+	        	
+	        	var toolbar = new Ext.Toolbar({
+	        		items: [{
+	        			xtype:'tbbutton',
+	        			text: 'Alta Dep.',
+	        			handler: showAddDep
+	        		}]
+	        	});
+	        	
 	        	var provinciasStore = new Ext.data.JsonStore({
 	        			autoLoad:true,
 	        			url:'../provincia/listjson',
 	        			root:'rows',
 	        			fields: ['id','nombre']
 	        		});
+	        	
+				var formDepartamento =  new Ext.FormPanel({
+										url:'../departamento/save',
+										id:'formDepartamentoId',
+				                		//renderTo: 'form-panel-departamento',
+							        	frame: true,
+							        	//title: 'Alta de Empresa',
+							        	width: 400,
+							        	height:150,
+							        	items: [{
+									        	xtype: 'textfield',
+									        	id: 'nombreFormDepId',
+									        	fieldLabel: 'Departamento',
+									        	allowBlank: false,
+									        	name: 'nombreFormDep',
+									        	witdh:200
+										        	
+								        	},{
+							        		xtype: 'combo',
+							        		fieldLabel: 'Provincia',
+							        		allowBlank: false,
+							        		id:'idProvinciaAddDep',
+							        		name: 'provinciaAddDep',
+							        		displayField:'nombre',
+							        		store: provinciasStore,
+							        		mode:'local',
+								        	valueField:'id',
+							        		hiddenName:'provincia.id',
+							        		width: 120
+							        	}],
+						                buttons: [{
+						                    text:'Guardar',
+						                    handler: function(){
+						                    	formDepartamento.getForm().submit({
+						                    		success: function(f,a){
+						                    			win.hide();
+						                    		},
+						                    		failure: function(f,a){
+						                    			Ext.Msg.alert('Error','Verifique todos los datos');
+						                    		}
+						                    	});
+						                    	
+						                    }
+						                },{
+						                    text: 'Cerrar',
+						                    handler: function(){
+						                        win.hide();
+						                    }
+						                }]
+				                		});
+	        
+	        
+	        
 	        		
 	        	var departamentosStore = new Ext.data.JsonStore({
 	        			autoLoad:true,
@@ -81,6 +114,7 @@
 	        	var empresa_form = new Ext.FormPanel({
 	        	url: 'save',
 	        	id:'empresaFormId',
+	        	tbar:toolbar,
 	        	renderTo: 'formulario_extjs',
 	        	frame: true,
 	        	title: 'Alta de Empresa',
@@ -225,7 +259,6 @@
 			</div>        
         </div>
         
-        <input type="button" id="show-btn" value="Mostrar Windows" />
         
 		<div id="hello-win" class="x-hidden">
 			<div id="form-panel-departamento">
