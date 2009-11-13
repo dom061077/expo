@@ -104,19 +104,33 @@ class DepartamentoController {
         departamentoInstance.properties = params
         return ['departamentoInstance':departamentoInstance]
     }
-
-    def save = {
-    	
+    
+    def savejson ={
         def departamentoInstance = new Departamento(params)
         if(!departamentoInstance.hasErrors() && departamentoInstance.save()) {
             render(contentType:"text/json"){
-            	success:true
-
+            	success true
+				nombreDep departamentoInstance.nombreDep
             }
         }
         else {
-            //render(view:'create',model:[departamentoInstance:departamentoInstance])
-            println('TIENE ERRORES')
+            render(contentType:"text/json"){
+            	false true
+            }
+
+            
+        }
+    }
+
+    def save = {
+        def departamentoInstance = new Departamento(params)
+        if(!departamentoInstance.hasErrors() && departamentoInstance.save()) {
+			flash.message = "Departamento ${departamentoInstance.id} fue creado"
+			redirect(action:show,id:departamentoInstance.id)
+        }
+        else {
+            render(view:'create',model:[departamentoInstance:departamentoInstance])
+            
         }
     }
 }

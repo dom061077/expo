@@ -9,12 +9,30 @@
         <script type="text/javascript">
 	        Ext.onReady(function(){
 		        Ext.QuickTips.init();
-	        	var win;
+	        	var winDep;
+	        	var winLoc;
+	        	var showAddLoc = function(){
+	        			if(!winLoc){
+	        				winLoc = new Ext.Window({
+	        					applyTo: 'loc-win',
+	        					title:'Carga de Localidades',
+	        					resizable:false,
+	        					modal:true,
+	        					formPanel:null,
+	        					width:400,
+	        					height:200,
+	        					closeAction:'hide',
+	        					plain:true,
+	        					items:[formLocalidad]	
+	        				});
+	        			}
+	        			winLoc.show(this);
+	        	}
 	        	
 	        	var showAddDep = function(){
-				        if(!win){
-				            win = new Ext.Window({
-				                applyTo:'hello-win',
+				        if(!winDep){
+				            winDep = new Ext.Window({
+				                applyTo:'dep-win',
 				                title:'Carga de Departamentos',
 				                resizable:false,
 				                modal:true,
@@ -26,7 +44,7 @@
 				                items:[formDepartamento]
 				            });
 				        }
-				        win.show(this);
+				        winDep.show(this);
 	        	}
 	        	
 	        	var toolbar = new Ext.Toolbar({
@@ -34,6 +52,10 @@
 	        			xtype:'tbbutton',
 	        			text: 'Agregar Dep.',
 	        			handler: showAddDep
+	        		},{
+	        			xtype:'tbbutton',
+	        			text: 'Agregar Loc.',
+	        			handler: showAddLoc
 	        		}]
 	        	});
 	        	
@@ -43,60 +65,6 @@
 	        			root:'rows',
 	        			fields: ['id','nombre']
 	        		});
-	        	
-				var formDepartamento =  new Ext.FormPanel({
-										url:'../departamento/save',
-										id:'formDepartamentoId',
-				                		//renderTo: 'form-panel-departamento',
-							        	frame: true,
-							        	//title: 'Alta de Empresa',
-							        	width: 400,
-							        	height:150,
-							        	items: [{
-									        	xtype: 'textfield',
-									        	id: 'nombreFormDepId',
-									        	fieldLabel: 'Departamento',
-									        	allowBlank: false,
-									        	name: 'nombreDep',
-									        	witdh:200
-										        	
-								        	},{
-							        		xtype: 'combo',
-							        		fieldLabel: 'Provincia',
-							        		allowBlank: false,
-							        		id:'idProvinciaAddDep',
-							        		name: 'provinciaAddDep',
-							        		displayField:'nombre',
-							        		store: provinciasStore,
-							        		mode:'local',
-								        	valueField:'id',
-							        		hiddenName:'provincia.id',
-							        		width: 120
-							        	}],
-						                buttons: [{
-						                    text:'Guardar',
-						                    handler: function(){
-						                    	formDepartamento.getForm().submit({
-						                    		success: function(f,a){
-						                    			win.hide();
-						                    		},
-						                    		failure: function(f,a){
-						                    			Ext.Msg.alert('Error','Verifique todos los datos');
-						                    		}
-						                    	});
-						                    	
-						                    }
-						                },{
-						                    text: 'Cerrar',
-						                    handler: function(){
-						                        win.hide();
-						                    }
-						                }]
-				                		});
-	        
-	        
-	        
-	        		
 	        	var departamentosStore = new Ext.data.JsonStore({
 	        			autoLoad:true,
 	        			url:'../departamento/listjson',
@@ -109,6 +77,150 @@
 	        			root:'rows',
 	        			fields:['id','nombreLoc']
 	        		});	
+	        		
+	        	var formLocalidad = new Ext.FormPanel({
+	        							url:'../localidad/savejson',
+	        							id:'formLocalidadId',
+	        							frame:true,
+	        							width: 400,
+	        							height:150,
+	        							items:[{
+	        									xtype: 'textfield',
+	        									id:'nombreFormLocId',
+	        									fieldLabel:'Localidad',
+	        									allowBlank: false,
+	        									name: 'nombreLoc',
+	        									width: 200
+	        								  },{
+	        								  	xtype:'combo',
+	        								  	id:'idProvinciaAddLoc',
+	        								  	fieldLabel:'Provincia',
+	        								  	allowBlank: false,
+	        								  	mode:'local',
+	        								  	name:'provinciaAddLoc',
+												listeners: {
+												       'select' : function(cmb, rec, idx) {
+												           var dep = Ext.getCmp('idDepartamentoAddLoc');
+												           
+												           dep.clearValue();
+												           dep.store.load({
+												              params: {'provincianombre': 'TUCUMAN' }
+												           });
+												           dep.enable();
+												       }
+												    },	        		
+	        								  	
+	        								  	displayField:'nombre',
+	        								  	store:provinciasStore,
+	        								  	valueField:'id'
+	        								  },{
+	        								  	xtype:'combo',
+	        								  	id:'idDepartamentoAddLoc',
+	        								  	fieldLabel:'Departamento',
+	        								  	allowBlank: false,
+	        								  	mode:'local',
+	        								  	name:'departamentoAddLoc',
+	        								  	displayField:'nombreDep',
+	        								  	store: departamentosStore,
+	        								  	valueField:'id',
+	        								  	hiddenName:'departamento.id',
+	        								  	width: 200
+	        								  }],
+	        							buttons: [{
+	        									text:'Guardar',
+	        									handler:function(){
+	        									
+		        										formLocalidad.getForm().submit({
+			        										success: function(f,a){
+													           var loc = Ext.getCmp('idLocalidad');
+													           loc.clearValue();
+													           loc.store.removeAll();
+													           loc.store.load({
+													           	  params:{'departamentonombre':Ext.getCmp('idLocalidad').getValue()}
+													           });
+													           loc.enable();
+								                    		   winDep.hide();
+			        											
+			        										},
+			        										failure: function(f,a){
+			        											Ext.Msg.alert('Error','No se guardaron los datos');
+			        										}
+		        										})
+	        										}
+		        								},{
+		        									text:'Cerrar',
+		        									handler:function(){winLoc.hide();}
+		        								}]
+	        								  
+	        	});	
+	        	
+				var formDepartamento =  new Ext.FormPanel({
+										url:'../departamento/savejson',
+										id:'formDepartamentoId',
+				                		//renderTo: 'form-panel-departamento',
+							        	frame: true,
+							        	//title: 'Alta de Empresa',
+							        	width: 400,
+							        	height:150,
+							        	items: [{
+									        	xtype: 'textfield',
+									        	id: 'nombreFormDepId',
+									        	fieldLabel: 'Departamento',
+									        	allowBlank: false,
+									        	name: 'nombreDep',
+									        	width:200
+										        	
+								        	},{
+							        		xtype: 'combo',
+							        		fieldLabel: 'Provincia',
+							        		allowBlank: false,
+							        		mode:'local',
+							        		id:'idProvinciaAddDep',
+							        		name: 'provinciaAddDep',
+							        		displayField:'nombre',
+							        		store: provinciasStore,
+							        		
+								        	valueField:'id',
+							        		hiddenName:'provincia.id',
+							        		width: 120
+							        	}],
+						                buttons: [{
+						                    text:'Guardar',
+						                    handler: function(){
+						                    	formDepartamento.getForm().submit({
+						                    		success: function(f,a){
+											           var dep = Ext.getCmp('idDepartamento');
+											           
+											           dep.clearValue();
+											           dep.store.load({
+											              params: {'provincianombre': Ext.getCmp('idProvincia').getValue() }
+											           });
+											           dep.enable();
+											           var loc = Ext.getCmp('idLocalidad');
+											           loc.clearValue();
+											           loc.store.removeAll();
+											           loc.enable();
+
+													   Ext.getCmp('idDepartamento').setValue(a.result.nombreDep);						                    		
+						                    		   winDep.hide();
+						                    		},
+						                    		failure: function(f,a){
+						                    			Ext.Msg.alert('Error','Verifique todos los datos');
+						                    		}
+						                    	});
+						                    	
+						                    }
+						                },{
+						                    text: 'Cerrar',
+						                    handler: function(){
+						                        winDep.hide();
+						                    }
+						                }]
+				                		});
+	        
+	        
+	        
+	        		
 	        		
 	        	
 	        	var empresa_form = new Ext.FormPanel({
@@ -260,10 +372,13 @@
         </div>
         
         
-		<div id="hello-win" class="x-hidden">
+		<div id="dep-win" class="x-hidden">
 			<div id="form-panel-departamento">
 				
 			</div>
+		</div>
+		<div id="loc-win" class="x-hidden">
+			
 		</div>
     </body>
     
