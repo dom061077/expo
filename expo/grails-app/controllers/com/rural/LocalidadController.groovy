@@ -114,4 +114,20 @@ class LocalidadController {
             render(view:'create',model:[localidadInstance:localidadInstance])
         }
     }
+    
+    def savejson = {
+    	def localidadInstance = new Localidad(params)
+    	if(!localidadInstance.hasErrors() && localidadInstance.save()){
+    		render('contentType:"text/json"'){
+    			success true
+    			nombreLoc localidadInstance.nombreLoc
+    		}	
+    	}
+    	else{
+    		render('contentType:"text/json"'){
+    			success false
+    			
+    		}
+    	}
+    }
 }
