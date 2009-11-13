@@ -47,10 +47,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="nombre">Nombre:</label>
+                                    <label for="nombreDep">Nombre Dep:</label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean:departamentoInstance,field:'nombre','errors')}">
-                                    <input type="text" id="nombre" name="nombre" value="${fieldValue(bean:departamentoInstance,field:'nombre')}"/>
+                                <td valign="top" class="value ${hasErrors(bean:departamentoInstance,field:'nombreDep','errors')}">
+                                    <input type="text" id="nombreDep" name="nombreDep" value="${fieldValue(bean:departamentoInstance,field:'nombreDep')}"/>
                                 </td>
                             </tr> 
                         
