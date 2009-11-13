@@ -13,13 +13,13 @@ class LocalidadController {
 		def c = Localidad.createCriteria()
 		def localidades = c.list{
 			departamento{
-				eq('nombre',params.departamentonombre)
+				eq('nombreDep',params.departamentonombre)
 			}
 		}
     	render(contentType:'text/json'){
     		rows{
     			localidades.each{
-    				row(id:it.id,nombre:it.nombre,sort_order:0)
+    				row(id:it.id,nombreLoc:it.nombreLoc,sort_order:0)
     			}
     		}
     	}		

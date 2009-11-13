@@ -20,7 +20,7 @@ class DepartamentoController {
     	render(contentType:'text/json'){
     		rows{
     			departamentos.each{
-    				row(id:it.id,nombre:it.nombre,sort_order:0)
+    				row(id:it.id,nombreDep:it.nombreDep,sort_order:0)
     			}
     		}
     	}			
@@ -106,15 +106,17 @@ class DepartamentoController {
     }
 
     def save = {
-    	println('HOLAAAA')
-    	println(params)
-        /*def departamentoInstance = new Departamento(params)
+    	
+        def departamentoInstance = new Departamento(params)
         if(!departamentoInstance.hasErrors() && departamentoInstance.save()) {
-            flash.message = "Departamento ${departamentoInstance.id} created"
-            redirect(action:show,id:departamentoInstance.id)
+            render(contentType:"text/json"){
+            	success:true
+
+            }
         }
         else {
-            render(view:'create',model:[departamentoInstance:departamentoInstance])
-        }*/
+            //render(view:'create',model:[departamentoInstance:departamentoInstance])
+            println('TIENE ERRORES')
+        }
     }
 }
