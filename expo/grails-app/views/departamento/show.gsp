@@ -43,9 +43,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name">Nombre:</td>
+                            <td valign="top" class="name">Nombre Dep:</td>
                             
-                            <td valign="top" class="value">${fieldValue(bean:departamentoInstance, field:'nombre')}</td>
+                            <td valign="top" class="value">${fieldValue(bean:departamentoInstance, field:'nombreDep')}</td>
                             
                         </tr>
                     
