@@ -49,10 +49,10 @@ class BootStrap {
 				
 				provincia = new Provincia(nombre:"TUCUMAN").save()
 				//tucuman
-				departamento = new Departamento(nombre:"CAPITAL",provincia:provincia).save()
-				new Localidad(nombre:"SEOC",departamento:departamento).save()
-				departamento = new Departamento(nombre:"LEALES",provincia:provincia).save()
-				new Localidad(nombre:"ESQUINA - MANCOPA",departamento:departamento).save()
+				departamento = new Departamento(nombreDep:"CAPITAL",provincia:provincia).save()
+				new Localidad(nombreLoc:"SEOC",departamento:departamento).save()
+				departamento = new Departamento(nombreDep:"LEALES",provincia:provincia).save()
+				new Localidad(nombreLoc:"ESQUINA - MANCOPA",departamento:departamento).save()
 				
 				//
 				provincia = new Provincia(nombre:"SALTA").save()
