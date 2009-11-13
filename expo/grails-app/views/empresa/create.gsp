@@ -32,7 +32,7 @@
 	        	var toolbar = new Ext.Toolbar({
 	        		items: [{
 	        			xtype:'tbbutton',
-	        			text: 'Alta Dep.',
+	        			text: 'Agregar Dep.',
 	        			handler: showAddDep
 	        		}]
 	        	});
@@ -57,7 +57,7 @@
 									        	id: 'nombreFormDepId',
 									        	fieldLabel: 'Departamento',
 									        	allowBlank: false,
-									        	name: 'nombreFormDep',
+									        	name: 'nombreDep',
 									        	witdh:200
 										        	
 								        	},{
@@ -101,13 +101,13 @@
 	        			autoLoad:true,
 	        			url:'../departamento/listjson',
 	        			root:'rows',
-	        			fields:['id','nombre']
+	        			fields:['id','nombreDep']
 	        		});	
 	        	var localidadesStore = new Ext.data.JsonStore({
 	        			autoLoad:true,
 	        			url:'../localidad/listjson',
 	        			root:'rows',
-	        			fields:['id','nombre']
+	        			fields:['id','nombreLoc']
 	        		});	
 	        		
 	        	
@@ -180,7 +180,7 @@
 	        		fieldLabel: 'Departamento',
 	        		id: 'idDepartamento',
 	        		name: 'departamentoLn',
-	        		displayField:'nombre',
+	        		displayField:'nombreDep',
 	        		mode:'local',
 	        		store: departamentosStore,
 	        		width: 120,
@@ -200,7 +200,7 @@
 	        		fieldLabel: 'Localidad',
 	        		name: 'localidadAux',
 	        		hiddenName:'localidad.id',
-	        		displayField:'nombre',
+	        		displayField:'nombreLoc',
 	        		valueField: 'id',
 	        		mode:'local',
 	        		store: localidadesStore,
