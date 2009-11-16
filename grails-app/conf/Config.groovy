@@ -47,29 +47,43 @@ environments {
 }
 
 // log4j configuration
-log4j = {
-    // Example of changing the log pattern for the default console
-    // appender:
-    //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+log4j {
+        appender.stdout = "org.apache.log4j.ConsoleAppender"
+        appender.'stdout.layout'="org.apache.log4j.PatternLayout"
+        appender.'stdout.layout.ConversionPattern'='[%r] %c{2} %m%n'
+        //if you want stdout to go to a file rather than the console, use the following two lines - but then it won't go to the console  
+        //appender.stdout = "org.apache.log4j.FileAppender"   
+        //appender.'stdout.File'="stdout.log"   //will go to approotdirectory/stdout.log
 
-    error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
-	       'org.codehaus.groovy.grails.web.pages', //  GSP
-	       'org.codehaus.groovy.grails.web.sitemesh', //  layouts
-	       'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-	       'org.codehaus.groovy.grails.web.mapping', // URL mapping
-	       'org.codehaus.groovy.grails.commons', // core / classloading
-	       'org.codehaus.groovy.grails.plugins', // plugins
-	       'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
-	       'org.springframework',
-	       'org.hibernate'
+        appender.errors = "org.apache.log4j.FileAppender"
+        appender.'errors.layout'="org.apache.log4j.PatternLayout"
+        appender.'errors.layout.ConversionPattern'='[%r] %c{2} %m%n'
+        appender.'errors.File'="stacktrace.log"   //goes to approotdirectory/stacktrace.log
 
-    warn   'org.mortbay.log'
+        rootLogger="error,stdout"
+        logger {
+          grails="error,stdout"
+          org {
+            codehaus.groovy.grails.web.servlet="error,stdout"  //  controllers
+            codehaus.groovy.grails.web.errors="error,stdout"  //  web layer errors
+            codehaus.groovy.grails.web.pages="error,stdout" //  GSP
+            codehaus.groovy.grails.web.sitemesh="error,stdout" //  layouts
+            codehaus.groovy.grails."web.mapping.filter"="error,stdout" // URL mapping
+            codehaus.groovy.grails."web.mapping"="error,stdout" // URL mapping
+            codehaus.groovy.grails.commons="info,stdout" // core / classloading
+            codehaus.groovy.grails.plugins="error,stdout" // plugins
+            codehaus.groovy.grails.orm.hibernate="error,stdout" // hibernate integration
+            springframework="off,stdout"
+            hibernate="off,stdout"
+        }
+    }
+        additivity.'default' = false
+        additivity {
+                grails=false
+                org {
+                      codehaus.groovy.grails=false
+                      springframework=false
+                      hibernate=false
+                }
+    }
 }
-
-
-     
-
-//log4j.logger.org.springframework.security='off,stdout'
