@@ -47,43 +47,18 @@ environments {
 }
 
 // log4j configuration
-log4j {
-        appender.stdout = "org.apache.log4j.ConsoleAppender"
-        appender.'stdout.layout'="org.apache.log4j.PatternLayout"
-        appender.'stdout.layout.ConversionPattern'='[%r] %c{2} %m%n'
-        //if you want stdout to go to a file rather than the console, use the following two lines - but then it won't go to the console  
-        //appender.stdout = "org.apache.log4j.FileAppender"   
-        //appender.'stdout.File'="stdout.log"   //will go to approotdirectory/stdout.log
 
-        appender.errors = "org.apache.log4j.FileAppender"
-        appender.'errors.layout'="org.apache.log4j.PatternLayout"
-        appender.'errors.layout.ConversionPattern'='[%r] %c{2} %m%n'
-        appender.'errors.File'="stacktrace.log"   //goes to approotdirectory/stacktrace.log
-
-        rootLogger="error,stdout"
-        logger {
-          grails="error,stdout"
-          org {
-            codehaus.groovy.grails.web.servlet="error,stdout"  //  controllers
-            codehaus.groovy.grails.web.errors="error,stdout"  //  web layer errors
-            codehaus.groovy.grails.web.pages="error,stdout" //  GSP
-            codehaus.groovy.grails.web.sitemesh="error,stdout" //  layouts
-            codehaus.groovy.grails."web.mapping.filter"="error,stdout" // URL mapping
-            codehaus.groovy.grails."web.mapping"="error,stdout" // URL mapping
-            codehaus.groovy.grails.commons="info,stdout" // core / classloading
-            codehaus.groovy.grails.plugins="error,stdout" // plugins
-            codehaus.groovy.grails.orm.hibernate="error,stdout" // hibernate integration
-            springframework="off,stdout"
-            hibernate="off,stdout"
-        }
+log4j = {
+    appenders {
+        console name: 'stdout', layout: pattern(conversionPattern:'%d [%t] %-5p %c{2} %x - %m%n')
+        rollingFile name: 'stackTraceLog',maxFileSize:'1MB', layout: pattern(conversionPattern:'%d [%t] %-5p %c{2} %x - %m%n'), file: 'expo.log'
     }
-        additivity.'default' = false
-        additivity {
-                grails=false
-                org {
-                      codehaus.groovy.grails=false
-                      springframework=false
-                      hibernate=false
-                }
+    error 'org.springframework', 'org.hibernate','com.rural'
+    all 'com.rural','org.hibernate'
+    warn 'com.rural'
+    error stackTraceLog: 'StackTrace'
+    root {
+        error 'stdout'
+        info 'stdout','stackTraceLog'
     }
 }
