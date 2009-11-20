@@ -10,11 +10,13 @@ class EmpresaController {
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
     def list = {
+    	log.info("INGRESANDO AL METODO list DE EmpresaController")
         params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
         [ empresaInstanceList: Empresa.list( params ), empresaInstanceTotal: Empresa.count() ]
     }
 
     def show = {
+       	log.info("INGRESANDO AL METODO show DE EmpresaController")
         def empresaInstance = Empresa.get( params.id )
 
         if(!empresaInstance) {
@@ -25,6 +27,7 @@ class EmpresaController {
     }
 
     def delete = {
+      	log.info("INGRESANDO AL METODO delete DE EmpresaController")
         def empresaInstance = Empresa.get( params.id )
         if(empresaInstance) {
             try {
@@ -44,6 +47,7 @@ class EmpresaController {
     }
 
     def edit = {
+    	log.info("INGRESANDO AL METODO edit DE EmpresaController")    
         def empresaInstance = Empresa.get( params.id )
 
         if(!empresaInstance) {
@@ -56,6 +60,7 @@ class EmpresaController {
     }
 
     def update = {
+    	log.info("INGRESANDO AL METODO update DE EmpresaController")
         def empresaInstance = Empresa.get( params.id )
         if(empresaInstance) {
             if(params.version) {
@@ -83,36 +88,46 @@ class EmpresaController {
     }
 
     def create = {
+    	log.info "INGRESANDO AL METODO CREATE DE EmpresaController"
         def empresaInstance = new Empresa()
         empresaInstance.properties = params
         return ['empresaInstance':empresaInstance]
     }
 
     def save = {
+    	log.info ("INGRESANDO AL METODO SAVE DE EmpresaController")
+
         def empresaInstance = new Empresa(params)
         
         if(!empresaInstance.hasErrors() && empresaInstance.save()) {
-            //flash.message = "Empresa ${empresaInstance.id} created"
-            //redirect(action:show,id:empresaInstance.id)
+            flash.message = "Empresa ${empresaInstance.id} created"
+            redirect(action:show,id:empresaInstance.id)
+        }
+        else {
+            render(view:'create',model:[empresaInstance:empresaInstance])
+        }
+    }
+    
+    def savejson = {
+    	log.info ("INGRESANDO AL METODO SAVE DE EmpresaController")
+    	log.debug("Parametros Json: "+params)
+        def empresaInstance = new Empresa(params)
+        if(!empresaInstance.hasErrors() && empresaInstance.save()) {
             render(contentType:"text/json") {
 					success true
-					
 				}
         }
         else {
-            //render(view:'create',model:[empresaInstance:empresaInstance])
             render(contentType:"text/json") {
 					success false
 					errors {
 						empresaInstance.errors.allErrors.each {
 							 title it.defaultMessage	
 							 }
-						/*for(alb in a.albums) {
-							album name:alb.title
-						}*/
 					}
 				}
             
         }
+    
     }
 }
