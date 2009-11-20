@@ -48,17 +48,3 @@ environments {
 
 // log4j configuration
 
-log4j = {
-    appenders {
-        console name: 'stdout', layout: pattern(conversionPattern:'%d [%t] %-5p %c{2} %x - %m%n')
-        rollingFile name: 'stackTraceLog',maxFileSize:'1MB', layout: pattern(conversionPattern:'%d [%t] %-5p %c{2} %x - %m%n'), file: 'expo.log'
-    }
-    error 'org.springframework', 'org.hibernate','com.rural'
-    all 'com.rural','org.hibernate'
-    warn 'com.rural'
-    error stackTraceLog: 'StackTrace'
-    root {
-        error 'stdout'
-        info 'stdout','stackTraceLog'
-    }
-}
