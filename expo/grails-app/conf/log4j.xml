@@ -76,7 +76,7 @@
     <priority value='INFO' />
   </category>
   <category name='grails.app' additivity='true'>
-    <priority value='INFO' />
+    <priority value='DEBUG' />
     <appender-ref ref='APP_LOG' />
     <appender-ref ref='CONSOLE' />
   </category>
