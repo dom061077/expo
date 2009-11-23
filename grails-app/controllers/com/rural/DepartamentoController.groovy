@@ -10,6 +10,7 @@ class DepartamentoController {
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 	
 	def listjson = {
+		log.info ("INGRESANDO AL METODO listjson DE DepartamentoController")
 		def c = Departamento.createCriteria()
 		def departamentos = c.list{
 		    provincia{

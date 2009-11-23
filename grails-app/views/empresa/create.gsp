@@ -7,6 +7,10 @@
         <title>Create Empresa</title>
         
         <script type="text/javascript">
+        	function loginForm(){
+        		//alert('Que pasa vieja!!!');
+        	}
+        
 	        Ext.onReady(function(){
 		        Ext.QuickTips.init();
 	        	var winDep;
@@ -69,7 +73,17 @@
 	        			autoLoad:true,
 	        			url:'../departamento/listjson',
 	        			root:'rows',
-	        			fields:['id','nombreDep']
+	        			fields:['id','nombreDep'],
+						listeners: {
+                            loadexception: function(proxy, store, response, e) {
+                                //alert("Response Text>>"+Ext.util.JSON.encode(response.responseText));
+                                var jsonObject = Ext.util.JSON.decode(response.responseText);
+                                if (jsonObject.loginredirect == true)
+                                		window.location='../login/';
+                                
+                               }
+	        			}
+	        			 
 	        		});	
 	        	var localidadesStore = new Ext.data.JsonStore({
 	        			autoLoad:true,
