@@ -109,7 +109,7 @@ class EmpresaController {
     }
     
     def savejson = {
-    	log.info ("INGRESANDO AL METODO SAVE DE EmpresaController")
+    	log.info ("INGRESANDO AL METODO savejson DE EmpresaController")
     	log.debug("Parametros Json: "+params)
         def empresaInstance = new Empresa(params)
         if(!empresaInstance.hasErrors() && empresaInstance.save()) {

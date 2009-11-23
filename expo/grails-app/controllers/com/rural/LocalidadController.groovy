@@ -116,15 +116,17 @@ class LocalidadController {
     }
     
     def savejson = {
+    	log.info("INGRESANDO AL METODO savejson de LocalidadController")
+    	log.debug("Parámetros Json: "+params)
     	def localidadInstance = new Localidad(params)
     	if(!localidadInstance.hasErrors() && localidadInstance.save()){
-    		render('contentType:"text/json"'){
+    		render(contentType:"text/json"){
     			success true
     			nombreLoc localidadInstance.nombreLoc
     		}	
     	}
     	else{
-    		render('contentType:"text/json"'){
+    		render(contentType:"text/json"){
     			success false
     			
     		}

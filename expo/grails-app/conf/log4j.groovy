@@ -70,7 +70,7 @@
   def app = ['grails.app']
   app.each {
     'category'(name: it, additivity: 'true') {
-      'priority'(value: 'INFO'); 'appender-ref'('ref': "APP_LOG"); 'appender-ref'('ref': "CONSOLE")}
+      'priority'(value: 'DEBUG'); 'appender-ref'('ref': "APP_LOG"); 'appender-ref'('ref': "CONSOLE")}
   }
 
   def orm = ['org.springframework.transaction', 'org.springframework.orm', 'org.apache.openjpa', 'openjpa', 'org.h2', 'h2database']
