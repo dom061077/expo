@@ -224,7 +224,7 @@
 	        		
 	        	
 	        	var empresa_form = new Ext.FormPanel({
-	        	url: 'save',
+	        	url: 'savejson',
 	        	id:'empresaFormId',
 	        	tbar:toolbar,
 	        	renderTo: 'formulario_extjs',
@@ -353,7 +353,10 @@
 	        	          	  			}
 	        	          	  		 
 		        	          },
-	        	          {text:'Cancelar'}
+	        	          {text:'Cancelar',handler: function (){
+			        	          window.location='list';
+		        	          }
+		        	      }
 	      	        ]
 	        	});
 	        	Ext.getCmp('nombreId').focus('', 10);	
