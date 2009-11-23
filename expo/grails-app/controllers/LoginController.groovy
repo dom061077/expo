@@ -90,13 +90,16 @@ class LoginController {
 	def authAjax = {
 		nocache(response)
 		//this is example:
-		render """
+		/*render """
 		<script type='text/javascript'>
 		(function() {
 			loginForm();
 		})();
 		</script>
-		"""
+		"""*/
+		render(contentType:"text/json"){
+			loginredirect true
+		}
 	}
 
 	/**
