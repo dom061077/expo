@@ -79,7 +79,7 @@
                                 //alert("Response Text>>"+Ext.util.JSON.encode(response.responseText));
                                 var jsonObject = Ext.util.JSON.decode(response.responseText);
                                 if (jsonObject.loginredirect == true)
-                                		window.location='../login/';
+                                		window.location='../logout/index';
                                 
                                }
 	        			}
@@ -89,7 +89,17 @@
 	        			autoLoad:true,
 	        			url:'../localidad/listjson',
 	        			root:'rows',
-	        			fields:['id','nombreLoc']
+	        			fields:['id','nombreLoc'],
+	        			listeners: {
+		                    loadexception: function(proxy, store, response, e) {
+					                    //alert("Response Text>>"+Ext.util.JSON.encode(response.responseText));
+					                    var jsonObject = Ext.util.JSON.decode(response.responseText);
+					                    if (jsonObject.loginredirect == true)
+					                    		window.location='../logout/index';
+                    
+					                   }
+        						
+	        				}
 	        		});	
 	        		
 	        	var formLocalidad = new Ext.FormPanel({
