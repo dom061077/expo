@@ -75,12 +75,12 @@
 
   def orm = ['org.springframework.transaction', 'org.springframework.orm', 'org.apache.openjpa', 'openjpa', 'org.h2', 'h2database']
   orm.each {
-    'category'(name: it, additivity: 'true') { 'priority'(value: 'INFO'); 'appender-ref'('ref': "ORM_LOG")}
+    'category'(name: it, additivity: 'false') { 'priority'(value: 'INFO'); 'appender-ref'('ref': "ORM_LOG")}
   }
 
   def sql = ['org.hibernate.SQL', 'openjpa.jdbc.SQL']
   sql.each {
-    'category'(name: it, additivity: 'true') { 'priority'(value: 'DEBUG'); 'appender-ref'('ref': "ORM_SQL_LOG")}
+    'category'(name: it, additivity: 'false') { 'priority'(value: 'DEBUG'); 'appender-ref'('ref': "ORM_SQL_LOG")}
   }
 
   def cache = ['org.jboss.cache']
