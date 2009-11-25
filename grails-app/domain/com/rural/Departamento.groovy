@@ -6,5 +6,6 @@ class Departamento {
 	static hasMany = [localidades:Localidad]
 	static belongs = [provincia:Provincia]
     static constraints = {
+    	nombreDep(blank:false,nullable:false, unique:true)
     }
 }

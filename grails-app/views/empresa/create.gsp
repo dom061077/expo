@@ -92,7 +92,6 @@
 	        			fields:['id','nombreLoc'],
 	        			listeners: {
 		                    loadexception: function(proxy, store, response, e) {
-					                    //alert("Response Text>>"+Ext.util.JSON.encode(response.responseText));
 					                    var jsonObject = Ext.util.JSON.decode(response.responseText);
 					                    if (jsonObject.loginredirect == true)
 					                    		window.location='../logout/index';
@@ -128,7 +127,7 @@
 												           
 												           dep.clearValue();
 												           dep.store.load({
-												              params: {'provincianombre': 'TUCUMAN' }
+												              params: {'provincianombre': Ext.getCmp('idProvincia').getValue() }
 												           });
 												           dep.enable();
 												       }
@@ -163,7 +162,7 @@
 													           	  params:{'departamentonombre':Ext.getCmp('idLocalidad').getValue()}
 													           });
 													           loc.enable();
-								                    		   winDep.hide();
+								                    		   winLoc.hide();
 			        											
 			        										},
 			        										failure: function(f,a){
@@ -367,7 +366,18 @@
 														    //for(var i=0;i<a.result.errors.length;i++){
 															//    Ext.Msg.alert('Advertencia',a.result.errors[i].title);
 														    //}
-						        							Ext.Msg.alert('Advertencia','Se produjo un error en la carga');          				
+														    
+														    if (a.failureType==Ext.form.Action.CONNECT_FAILURE ||
+														    	a.failureType==Ext.form.Action.SERVER_INVALID){
+														    		Ext.Msg.alert('Error','El servidor no Responde')
+														    	}
+														    if (a.result){
+														    	if (a.result.redirect==true)
+														    		Error.Msg.alert('Su sesion de usuario a caducado, ingrese nuevamente');
+														    		window.location='../logout/index';
+														    }	
+														    
+						        							//Ext.Msg.alert('Advertencia','Se produjo un error en la carga');          				
 				        	          						/*Ext.each(a.result.errors,function(error,index){
 					        	          								Ext.Msg.alert('Advertencia',error.title)
 			        	          								}
