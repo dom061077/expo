@@ -107,6 +107,7 @@ class DepartamentoController {
     }
     
     def savejson ={
+    	log.debug("INGRESANDO AL METODO savejson DE DepartamentoController")
         def departamentoInstance = new Departamento(params)
         if(!departamentoInstance.hasErrors() && departamentoInstance.save()) {
             render(contentType:"text/json"){
@@ -115,8 +116,9 @@ class DepartamentoController {
             }
         }
         else {
+        	log.debug("Errores de validacion: "+departamentoInstance.errors)
             render(contentType:"text/json"){
-            	false true
+            	success false
             }
 
             
@@ -130,6 +132,9 @@ class DepartamentoController {
 			redirect(action:show,id:departamentoInstance.id)
         }
         else {
+        	log.debug("Errores de validacion: "+departamentoInstance.errors)
+        	departamentoInstance.renderErrors
+        
             render(view:'create',model:[departamentoInstance:departamentoInstance])
             
         }
