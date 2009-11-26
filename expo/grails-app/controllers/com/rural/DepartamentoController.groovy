@@ -119,7 +119,7 @@ class DepartamentoController {
         	log.debug("Errores de validacion: "+departamentoInstance.errors)
             render(contentType:"text/json"){
             	success false
-            }
+            } 
 
             
         }
@@ -132,8 +132,17 @@ class DepartamentoController {
 			redirect(action:show,id:departamentoInstance.id)
         }
         else {
-        	log.debug("Errores de validacion: "+departamentoInstance.errors)
-        	departamentoInstance.renderErrors
+        	departamentoInstance.errors.allErrors.each{error->
+        		def code = {def codigo="hola"	
+        					error.codes.each{
+				        					if(g.message(code:it)!=it){
+												codigo=g.message(code:it)											        						
+				        					}
+		        					} 
+		        			 return codigo		
+        					}
+				log.debug("Mensaje final: "+code)        				
+        	}
         
             render(view:'create',model:[departamentoInstance:departamentoInstance])
             
