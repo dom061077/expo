@@ -118,17 +118,33 @@ class LocalidadController {
     def savejson = {
     	log.info("INGRESANDO AL METODO savejson de LocalidadController")
     	log.debug("Parámetros Json: "+params)
+    	
+    	def errorList=[]
+    	
     	def localidadInstance = new Localidad(params)
+    	
     	if(!localidadInstance.hasErrors() && localidadInstance.save()){
+    		log.info("Instancia de Localidad guardada, renderizando json")
     		render(contentType:"text/json"){
     			success true
     			nombreLoc localidadInstance.nombreLoc
     		}	
     	}
     	else{
+    		log.info("Error de validacion en localidad")
+    		localidadInstance.errors.allErrors.each{error->
+    			error.codes.each{
+    				if(g.message(code:it)!=it)
+    					errorList.add(g.message(code:it))
+    			}
+    		}
     		render(contentType:"text/json"){
     			success false
-    			
+    			errors{
+    				errorList.each{
+    					title it
+    				}
+    			}
     		}
     	}
     }

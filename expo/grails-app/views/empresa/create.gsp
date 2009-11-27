@@ -228,10 +228,21 @@
 						                    		   winDep.hide();
 						                    		},
 						                    		failure: function(f,a){
-						                    			Ext.Msg.alert('Error','Verifique todos los datos');
+					                    					var msg="";
+					                    					if (a.result)
+														    	if (a.result.errors){
+														    		 for (var i=0; i<a.result.errors.length;i++){
+														    			msg=msg+a.result.errors[i].title+'\r\n';	
+												    				}
+																	Ext.Msg.show({
+																		title:'Errores',
+																		msg:msg,
+																		icon: Ext.MessageBox.ERROR	
+																	});	
+												    				
+											    				}
 						                    		}
 						                    	});
-						                    	
 						                    }
 						                },{
 						                    text: 'Cerrar',
@@ -366,15 +377,22 @@
 														    //for(var i=0;i<a.result.errors.length;i++){
 															//    Ext.Msg.alert('Advertencia',a.result.errors[i].title);
 														    //}
-														    
+														    var msg;
 														    if (a.failureType==Ext.form.Action.CONNECT_FAILURE ||
 														    	a.failureType==Ext.form.Action.SERVER_INVALID){
 														    		Ext.Msg.alert('Error','El servidor no Responde')
 														    	}
 														    if (a.result){
-														    	if (a.result.redirect==true)
+														    	if (a.result.redirect==true){
 														    		Error.Msg.alert('Su sesion de usuario a caducado, ingrese nuevamente');
 														    		window.location='../logout/index';
+														    		}
+														    	if (a.result.errors){
+														    		for (a.result.errors in error){
+														    			msg=msg+error.title;	
+												    				}
+												    				Ext.Msg.alert(msg);
+											    				}
 														    }	
 														    
 						        							//Ext.Msg.alert('Advertencia','Se produjo un error en la carga');          				

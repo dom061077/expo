@@ -107,18 +107,32 @@ class DepartamentoController {
     }
     
     def savejson ={
-    	log.debug("INGRESANDO AL METODO savejson DE DepartamentoController")
+    	log.info("INGRESANDO AL METODO savejson de DepartamentoController")
+    	def errorList = []
         def departamentoInstance = new Departamento(params)
         if(!departamentoInstance.hasErrors() && departamentoInstance.save()) {
+        	log.info("Intancia de departamento guardada, renderizando json")
             render(contentType:"text/json"){
             	success true
 				nombreDep departamentoInstance.nombreDep
             }
         }
         else {
-        	log.debug("Errores de validacion: "+departamentoInstance.errors)
+        	log.info("Error de validacion en departamento")
+        	departamentoInstance.errors.allErrors.each{error->
+        		error.codes.each{
+        			if(g.message(code:it)!=it)
+        				errorList.add(g.message(code:it))
+        		}
+        	}
+
             render(contentType:"text/json"){
             	success false
+            	errors {
+            		errorList.each{
+            			title it
+            		}
+            	}
             } 
 
             
@@ -126,6 +140,7 @@ class DepartamentoController {
     }
 
     def save = {
+    	def errorList = []
         def departamentoInstance = new Departamento(params)
         if(!departamentoInstance.hasErrors() && departamentoInstance.save()) {
 			flash.message = "Departamento ${departamentoInstance.id} fue creado"
@@ -133,17 +148,13 @@ class DepartamentoController {
         }
         else {
         	departamentoInstance.errors.allErrors.each{error->
-        		def code = {def codigo="hola"	
-        					error.codes.each{
-				        					if(g.message(code:it)!=it){
-												codigo=g.message(code:it)											        						
-				        					}
-		        					} 
-		        			 return codigo		
-        					}
-				log.debug("Mensaje final: "+code)        				
+        		error.codes.each{
+        			if(g.message(code:it)!=it)
+        				errorList.add(g.message(code:it))
+        		}
         	}
-        
+        	
+        	errorList.each{log.debug(it)}
             render(view:'create',model:[departamentoInstance:departamentoInstance])
             
         }
