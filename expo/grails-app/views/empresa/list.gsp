@@ -5,60 +5,47 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
         <title>Empresa List</title>
+        <script type="text/javascript">
+        	Ext.onReady(function(){
+            	var store = new Ext.data.JsonStore({
+							totalProperty: 'total',
+							root: 'rows',
+							url: 'listjson',
+							fields:[
+									'nombre','nombreRepresentante','telefono1'
+							]
+            		});
+            	store.load({params:{start:0, limit:10}});
+            	var grid = new Ext.grid.GridPanel({
+                		store:store,
+                		columns: [
+                		          {header: "Nombre",width:100,sortable:true,dataIndex:'nombre'},
+                		          {header: "Representante", width:100,sortable:true,dataIndex:'nombreRepresentante'},
+                		          {header: "telefono1",width:20}
+                          		],
+                        stripeRows: true,
+                        height:250,
+                        width:500,
+                        title:'Empresas',
+                        bbar: new Ext.PagingToolbar({
+                            	pageSize: 10,
+                            	store: store,
+                            	displayInfo:true,
+                            	displayMsg: 'Visualizando empresas {0} - {1} de {2}',
+                            	emptyMsg: 'No hay empresas para visualizar'
+            				})
+        			});
+    			grid.render('empresa-grid');
+        	});
+        </script>
     </head>
     <body>
         <div class="nav">
             <span class="menuButton"><a class="home" href="${resource(dir:'')}">Home</a></span>
             <span class="menuButton"><g:link class="create" action="create">New Empresa</g:link></span>
         </div>
-        <div class="body">
-            <h1>Empresa List</h1>
-            <g:if test="${flash.message}">
-            <div class="message">${flash.message}</div>
-            </g:if>
-            <div class="list">
-                <table>
-                    <thead>
-                        <tr>
-                        
-                   	        <g:sortableColumn property="id" title="Id" />
-                        
-                   	        <g:sortableColumn property="cuit" title="Cuit" />
-                        
-                   	        <g:sortableColumn property="direccion" title="Direccion" />
-                        
-                   	        <th>Localidad</th>
-                   	    
-                   	        <g:sortableColumn property="nombre" title="Nombre" />
-                        
-                   	        <g:sortableColumn property="nombreRepresentante" title="Nombre Representante" />
-                        
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <g:each in="${empresaInstanceList}" status="i" var="empresaInstance">
-                        <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-                        
-                            <td><g:link action="show" id="${empresaInstance.id}">${fieldValue(bean:empresaInstance, field:'id')}</g:link></td>
-                        
-                            <td>${fieldValue(bean:empresaInstance, field:'cuit')}</td>
-                        
-                            <td>${fieldValue(bean:empresaInstance, field:'direccion')}</td>
-                        
-                            <td>${fieldValue(bean:empresaInstance, field:'localidad')}</td>
-                        
-                            <td>${fieldValue(bean:empresaInstance, field:'nombre')}</td>
-                        
-                            <td>${fieldValue(bean:empresaInstance, field:'nombreRepresentante')}</td>
-                        
-                        </tr>
-                    </g:each>
-                    </tbody>
-                </table>
-            </div>
-            <div class="paginateButtons">
-                <g:paginate total="${empresaInstanceTotal}" />
-            </div>
+        <div id="empresa-grid">
+        	
         </div>
     </body>
 </html>
