@@ -166,7 +166,20 @@
 			        											
 			        										},
 			        										failure: function(f,a){
-			        											Ext.Msg.alert('Error','No se guardaron los datos');
+						                    					var msg="";
+						                    					if (a.result)
+															    	if (a.result.errors){
+															    		 for (var i=0; i<a.result.errors.length;i++){
+															    			msg=msg+a.result.errors[i].title+'\r\n';	
+													    				}
+																		Ext.Msg.show({
+																			title:'Errores',
+																			msg:msg,
+																			icon: Ext.MessageBox.ERROR	
+																		});	
+													    				
+												    				}
+
 			        										}
 		        										})
 	        										}

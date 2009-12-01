@@ -9,6 +9,27 @@ class EmpresaController {
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
+    def listjson = {
+    	log.info("INGRESANDO AL METODO listjson de EmpresaController")
+    	log.debug("Parametros: "+params)
+    	def empresas = Empresa.createCriteria().list(
+    					max: params.limit,
+    					offset: params.start,
+    					sort: 'nombre',
+    					order:'asc'
+    			){}
+    	log.debug("Cantidad de Empresas consultadas: "+empresas.count())
+    	render(contentType:'text/json'){
+    		total Empresa.count()
+    		rows{
+    			empresas.each{
+    				row(nombre:it.nombre,nombreRepresentante:it.nombreRepresentante,telefono1:it.telefono1)
+    			}
+    			
+    		}
+    	}
+    }
+    
     def list = {
     	log.info("INGRESANDO AL METODO list DE EmpresaController")
         params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
@@ -112,6 +133,7 @@ class EmpresaController {
     	log.info ("INGRESANDO AL METODO savejson DE EmpresaController")
     	log.debug("Parametros Json: "+params)
         def empresaInstance = new Empresa(params)
+    	log.debug("Valor de Instancia Empresa antes de salvar: "+empresaInstance)
         if(!empresaInstance.hasErrors() && empresaInstance.save()) {
             render(contentType:"text/json") {
 					success true
