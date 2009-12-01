@@ -25,8 +25,9 @@
                           		],
                         stripeRows: true,
                         height:250,
-                        width:500,
+                        width:450,
                         title:'Empresas',
+                        iconCls: 'icon-grid', 
                         bbar: new Ext.PagingToolbar({
                             	pageSize: 10,
                             	store: store,
@@ -35,14 +36,46 @@
                             	emptyMsg: 'No hay empresas para visualizar'
             				})
         			});
-    			grid.render('empresa-grid');
+    			//grid.render('empresa-grid');
+    			
+    			var formSearch = new Ext.form.FormPanel({
+    					renderTo: 'empresa-grid',
+    					id:'formSearchId',
+    					title:'Listado de Empresas',
+    					width:500,
+    					frame:true,
+    					items: [{
+    							layout: 'column',
+    							anchor: '0',
+    							items: [{
+    										columnWidth: .5,
+    										layout: 'form',
+    										items: {
+    											xtype: 'textfield',
+    											name: 'textbusqueda',
+    											fieldLabel: 'Texto a Buscar',
+    											anchor: '0'
+    										}
+    									},{
+    										columnWidth: .5,
+    										items: {
+    											xtype: 'button',
+    											text: 'Buscar'
+    										}
+    									}
+    									
+    								]
+    						},grid]
+    				});
+    			
+    			
+    			
         	});
         </script>
     </head>
     <body>
         <div class="nav">
-            <span class="menuButton"><a class="home" href="${resource(dir:'')}">Home</a></span>
-            <span class="menuButton"><g:link class="create" action="create">New Empresa</g:link></span>
+            <span class="menuButton"><g:link class="create" action="create">Agregar Empresa</g:link></span>
         </div>
         <div id="empresa-grid">
         	
