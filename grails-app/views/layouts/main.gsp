@@ -44,12 +44,11 @@
 		</div>
 		
 		<div class="right">
-		
-			<h2>Navigation</h2>
-			
 			<g:isLoggedIn>
 				<g:render template="/login/sidebar_loggedin"/>
 			</g:isLoggedIn>
+			<h2>Navigation</h2>
+			
 			
 		
 		</div>
