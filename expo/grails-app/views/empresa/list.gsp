@@ -19,6 +19,7 @@
             	var grid = new Ext.grid.GridPanel({
                 		store:store,
                 		columns: [
+                						  	
                 		          {header: "Nombre",width:100,sortable:true,dataIndex:'nombre'},
                 		          {header: "Representante", width:100,sortable:true,dataIndex:'nombreRepresentante'},
                 		          {header: "telefono1",width:20}
@@ -37,7 +38,14 @@
             				})
         			});
     			//grid.render('empresa-grid');
-    			
+    			grid.on('rowdblclick',function(grid, rowIndex, e){
+		                   var r = grid.getStore().getAt(rowIndex);
+		                   var selectedId = r.get('nombre');
+		                  //console.log(selectedId);
+		                  store.reload({params: {id_ft: selectedId}});
+		                  window.location = 'create'
+						  	 	
+    					});
     			var formSearch = new Ext.form.FormPanel({
     					renderTo: 'empresa-grid',
     					id:'formSearchId',
@@ -60,8 +68,15 @@
     										columnWidth: .5,
     										items: {
     											xtype: 'button',
-    											text: 'Buscar'
-    										}
+    											text: 'Buscar',
+    											listeners:{
+    												click: function(){
+							        	          		formSearch.getForm().submit();
+    													
+    												}
+    												}
+    											}
+	        	          	  		 
     									}
     									
     								]
