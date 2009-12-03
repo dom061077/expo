@@ -10,7 +10,7 @@ class BootStrap {
      		switch (Environment.current){
      				
      				case Environment.DEVELOPMENT:
-     								 
+     					createUserIfRequired()			 
      					createAdminUserIfRequired()
      					break;
      				case Environment.PRODUCTION:
@@ -19,6 +19,18 @@ class BootStrap {
      		}
      }
      def destroy = {
+     }
+     
+     void createUserIfRequired(){
+     		if (!Person.findByUsername("usuario")){
+     			log.debug "Creating usuario user";
+     			def authority = new Authority(authority: "ROLE_USER", description: "Usuario comun")
+     			def person = new Person(username:"usuario",
+     				passwd: authenticateService.encodePassword('usuario'),email:'usuario@noexiste.com.ar'
+     				,enabled:true,userRealName:"Usuario comun de prueba").save()
+     			authority.addToPeople(person)
+     			authority.save()	
+     		}
      }
 	 
 	 void createAdminUserIfRequired(){
@@ -34,7 +46,7 @@ class BootStrap {
 				new Requestmap(url:"/register/**",configAttribute:"ROLE_ADMIN").save()
 				println "Requestmap creado"
 				
-				new Requestmap(url:"/",configAttribute:"IS_AUTHENTICATED_ANONYMOUSLY").save()
+				//new Requestmap(url:"/",configAttribute:"IS_AUTHENTICATED_ANONYMOUSLY").save()
 				new Requestmap(url:"/login/**",configAttribute:"IS_AUTHENTICATED_ANONYMOUSLY").save()				
 				new Requestmap(url:"/register/**",configAttribute:"IS_AUTHENTICATED_ANONYMOUSLY").save()
 				new Requestmap(url:"/js/**",configAttribute:"IS_AUTHENTICATED_ANONYMOUSLY").save()
@@ -43,6 +55,10 @@ class BootStrap {
 				new Requestmap(url:"/images/**",configAttribute:"IS_AUTHENTICATED_ANONYMOUSLY").save()
 				new Requestmap(url:"/plugins/**",configAttribute:"IS_AUTHENTICATED_ANONYMOUSLY").save()
 				new Requestmap(url:"/**",configAttribute:"IS_AUTHENTICATED_REMEMBERED").save()
+				new Requestmap(url:"/person/**",configAttribute:"ROLE_ADMIN").save()
+				new Requestmap(url:"/authority/**",configAttribute:"ROLE_ADMIN").save()
+				new Requestmap(url:"/requestmap/**",configAttribute:"ROLE_ADMIN").save()
+				new Requestmap(url:"/vendedor/**",configAttribute:"ROLE_ADMIN").save()
 				Provincia provincia
 				Departamento departamento
 				

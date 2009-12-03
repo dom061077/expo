@@ -46,8 +46,16 @@
 		<div class="right">
 			<g:isLoggedIn>
 				<g:render template="/login/sidebar_loggedin"/>
+				<h2>Navegación</h2>
+				<ul>
+					<li class='controller'><g:link controller="empresa">Empresas </g:link></li>
+					<g:ifAllGranted role="ROLE_ADMIN">
+						<li class='controller'><g:link controller="vendedor">Vendedores </g:link> </li>
+					</g:ifAllGranted>
+				</ul>
+				
 			</g:isLoggedIn>
-			<h2>Navigation</h2>
+			
 			
 			
 		
