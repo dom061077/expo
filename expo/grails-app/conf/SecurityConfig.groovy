@@ -11,4 +11,6 @@ security {
 	loginFormUrl = "/login"
 	defaultTargetUrl = "/"
 	userRequestMapDomainClass = true 
+	
+
 }

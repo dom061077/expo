@@ -28,6 +28,12 @@ class LoginController {
 	def openIDAuthenticationProcessingFilter
 
 	private final authenticationTrustResolver = new AuthenticationTrustResolverImpl()
+	
+	
+	def updatepssw = {
+		
+		redirect uri: '/'
+	}
 
 	def index = {
 		if (isLoggedIn()) {
