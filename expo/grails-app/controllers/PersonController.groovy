@@ -11,6 +11,8 @@ class PersonController {
 	// the delete, save and update actions only accept POST requests
 	static Map allowedMethods = [delete: 'POST', save: 'POST', update: 'POST']
 
+
+
 	def index = {
 		redirect action: list, params: params
 	}
@@ -159,4 +161,42 @@ class PersonController {
 
 		return [person: person, roleMap: roleMap]
 	}
+	
+	def updatepssw = {
+		
+		redirect uri: '/'
+	}
+
+	def editpassw = {
+		log.info("INGRESANDO AL METODO editpassw EN PersonController")
+		log.debug("Params: "+params)
+		def 		
+		
+		
+	}
+	
+}
+
+class PersonCommand {
+	String username
+	String passwd
+	String newpasswd
+	String newpasswdrepeat
+	
+	static constraints = {
+		newpasswd(blank: false, size: 6..15,
+				validator: { newpswd, pc ->
+					if(newpswd != pc.passwd)
+						return newpswd != pc.passwd
+					else
+						return newpswd != pc.username							
+				}
+			)
+		newpasswdrepeat(blank: false, size: 6..15,
+				validator: { repeatpswd, pc ->
+					return repeatpswd==pc.newpasswd
+				}
+			)	
+	}
+	
 }

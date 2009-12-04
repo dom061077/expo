@@ -30,10 +30,6 @@ class LoginController {
 	private final authenticationTrustResolver = new AuthenticationTrustResolverImpl()
 	
 	
-	def updatepssw = {
-		
-		redirect uri: '/'
-	}
 
 	def index = {
 		if (isLoggedIn()) {
