@@ -12,17 +12,17 @@
 							root: 'rows',
 							url: 'listjson',
 							fields:[
-									'nombre','nombreRepresentante','telefono1'
+									'id','nombre','nombreRepresentante','telefono1'
 							]
             		});
             	store.load({params:{start:0, limit:10}});
             	var grid = new Ext.grid.GridPanel({
                 		store:store,
                 		columns: [
-                						  	
-                		          {header: "Nombre",width:100,sortable:true,dataIndex:'nombre'},
-                		          {header: "Representante", width:100,sortable:true,dataIndex:'nombreRepresentante'},
-                		          {header: "telefono1",width:20}
+                		          {header: "id",dataIndex:'id',hidden:true},		  	
+                		          {header: "Nombre",width:200,sortable:true,dataIndex:'nombre'},
+                		          {header: "Representante", width:200,sortable:true,dataIndex:'nombreRepresentante'},
+                		          {header: "telefono1",width:100}
                           		],
                         stripeRows: true,
                         height:250,
@@ -40,13 +40,14 @@
     			//grid.render('empresa-grid');
     			grid.on('rowdblclick',function(grid, rowIndex, e){
 		                   var r = grid.getStore().getAt(rowIndex);
-		                   var selectedId = r.get('nombre');
+		                   var selectedId = r.get('id');
 		                  //console.log(selectedId);
 		                  store.reload({params: {id_ft: selectedId}});
-		                  window.location = 'create'
+		                  window.location = 'edit?id='+selectedId;
 						  	 	
     					});
     			var formSearch = new Ext.form.FormPanel({
+        				url:'search',
     					renderTo: 'empresa-grid',
     					id:'formSearchId',
     					title:'Listado de Empresas',
@@ -60,7 +61,7 @@
     										layout: 'form',
     										items: {
     											xtype: 'textfield',
-    											name: 'textbusqueda',
+    											name: 'searchCriteria',
     											fieldLabel: 'Texto a Buscar',
     											anchor: '0'
     										}
@@ -71,7 +72,13 @@
     											text: 'Buscar',
     											listeners:{
     												click: function(){
-							        	          		formSearch.getForm().submit();
+							        	          		formSearch.getForm().submit({
+																success: function(f,a){
+																	store.load({
+																		params: {'start':0,'limit':10,'searchCriteria':a.result.searchCriteria}
+																	});
+							        	          				}
+								        	          		});
     													
     												}
     												}
