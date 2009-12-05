@@ -5,6 +5,424 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
         <title>Edit Empresa</title>
+        <script type="text/javascript">
+        Ext.onReady(function(){
+	        Ext.QuickTips.init();
+        	var winDep;
+        	var winLoc;
+        	var showAddLoc = function(){
+        			if(!winLoc){
+        				winLoc = new Ext.Window({
+        					applyTo: 'loc-win',
+        					title:'Carga de Localidades',
+        					resizable:false,
+        					modal:true,
+        					formPanel:null,
+        					width:400,
+        					height:200,
+        					closeAction:'hide',
+        					plain:true,
+        					items:[formLocalidad]	
+        				});
+        			}
+        			winLoc.show(this);
+        	}
+        	
+        	var showAddDep = function(){
+			        if(!winDep){
+			            winDep = new Ext.Window({
+			                applyTo:'dep-win',
+			                title:'Carga de Departamentos',
+			                resizable:false,
+			                modal:true,
+			                formPanel: null,
+			                width:400,
+			                height:200,
+			                closeAction:'hide',
+			                plain: true,
+			                items:[formDepartamento]
+			            });
+			        }
+			        winDep.show(this);
+        	}
+        	
+        	var toolbar = new Ext.Toolbar({
+        		items: [{
+        			xtype:'tbbutton',
+        			text: 'Agregar Dep.',
+        			handler: showAddDep
+        		},{
+        			xtype:'tbbutton',
+        			text: 'Agregar Loc.',
+        			handler: showAddLoc
+        		}]
+        	});
+        	
+        	var provinciasStore = new Ext.data.JsonStore({
+        			autoLoad:true,
+        			url:'../provincia/listjson',
+        			root:'rows',
+        			fields: ['id','nombre']
+        		});
+        	var departamentosStore = new Ext.data.JsonStore({
+        			autoLoad:true,
+        			url:'../departamento/listjson',
+        			root:'rows',
+        			fields:['id','nombreDep'],
+					listeners: {
+                        loadexception: function(proxy, store, response, e) {
+                            //alert("Response Text>>"+Ext.util.JSON.encode(response.responseText));
+                            var jsonObject = Ext.util.JSON.decode(response.responseText);
+                            if (jsonObject.loginredirect == true)
+                            		window.location='../logout/index';
+                            
+                           }
+        			}
+        			 
+        		});	
+        	var localidadesStore = new Ext.data.JsonStore({
+        			autoLoad:true,
+        			url:'../localidad/listjson',
+        			root:'rows',
+        			fields:['id','nombreLoc'],
+        			listeners: {
+	                    loadexception: function(proxy, store, response, e) {
+				                    var jsonObject = Ext.util.JSON.decode(response.responseText);
+				                    if (jsonObject.loginredirect == true)
+				                    		window.location='../logout/index';
+                
+				                   }
+    						
+        				}
+        		});	
+        		
+        	var formLocalidad = new Ext.FormPanel({
+        							url:'../localidad/savejson',
+        							id:'formLocalidadId',
+        							frame:true,
+        							width: 400,
+        							height:150,
+        							items:[{
+        									xtype: 'textfield',
+        									id:'nombreFormLocId',
+        									fieldLabel:'Localidad',
+        									allowBlank: false,
+        									name: 'nombreLoc',
+        									width: 200
+        								  },{
+        								  	xtype:'combo',
+        								  	id:'idProvinciaAddLoc',
+        								  	fieldLabel:'Provincia',
+        								  	allowBlank: false,
+        								  	mode:'local',
+        								  	name:'provinciaAddLoc',
+											listeners: {
+											       'select' : function(cmb, rec, idx) {
+											           var dep = Ext.getCmp('idDepartamentoAddLoc');
+											           
+											           dep.clearValue();
+											           dep.store.load({
+											              params: {'provincianombre': Ext.getCmp('idProvincia').getValue() }
+											           });
+											           dep.enable();
+											       }
+											    },	        		
+        								  	
+        								  	displayField:'nombre',
+        								  	store:provinciasStore,
+        								  	valueField:'id'
+        								  },{
+        								  	xtype:'combo',
+        								  	id:'idDepartamentoAddLoc',
+        								  	fieldLabel:'Departamento',
+        								  	allowBlank: false,
+        								  	mode:'local',
+        								  	name:'departamentoAddLoc',
+        								  	displayField:'nombreDep',
+        								  	store: departamentosStore,
+        								  	valueField:'id',
+        								  	hiddenName:'departamento.id',
+        								  	width: 200
+        								  }],
+        							buttons: [{
+        									text:'Guardar',
+        									handler:function(){
+        									
+	        										formLocalidad.getForm().submit({
+		        										success: function(f,a){
+												           var loc = Ext.getCmp('idLocalidad');
+												           loc.clearValue();
+												           loc.store.removeAll();
+												           loc.store.load({
+												           	  params:{'departamentonombre':Ext.getCmp('idLocalidad').getValue()}
+												           });
+												           loc.enable();
+							                    		   winLoc.hide();
+		        											
+		        										},
+		        										failure: function(f,a){
+					                    					var msg="";
+					                    					if (a.result)
+														    	if (a.result.errors){
+														    		 for (var i=0; i<a.result.errors.length;i++){
+														    			msg=msg+a.result.errors[i].title+'\r\n';	
+												    				}
+																	Ext.Msg.show({
+																		title:'Errores',
+																		msg:msg,
+																		icon: Ext.MessageBox.ERROR	
+																	});	
+												    				
+											    				}
+
+		        										}
+	        										})
+        										}
+	        								},{
+	        									text:'Cerrar',
+	        									handler:function(){winLoc.hide();}
+	        								}]
+        								  
+        	});	
+        	
+			var formDepartamento =  new Ext.FormPanel({
+									url:'../departamento/savejson',
+									id:'formDepartamentoId',
+			                		//renderTo: 'form-panel-departamento',
+						        	frame: true,
+						        	//title: 'Alta de Empresa',
+						        	width: 400,
+						        	height:150,
+						        	items: [{
+								        	xtype: 'textfield',
+								        	id: 'nombreFormDepId',
+								        	fieldLabel: 'Departamento',
+								        	allowBlank: false,
+								        	name: 'nombreDep',
+								        	width:200
+									        	
+							        	},{
+						        		xtype: 'combo',
+						        		fieldLabel: 'Provincia',
+						        		allowBlank: false,
+						        		mode:'local',
+						        		id:'idProvinciaAddDep',
+						        		name: 'provinciaAddDep',
+						        		displayField:'nombre',
+						        		store: provinciasStore,
+						        		
+							        	valueField:'id',
+						        		hiddenName:'provincia.id',
+						        		width: 120
+						        	}],
+					                buttons: [{
+					                    text:'Guardar',
+					                    handler: function(){
+					                    	formDepartamento.getForm().submit({
+					                    		success: function(f,a){
+										           var dep = Ext.getCmp('idDepartamento');
+										           
+										           dep.clearValue();
+										           dep.store.load({
+										              params: {'provincianombre': Ext.getCmp('idProvincia').getValue() }
+										           });
+										           dep.enable();
+										           var loc = Ext.getCmp('idLocalidad');
+										           loc.clearValue();
+										           loc.store.removeAll();
+										           loc.enable();
+
+												   Ext.getCmp('idDepartamento').setValue(a.result.nombreDep);						                    		
+					                    		   winDep.hide();
+					                    		},
+					                    		failure: function(f,a){
+				                    					var msg="";
+				                    					if (a.result)
+													    	if (a.result.errors){
+													    		 for (var i=0; i<a.result.errors.length;i++){
+													    			msg=msg+a.result.errors[i].title+'\r\n';	
+											    				}
+																Ext.Msg.show({
+																	title:'Errores',
+																	msg:msg,
+																	icon: Ext.MessageBox.ERROR	
+																});	
+											    				
+										    				}
+					                    		}
+					                    	});
+					                    }
+					                },{
+					                    text: 'Cerrar',
+					                    handler: function(){
+					                        winDep.hide();
+					                    }
+					                }]
+			                		});
+        
+        
+        
+        		
+        		
+        	
+        	var empresa_form = new Ext.FormPanel({
+        	url: 'savejson',
+        	id:'empresaFormId',
+        	tbar:toolbar,
+        	renderTo: 'formulario_extjs',
+        	frame: true,
+        	title: 'Alta de Empresa',
+        	width: 400,
+        	items: [{
+        	xtype: 'textfield',
+        	id: 'nombreId',
+        	fieldLabel: 'Nombre',
+        	allowBlank: false,
+        	name: 'nombre'
+        	},{
+        	xtype: 'textfield',
+        	fieldLabel: 'C.U.I.T',
+        	allowBlank: false,
+        	name: 'cuit'
+        	},{
+        	xtype: 'textfield',
+        	fieldLabel: 'Representante',
+        	allowBlank: false,
+        	
+        	name: 'nombreRepresentante'
+        	},{
+	        	xtype: 'textfield',
+	            fieldLabel: 'Direcci&#243;n',
+	            allowBlank: false,
+	            name:'direccion'
+        	},{
+	        	xtype: 'textfield',
+	        	fieldLabel:'Telefono 1',
+	        	allowBlank:false,
+	        	name:'telefono1'
+        	},{
+	        	xtype: 'textfield',
+	        	fieldLabel: 'Telefono 2',
+	        	allowBlank: true,
+	        	name:'telefono2'
+        	},{
+        		xtype: 'combo',
+        		fieldLabel: 'Provincia',
+        		id:'idProvincia',
+        		name: 'provinciaLn',
+        		displayField:'nombre',
+        		allowBlank:false,
+        		mode:'local',
+        		store: provinciasStore,
+        		width: 120,
+				listeners: {
+				       'select' : function(cmb, rec, idx) {
+				           var dep = Ext.getCmp('idDepartamento');
+				           
+				           dep.clearValue();
+				           dep.store.load({
+				              params: {'provincianombre': Ext.getCmp('idProvincia').getValue() }
+				           });
+				           dep.enable();
+				           var loc = Ext.getCmp('idLocalidad');
+				           loc.clearValue();
+				           loc.store.removeAll();
+				           loc.disable();
+				       }
+				    }	        		
+        	},{
+        		xtype: 'combo',
+        		fieldLabel: 'Departamento',
+        		id: 'idDepartamento',
+        		name: 'departamentoLn',
+        		displayField:'nombreDep',
+        		allowBlank:false,
+        		mode:'local',
+        		store: departamentosStore,
+        		width: 120,
+        		listeners: {
+        				'select' : function (cmb,rec,idx){
+							var loc = Ext.getCmp('idLocalidad');
+							loc.clearValue();
+							loc.store.load({
+    							params: {'departamentonombre':Ext.getCmp('idDepartamento').getValue()}
+							});
+							loc.enable();
+        				}
+        		}
+        	},{
+        		xtype: 'combo',
+        		id: 'idLocalidad',
+        		fieldLabel: 'Localidad',
+        		allowBlank: false,
+        		name: 'localidadAux',
+        		hiddenName:'localidad.id',
+        		displayField:'nombreLoc',
+        		valueField: 'id',
+        		mode:'local',
+        		store: localidadesStore,
+        		width: 200
+        		
+        	}],
+        	buttons: [
+        	          	  {
+	        	          	text:'Guardar',handler: function(){
+		        	          		empresa_form.getForm().submit({
+			        	          			//waitMsg:'Guardando Datos...',
+				        	          		success: function(f,a){
+			        	          					Ext.Msg.alert('Mensaje','Los datos se guardaron correctamente',
+															function(btn,text){
+																if(btn=='ok'){
+																	window.location='create';	
+																}
+			        	          							}
+							        	          	);
+			        	          					
+		        	          						},
+		        	          				failure: function(f,a){
+					        	          				//Ext.Msg.alert('Warning',(a.result.errors[1]).title);
+					        	          				//Ext.Msg.alert('Warning',(a.result.errors[0]).title);
+													    //for(var i=0;i<a.result.errors.length;i++){
+														//    Ext.Msg.alert('Advertencia',a.result.errors[i].title);
+													    //}
+													    var msg;
+													    if (a.failureType==Ext.form.Action.CONNECT_FAILURE ||
+													    	a.failureType==Ext.form.Action.SERVER_INVALID){
+													    		Ext.Msg.alert('Error','El servidor no Responde')
+													    	}
+													    if (a.result){
+													    	if (a.result.redirect==true){
+													    		Error.Msg.alert('Su sesion de usuario a caducado, ingrese nuevamente');
+													    		window.location='../logout/index';
+													    		}
+													    	if (a.result.errors){
+													    		for (a.result.errors in error){
+													    			msg=msg+error.title;	
+											    				}
+											    				Ext.Msg.alert(msg);
+										    				}
+													    }	
+													    
+					        							//Ext.Msg.alert('Advertencia','Se produjo un error en la carga');          				
+			        	          						/*Ext.each(a.result.errors,function(error,index){
+				        	          								Ext.Msg.alert('Advertencia',error.title)
+		        	          								}
+					        	          				);*/
+		        	          						}
+		        	          				});
+        	          	  			}
+        	          	  		 
+	        	          },
+        	          {text:'Cancelar',handler: function (){
+		        	          window.location='list';
+	        	          }
+	        	      }
+      	        ]
+        	});
+        	Ext.getCmp('nombreId').focus('', 10);	
+    	});
+        
+        </script>
     </head>
     <body>
         <div class="nav">
@@ -13,111 +431,18 @@
             <span class="menuButton"><g:link class="create" action="create">New Empresa</g:link></span>
         </div>
         <div class="body">
-            <h1>Edit Empresa</h1>
-            <g:if test="${flash.message}">
-            <div class="message">${flash.message}</div>
-            </g:if>
-            <g:hasErrors bean="${empresaInstance}">
-            <div class="errors">
-                <g:renderErrors bean="${empresaInstance}" as="list" />
-            </div>
-            </g:hasErrors>
-            <g:form method="post" >
-                <input type="hidden" name="id" value="${empresaInstance?.id}" />
-                <input type="hidden" name="version" value="${empresaInstance?.version}" />
-                <div class="dialog">
-                    <table>
-                        <tbody>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="cuit">Cuit:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'cuit','errors')}">
-                                    <input type="text" id="cuit" name="cuit" value="${fieldValue(bean:empresaInstance,field:'cuit')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="direccion">Direccion:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'direccion','errors')}">
-                                    <input type="text" id="direccion" name="direccion" value="${fieldValue(bean:empresaInstance,field:'direccion')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="localidad">Localidad:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'localidad','errors')}">
-                                    <g:select optionKey="id" from="${com.rural.Localidad.list()}" name="localidad.id" value="${empresaInstance?.localidad?.id}" ></g:select>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="nombre">Nombre:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'nombre','errors')}">
-                                    <input type="text" id="nombre" name="nombre" value="${fieldValue(bean:empresaInstance,field:'nombre')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="nombreRepresentante">Nombre Representante:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'nombreRepresentante','errors')}">
-                                    <input type="text" id="nombreRepresentante" name="nombreRepresentante" value="${fieldValue(bean:empresaInstance,field:'nombreRepresentante')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="provincia">Provincia:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'provincia','errors')}">
-                                    <input type="text" id="provincia" name="provincia" value="${fieldValue(bean:empresaInstance,field:'provincia')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="telefono1">Telefono1:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'telefono1','errors')}">
-                                    <input type="text" id="telefono1" name="telefono1" value="${fieldValue(bean:empresaInstance,field:'telefono1')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="telefono2">Telefono2:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'telefono2','errors')}">
-                                    <input type="text" id="telefono2" name="telefono2" value="${fieldValue(bean:empresaInstance,field:'telefono2')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="vendedor">Vendedor:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:empresaInstance,field:'vendedor','errors')}">
-                                    <g:select optionKey="id" from="${com.rural.Vendedor.list()}" name="vendedor.id" value="${empresaInstance?.vendedor?.id}" ></g:select>
-                                </td>
-                            </tr> 
-                        
-                        </tbody>
-                    </table>
-                </div>
-                <div class="buttons">
-                    <span class="button"><g:actionSubmit class="save" value="Update" /></span>
-                    <span class="button"><g:actionSubmit class="delete" onclick="return confirm('Are you sure?');" value="Delete" /></span>
-                </div>
-            </g:form>
+			<div id="formulario_extjs">
+			</div>        
         </div>
+        
+        
+		<div id="dep-win" class="x-hidden">
+			<div id="form-panel-departamento">
+				
+			</div>
+		</div>
+		<div id="loc-win" class="x-hidden">
+			
+		</div>
     </body>
 </html>

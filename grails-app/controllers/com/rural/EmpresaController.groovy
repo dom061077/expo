@@ -8,6 +8,16 @@ class EmpresaController {
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
+    
+    def search = {
+    	log.info("INGRESANDO AL METODO search de EmpresaController")
+    	log.debug("Parametros: "+params)
+    	render(contentType:'text/json'){
+    		success true
+    		if(params.searchCriteria)
+    			searchCriteria params.searchCriteria
+    	}
+    }
 
     def listjson = {
     	log.info("INGRESANDO AL METODO listjson de EmpresaController")
@@ -17,13 +27,13 @@ class EmpresaController {
     					offset: params.start,
     					sort: 'nombre',
     					order:'asc'
-    			){}
+    			){like('nombre','%'+params.searchCriteria+'%')}
     	log.debug("Cantidad de Empresas consultadas: "+empresas.count())
     	render(contentType:'text/json'){
     		total Empresa.count()
     		rows{
     			empresas.each{
-    				row(nombre:it.nombre,nombreRepresentante:it.nombreRepresentante,telefono1:it.telefono1)
+    				row(id:it.id,nombre:it.nombre,nombreRepresentante:it.nombreRepresentante,telefono1:it.telefono1)
     			}
     			
     		}
