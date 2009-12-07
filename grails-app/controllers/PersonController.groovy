@@ -175,9 +175,9 @@ class PersonController {
 		render(contentType:'text/json'){
 			success true
 			data{ username person.username
-			password person.passwd
-			newpassword ""
-			retypenewpassword ""
+							password person.passwd
+							newpassword ""
+							retypenewpassword ""
 			}
 			
 		}
