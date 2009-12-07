@@ -149,7 +149,7 @@ class LoginController {
 				msg = "[$username] is disabled."
 			}
 			else {
-				msg = "[$username] wrong username/password."
+				msg = "[$username] Usuario o contraseña invílidos."
 			}
 		}
 

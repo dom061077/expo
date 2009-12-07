@@ -49,6 +49,11 @@
         				url:'editpasswJson',
         				params: {
         					'id': userId
+    					},
+    					success: function(f,a){
+    						var jsonstruct=a.response.responseText;
+    						var jsonresult=eval('('+jsonstruct+')');
+    						Ext.getCmp('usernameId').setValue(jsonresult.data[0].username);
     					}
         			});
         	});
