@@ -167,13 +167,29 @@ class PersonController {
 		redirect uri: '/'
 	}
 
-	def editpassw = {
-		log.info("INGRESANDO AL METODO editpassw EN PersonController")
+	def editpasswJson = {
+		log.info("INGRESANDO AL METODO editpasswJson EN PersonController")
 		log.debug("Params: "+params)
-		def 		
-		
-		
+		Person person = Person.get(params.id)
+		log.debug("Usuario: "+person.username)
+		render(contentType:'text/json'){
+			success true
+			data{ username person.username
+			password person.passwd
+			newpassword ""
+			retypenewpassword ""
+			}
+			
+		}
 	}
+	
+	def editpassw = {
+		log.info("INGRESANDO AL METODO editpasswJson EN PersonController")
+		Long id = authenticateService.userDomain().id
+		log.debug("ID DE USUARIO: "+id) 
+		return [id:id]
+	}
+	
 	
 }
 
