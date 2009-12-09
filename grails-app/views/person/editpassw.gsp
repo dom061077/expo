@@ -14,36 +14,62 @@
         	Ext.onReady(function(){
         			Ext.QuickTips.init();
         			var formPssw = new Ext.FormPanel({
-        					url:'../login/updatepssw',
+        					url:'updatepsswJson',
         					id:'formPsswId',
         					renderTo:'formpassword',
         					frame:true,
         					width:400,
-        					height:150,
+        					height:200,
         					items:  [   {xtype: 'textfield',
 										 id:'usernameId',
 										 fieldLabel:'Usuario',
 										 name:'username',
 										 width:200,
-										 readOnly:false
+										 readonly:true
             							},        	        					
         	        					{xtype: 'textfield',
 	        							id:  'passwordId',
 	        							fieldLabel:'Contraseña anterior',
 	        							name:'password',
+										inputType: 'password',
 	        							width:200,
 	        							readOnly:false},{
         								xtype: 'textfield',
         								id:  'newpasswordId',
         								fieldLabel:'Nueva Contraseña',
         								name:'newpassword',
+										inputType: 'password',
         								width:200},{
         								xtype: 'textfield',
         								fieldLabel:'Repita Nueva Contraseña',
-        								id: 'retypenewpasswordId',
-        								name: 'retypenewpassword',
+        								id: 'newpasswordrepeatId',
+        								name: 'newpasswordrepeat',
         								width:200}
-        							]
+        							],
+        					buttons:[{text: 'Cambiar',
+        							  handler: function(){
+        							  			formPssw.getForm().submit({
+        							  				success: function(f,a){
+        							  					},
+        							  				failure: function(f,a){
+					                    					var msg="";
+					                    					if (a.result)
+														    	if (a.result.errors){
+														    		 for (var i=0; i<a.result.errors.length;i++){
+														    			msg=msg+a.result.errors[i].title+'\r\n';	
+												    				}
+																	Ext.Msg.show({
+																		title:'Errores',
+																		msg:msg,
+																		icon: Ext.MessageBox.ERROR	
+																	});	
+												    				
+											    				}
+        							  					}
+        							  			});	
+        							  		}
+        							 }
+        					]		
         				});
     				formPssw.load({
         				url:'editpasswJson',
@@ -56,6 +82,7 @@
     						Ext.getCmp('usernameId').setValue(jsonresult.data[0].username);
     					}
         			});
+        			Ext.getCmp('passwordId').focus('',10);
         	});
         </script>
         

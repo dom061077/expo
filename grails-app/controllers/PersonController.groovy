@@ -162,9 +162,34 @@ class PersonController {
 		return [person: person, roleMap: roleMap]
 	}
 	
-	def updatepssw = {
+	def updatepsswJson = {PersonCommand pc ->
+		def errorList = []
+		log.info("INGRESANDO AL METODO updatepsswJson")
+		log.debug("PersonCommand username: "+pc.username)
+		log.debug("PersonCommand password: "+pc.password)
+		log.debug("PersonCommand newpassword: "+pc.newpassword)
+		log.debug("PersonCommand newpasswordrepeat: "+pc.newpasswordrepeat)
+		if(pc.hasErrors()){
+			pc.errors.allErrors.each{error->
+        		error.codes.each{
+        			log.debug("Codigo de error: "+it)
+        			if(g.message(code:it)!=it)
+        				log.debug("ENCONTRO EL CODIGO DE MENSAJE")
+        				errorList.add(g.message(code:it))
+        		}
+			}
 		
-		redirect uri: '/'
+			render(contentType:"text/json"){
+				success false
+				errors{
+					errorList.each{
+						title it
+					}
+				} 
+			}
+		}	
+		
+		
 	}
 
 	def editpasswJson = {
@@ -195,22 +220,23 @@ class PersonController {
 
 class PersonCommand {
 	String username
-	String passwd
-	String newpasswd
-	String newpasswdrepeat
+	String password
+	String newpassword
+	String newpasswordrepeat
 	
 	static constraints = {
-		newpasswd(blank: false, size: 6..15,
+		newpassword(blank: false, size: 6..15,
 				validator: { newpswd, pc ->
-					if(newpswd != pc.passwd)
-						return newpswd != pc.passwd
-					else
-						return newpswd != pc.username							
+					if(newpswd != pc.password){
+						return newpswd != pc.password
+					}else{
+						return newpswd != pc.username
+					}							
 				}
 			)
-		newpasswdrepeat(blank: false, size: 6..15,
+		newpasswordrepeat(blank: false, size: 6..15,
 				validator: { repeatpswd, pc ->
-					return repeatpswd==pc.newpasswd
+					return repeatpswd==pc.newpassword
 				}
 			)	
 	}
