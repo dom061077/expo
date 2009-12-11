@@ -169,6 +169,7 @@ class PersonController {
 		log.debug("PersonCommand password: "+pc.password)
 		log.debug("PersonCommand newpassword: "+pc.newpassword)
 		log.debug("PersonCommand newpasswordrepeat: "+pc.newpasswordrepeat)
+		log.debug("Params: "+params)
 		if(pc.hasErrors()){
 			pc.errors.allErrors.each{error->
         		error.codes.each{
