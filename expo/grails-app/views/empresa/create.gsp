@@ -242,7 +242,21 @@
 						                    		},
 						                    		failure: function(f,a){
 					                    					var msg="";
-					                    					if (a.result)
+					                    					if (a.result){
+														    	if (a.result.loginredirect==true){
+														    		Ext.Msg.show({
+															    		title:'Mensaje',
+																		msg:'Su sesion de usuario a caducado, ingrese nuevamente',
+																		buttons: Ext.MessageBox.OK,																		
+														    			icon: Ext.MessageBox.WARNING,
+														    			fn: function(btn){
+														    				window.location='../logout/index';
+														    			}
+														    			
+														    		});
+														    		
+														    	}
+						                    					
 														    	if (a.result.errors){
 														    		 for (var i=0; i<a.result.errors.length;i++){
 														    			msg=msg+a.result.errors[i].title+'\r\n';	
@@ -254,6 +268,7 @@
 																	});	
 												    				
 											    				}
+					                    					}
 						                    		}
 						                    	});
 						                    }
@@ -396,8 +411,8 @@
 														    		Ext.Msg.alert('Error','El servidor no Responde')
 														    	}
 														    if (a.result){
-														    	if (a.result.redirect==true){
-														    		Error.Msg.alert('Su sesion de usuario a caducado, ingrese nuevamente');
+														    	if (a.result.loginredirect==true){
+														    		Ext.Msg.alert('Su sesion de usuario a caducado, ingrese nuevamente');
 														    		window.location='../logout/index';
 														    		}
 														    	if (a.result.errors){
