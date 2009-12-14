@@ -43,8 +43,8 @@
         								fieldLabel:'Nueva Contraseña',
         								name:'newpassword',
         								allowBlank:false,
-										minLengthText:6,
-										maxLengthText:15,
+										minLength:6,
+										maxLength:15,
 										msgTarget:'side',	        								
 										inputType: 'password',
         								width:200},{
@@ -63,6 +63,14 @@
         							  handler: function(){
         							  			formPssw.getForm().submit({
         							  				success: function(f,a){
+        							  						Ext.Msg.show({
+            							  						title:'Mensaje',
+            							  						msg:'Su contraseña fue modificada con �xito',
+            							  						buttons: Ext.MessageBox.OK,
+            							  						fn: function(btn){
+            							  							window.location='../';
+        							  							}
+        							  						});
         							  					},
         							  				failure: function(f,a){
 					                    					var msg="";
