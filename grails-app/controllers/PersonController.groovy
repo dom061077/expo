@@ -164,19 +164,29 @@ class PersonController {
 	
 	def updatepsswJson = {PersonCommand pc ->
 		def errorList = []
+	
 		log.info("INGRESANDO AL METODO updatepsswJson")
 		log.debug("PersonCommand username: "+pc.username)
 		log.debug("PersonCommand password: "+pc.password)
 		log.debug("PersonCommand newpassword: "+pc.newpassword)
 		log.debug("PersonCommand newpasswordrepeat: "+pc.newpasswordrepeat)
 		log.debug("Params: "+params)
+		Person user = authenticateService?.userDomain()
+		if (authenticateService.encodePassword(pc.password).equals(user.passwd)){
+			log.debug("El password es correcto")
+		}else{
+			log.debug("El password es incorrecto")
+			pc.errors.rejectValue("password","personcommand.password.authentication.failed","Contraseña")
+		}
+			
 		if(pc.hasErrors()){
 			pc.errors.allErrors.each{error->
         		error.codes.each{
         			log.debug("Codigo de error: "+it)
-        			if(g.message(code:it)!=it)
+        			if(g.message(code:it)!=it){
         				log.debug("ENCONTRO EL CODIGO DE MENSAJE")
         				errorList.add(g.message(code:it))
+        			}
         		}
 			}
 		
@@ -188,7 +198,25 @@ class PersonController {
 					}
 				} 
 			}
-		}	
+		}else{
+			user = Person.findByUsername(pc.username)
+			user.passwd=authenticateService.encodePassword(pc.newpassword)
+			if (user.save()){
+				log.debug("PASSWORD MODIFICADA CON EXITO")
+				render(contentType:"text/json"){
+					success true
+				}
+				
+			}else{
+				log.debug("NO SE GUARDO EL CAMBIO DE PASSWORD DEBIDO A ALGUN ERROR")
+				render(contentType:"text/json"){
+					success false
+					errors{
+						title "Se produjo un error al guardar los datos."
+					}
+				}
+			}
+		}
 		
 		
 	}
