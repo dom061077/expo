@@ -298,27 +298,34 @@
 	        	id: 'nombreId',
 	        	fieldLabel: 'Nombre',
 	        	allowBlank: false,
+	        	msgTarget:'side',
+	        	width:260,
 	        	name: 'nombre'
 	        	},{
 	        	xtype: 'textfield',
 	        	fieldLabel: 'C.U.I.T',
 	        	allowBlank: false,
+	        	msgTarget:'side',
 	        	name: 'cuit'
 	        	},{
 	        	xtype: 'textfield',
 	        	fieldLabel: 'Representante',
 	        	allowBlank: false,
-	        	
+	        	msgTarget:'side',
+	        	width:260,
 	        	name: 'nombreRepresentante'
 	        	},{
 		        	xtype: 'textfield',
 		            fieldLabel: 'Direcci&#243;n',
 		            allowBlank: false,
+		            width:260,
+		            msgTarget:'side',
 		            name:'direccion'
 	        	},{
 		        	xtype: 'textfield',
 		        	fieldLabel:'Telefono 1',
 		        	allowBlank:false,
+		        	msgTarget:'side',
 		        	name:'telefono1'
 	        	},{
 		        	xtype: 'textfield',
@@ -332,6 +339,7 @@
 	        		name: 'provinciaLn',
 	        		displayField:'nombre',
 	        		allowBlank:false,
+	        		msgTarget:'side',
 	        		mode:'local',
 	        		store: provinciasStore,
 	        		width: 120,
@@ -357,6 +365,7 @@
 	        		name: 'departamentoLn',
 	        		displayField:'nombreDep',
 	        		allowBlank:false,
+	        		msgTarget:'side',
 	        		mode:'local',
 	        		store: departamentosStore,
 	        		width: 120,
@@ -381,6 +390,7 @@
 	        		valueField: 'id',
 	        		mode:'local',
 	        		store: localidadesStore,
+	        		msgTarget:'side',
 	        		width: 200
 	        		
 	        	}],
@@ -449,8 +459,8 @@
     
     <body>
         <div class="nav">
-            <span class="menuButton"><a class="home" href="${resource(dir:'')}">Home</a></span>
-            <span class="menuButton"><g:link class="list" action="list">Empresa List</g:link></span>
+            <!-- span class="menuButton"><a class="home" href="${resource(dir:'')}">Home</a></span -->
+            <span class="menuButton"><g:link class="list" action="list">Listado de Empresas</g:link></span>
         </div>
         <div class="body">
 			<div id="formulario_extjs">
