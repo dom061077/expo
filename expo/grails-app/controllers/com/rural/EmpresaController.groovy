@@ -28,7 +28,7 @@ class EmpresaController {
     					sort: 'nombre',
     					order:'asc'
     			){like('nombre','%'+params.searchCriteria+'%')}
-    	log.debug("Cantidad de Empresas consultadas: "+empresas.count())
+    	log.debug("Cantidad de Empresas consultadas: "+Empresa.count())
     	render(contentType:'text/json'){
     		total Empresa.count()
     		rows{
@@ -77,6 +77,13 @@ class EmpresaController {
         }
     }
 
+    def editJson = {
+    	log.info("INGRESANDO AL METODO editJson DE EMPRESACONTROLLER")
+    	log.debug("Params: "+params)
+    	def empresaInsance = Empresa.get(params.id)
+    	
+    }
+    
     def edit = {
     	log.info("INGRESANDO AL METODO edit DE EmpresaController")    
         def empresaInstance = Empresa.get( params.id )
