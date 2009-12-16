@@ -1,5 +1,3 @@
-
-
 package com.rural
 
 class EmpresaController {

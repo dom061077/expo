@@ -10,7 +10,7 @@ class ProvinciaController {
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
     
     def listjson = {
-    	def provincias = Provincia.list()
+    	def provincias = Provincia.list(sort:"nombre",order:"asc")
     	render(contentType:'text/json'){
     		rows{
     			provincias.each{

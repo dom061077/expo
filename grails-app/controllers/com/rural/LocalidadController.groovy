@@ -15,6 +15,7 @@ class LocalidadController {
 			departamento{
 				eq('nombreDep',params.departamentonombre)
 			}
+			order("nombreLoc","asc")
 		}
     	render(contentType:'text/json'){
     		rows{
@@ -128,6 +129,7 @@ class LocalidadController {
     		render(contentType:"text/json"){
     			success true
     			nombreLoc localidadInstance.nombreLoc
+    			idLoc	  localidadInstance.id
     		}	
     	}
     	else{

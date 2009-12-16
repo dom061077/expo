@@ -159,9 +159,11 @@
 													           loc.clearValue();
 													           loc.store.removeAll();
 													           loc.store.load({
-													           	  params:{'departamentonombre':Ext.getCmp('idLocalidad').getValue()}
+													           	  params:{'departamentonombre':Ext.getCmp('idDepartamento').getValue()}
 													           });
 													           loc.enable();
+													           Ext.getCmp('idLocalidad').setValue(a.result.nombreLoc);
+													           Ext.getCmp('idLocalidad').hiddenField.value=a.result.idLoc;
 								                    		   winLoc.hide();
 			        											
 			        										},

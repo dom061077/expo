@@ -16,7 +16,8 @@ class DepartamentoController {
 		    provincia{
 		    	eq('nombre',params.provincianombre)
 		    }
-}
+		    order("nombreDep","asc")
+		}
 		
     	render(contentType:'text/json'){
     		rows{
