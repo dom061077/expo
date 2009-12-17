@@ -75,10 +75,21 @@ class EmpresaController {
         }
     }
 
-    def editJson = {
+    def editempresajson = {
     	log.info("INGRESANDO AL METODO editJson DE EMPRESACONTROLLER")
     	log.debug("Params: "+params)
-    	def empresaInsance = Empresa.get(params.id)
+    	def empresaInstance = Empresa.get(params.id)
+    	render(contentType:'text/json'){
+    		success true
+    		data(id:empresaInstance.id,nombre:empresaInstance.nombre
+    			 ,nombreRepresentante:empresaInstance.nombreRepresentante
+    			 ,telefono1:empresaInstance.telefono1
+    			 ,telefono2:empresaInstance.telefono2
+    			 ,cuit:empresaInstance.cuit
+    			 ,direccion:empresaInstance.direccion
+    			 ,provinciaLn:e
+    			)
+    	}
     	
     }
     
@@ -91,7 +102,7 @@ class EmpresaController {
             redirect(action:list)
         }
         else {
-            return [ empresaInstance : empresaInstance ]
+            return [ id: params.id ]
         }
     }
 
