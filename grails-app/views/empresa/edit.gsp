@@ -2,6 +2,11 @@
 <%@ page import="com.rural.Empresa" %>
 <html>
     <head>
+    	<%
+    		out << "<script type='text/javascript'>";
+    		out << "var empresaId = ${id};";
+    		out << "</script>";
+    	%>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
         <title>Edit Empresa</title>
@@ -419,7 +424,17 @@
 	        	      }
       	        ]
         	});
-        	Ext.getCmp('nombreId').focus('', 10);	
+        	Ext.getCmp('nombreId').focus('', 10);
+        	empresa_form.load({
+            		url:'editempresajson',
+            		params:{
+        				'id':empresaId
+        			},
+        			success: function(f,a){
+            				
+        				}
+                    		
+		        });	
     	});
         
         </script>
