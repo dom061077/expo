@@ -417,7 +417,7 @@
 														    //for(var i=0;i<a.result.errors.length;i++){
 															//    Ext.Msg.alert('Advertencia',a.result.errors[i].title);
 														    //}
-														    var msg;
+														    var msg="";
 														    if (a.failureType==Ext.form.Action.CONNECT_FAILURE ||
 														    	a.failureType==Ext.form.Action.SERVER_INVALID){
 														    		Ext.Msg.alert('Error','El servidor no Responde')
@@ -428,8 +428,8 @@
 														    		window.location='../logout/index';
 														    		}
 														    	if (a.result.errors){
-														    		for (a.result.errors in error){
-														    			msg=msg+error.title;	
+														    		for (var i=0; i<a.result.errors.length;i++){
+														    			msg=msg+a.result.errors[i].title+'\r\n';	
 												    				}
 												    				Ext.Msg.alert(msg);
 											    				}

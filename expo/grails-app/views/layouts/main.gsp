@@ -14,6 +14,7 @@
         <g:layoutHead />
         
         <script type="text/javascript">
+        	
         	/*var viewport = new Ext.Viewport(
 						layout: "border",
 						items: [
@@ -70,7 +71,7 @@
 </div>
 
 <div id="footer">
-Design by <a href="http://www.minimalistic-design.net">Minimalistic Design</a>
+<a href="http://www.srt.org.ar">Sociedad Rural de Tucum&aacute;n</a>
 </div>
 
 </body>
