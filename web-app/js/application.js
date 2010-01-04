@@ -10,4 +10,5 @@ if (Ajax && (Ajax != null)) {
           Effect.Fade('spinner',{duration:0.5,queue:'end'});
 	  }
 	});
+	
 }

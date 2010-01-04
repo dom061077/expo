@@ -14,6 +14,7 @@ class Empresa {
 	Localidad localidad
 	
     static constraints = {
+		nombre(unique:true)
 		vendedor(blank:true,nullable:true)
 		localidad(blank:true,nullable:true)
     }

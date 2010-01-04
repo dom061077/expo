@@ -57,21 +57,37 @@ class EmpresaController {
 
     def delete = {
       	log.info("INGRESANDO AL METODO delete DE EmpresaController")
+      	log.info("PARAMETROS: "+params)
         def empresaInstance = Empresa.get( params.id )
+        def errorList
         if(empresaInstance) {
             try {
                 empresaInstance.delete(flush:true)
-                flash.message = "Empresa ${params.id} deleted"
-                redirect(action:list)
+                log.info("EMPRESA CON ID: "+params.id+" ELIMINADA")
+                //flash.message = "Empresa ${params.id} deleted"
+                //redirect(action:list)
+                render(contentType:"text/json"){
+                	respuesta(success:true,title:"El registro se eliminó correctamente")
+                }
             }
             catch(org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "Empresa ${params.id} could not be deleted"
-                redirect(action:show,id:params.id)
+            	log.info("ERROR DE INTEGRIDAD AL TRATAR DE ELIMINAR LA EMPRESA CON ID: "+params.id)
+                //flash.message = "Empresa ${params.id} could not be deleted"
+                //redirect(action:show,id:params.id)
+                render(contentType:"text/json"){
+                	success false
+                	title "No se puede eliminar la empresa porque esta referenciada por otros datos"
+                }
             }
         }
         else {
-            flash.message = "Empresa not found with id ${params.id}"
-            redirect(action:list)
+            //flash.message = "Empresa not found with id ${params.id}"
+            //redirect(action:list)
+            log.info("Empresa con id ${params.id} no encontrada")
+            render(contentType:"text/json"){
+            	respuesta(success:false,
+            		title:"Empresa con id ${params.id} no encontrada")
+            }
         }
     }
 
@@ -79,6 +95,7 @@ class EmpresaController {
     	log.info("INGRESANDO AL METODO editJson DE EMPRESACONTROLLER")
     	log.debug("Params: "+params)
     	def empresaInstance = Empresa.get(params.id)
+    	log.debug("nombre de la localidad: "+empresaInstance.localidad.nombreLoc)
     	render(contentType:'text/json'){
     		success true
     		data(id:empresaInstance.id,nombre:empresaInstance.nombre
@@ -87,7 +104,10 @@ class EmpresaController {
     			 ,telefono2:empresaInstance.telefono2
     			 ,cuit:empresaInstance.cuit
     			 ,direccion:empresaInstance.direccion
-    			 ,provinciaLn:e
+    			 ,provinciaLn:empresaInstance.localidad.departamento.provincia.nombre
+    			 ,departamentoLn: empresaInstance.localidad.departamento.nombreDep
+    			 ,localidadAux: empresaInstance.localidad.nombreLoc
+    			 ,localidadId: empresaInstance.localidad.id
     			)
     	}
     	
@@ -108,6 +128,7 @@ class EmpresaController {
 
     def update = {
     	log.info("INGRESANDO AL METODO update DE EmpresaController")
+    	log.debug("Parametros: ${params}")
         def empresaInstance = Empresa.get( params.id )
         if(empresaInstance) {
             if(params.version) {
@@ -121,16 +142,39 @@ class EmpresaController {
             }
             empresaInstance.properties = params
             if(!empresaInstance.hasErrors() && empresaInstance.save()) {
-                flash.message = "Empresa ${params.id} updated"
-                redirect(action:show,id:empresaInstance.id)
+                //flash.message = "Empresa ${params.id} updated"
+                //redirect(action:show,id:empresaInstance.id)
+                log.info("Intancia de empresa guardada, renderizando json")
+                render(contentType:"text/json"){
+                	success true
+                }
             }
             else {
-                render(view:'edit',model:[empresaInstance:empresaInstance])
+                //render(view:'edit',model:[empresaInstance:empresaInstance])
+            	log.info("Error de validacion en departamento")
+            	empresaInstance.errors.allErrors.each{error->
+            		error.codes.each{
+            			if(g.message(code:it)!=it)
+            				errorList.add(g.message(code:it))
+            		}
+            	}
+
+                render(contentType:"text/json"){
+                	success false
+                	errorList.each{
+                		errors{error(title:it)}
+                	}
+                } 
+                
             }
         }
         else {
-            flash.message = "Empresa not found with id ${params.id}"
-            redirect(action:list)
+            //flash.message = "Empresa not found with id ${params.id}"
+            log.info("Empresa no encontrada con id ${params.id}")
+            render(contentType:'text/json'){
+            	success false
+            	errors{error(title:"Empresa con id ${params.id} no encontrada")}
+            }
         }
     }
 
@@ -166,6 +210,14 @@ class EmpresaController {
 				}
         }
         else {
+        	empresaInstance.errors.allErrors.each{
+        		it.arguments.each{arg->
+        			log.debug("Argumento: "+arg)
+        		}
+        		it.codes.each{cod->
+        			log.debug("Codigos: "+cod)
+        		}
+        	}
             render(contentType:"text/json") {
 					success false
 					errors {
