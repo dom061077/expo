@@ -2,14 +2,15 @@
     <head>
         <title><g:layoutTitle default="Grails" /></title>
         <link rel="stylesheet" href="${resource(dir:'css',file:'style.css')}" />
-        <link rel="stylesheet" href="${resource(dir:'css',file:'form.css')}" />        
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
         <g:javascript library="ext"  />
         	
         <ext:javascript dir="" file="ext-all.js"/>
         <ext:javascript dir="build/locale" file="ext-lang-es.js"/>
         <ext:stylesheet dir="resources/css" file="ext-all.css"/>
+        <ext:stylesheet dir="resources/css" file="tabs.css"/>
         <ext:javascript dir="build/locale" file="ext-lang-es.js"/>
+        
         
         <g:layoutHead />
         

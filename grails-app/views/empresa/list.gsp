@@ -51,7 +51,7 @@
     					renderTo: 'empresa-grid',
     					id:'formSearchId',
     					title:'Listado de Empresas',
-    					width:500,
+    					width:450,
     					frame:true,
     					items: [{
     							layout: 'column',
