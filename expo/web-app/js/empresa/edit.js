@@ -1,5 +1,7 @@
         Ext.onReady(function(){
 	        Ext.QuickTips.init();
+	        
+        
         	var winDep;
         	var winLoc;
         	var showAddLoc = function(){
