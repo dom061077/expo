@@ -1,5 +1,7 @@
 package com.rural
 
+import grails.converters.JSON
+
 class EmpresaController {
     
     def index = { redirect(action:list,params:params) }
@@ -200,10 +202,20 @@ class EmpresaController {
     }
     
     def savejson = {
-    	log.info ("INGRESANDO AL METODO savejson DE EmpresaController")
+    	log.info("INGRESANDO AL METODO savejson DE EmpresaController")
     	log.debug("Parametros Json: "+params)
         def empresaInstance = new Empresa(params)
     	log.debug("Valor de Instancia Empresa antes de salvar: "+empresaInstance)
+		def expos = JSON.parse(params.exposempresajson)
+		log.debug("Exposiciones cargadas: "+expos)
+		Exposicion expo
+    	expos.each{
+			log.debug("Cada item de las expos en json es: "+it)
+			expo = Exposicion.get(it.id)
+			empresaInstance.addToExpos(expo)
+		}
+
+		
         if(!empresaInstance.hasErrors() && empresaInstance.save()) {
             render(contentType:"text/json") {
 					success true
@@ -230,4 +242,11 @@ class EmpresaController {
         }
     
     }
+    
+    def listexpos = {
+    	log.info("INGRESANDO AL METODO listexpos DE EmpresaController")
+    	//def expos = Empresa.
+    	
+    }
+    
 }
