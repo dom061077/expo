@@ -31,6 +31,9 @@ class Empresa {
 		telefono2(blank:true,nullable:true)
 		cuit(blank:true,nullable:true)
 		direccion(blank:true,nullable:true)
+		telefonoRepresentante1(blank:true,nullable:true)
+		telefonoRepresentante2(blank:true,nullable:true)
+		telefonoRepresentante3(blank:true,nullable:true)		
 		
     }
 	static belongs = [vendedor:Vendedor, localidad:Localidad]
