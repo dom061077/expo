@@ -3,7 +3,9 @@ package com.rural
 class Exposicion {
 	String nombre
 	
-	static belongsTo = [empresa : Empresa]
+	static hasMany = [empresas : Empresa]
     static constraints = {
     }
+	
+	static belongsTo = [Empresa]
 }
