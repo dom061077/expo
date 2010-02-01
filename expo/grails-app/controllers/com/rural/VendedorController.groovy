@@ -13,6 +13,18 @@ class VendedorController {
         params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
         [ vendedorInstanceList: Vendedor.list( params ), vendedorInstanceTotal: Vendedor.count() ]
     }
+    
+    def listjson = {
+    	log.info("INGRESANDO AL METODO listJson DEL CONTROLADOR VendedorController")
+    	def vendedores = Vendedor.list(sort:"nombre",order:"asc")
+    	render(contentType:'text/json'){
+    		rows{
+    			vendedores.each{
+    				row(id:it.id,nombre:it.nombre)
+    			}
+    		}
+    	}
+    }
 
     def show = {
         def vendedorInstance = Vendedor.get( params.id )
