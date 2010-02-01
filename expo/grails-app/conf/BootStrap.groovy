@@ -2,6 +2,7 @@ import grails.util.Environment;
 import com.rural.Provincia;
 import com.rural.Departamento;
 import com.rural.Localidad;
+import com.rural.Exposicion;
 
 class BootStrap {
 	 def authenticateService
@@ -75,6 +76,9 @@ class BootStrap {
 				
 				provincia = new Provincia(nombre:"CATAMARCA").save()
 				provincia = new Provincia(nombre:"BUENOS AIRES").save()
+				
+				new Exposicion(nombre:"EXPO CONSTRUCCION").save()
+				new Exposicion(nombre:"EXPO TUCUMAN").save()
 				
 				
 			} else {
