@@ -15,14 +15,9 @@
         <g:layoutHead />
         
         <script type="text/javascript">
-        	
-        	/*var viewport = new Ext.Viewport(
-						layout: "border",
-						items: [
-						        {region:}
-						]
-
-                	);*/
+			<%
+				out << "var imagePath='"+"${resource(dir:'images')}';";
+			%>        	
         </script>
         			
 
