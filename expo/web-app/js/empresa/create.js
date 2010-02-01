@@ -269,11 +269,75 @@
 						                }]
 				                		});
 	        
+				var dsexpoModel = Ext.data.Record.create([
+						'id',
+						'nombre'
+				]);                		
+				
+				var vendedoresStore = new Ext.data.JsonStore({
+					autoLoad:true,
+					root:'rows',
+					url: '../vendedor/listjson',
+					fields: ['id','nombre']
+				});
 	        
-	        
+	        	var exposStore = new Ext.data.JsonStore({
+	        		    autoLoad:true,
+	        			//totalProperty: 'total',
+	        			root: 'rows',
+	        			url:'../exposicion/listjson',
+	        			fields:[
+	        				'id','nombre'
+	        			]
+	        			
+	        			
+	        		}); 
+	        	
+	        	var exposdeempresaStore= new Ext.data.JsonStore({
+	        			totalProperty: 'total',
+	        			root: 'rows',
+	        			url:'listexpos',
+	        			fields:['id','nombre'],
+	        			valueField:'id'
+	        		});	
 	        		
-	        
+	        	var gridexpos = new Ext.grid.GridPanel({
+	        		store:exposdeempresaStore,
+	        		tbar:[{	icon: imagePath+'/skin/database_delete.png',
+	        				cls: 'x-btn-text-icon',
+	        				handler: function(){
+	        					var sm = gridexpos.getSelectionModel();
+	        					var sel = sm.getSelected();
+	        					if (sm.hasSelection()){
+	        						gridexpos.getStore().remove(sel);
+	        					}
+	        				}
+	        			  }],
+	        		title:'Exposiciones',
+	        		columns: [
+	        				{header:"id",dataIndex:"id",hidden:true},
+	        				{header:"Nombre",width:250,dataIndex:"nombre"}
+	        			],
+	        		height:200,
+	        		width:300
+	        	});
 	        		
+	        	var comboExpo = new Ext.form.ComboBox({
+														 layout:'form',
+			        									 id:'idExposicionAddExpo',
+			        									 allowBlank:true,
+			        									 fieldLabel:'Exposición',
+			        									 mode:'local',
+			        									 name:'exposicionAddExpo',
+			        									 displayField:'nombre',
+			        									 forceSelection:true,
+			        									 store:exposStore,
+			        									 forceSelection:true,
+			        									 listWidth:200,
+			        									 valueField:'id',
+			        									 hiddenName:'id'
+			        									 
+	        									});
 	        	
 	        	var empresa_form = new Ext.FormPanel({
 	        	url: 'savejson',
@@ -284,7 +348,7 @@
 	        	frame: true,
 	        	title: 'Alta de Empresa',
 	        	height:400,
-	        	width: 400,
+	        	width: 450,
 	        	items: {	xtype:'tabpanel',
 	        				activeItem:0,
 	        				autoScroll:true,
@@ -300,7 +364,7 @@
 									 ,anchor:'100% 100%'
 									 ,defaultType:'textfield'
 									 ,bodyStyle:'padding:5px'
-									 ,border:false 
+									 ,border:true 
 									 // as we use deferredRender:false we mustn't
 									 // render tabs into display:none containers
 									 //,hideMode:'offsets'
@@ -327,14 +391,6 @@
 								        	msgTarget:'under',
 								        	layout:'form',
 								        	name: 'cuit'
-								        	},{
-								        	xtype: 'textfield',
-								        	fieldLabel: 'Representante',
-								        	allowBlank: false,
-								        	msgTarget:'under',
-								        	layout:'form',
-								        	width:260,
-								        	name: 'nombreRepresentante'
 								        	},{
 									        	xtype: 'textfield',
 									            fieldLabel: 'Dirección',
@@ -367,6 +423,7 @@
 								        		msgTarget:'under',
 								        		mode:'local',
 								        		store: provinciasStore,
+								        		forceSelection:true,
 								        		width: 120,
 												listeners: {
 												       'select' : function(cmb, rec, idx) {
@@ -393,6 +450,7 @@
 								        		msgTarget:'under',
 								        		mode:'local',
 								        		store: departamentosStore,
+								        		forceSelection:true,
 								        		layout:'form',
 								        		width: 120,
 								        		listeners: {
@@ -418,43 +476,131 @@
 								        		mode:'local',
 								        		store: localidadesStore,
 								        		msgTarget:'under',
-								        		width: 200 }
+								        		forceSelection:true,
+								        		width: 200
+								        	},{
+								        		xtype: 'combo',
+								        		id: 'idVendedor',
+								        		fieldLabel:'Vendedor',
+								        		allowBlank: false,
+								        		name: 'vendedor',
+								        		hiddenName:'vendedor.id',
+								        		displayField:'nombre',
+								        		layout:'form',
+								        		valueField: 'id',
+								        		mode: 'local',
+								        		store: vendedoresStore,
+								        		msgTarget:'under',
+								        		forceSelection:true,
+								        		width: 200
+								        	}
 								        	]},
 										{
 	        							title:'Contacto',
 	        							//frame:true,
 	        							defaults:{anchor:'-20'},
-	        							items:[
-	        									{xtype:'textfield',
-	        									 fieldLabel:'prueba',
-	        									 name:'prueba'
-	        									}
+	        							items:[{xtype: 'textfield',
+								        		fieldLabel: 'Representante',
+								        		allowBlank: false,
+								        		msgTarget:'under',
+								        		layout:'form',
+								        		width:260,
+								        		name: 'nombreRepresentante'
+								        	},{
+								        		xtype: 'textfield',
+								        		fieldLabel:'Teléfono 1',
+								        		allowBlank: true,
+								        		msgTarget:'under',
+								        		layout: 'form',
+								        		name: 'telefonoRepresentante1'
+								        	},{
+								        		xtype: 'textfield',
+								        		fieldLabel:'Teléfono 2',
+								        		allowBlank: true,
+								        		msgTarget: 'under',
+								        		layout:'form',
+								        		name: 'telefonoRepresentante2'
+								        	},{
+								        		xtype: 'textfield',
+								        		fieldLabel:'Teléfono 3',
+								        		allowBlank: true,
+								        		msgTarget: 'under',
+								        		layout: 'form',
+								        		name: 'telefonoRepresentante3'
+								        	}
 	        							]
 	        						},{
 	        							title:'Exposiciones',
-	        							defaults:{anchor:'-20'},
+	        							//defaults:{anchor:'-20'},
+	        							layout:'form',
+	        							defaultType:'panel',
+	        							
 	        							items:[
-	        									{xtype:'textfield',
-	        									 fieldLabel:'Rubro'
+	        								{
+	        									layout:'column',
+	        									anchor:'0',
+	        									items:[
+	        										{columnWidth: .8,
+	        										 anchor:'0',
+	        										 layout:'form',
+	        										 items:comboExpo
+	        										},{
+	        										 //columnWidth:.5,
+	        										 layout:'form',
+	        										 items:[{
+	        										 	 xtype:'button',
+	        										 	 text:'Agregar',
+	        										 	 handler: function(){
+	        										 	 	if(exposdeempresaStore.find('id',comboExpo.hiddenField.value)<0)
+		        										 	 	exposdeempresaStore.insert(0,
+		        										 	 		new dsexpoModel({
+		        										 	 			id:comboExpo.hiddenField.value,
+		        										 	 			nombre:Ext.getCmp('idExposicionAddExpo').getRawValue()
+		        										 	 		})
+		        										 	 	);	
+		        										 	else
+		        										 		Ext.Msg.show({title:'Error'
+		        										 						,msg:'Ya existe la Exposición'
+		        										 						,icon:Ext.Msg.ERROR});
+	        										 	 }
+	        										 	},{
+	        										 		xtype:'hidden',
+	        										 		allowBlank:true,
+	        										 		name:'exposempresajson',
+	        										 		id:'exposempresajsonId'
+	        										 		
+	        										 		
+	        										 	}]
+	        										}
 	        									
-	        									}
+	        									]
+	        								},gridexpos
 	        							]
 	        						}								        	
 							]},
 	        	buttons: [
 	        	          	  {
 		        	          	text:'Guardar',handler: function(){
+        	          					var exposStoreArr=[];
+        	          					var exposStoreJsonString="";
+        	          					exposStore.each(function(rec){
+        	          						exposStoreArr.push(rec.data);
+        	          					});
+        	          					exposStoreJsonString=Ext.encode(exposStoreArr);
+										Ext.getCmp('exposempresajsonId').setValue(exposStoreJsonString);
+		        	          		
+										
+										
 			        	          		empresa_form.getForm().submit({
 				        	          			//waitMsg:'Guardando Datos...',
 					        	          		success: function(f,a){
-				        	          					Ext.Msg.alert('Mensaje','Los datos se guardaron correctamente',
-																function(btn,text){
-																	if(btn=='ok'){
-																		window.location='create';	
-																	}
-				        	          							}
-								        	          	);
-				        	          					
+					        	          					Ext.Msg.alert('Mensaje','Los datos se guardaron correctamente',
+																	function(btn,text){
+																		if(btn=='ok'){
+																			window.location='create';	
+																		}
+					        	          							}
+									        	          	);
 			        	          						},
 			        	          				failure: function(f,a){
 						        	          				//Ext.Msg.alert('Warning',(a.result.errors[1]).title);
