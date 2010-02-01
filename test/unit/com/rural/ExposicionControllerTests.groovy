@@ -2,7 +2,7 @@ package com.rural
 
 import grails.test.*
 
-class EmpresaTests extends GrailsUnitTestCase {
+class ExposicionControllerTests extends ControllerUnitTestCase {
     protected void setUp() {
         super.setUp()
     }
@@ -11,5 +11,7 @@ class EmpresaTests extends GrailsUnitTestCase {
         super.tearDown()
     }
 
+    void testSomething() {
 
+    }
 }
