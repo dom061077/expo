@@ -104,12 +104,17 @@ class EmpresaController {
     			 ,nombreRepresentante:empresaInstance.nombreRepresentante
     			 ,telefono1:empresaInstance.telefono1
     			 ,telefono2:empresaInstance.telefono2
+    			 ,telefonoRepresentante1:empresaInstance.telefonoRepresentante1
+    			 ,telefonoRepresentante2:empresaInstance.telefonoRepresentante2
+    			 ,telefonoRepresentante3:empresaInstance.telefonoRepresentante3
     			 ,cuit:empresaInstance.cuit
     			 ,direccion:empresaInstance.direccion
     			 ,provinciaLn:empresaInstance.localidad.departamento.provincia.nombre
     			 ,departamentoLn: empresaInstance.localidad.departamento.nombreDep
     			 ,localidadAux: empresaInstance.localidad.nombreLoc
     			 ,localidadId: empresaInstance.localidad.id
+    			 ,vendedorId: empresaInstance.vendedor.id
+    			 ,vendedor:empresaInstance.vendedor.nombre
     			)
     	}
     	
@@ -131,7 +136,24 @@ class EmpresaController {
     def update = {
     	log.info("INGRESANDO AL METODO update DE EmpresaController")
     	log.debug("Parametros: ${params}")
+    	log.debug("Params.id: "+params.id)
         def empresaInstance = Empresa.get( params.id )
+        def expos = JSON.parse(params.exposempresajson)
+        def empIterator = null
+        def isnew
+        expos.each{
+    		empIterator = empresaInstance.expos.iterator()
+    		def e=null
+    		isnew=true
+    		while(empIterator.hasNext()){
+    			e=empIterator.next()
+    			if(e.id==it.id) isnew=false
+    		}
+    		if (isnew){
+    			empresaInstance.addToExpos(Exposicion.get(it.id))
+    			log.debug "SE AGREGO UNA EXPOSICION A LA EMPRESA"
+    		}
+    	}
         if(empresaInstance) {
             if(params.version) {
                 def version = params.version.toLong()
@@ -245,7 +267,19 @@ class EmpresaController {
     
     def listexpos = {
     	log.info("INGRESANDO AL METODO listexpos DE EmpresaController")
-    	//def expos = Empresa.
+    	log.debug("PARAMETROS: "+params)
+    	
+    	
+    	def empresa = Empresa.get(params.id)
+    	
+    	render(contentType:"text/json"){
+    		total empresa.expos.count()
+    		rows{
+    			empresa.expos.each{
+    				row(id:it.id,nombre:it.nombre,isnew:false)
+    			}
+    		}
+    	}
     	
     }
     
