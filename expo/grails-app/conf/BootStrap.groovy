@@ -3,6 +3,7 @@ import com.rural.Provincia;
 import com.rural.Departamento;
 import com.rural.Localidad;
 import com.rural.Exposicion;
+import com.rural.Vendedor
 
 class BootStrap {
 	 def authenticateService
@@ -15,6 +16,9 @@ class BootStrap {
      					createAdminUserIfRequired()
      					break;
      				case Environment.PRODUCTION:
+     					createAdminUserIfRequired()
+     					break;
+     				case Environment.TEST:
      					createAdminUserIfRequired()
      					break;
      		}
@@ -79,6 +83,8 @@ class BootStrap {
 				
 				new Exposicion(nombre:"EXPO CONSTRUCCION").save()
 				new Exposicion(nombre:"EXPO TUCUMAN").save()
+				
+				new Vendedor(nombre:'PRUEBA').save()
 				
 				
 			} else {
