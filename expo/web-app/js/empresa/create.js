@@ -280,6 +280,18 @@
 					url: '../vendedor/listjson',
 					fields: ['id','nombre']
 				});
+				
+				var rubroStore = new Ext.data.JsonStore({
+					autoLoad:true,
+					root:'rows',
+					url:'../rubro/listrubrojson'
+				});
+				
+				var subrubroStore = new Ext.data.JsonStore({
+					autoLoad:true,
+					root:'rows',
+					url:'../rubro/listsubrubrojson'
+				});
 	        
 	        	var exposStore = new Ext.data.JsonStore({
 	        		    autoLoad:true,
@@ -347,7 +359,7 @@
 	        	renderTo: 'formulario_extjs',
 	        	frame: true,
 	        	title: 'Alta de Empresa',
-	        	height:400,
+	        	height:450,
 	        	width: 450,
 	        	items: {	xtype:'tabpanel',
 	        				activeItem:0,
@@ -493,7 +505,21 @@
 								        		msgTarget:'under',
 								        		forceSelection:true,
 								        		width: 200
-								        	}
+								        	},{
+								        		xtype: 'combo',
+								        		fieldLabel:'Rubro',
+								        		allowBlank:false,
+								        		msgTarget: 'under',
+								        		layout: 'form',
+								        		name: 'rubro'
+								        	},{
+								        		xtype: 'combo',
+								        		fieldLabel:'Sub-Rubro',
+								        		allowBlank:false,
+								        		msgTarget:'under',
+								        		layout: 'form',
+								        		name: 'subrubro'
+							        		}
 								        	]},
 										{
 	        							title:'Contacto',
@@ -583,7 +609,7 @@
 		        	          	text:'Guardar',handler: function(){
         	          					var exposStoreArr=[];
         	          					var exposStoreJsonString="";
-        	          					exposStore.each(function(rec){
+        	          					exposdeempresaStore.each(function(rec){
         	          						exposStoreArr.push(rec.data);
         	          					});
         	          					exposStoreJsonString=Ext.encode(exposStoreArr);
