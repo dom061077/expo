@@ -4,6 +4,7 @@ import com.rural.Departamento;
 import com.rural.Localidad;
 import com.rural.Exposicion;
 import com.rural.Vendedor
+import com.rural.Rubro
 
 class BootStrap {
 	 def authenticateService
@@ -86,6 +87,9 @@ class BootStrap {
 				
 				new Vendedor(nombre:'PRUEBA').save()
 				
+				
+				Rubro subrubro=new Rubro(nombre:"CONSTRUCCION EDIFICIOS").save()
+				new Rubro(nombre:"CONSTRUCCION",subRubro:subrubro).save()
 				
 			} else {
 				println "Existing admin user, skipping creation"

@@ -292,9 +292,6 @@
 	        			
 	        			
 	        		}); 
-	        	var exposdeempresaStoreDeleted = new Ext.data.Store({
-	        			
-	        		});	
 	        	
 	        	var exposdeempresaStore= new Ext.data.JsonStore({
 	        			totalProperty: 'total',
@@ -339,7 +336,7 @@
 			        									 forceSelection:true,
 			        									 listWidth:200,
 			        									 valueField:'id',
-			        									 hiddenName:'id'
+			        									 hiddenName:'comboexpoid'
 			        									 
 	        									});
 	        	
@@ -378,13 +375,13 @@
 	        							title:'Datos Empresa',		
 	        							autoScroll:true,
 	        							defaults:{anchor:'-20'},
-								        	items: [/*{xtype: 'textfield',
+								        	items: [{xtype: 'textfield',
 						        			 id:'empresaId',
 						        			 hideLabel:true,
 						        			 fieldLabel:'id de Empresa',
 						        			 name:'id',
-						        			 hidden:false
-						        			},*/{xtype: 'textfield',
+						        			 hidden:true
+						        			},{xtype: 'textfield',
 								        	id: 'nombreId',
 								        	fieldLabel: 'Nombre',
 								        	allowBlank: false,
@@ -605,7 +602,7 @@
 					        	          					Ext.Msg.alert('Mensaje','Los datos se guardaron correctamente',
 																	function(btn,text){
 																		if(btn=='ok'){
-																			window.location='create';	
+																			window.location='list';	
 																		}
 					        	          							}
 									        	          	);
@@ -639,6 +636,54 @@
 	        	          	  			}
 	        	          	  		 
 		        	          },
+		        	          
+		        	          {text:'Eliminar',handler:function(){
+									Ext.Msg.show({title:'Mensaje',
+													msg:'Está seguro/a de eliminar el registro?',
+													buttons: {yes:true,no:true},
+													icon: Ext.MessageBox.QUESTION,
+													fn: function(btn){
+														if (btn=='yes'){
+															var conn = new Ext.data.Connection();
+															conn.request({
+																url:'delete',
+																method:'POST',
+																params:{
+																	id:Ext.getCmp('empresaId').getValue()
+																},
+																success: function(resp,opt){
+																	var respuesta = Ext.decode(resp.responseText);
+																	
+																	if(respuesta){
+																		if(respuesta.loginredirect)
+																			window.location='../logout/index';
+																		else {
+																			Ext.Msg.show({
+																				title:"Error",
+																				msg:respuesta.respuesta.title,
+																				icon:Ext.MessageBox.ERROR,
+																				buttons:Ext.MessageBox.OK
+																			});
+																			if(respuesta.respuesta.success)
+																				window.location='list';
+																		}
+																	}
+																	
+																},
+																failure: function(resp,opt){
+																	Ext.Msg.show({
+																			title:'Error',
+																			msg:'Se produjo un error al intentar eliminar el registro',
+																			icon:Ext.MessageBox.ERROR,
+																			buttons: Ext.MessageBox.OK
+																	});						
+																}
+															});
+														}
+													}
+												});							        	      	
+								   }
+			        	      },		        	          
 	        	          {text:'Cancelar',handler: function (){
 			        	          window.location='list';
 		        	          }
