@@ -292,6 +292,9 @@
 	        			
 	        			
 	        		}); 
+	        	var exposdeempresaStoreDeleted = new Ext.data.Store({
+	        			
+	        		});	
 	        	
 	        	var exposdeempresaStore= new Ext.data.JsonStore({
 	        			totalProperty: 'total',
@@ -336,7 +339,7 @@
 			        									 forceSelection:true,
 			        									 listWidth:200,
 			        									 valueField:'id',
-			        									 hiddenName:'comboexpoid'
+			        									 hiddenName:'idComboAddExpo'
 			        									 
 	        									});
 	        	
@@ -636,7 +639,6 @@
 	        	          	  			}
 	        	          	  		 
 		        	          },
-		        	          
 		        	          {text:'Eliminar',handler:function(){
 									Ext.Msg.show({title:'Mensaje',
 													msg:'Está seguro/a de eliminar el registro?',
@@ -674,7 +676,7 @@
 																	Ext.Msg.show({
 																			title:'Error',
 																			msg:'Se produjo un error al intentar eliminar el registro',
-																			icon:Ext.MessageBox.ERROR,
+																			icon:Ext.MessageBox.INFO,
 																			buttons: Ext.MessageBox.OK
 																	});						
 																}
@@ -682,8 +684,8 @@
 														}
 													}
 												});							        	      	
-								   }
-			        	      },		        	          
+								   }		        	          
+							   },		        	          
 	        	          {text:'Cancelar',handler: function (){
 			        	          window.location='list';
 		        	          }
