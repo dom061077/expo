@@ -138,13 +138,48 @@ class EmpresaController {
     	log.debug("Parametros: ${params}")
     	log.debug("Params.id: "+params.id)
         def empresaInstance = Empresa.get( params.id )
-        log.debug("EMPRESA RECUPERADA PARA EL UPDATE: "+empresaInstance)
         def expos = JSON.parse(params.exposempresajson)
         def empIterator = null
+        def exposJsonIterator = null
         def isnew
         def isdeleted
-        def e
-        ArrayList errorList=new ArrayList()
+        def expoJson=null
+        def e = null
+        //aqui determino las expos que se van a agregar
+        expos.each{
+    		empIterator = empresaInstance.expos.iterator()
+    		e=null
+    		isnew=true
+    		while(empIterator.hasNext()){
+    			e=empIterator.next()
+    			if(e.id==it.id) isnew=false
+    		}
+    		if (isnew){
+    			empresaInstance.addToExpos(Exposicion.get(it.id))
+    			log.debug "SE AGREGO UNA EXPOSICION A LA EMPRESA"
+    		}
+    	}
+    	//aqui determino las expos que se van a eliminar
+    	
+    	empIterator = empresaInstance.expos.iterator()
+    	while(empIterator.hasNext()){
+    		e=empIterator.next()
+    		exposJsonIterator = expos.iterator()
+    		expoJson=null
+    		isdeleted=true
+	    	while (exposJsonIterator.hasNext()){
+	    		expoJson=exposJsonIterator.next()
+	    		log.debug ("Id de expo JSON: "+expoJson.id+" Id de expo Empresa "+ e.id)
+	    		if((expoJson.id.toString()).compareTo(e.id.toString())==0){
+	    			isdeleted=false
+	    			log.debug("Para NO borrar "+e)
+	    		}
+	    	}
+    		if(isdeleted)
+    			empIterator.remove()
+    	}
+    	
+    	
         if(empresaInstance) {
             if(params.version) {
                 def version = params.version.toLong()
@@ -155,42 +190,10 @@ class EmpresaController {
                     return
                 }
             }
-            empresaInstance.properties = params            
-            
-            expos.each{
-        		empIterator = empresaInstance.expos.iterator()
-        		e=null
-        		isnew=true
-        		while(empIterator.hasNext()){
-        			e=empIterator.next()
-        			if(e.id==it.id) isnew=false
-        		}
-        		if (isnew){
-        			empresaInstance.addToExpos(Exposicion.get(it.id))
-        			log.debug "SE AGREGO UNA EXPOSICION A LA EMPRESA"
-        		}
-        	}
-            def empIteratorRem=empresaInstance.expos.iterator();
-            def erem=null
-            while(empIteratorRem.hasNext()){
-            	erem=empIteratorRem.next()
-            	empIterator = expos.iterator()
-            	e=null
-            	isdeleted=true
-            	while(empIterator.hasNext()){
-            		e=empIterator.next()
-            		if(e.id==erem.id) isdeleted=false
-            	}
-            	if (isdeleted){
-            		empresaInstance.expos.remove(erem)
-            		log.debug("SE REMOVIO UNA EXPOSICION DE LA EMPRESA")
-            	}
-            }
-
+            empresaInstance.properties = params
             if(!empresaInstance.hasErrors() && empresaInstance.save()) {
                 //flash.message = "Empresa ${params.id} updated"
                 //redirect(action:show,id:empresaInstance.id)
-                
                 log.info("Intancia de empresa guardada, renderizando json")
                 render(contentType:"text/json"){
                 	success true
@@ -198,10 +201,9 @@ class EmpresaController {
             }
             else {
                 //render(view:'edit',model:[empresaInstance:empresaInstance])
-            	log.info("Error de validacion en empresaInstance")
+            	log.info("Error de validacion en departamento")
             	empresaInstance.errors.allErrors.each{error->
             		error.codes.each{
-            			log.debug "ERROR DE VALIDACION: "+g.message(code:it)
             			if(g.message(code:it)!=it)
             				errorList.add(g.message(code:it))
             		}
