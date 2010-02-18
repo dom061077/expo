@@ -5,6 +5,7 @@ import com.rural.Localidad;
 import com.rural.Exposicion;
 import com.rural.Vendedor
 import com.rural.Rubro
+import com.rural.SubRubro
 
 class BootStrap {
 	 def authenticateService
@@ -19,9 +20,9 @@ class BootStrap {
      				case Environment.PRODUCTION:
      					createAdminUserIfRequired()
      					break;
-     				case Environment.TEST:
-     					createAdminUserIfRequired()
-     					break;
+     				//case Environment.TEST:
+     				//	createAdminUserIfRequired()
+     				//	break;
      		}
      }
      def destroy = {
@@ -88,8 +89,8 @@ class BootStrap {
 				new Vendedor(nombre:'PRUEBA').save()
 				
 				
-				Rubro subrubro=new Rubro(nombre:"CONSTRUCCION EDIFICIOS").save()
-				new Rubro(nombre:"CONSTRUCCION",subRubro:subrubro).save()
+				Rubro rubro=new Rubro(nombreRubro:"CONSTRUCCION").save()
+				SubRubro srubro = new SubRubro(nombre:"CONSTRUCCION DE ESCUELAS",rubro:rubro).save()
 				
 			} else {
 				println "Existing admin user, skipping creation"
