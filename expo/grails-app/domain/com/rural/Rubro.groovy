@@ -2,12 +2,14 @@ package com.rural
 
 class Rubro {
 
-	String nombre
-	Rubro subRubro
+	String nombreRubro
+	
+	
     static constraints = {
-		nombre(unique:true,nullable:false,blank:false)
-		subRubro(nullable:true,blank:true)
-		empresas(nullabel:true,blank:true)
+		nombreRubro(unique:true,nullable:false,blank:false)
+		
+		
+		
     }
-	static hasMany = [subRubro : Rubro,empresas : Empresa]
+	static hasMany = [subRubros : SubRubro]
 }

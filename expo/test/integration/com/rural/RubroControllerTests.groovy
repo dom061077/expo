@@ -5,39 +5,46 @@ import grails.test.*
 class RubroControllerTests extends GroovyTestCase {
     protected void setUp() {
         super.setUp()
+        def rubros = Rubro.listt()
+        rubros.each{
+        	it.delete()
+        }
     }
 
     protected void tearDown() {
         super.tearDown()
     }
 
-    void testListRubroJson() {
-        def srubro=new Rubro(nombre:"CONSTRUCCION")
-        if (!srubro.validate()){
-        	srubro.errors.each{
+    void testListRubroJSON() {
+        def rubro=new Rubro(nombreRubro:"CONSTRUCCIONXXX")
+        if (!rubro.validate()){
+        	rubro.errors.each{
         		println it
         	}
-        	fail("ERROR EN VALIDACION "+srubro.errors.allErrors)
+        	fail("ERROR EN VALIDACION "+rubro.errors.allErrors)
         }
-        assertFalse srubro.validate()
-        def rubro=new Rubro(nombre:"CONSTRUCCIONES EDILICIAS",subRubro:srubro).save()
+        rubro.save(flush:true)
+        //def rubro=new Rubro(nombre:"CONSTRUCCIONES EDILICIAS",subRubro:srubro).save()
         //assertFalse("MENSAJE VALIDACION: "+subrubro.errors,1==1)	
     	assertTrue(Rubro.count()==1)
     	def rubroController = new RubroController()
     	rubroController.listrubrojson()
     	def respuesta = rubroController.response.contentAsString
     	def responseJSON = grails.converters.JSON.parse(respuesta)
-    	assertTrue(responseJSON.total==2)
+    	if(responseJSON.total!=1)
+    		fail("CANTIDAD DE RUBROS: $respuesta")
     		
     }
     
-    private void validateAndPrintErrors(Object object) {
-    	   if (!object.validate()) {
-    	       object.errors.allErrors.each {error ->
-    	           println error
-    	      }
-    	      fail("failed to save object ${object}")
-    	   }
-    }    
+    void testListSubRubroJSON(){
+    	//def rubro = new 
+    }
     
+    void testCRUD(){
+    	def rubro = new Rubro(nombreRubro:"RUBRO 1").save(flush:true)
+    	assertNotNull(rubro)
+    	new SubRubro(nombreSubrubro:"SUBRUBRO 1",rubro:rubro).save(flush:true)
+    	def subrubros = SubRubro.list(rubro:rubro)
+    	assertTrue(subrubros.size()==1)
+    }
 }

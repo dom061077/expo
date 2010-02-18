@@ -103,10 +103,11 @@ class RubroController {
     def listrubrojson = {
     	def rubros = Rubro.list()
     	render(contentType:"text/json"){
+    		total rubros.size()
     		rows{
     			rubros.each{
-    				total: rubros.size()
-    				row(id:it.id,nombre:it.nombre)
+    				
+    				row(id:it.id,nombreRubro:it.nombreRubro)
     			}
     		}
     	}
@@ -114,12 +115,13 @@ class RubroController {
     }
     
     def listsubrubrojson = {
-    	def subrubros = Rubro.get(params.id).subrubros
+    	def subrubros = SubRubro.list()
     	render(contentType:"text/json"){
+			total subrubros.size()    		
     		rows{
-    			total: subrubros.size()
+
     			subrubros.each{
-    				row(id:it.id,nombre:it.nombre)
+    				row(id:it.id,nombreSubrubro:it.nombreSubrubro)
     			}
     		}
     	}
