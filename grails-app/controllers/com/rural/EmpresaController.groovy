@@ -115,6 +115,10 @@ class EmpresaController {
     			 ,localidadId: empresaInstance.localidad.id
     			 ,vendedorId: empresaInstance.vendedor.id
     			 ,vendedor:empresaInstance.vendedor.nombre
+    			 ,rubro:empresaInstance.subrubro.rubro.nombreRubro
+    			 ,rubroId:empresaInstance.subrubro.rubro.id
+    			 ,subrubro:empresaInstance.subrubro.nombreSubrubro
+    			 ,subrubroId: empresaInstance.subrubro.id
     			)
     	}
     	
@@ -145,6 +149,7 @@ class EmpresaController {
         def isdeleted
         def expoJson=null
         def e = null
+        def errorList = null
         //aqui determino las expos que se van a agregar
         expos.each{
     		empIterator = empresaInstance.expos.iterator()

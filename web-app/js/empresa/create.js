@@ -284,13 +284,14 @@
 				var rubroStore = new Ext.data.JsonStore({
 					autoLoad:true,
 					root:'rows',
-					url:'../rubro/listrubrojson'
+					url:'../rubro/listrubrojson',
+					fields: ['id','nombreRubro']
 				});
 				
 				var subrubroStore = new Ext.data.JsonStore({
-					autoLoad:true,
 					root:'rows',
-					url:'../rubro/listsubrubrojson'
+					url:'../rubro/listsubrubrojson',
+					fields: ['id','nombreSubrubro']
 				});
 	        
 	        	var exposStore = new Ext.data.JsonStore({
@@ -508,17 +509,44 @@
 								        	},{
 								        		xtype: 'combo',
 								        		fieldLabel:'Rubro',
+								        		id:'idRubro',
 								        		allowBlank:false,
 								        		msgTarget: 'under',
+								        		name: 'rubro',
+								        		hiddenName:'rubro.id',
+								        		displayField:'nombreRubro',
+								        		valueField:'id',
+								        		mode : 'local',
+								        		forceSelection:true,
+								        		store:rubroStore,
 								        		layout: 'form',
-								        		name: 'rubro'
+								        		width:200,
+								        		listeners:{
+								        			'select': function(cmd,rec,idx){
+								        				var subrubroCmb = Ext.getCmp('idSubrubro');
+								        				subrubroCmb.clearValue();
+								        				subrubroCmb.store.load({
+								        					params:{'rubroid':Ext.getCmp('idRubro').hiddenField.value}
+								        				});
+								        				subrubroCmb.enable();
+								        			}
+								        		}
 								        	},{
 								        		xtype: 'combo',
 								        		fieldLabel:'Sub-Rubro',
+								        		id:'idSubrubro',
+								        		store:subrubroStore,
 								        		allowBlank:false,
 								        		msgTarget:'under',
 								        		layout: 'form',
-								        		name: 'subrubro'
+								        		name: 'subrubro',
+								        		hiddenName:'subrubro.id',
+								        		displayField:'nombreSubrubro',
+								        		valueField:'id',
+								        		mode:'local',
+								        		forceSelection:true,
+								        		store:subrubroStore,
+								        		width:200
 							        		}
 								        	]},
 										{
