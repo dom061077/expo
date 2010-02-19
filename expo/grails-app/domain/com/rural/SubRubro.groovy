@@ -3,6 +3,7 @@ package com.rural
 class SubRubro {
 	
 	String nombreSubrubro
+	Rubro rubro
     static constraints = {
 		nombreSubrubro(unique:true,nullable:false,blank:false)
 		//rubro(nullable:false,blank:false)

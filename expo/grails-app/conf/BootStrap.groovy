@@ -90,7 +90,7 @@ class BootStrap {
 				
 				
 				Rubro rubro=new Rubro(nombreRubro:"CONSTRUCCION").save()
-				SubRubro srubro = new SubRubro(nombre:"CONSTRUCCION DE ESCUELAS",rubro:rubro).save()
+				SubRubro srubro = new SubRubro(nombreSubrubro:"CONSTRUCCION DE ESCUELAS",rubro:rubro).save()
 				
 			} else {
 				println "Existing admin user, skipping creation"

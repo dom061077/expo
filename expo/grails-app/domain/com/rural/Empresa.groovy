@@ -14,7 +14,7 @@ class Empresa {
 	
 	Vendedor vendedor
 	Localidad localidad
-	Rubro subrubro
+	SubRubro subrubro
 	String telefonoRepresentante1;
 	String telefonoRepresentante2;
 	String telefonoRepresentante3;
@@ -37,5 +37,5 @@ class Empresa {
 		telefonoRepresentante3(blank:true,nullable:true)		
 		subrubro(blank:true,nullable:true)
     }
-	static belongs = [vendedor:Vendedor, localidad:Localidad, subrubro: Rubro]
+	static belongs = [vendedor:Vendedor, localidad:Localidad, subrubro: SubRubro]
 }

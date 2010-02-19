@@ -101,6 +101,7 @@ class RubroController {
     //procedures que trabajan con json
     
     def listrubrojson = {
+    	log.info("INGRESANDO AL METODO listrubrojson DEL CONTROLLER RubroController")
     	def rubros = Rubro.list()
     	render(contentType:"text/json"){
     		total rubros.size()
@@ -115,7 +116,11 @@ class RubroController {
     }
     
     def listsubrubrojson = {
-    	def subrubros = SubRubro.list()
+        log.info("INGRESANDO AL METODO listsubrubrojson DEL CONTROLLER RubroController")
+        log.debug("PARAMETROS ENVIADOS: "+params)
+    	def subrubros = SubRubro.createCriteria().list{
+    	 		eq('rubro.id',new Long(params.rubroid))
+    	}
     	render(contentType:"text/json"){
 			total subrubros.size()    		
     		rows{

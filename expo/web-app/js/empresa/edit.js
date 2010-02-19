@@ -280,6 +280,20 @@
 					url: '../vendedor/listjson',
 					fields: ['id','nombre']
 				});
+				
+				var rubroStore = new Ext.data.JsonStore({
+					autoLoad:true,
+					root:'rows',
+					url:'../rubro/listrubrojson',
+					fields: ['id','nombreRubro']
+				});
+				
+				var subrubroStore = new Ext.data.JsonStore({
+					root:'rows',
+					url:'../rubro/listsubrubrojson',
+					fields: ['id','nombreSubrubro']
+				});
+				
 	        
 	        	var exposStore = new Ext.data.JsonStore({
 	        		    autoLoad:true,
@@ -501,7 +515,48 @@
 								        		msgTarget:'under',
 								        		forceSelection:true,
 								        		width: 200
-								        	}
+								        	},{
+								        		xtype: 'combo',
+								        		fieldLabel:'Rubro',
+								        		id:'idRubro',
+								        		allowBlank:false,
+								        		msgTarget: 'under',
+								        		name: 'rubro',
+								        		hiddenName:'rubro.id',
+								        		displayField:'nombreRubro',
+								        		valueField:'id',
+								        		mode : 'local',
+								        		forceSelection:true,
+								        		store:rubroStore,
+								        		layout: 'form',
+								        		width:200,
+								        		listeners:{
+								        			'select': function(cmd,rec,idx){
+								        				var subrubroCmb = Ext.getCmp('idSubrubro');
+								        				subrubroCmb.clearValue();
+								        				subrubroCmb.store.load({
+								        					params:{'rubroid':Ext.getCmp('idRubro').hiddenField.value}
+								        				});
+								        				subrubroCmb.enable();
+								        			}
+								        		}
+								        	},{
+								        		xtype: 'combo',
+								        		fieldLabel:'Sub-Rubro',
+								        		id:'idSubrubro',
+								        		store:subrubroStore,
+								        		allowBlank:false,
+								        		msgTarget:'under',
+								        		layout: 'form',
+								        		name: 'subrubro',
+								        		hiddenName:'subrubro.id',
+								        		displayField:'nombreSubrubro',
+								        		valueField:'id',
+								        		mode:'local',
+								        		forceSelection:true,
+								        		store:subrubroStore,
+								        		width:200
+							        		}
 								        	]},
 										{
 	        							title:'Contacto',
@@ -720,6 +775,11 @@
 	            				Ext.getCmp('idVendedor').setValue(a.result.data.vendedor);
 	            				Ext.getCmp('idVendedor').hiddenField.value=a.result.data.vendedorId;
 	            				
+	            				Ext.getCmp('idRubro').setValue(a.result.data.rubro);
+	            				Ext.getCmp('idRubro').hiddenField.value=a.result.data.rubroId;
+	            				
+	            				Ext.getCmp('idSubrubro').setValue(a.result.data.subrubro);
+	            				Ext.getCmp('idSubrubro').hiddenField.value=a.result.data.subrubroId;
 	            				
 	        				},
 	        			failure: function (thisform,action){

@@ -3,6 +3,7 @@ package com.rural
 import grails.test.*
 
 class RubroControllerTests extends GroovyTestCase {
+	def rubroConsulta = null
     protected void setUp() {
         super.setUp()
         def rubros = Rubro.list()
@@ -18,8 +19,9 @@ class RubroControllerTests extends GroovyTestCase {
         	fail("ERROR EN VALIDACION "+rubro.errors.allErrors)
         }
         rubro.save(flush:true)
-    	
-		def subrubro = new SubRubro(nombreSubrubro:"CONSTRUCCION SUBRUBRO",rubro:rubro).save(flush:true)        
+    	rubroConsulta = rubro
+		new SubRubro(nombreSubrubro:"CONSTRUCCION SUBRUBRO",rubro:rubro).save(flush:true)
+		new SubRubro(nombreSubrubro:"CONSTRUCCION SUBRUBRO 2",rubro:rubro).save(flush:true)        
         
     }
 
@@ -41,18 +43,28 @@ class RubroControllerTests extends GroovyTestCase {
     }
     
     void testListSubRubroJSON(){
-    	assertTrue(SubRubro.count()==1)
+    	assertTrue(SubRubro.count()==2)
     	def rubroController = new RubroController()
+    	rubroController.request.parameters = [rubroid:Long.toString(rubroConsulta.id.longValue())]
     	rubroController.listsubrubrojson()
     	def respuesta = rubroController.response.contentAsString
     	def responseJSON=grails.converters.JSON.parse(respuesta)
-    	if(responseJSON.total!=1)
+    	if(responseJSON.total!=2)
     		fail("CANTIDAD DE SUBRUBROS: $respuesta")
     }
     
     void testCRUD(){
-    	new SubRubro(nombreSubrubro:"SUBRUBRO 1",rubro:rubro).save(flush:true)
-    	def subrubros = SubRubro.list(rubro:rubro)
-    	assertTrue(subrubros.size()==1)
+    	def subrubros = SubRubro.list(rubro:rubroConsulta)
+    	assertTrue(subrubros.size()==2)
+    }
+    
+    void testSubRubroList(){
+    	assertTrue(SubRubro.count()==2)
+    	assertNotNull(rubroConsulta)
+    	def subrubros = SubRubro.createCriteria().list{
+    				eq('rubro.id',rubroConsulta.id)
+    	}
+    	
+    	assertTrue(subrubros.size()==2)
     }
 }
