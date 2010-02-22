@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+    <bean id="multipartResolver" class="com.adeptiva.commons.upload.AjaxMultipartResolver">
+        <property name="maxInMemorySize">
+            <!-- Max in memory 100kbytes -->
+            <value>10240</value>
+        </property>
+        <property name="maxUploadSize">
+            <!--  1Gb Max upload size -->
+            <value>1024000000</value>
+        </property>
+<!--        <property name="uploadTempDir">
+
+            <value>/tmp</value>
+        </property>-->
+        <property name="progressListener">
+            <ref bean="progressListener"/>
+        </property>
+	</bean>
+
+    <bean id="progressListener" class="com.adeptiva.commons.upload.AjaxProgressListener"/>
+    		
+</beans>
