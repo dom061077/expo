@@ -314,4 +314,39 @@ class EmpresaController {
     	
     }
     
+    //****************************métodos para el manejo inserción a partir de archivos excel********
+    
+    def upload = {
+    	def file = request.getFile('myFile')
+    }
+    
+    def uploadInfo = {
+            def progressMap = session.getAttribute("progressMap")
+            def progressStatus = session.getAttribute("progressStatus")
+            
+            if (!progressMap) {
+                render("No ProgressMap you Dweeb(tm)!")
+            }
+            
+            //if we don't have progress info in the session, it could
+            //indicate that the file upload was to small to require streaming
+            //and possibly finished before we could check progress
+            if (progressMap?.bytesRead == null){
+                render(builder:'json'){
+        		    bytesRead(1 )   
+        			totalSize(1 )
+        			status(AjaxProgressListener.STATUS_DONE)
+        		}   
+            }
+                
+            
+            //Aahh.. JSON builders how I love thee :)
+    		render(builder:'json'){
+    		    bytesRead(progressMap['bytesRead'] )   
+    			totalSize(progressMap['length'] )
+    			status(progressStatus)
+    		}
+    
+    }
+    
 }
