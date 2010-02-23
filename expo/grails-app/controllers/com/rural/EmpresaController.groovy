@@ -1,6 +1,9 @@
 package com.rural
 
 import grails.converters.JSON
+import jxl.*
+import org.springframework.web.multipart.commons.CommonsMultipartFile
+import org.springframework.web.multipart.MultipartHttpServletRequest
 
 class EmpresaController {
     
@@ -379,11 +382,32 @@ class EmpresaController {
     
     //****************************métodos para el manejo inserción a partir de archivos excel********
     
-    def upload = {
-    	def file = request.getFile('myFile')
+    def uploadedFile = {
+    	log.info("INGRESANDO AL METODO uploadedFile DEL CONTROLADOR EmpresaController")
+	    MultipartHttpServletRequest mpr = (MultipartHttpServletRequest)request;  
+		CommonsMultipartFile fileExcel = (CommonsMultipartFile) mpr.getFile("archivoExcel");  
+		     
+		  // create our workbook
+		  try{  
+			  Workbook workbook = Workbook.getWorkbook(fileExcel.inputStream)  
+			  Sheet sheet = workbook.getSheet(0)
+			  log.debug("LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTO")
+			  
+  			  return [success:true,msgupload:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTO"]		  
+  		  }catch(jxl.read.biff.BiffException ioe){
+		   	 log.debug("FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL")
+		   	 return [success:false,msgupload:"FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL"]
+		  }      	
+    }
+    
+    def uploadFile = {
+    	log.info("INGRESANDO AL METODO uploadFile DEL CONTROLADOR EmpresaController")
+    	log.debug("PARAMETROS: "+params)
+    	
     }
     
     def uploadInfo = {
+    		log.info("INGRESANDO AL METODO uploadInfo DEL CONTROLLADOR EmpresaController")
             def progressMap = session.getAttribute("progressMap")
             def progressStatus = session.getAttribute("progressStatus")
             
