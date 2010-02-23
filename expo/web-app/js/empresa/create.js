@@ -313,6 +313,14 @@
 	        			fields:['id','nombre'],
 	        			valueField:'id'
 	        		});	
+	        	
+	        	var exposaparticiparStore = new Ext.data.JsonStore({
+	        			totalProperty: 'total',
+	        			root: 'rows',
+	        			url:'listexposaparticipar',
+	        			fields:['id','nombre'],
+	        			valueField:'id'
+	        	});	
 	        		
 	        	var gridexpos = new Ext.grid.GridPanel({
 	        		store:exposdeempresaStore,
@@ -333,6 +341,43 @@
 	        			],
 	        		height:200,
 	        		width:300
+	        	});
+	        	
+	        	var gridexposaparticipar = new Ext.grid.GridPanel({
+	        		store: exposaparticiparStore,
+	        		tbar:[{
+	        				icon: imagePath+'/skin/database_delete.png',
+	        				cls: 'x-btn-text-icon',
+	        				handler: function(){
+	        					var sm = gridexposaparticipar.getSelectionModel();
+	        					var sel = sm.getSelected();
+	        					if (sm.hasSelection()){
+	        						gridexposaparticipar.getStore().remove(sel);
+	        					}
+	        				}
+	        			}],
+	        		title: 'Exposiciones',
+	        		columns:[
+	        			{header:"id",dataIndex:"id",hidden:true},
+	        			{header:"Nombre",width:250,dataIndex:"nombre"}
+	        		],
+	        		height:200,
+	        		width:300
+	        	});
+	        	
+	        	var comboExpoaParticipar = new Ext.form.ComboBox({
+	        														layout:'form',
+	        														id:'idExposicionaParticiparAddExpo',
+	        														allowBlank:true,
+	        														fieldLabel: 'Exposición',
+	        														mode:'local',
+	        														name:'exposicionaParticiparAddExpo',
+	        														displayField:'nombre',
+	        														forceSelection:true,
+	        														store:exposStore,
+	        														listWidth:200,
+	        														valueField:'id',
+	        														hiddenName:'id'
 	        	});
 	        		
 	        	var comboExpo = new Ext.form.ComboBox({
@@ -584,7 +629,7 @@
 								        	}
 	        							]
 	        						},{
-	        							title:'Exposiciones',
+	        							title:'Expos. en las que participó',
 	        							//defaults:{anchor:'-20'},
 	        							layout:'form',
 	        							defaultType:'panel',
@@ -629,6 +674,35 @@
 	        									
 	        									]
 	        								},gridexpos
+	        							]
+	        						},{
+	        							title:'Expos. a participar',
+	        							layout:'form',
+	        							defaultType:'panel',
+	        							items:[
+	        								{
+	        									layout:'column',
+	        									anchor:'0',
+	        									items:[
+		        									{columnWidth: .8,
+		        									 anchor:'0',
+		        									 layout:'form',
+		        									 items:comboExpoaParticipar
+		        									},{
+		        									 layout:'form',
+		        									 items:[{
+		        									 	xtype:'button',
+		        									 	text:'Agregar',
+		        									 	handler: function(){
+		        											if(exposaparticiparStore.find('id',comboExposaParticipar.hiddenField.value<0))
+		        												exposaparticiparStore.insert(0,
+		        													new ds
+		        												);						 		
+		        									 	}
+		        									 }]
+		        									}
+	        									]
+	        								},gridexposaparticipar
 	        							]
 	        						}								        	
 							]},
