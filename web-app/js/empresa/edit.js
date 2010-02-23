@@ -364,8 +364,8 @@
 	        	border:false,
 	        	renderTo: 'formulario_extjs',
 	        	frame: true,
-	        	title: 'Alta de Empresa',
-	        	height:400,
+	        	title: 'Modificar de Empresa',
+	        	height:470,
 	        	width: 450,
 	        	items: {	xtype:'tabpanel',
 	        				activeItem:0,
@@ -593,7 +593,7 @@
 								        	}
 	        							]
 	        						},{
-	        							title:'Exposiciones',
+	        							title:'Expos. en las que participó',
 	        							//defaults:{anchor:'-20'},
 	        							layout:'form',
 	        							defaultType:'panel',

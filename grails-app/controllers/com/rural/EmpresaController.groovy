@@ -143,6 +143,7 @@ class EmpresaController {
     	log.debug("Params.id: "+params.id)
         def empresaInstance = Empresa.get( params.id )
         def expos = JSON.parse(params.exposempresajson)
+        def exposaparticipar = JSON.parse(params.exposaparticiparjson)
         def empIterator = null
         def exposJsonIterator = null
         def isnew
@@ -183,7 +184,42 @@ class EmpresaController {
     		if(isdeleted)
     			empIterator.remove()
     	}
+//+++++++++++++++++++++
+        //aqui determino las exposaparticpar que se van a agregar
+        exposaparticipar.each{
+    		empIterator = empresaInstance.exposaparticipar.iterator()
+    		e=null
+    		isnew=true
+    		while(empIterator.hasNext()){
+    			e=empIterator.next()
+    			if(e.id==it.id) isnew=false
+    		}
+    		if (isnew){
+    			empresaInstance.addToExposaparticipar(Exposicion.get(it.id))
+    			log.debug "SE AGREGO UNA EXPOSICION A LA EMPRESA"
+    		}
+    	}
+    	//aqui determino las exposaparticipar que se van a eliminar
     	
+    	empIterator = empresaInstance.exposaparticipar.iterator()
+    	while(empIterator.hasNext()){
+    		e=empIterator.next()
+    		exposJsonIterator = exposaparticipar.iterator()
+    		expoJson=null
+    		isdeleted=true
+	    	while (exposJsonIterator.hasNext()){
+	    		expoJson=exposJsonIterator.next()
+	    		log.debug ("Id de expo JSON: "+expoJson.id+" Id de expo Empresa "+ e.id)
+	    		if((expoJson.id.toString()).compareTo(e.id.toString())==0){
+	    			isdeleted=false
+	    			log.debug("Para NO borrar "+e)
+	    		}
+	    	}
+    		if(isdeleted)
+    			empIterator.remove()
+    	}
+    	//-----------fin logica para agregar y eliminar expos en que se participó y en las que se participará
+
     	
         if(empresaInstance) {
             if(params.version) {
@@ -206,7 +242,7 @@ class EmpresaController {
             }
             else {
                 //render(view:'edit',model:[empresaInstance:empresaInstance])
-            	log.info("Error de validacion en departamento")
+            	log.info("Error de validacion en Empresa")
             	empresaInstance.errors.allErrors.each{error->
             		error.codes.each{
             			if(g.message(code:it)!=it)
@@ -260,18 +296,27 @@ class EmpresaController {
         def empresaInstance = new Empresa(params)
     	log.debug("Valor de Instancia Empresa antes de salvar: "+empresaInstance)
 		def expos = JSON.parse(params.exposempresajson)
+		def exposaparticipar = JSON.parse(params.exposaparticiparjson)
 		log.debug("Exposiciones cargadas: "+expos)
+		log.debug("Exposiciones en las que puede participar: "+exposaparticipar)
 		Exposicion expo
     	expos.each{
 			log.debug("Cada item de las expos en json es: "+it)
 			expo = Exposicion.get(it.id)
 			empresaInstance.addToExpos(expo)
 		}
+    	
+    	exposaparticipar.each{
+    		log.debug("Cada item de las exposaparticiparjson es: "+it)
+    		expo = Exposicion.get(it.id)
+    		empresaInstance.addToExposaparticipar(expo)
+    	}
 
 		
         if(!empresaInstance.hasErrors() && empresaInstance.save()) {
             render(contentType:"text/json") {
 					success true
+					idEmpresa empresaInstance.id
 				}
         }
         else {
@@ -313,6 +358,24 @@ class EmpresaController {
     	}
     	
     }
+
+    def listexposaparticipar = {
+    	log.info("INGRESANDO AL METODO listexposaparticipar DE EmpresaController")
+    	log.debug("PARAMETROS: "+params)
+    	
+    	def empresa = Empresa.get(params.id)
+    	render(contentType:"text/json"){
+    		total empresa.exposaparticipar.size()
+    		rows{
+    			empresa.exposaparticipar.each{
+    				row(id:it.id,nombre:it.nombre)
+    				
+    			}
+    		}
+    	}
+    }
+
+    
     
     //****************************métodos para el manejo inserción a partir de archivos excel********
     

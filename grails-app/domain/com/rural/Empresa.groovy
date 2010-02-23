@@ -19,7 +19,7 @@ class Empresa {
 	String telefonoRepresentante2;
 	String telefonoRepresentante3;
 	
-	static hasMany = [expos:Exposicion]
+	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion]
 	
 	
     static constraints = {
