@@ -381,9 +381,8 @@ class EmpresaController {
     
     
     //****************************métodos para el manejo inserción a partir de archivos excel********
-    
-    def uploadedFile = {
-    	log.info("INGRESANDO AL METODO uploadedFile DEL CONTROLADOR EmpresaController")
+    def upload  = {
+    	log.info("INGRESANDO AL METODO upload DEL CONTROLADOR EmpresaController")
 	    MultipartHttpServletRequest mpr = (MultipartHttpServletRequest)request;  
 		CommonsMultipartFile fileExcel = (CommonsMultipartFile) mpr.getFile("archivoExcel");  
 		     
@@ -396,8 +395,14 @@ class EmpresaController {
   			  return [success:true,msgupload:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTO"]		  
   		  }catch(jxl.read.biff.BiffException ioe){
 		   	 log.debug("FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL")
-		   	 return [success:false,msgupload:"FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL"]
+		   	 redirect(action:'list')
 		  }      	
+    	
+    }
+    
+    def uploadedFile = {
+    	log.info("INGRESANDO AL METODO uploadedFile DEL CONTROLADOR EmpresaController")
+    	
     }
     
     def uploadFile = {
