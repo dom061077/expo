@@ -1,3 +1,5 @@
+//http://www.youtube.com/watch?v=8ylGmIBSK78
+
 Ext.onReady(function(){
 	Ext.QuickTips.init();
 	var progressBar = new Ext.ProgressBar({
@@ -14,7 +16,37 @@ Ext.onReady(function(){
 				form: uploadForm.getForm().getEl().dom,
 				url:'upload',
 				isUpload: true,
-     			headers: {'Content-type':'multipart/form-data'}
+     			//headers: {'Content-type':'multipart/form-data'},
+				headers: {'Content-type':'text/html'},
+     			success: function(response,opt){
+     				var respuestaJson=Ext.util.JSON.decode(response.responseText)
+     				if (respuestaJson.success){
+     					Ext.Msg.show({
+     						title:'Resultado de la carga',
+     						msg:respuestaJson.responseText,
+     						icon: Ext.Msg.INFO,
+     						buttons: Ext.Msg.OK
+     					});
+     					if (respuestaJson.success==true){
+     						var conn = new Ext.data.Connection();
+     						conn.request({
+     							url:'procesarexcel',
+     							method:'POST',
+     							params:{
+     								nombrearchivo:respuestaJson.nombrearchivo
+     							},
+     							success:function(resp,opt){
+     								
+     							},
+     							failure:function(resp,opt){
+     								
+     							}
+     						});
+     					}else{
+     						//no hacer nada
+     					}
+     				}
+     			}
 
 			});			
 			
@@ -37,11 +69,17 @@ Ext.onReady(function(){
 					   		
 					   		//If we are done or upload failed, stop running this
 					   		//task
-					   		if (obj.status === "FAILED" ||
-					   			obj.status === "DONE"){
+					   		if (obj.status === "FAILED")
 					   			Ext.TaskMgr.stop(task);
-					   			//window.location = 'uploadedFile';
-					   		}
+					   		else	
+						   		if (obj.status === "DONE"){
+							   		progressBar.updateProgress(obj.salvados/obj.total);
+							   		progressBar.updateText('Copiando archivo...');
+						   			if (obj.total>=obj.salvados){	
+						   				Ext.TaskMgr.stop(task);
+						   			}
+						   			
+						   		}
 					   		
 					   },
 					   failure: function(response, request){
@@ -67,6 +105,7 @@ Ext.onReady(function(){
 	        							renderTo:'formularioupload',
 	        							width: 400,
 	        							height:150,
+	        							fileUpload:true,
 	        							items:[
 	        									{xtype:'textfield',
 	        									 name:'archivoExcel',
@@ -80,6 +119,7 @@ Ext.onReady(function(){
 	           								 id:'uploadFormId',
 	        								 handler: function(){
 	        								 	handleUpload();
+	        								 	
 	        								 }
 	        								}
 	        							]	

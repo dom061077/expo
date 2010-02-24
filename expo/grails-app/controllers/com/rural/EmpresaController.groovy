@@ -390,15 +390,23 @@ class EmpresaController {
 		  try{  
 			  Workbook workbook = Workbook.getWorkbook(fileExcel.inputStream)  
 			  Sheet sheet = workbook.getSheet(0)
-			  log.debug("LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTO")
-			  
-  			  return [success:true,msgupload:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTO"]		  
+			  log.info("LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTO. NOMBRE DEL ARCHIVO: ${fileExcel.name}")
+			  def cuit = null
+			  def nombre = null
+			  session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":0])
+			  for(int r = 1; r < sheet.rows; r++){
+			  	session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":r+1])			  			
+			  }
+			  				  
+			  //render """{success:true,nombrearchivo:"${fileExcel.name}", responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA"}"""		  
   		  }catch(jxl.read.biff.BiffException ioe){
-		   	 log.debug("FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL")
-		   	 redirect(action:'list')
+		   	 log.info("FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL")
+		   	  //render """{success:false, responseText:"FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL"}"""
 		  }      	
     	
     }
+    
+    
     
     def uploadedFile = {
     	log.info("INGRESANDO AL METODO uploadedFile DEL CONTROLADOR EmpresaController")
@@ -415,6 +423,7 @@ class EmpresaController {
     		log.info("INGRESANDO AL METODO uploadInfo DEL CONTROLLADOR EmpresaController")
             def progressMap = session.getAttribute("progressMap")
             def progressStatus = session.getAttribute("progressStatus")
+            def progressMapSave = session.getAttribute("progressMapSave")
             
             if (!progressMap) {
                 render("No ProgressMap you Dweeb(tm)!")
@@ -433,10 +442,18 @@ class EmpresaController {
                 
             
             //Aahh.. JSON builders how I love thee :)
+            def totalFilas = 0
+            def filasSalvadas = 0
+            if(progressMapSave){ 
+            	totalFilas = 0//progressMapSave['total']
+            	filasSalvadas =0// progressMapSave['salvados']
+            }
     		render(builder:'json'){
     		    bytesRead(progressMap['bytesRead'] )   
     			totalSize(progressMap['length'] )
     			status(progressStatus)
+    			total(totalFilas)
+    			salvados(filasSalvadas)
     		}
     
     }
