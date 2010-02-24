@@ -10,9 +10,9 @@ Ext.onReady(function(){
 	function handleUpload(){
 
 			//start a TaskRunner which will fetch progress updates
-			Ext.Ajax.request({
+			 Ext.Ajax.request({
 				form: uploadForm.getForm().getEl().dom,
-				url:'uploadedFile',
+				url:'upload',
 				isUpload: true,
      			headers: {'Content-type':'multipart/form-data'}
 
@@ -40,6 +40,7 @@ Ext.onReady(function(){
 					   		if (obj.status === "FAILED" ||
 					   			obj.status === "DONE"){
 					   			Ext.TaskMgr.stop(task);
+					   			//window.location = 'uploadedFile';
 					   		}
 					   		
 					   },

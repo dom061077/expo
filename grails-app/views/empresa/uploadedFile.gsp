@@ -20,7 +20,8 @@
         <div class="nav">
         </div>
         
-        <div id='progressBar'>
+    	<!-- g:textField name="success"/ -->
+    	<!-- g:textField name="msgupload"/         
         </div>
         <div class="body">
 			<div id="formularioupload">

@@ -17,8 +17,6 @@
         
     </head>
     <body>
-    	<g:textField name="success"/>
-    	<g:textField name="msgupload"/>
         <div class="nav">
         </div>
         
