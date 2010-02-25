@@ -101,7 +101,7 @@ class EmpresaController {
     	log.info("INGRESANDO AL METODO editJson DE EMPRESACONTROLLER")
     	log.debug("Params: "+params)
     	def empresaInstance = Empresa.get(params.id)
-    	log.debug("nombre de la localidad: "+empresaInstance.localidad.nombreLoc)
+    	log.debug("nombre de la localidad: "+empresaInstance.localidad?.nombreLoc)
     	render(contentType:'text/json'){
     		success true
     		data(id:empresaInstance.id,nombre:empresaInstance.nombre
@@ -113,16 +113,16 @@ class EmpresaController {
     			 ,telefonoRepresentante3:empresaInstance.telefonoRepresentante3
     			 ,cuit:empresaInstance.cuit
     			 ,direccion:empresaInstance.direccion
-    			 ,provinciaLn:empresaInstance.localidad.departamento.provincia.nombre
-    			 ,departamentoLn: empresaInstance.localidad.departamento.nombreDep
-    			 ,localidadAux: empresaInstance.localidad.nombreLoc
-    			 ,localidadId: empresaInstance.localidad.id
-    			 ,vendedorId: empresaInstance.vendedor.id
-    			 ,vendedor:empresaInstance.vendedor.nombre
-    			 ,rubro:empresaInstance.subrubro.rubro.nombreRubro
-    			 ,rubroId:empresaInstance.subrubro.rubro.id
-    			 ,subrubro:empresaInstance.subrubro.nombreSubrubro
-    			 ,subrubroId: empresaInstance.subrubro.id
+    			 ,provinciaLn:empresaInstance.localidad?.departamento?.provincia?.nombre
+    			 ,departamentoLn: empresaInstance.localidad?.departamento?.nombreDep
+    			 ,localidadAux: empresaInstance.localidad?.nombreLoc
+    			 ,localidadId: empresaInstance.localidad?.id
+    			 ,vendedorId: empresaInstance.vendedor?.id
+    			 ,vendedor:empresaInstance.vendedor?.nombre
+    			 ,rubro:empresaInstance.subrubro?.rubro?.nombreRubro
+    			 ,rubroId:empresaInstance.subrubro?.rubro?.id
+    			 ,subrubro:empresaInstance.subrubro?.nombreSubrubro
+    			 ,subrubroId: empresaInstance.subrubro?.id
     			)
     	}
     	
@@ -396,13 +396,23 @@ class EmpresaController {
 			  def nombre = null
 			  session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":0])
 			  Empresa empresa
+			  def rowserrors = []
 			  for(int r = 1; r < sheet.rows; r++){
-				empresa = new Empresa(cuit:"",nombre:"")
+			    //def top = sheet.getCell(0, r).contents
+				empresa = new Empresa(cuit:sheet.getCell(0, r).contents,nombre:sheet.getCell(1, r).contents)
 				batch.add(empresa)
 				if(batch.size()>100){
 					Empresa.withTransaction{
 						for(Empresa emp in batch)
-							emp.save()
+							if(!emp.hasErrors())
+								//emp.save()
+								log.debug("VALORES DE INSERCION: "+emp.nombre
+										+" "+emp.cuit )
+							else{
+								log.debug("ERRORES DE VALIDACION: $emp.errors.allErrors")
+								log.debug("VALORES DE INSERCION CON ERRORES: "+emp.nombre
+										+" "+emp.cuit )
+							}		
 					}
 					batch.clear()
 				}
@@ -411,12 +421,24 @@ class EmpresaController {
 			  log.debug("SALVANDO EMPRESS EN TRANSACCION")
    			  Empresa.withTransaction{
 					for(Empresa emp in batch){
-						emp.save()
-						log.debug("EMPRESA SALVADA: "+emp)
+						if(!emp.hasErrors()){
+							if (Empresa.findByNombre(emp.nombre)!=null){
+								log.debug("La Empresa ya existe")
+								rowerrors.add(empresa:emp,msg:"La empresa ya existe")
+							}else{	
+								emp.save()
+								log.debug("EMPRESA SALVADA: "+emp)
+							}							
+						}else{	
+							log.debug("EMPRESA CON ERRORES: $emp.errors.allErrors")
+							rowerrors.add(empresa:emp,msg:"Error desconocido")
+						}
 					}
 				}
 				batch.clear()
-			  				  
+			  if(rowerrors.size()>0){
+			  		
+			  }				  
 			  render """{success:true, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA"}"""		  
   		  }catch(jxl.read.biff.BiffException ioe){
 		   	 log.info("FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL")
