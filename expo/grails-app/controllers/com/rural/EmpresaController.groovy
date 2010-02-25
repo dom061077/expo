@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest
 class EmpresaController {
     
     def index = { redirect(action:list,params:params) }
+    def sessionFactory
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
@@ -385,7 +386,7 @@ class EmpresaController {
     	log.info("INGRESANDO AL METODO upload DEL CONTROLADOR EmpresaController")
 	    MultipartHttpServletRequest mpr = (MultipartHttpServletRequest)request;  
 		CommonsMultipartFile fileExcel = (CommonsMultipartFile) mpr.getFile("archivoExcel");  
-		     
+		List<Empresa> batch = []     
 		  // create our workbook
 		  try{  
 			  Workbook workbook = Workbook.getWorkbook(fileExcel.inputStream)  
@@ -394,14 +395,32 @@ class EmpresaController {
 			  def cuit = null
 			  def nombre = null
 			  session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":0])
+			  Empresa empresa
 			  for(int r = 1; r < sheet.rows; r++){
+				empresa = new Empresa(cuit:"",nombre:"")
+				batch.add(empresa)
+				if(batch.size()>100){
+					Empresa.withTransaction{
+						for(Empresa emp in batch)
+							emp.save()
+					}
+					batch.clear()
+				}
 			  	session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":r+1])			  			
 			  }
+			  log.debug("SALVANDO EMPRESS EN TRANSACCION")
+   			  Empresa.withTransaction{
+					for(Empresa emp in batch){
+						emp.save()
+						log.debug("EMPRESA SALVADA: "+emp)
+					}
+				}
+				batch.clear()
 			  				  
-			  //render """{success:true,nombrearchivo:"${fileExcel.name}", responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA"}"""		  
+			  render """{success:true, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA"}"""		  
   		  }catch(jxl.read.biff.BiffException ioe){
 		   	 log.info("FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL")
-		   	  //render """{success:false, responseText:"FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL"}"""
+		   	  render """{success:false, responseText:"FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL"}"""
 		  }      	
     	
     }
@@ -424,6 +443,7 @@ class EmpresaController {
             def progressMap = session.getAttribute("progressMap")
             def progressStatus = session.getAttribute("progressStatus")
             def progressMapSave = session.getAttribute("progressMapSave")
+            log.debug("CONTENIDO DE progressMapSave: "+progressMapSave)
             
             if (!progressMap) {
                 render("No ProgressMap you Dweeb(tm)!")
@@ -445,8 +465,8 @@ class EmpresaController {
             def totalFilas = 0
             def filasSalvadas = 0
             if(progressMapSave){ 
-            	totalFilas = 0//progressMapSave['total']
-            	filasSalvadas =0// progressMapSave['salvados']
+            	totalFilas = progressMapSave['total']
+            	filasSalvadas = progressMapSave['salvados']
             }
     		render(builder:'json'){
     		    bytesRead(progressMap['bytesRead'] )   
