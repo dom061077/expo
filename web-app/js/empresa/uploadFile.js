@@ -17,7 +17,7 @@ Ext.onReady(function(){
 				url:'upload',
 				isUpload: true,
      			//headers: {'Content-type':'multipart/form-data'},
-				headers: {'Content-type':'text/html'},
+				//headers: {'Content-type':'text/html'},
      			success: function(response,opt){
      				var respuestaJson=Ext.util.JSON.decode(response.responseText)
      				if (respuestaJson.success){
@@ -30,10 +30,10 @@ Ext.onReady(function(){
      					if (respuestaJson.success==true){
      						var conn = new Ext.data.Connection();
      						conn.request({
-     							url:'procesarexcel',
+     							url:'list',
      							method:'POST',
      							params:{
-     								nombrearchivo:respuestaJson.nombrearchivo
+     								//nombrearchivo:respuestaJson.nombrearchivo
      							},
      							success:function(resp,opt){
      								
@@ -75,7 +75,8 @@ Ext.onReady(function(){
 						   		if (obj.status === "DONE"){
 							   		progressBar.updateProgress(obj.salvados/obj.total);
 							   		progressBar.updateText('Copiando archivo...');
-						   			if (obj.total>=obj.salvados){	
+						   			if (obj.total>=obj.salvados){
+						   				progressBar.updateText('Copia de archivo completada');
 						   				Ext.TaskMgr.stop(task);
 						   			}
 						   			
