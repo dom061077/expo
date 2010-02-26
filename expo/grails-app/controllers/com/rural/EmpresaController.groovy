@@ -298,6 +298,7 @@ class EmpresaController {
     	log.info("INGRESANDO AL METODO savejson DE EmpresaController")
     	log.debug("Parametros Json: "+params)
         def empresaInstance = new Empresa(params)
+        empresaInstance.fechaAlta= new Date()
     	log.debug("Valor de Instancia Empresa antes de salvar: "+empresaInstance)
 		def expos = JSON.parse(params.exposempresajson)
 		def exposaparticipar = JSON.parse(params.exposaparticiparjson)
@@ -399,7 +400,7 @@ class EmpresaController {
 			  def rowerrors = []
 			  for(int r = 1; r < sheet.rows; r++){
 			    //def top = sheet.getCell(0, r).contents
-				empresa = new Empresa(cuit:sheet.getCell(0, r).contents,nombre:sheet.getCell(1, r).contents)
+				empresa = new Empresa(fechaAlta:new Date(),cuit:sheet.getCell(0, r).contents,nombre:sheet.getCell(1, r).contents)
 				batch.add(empresa)
 				if(batch.size()>100){
 					Empresa.withTransaction{
@@ -418,7 +419,9 @@ class EmpresaController {
 				}
 			  	session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":r+1,"success":true])			  			
 			  }
-			  log.debug("SALVANDO EMPRESS EN TRANSACCION")
+			  log.debug("SALVANDO EMPRESA EN TRANSACCION")
+			  def cargaExcelInstance = new CargaExcel(fechaCarga:new Date(),nombreArchivo:fileExcel.name,archivo:fileExcel.bytes)
+			  cargaExcelInstance.save()
    			  Empresa.withTransaction{
 					for(Empresa emp in batch){
 						if(!emp.hasErrors()){
@@ -442,10 +445,17 @@ class EmpresaController {
 					  
 				  }
 			  }				  
-			  render """{success:true, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA"}"""		  
+			  def rowerrorsstr = "errors:["
+			  rowerrors.each{
+			  		rowerrorsstr +="{msgerror:'$it.msg',cuit:'$it.empresa.cuit',nombre:'$it.empresa.nombre'}," 
+			  }
+			  rowerrorsstr+="{mssgerror: '',cuit:'',nombre:''}]"
+			  render """{success:true, totalerrores:$rowerrors.size, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA",$rowerrorsstr}"""
+			  
+			  		  
   		  }catch(jxl.read.biff.BiffException ioe){
 		   	 log.info("FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL")
-		   	 render """{success:false, responseText:"FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL"}"""
+		   	 //recordar que para los taskrunner tengo que renderizar json de esta formarender """{success:false, responseText:"FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL"}"""
 		   	 
 		  }      	
     	
