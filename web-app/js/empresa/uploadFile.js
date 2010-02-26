@@ -10,6 +10,7 @@ Ext.onReady(function(){
 	*/
 	var mensajeglobal='';
 	
+	
 	function handleUploadsinTaskMgr(){
 			 Ext.Ajax.request({
 				form: uploadForm.getForm().getEl().dom,
@@ -22,6 +23,7 @@ Ext.onReady(function(){
      				mensajeglobal=respuestaJson.responseText;
    					if (respuestaJson.success==true){
      										Ext.MessageBox.hide();
+     										erroresStore.loadData(respuestaJson);
 						   					Ext.MessageBox.show({
 						   						title:'Mensaje',
 						   						msg:'PASO POR EL TRUE'
@@ -33,6 +35,7 @@ Ext.onReady(function(){
 						   						title:'Error',
 						   						msg:'PASO POR EL FALSE'
 						   		});
+						   		
      				}
      			}
 
@@ -124,7 +127,28 @@ Ext.onReady(function(){
 		
 			return true;
 
-	}	
+	}
+	
+	var erroresReader = new Ext.data.JsonReader({
+		root: 'errors',
+		totalProperty:'totalerrores',
+		fields:[
+			{name:'cuit'},{name:'nombre'},{name:'msgerror'}
+		]
+	});
+	
+	var erroresStore = new Ext.data.Store({reader : erroresReader	});
+	
+	
+	var gridErrores = new Ext.grid.GridPanel({
+		store:erroresStore,
+		columns:[
+			{header: 'C.U.I.T',dataIndex:'cuit'},
+			{header: 'nombre',dataindex:'nombre'},
+			{header: 'Mensaje',dataindex:'msgerror'}
+		]
+	});
+		
 	
 	var uploadForm = new Ext.FormPanel({
 	        							url:'upload',
@@ -135,6 +159,7 @@ Ext.onReady(function(){
 	        							width: 400,
 	        							height:150,
 	        							fileUpload:true,
+	        							title:'Erores de la Copia',
 	        							items:[
 	        									{xtype:'textfield',
 	        									 name:'archivoExcel',
@@ -142,6 +167,7 @@ Ext.onReady(function(){
 	        									 inputType:'file'
 	        									
 	        									}/*,progressBar*/
+	        									,gridErrores
 	        								],
 	        							buttons:[
 	        								{text:'Subir Archivo',
@@ -154,6 +180,7 @@ Ext.onReady(function(){
 	        								 		icon: Ext.MessageBox.INFO
 	        								 	});
 	        								 	handleUploadsinTaskMgr();
+	        								 	
 	        								 }
 	        								}
 	        							]	

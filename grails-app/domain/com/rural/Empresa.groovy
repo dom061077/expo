@@ -9,6 +9,7 @@ class Empresa {
 	String cuit
 	String direccion
 	String codigoPostal
+	Date fechaAlta
 	
 	//String localidad
 	
