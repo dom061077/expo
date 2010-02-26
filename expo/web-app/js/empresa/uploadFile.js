@@ -8,7 +8,38 @@ Ext.onReady(function(){
 						text:''
 					});
 	*/
+	var mensajeglobal='';
+	
+	function handleUploadsinTaskMgr(){
+			 Ext.Ajax.request({
+				form: uploadForm.getForm().getEl().dom,
+				url:'upload',
+				isUpload: true,
+     			//headers: {'Content-type':'multipart/form-data'},
+				//headers: {'Content-type':'text/html'},
+     			success: function(response,opt){
+     				var respuestaJson=Ext.util.JSON.decode(response.responseText)
+     				mensajeglobal=respuestaJson.responseText;
+   					if (respuestaJson.success==true){
+     										Ext.MessageBox.hide();
+						   					Ext.MessageBox.show({
+						   						title:'Mensaje',
+						   						msg:'PASO POR EL TRUE'
+						   					});
+   					}else{
+     						
+     							Ext.MessageBox.hide();	
+						   		Ext.MessageBox.show({
+						   						title:'Error',
+						   						msg:'PASO POR EL FALSE'
+						   		});
+     				}
+     			}
 
+			});			
+		
+	}
+	
 	function handleUpload(){
 
 			//start a TaskRunner which will fetch progress updates
@@ -20,30 +51,22 @@ Ext.onReady(function(){
 				//headers: {'Content-type':'text/html'},
      			success: function(response,opt){
      				var respuestaJson=Ext.util.JSON.decode(response.responseText)
+     				mensajeglobal=respuestaJson.responseText;
      				if (respuestaJson.success){
-     					Ext.Msg.show({
-     						title:'Resultado de la carga',
-     						msg:respuestaJson.responseText,
-     						icon: Ext.Msg.INFO,
-     						buttons: Ext.Msg.OK
-     					});
      					if (respuestaJson.success==true){
-     						var conn = new Ext.data.Connection();
-     						conn.request({
-     							url:'list',
-     							method:'POST',
-     							params:{
-     								//nombrearchivo:respuestaJson.nombrearchivo
-     							},
-     							success:function(resp,opt){
-     								
-     							},
-     							failure:function(resp,opt){
-     								
-     							}
-     						});
+     										Ext.MessageBox.hide();
+						   					Ext.MessageBox.show({
+						   						title:'Mensaje',
+						   						msg:'PASO POR EL TRUE'
+						   					});
      					}else{
-     						//no hacer nada
+     						
+     							Ext.MessageBox.hide();	
+						   		Ext.MessageBox.show({
+						   						title:'Error',
+						   						msg:respuestaJson.responseText
+						   		});
+
      					}
      				}
      			}
@@ -77,8 +100,12 @@ Ext.onReady(function(){
 							   		//progressBar.updateText('Copiando archivo...');
 						   			if (obj.total>=obj.salvados){
 						   				//progressBar.updateText('Copia de archivo completada');
-						   				Ext.MessageBox.hide();
+						   				//Ext.MessageBox.hide();
 						   				Ext.TaskMgr.stop(task);
+						   				//Ext.MessageBox.show({
+						   					//title:'Mensaje',
+						   					//msg:mensajeglobal
+						   				//});
 						   			}
 						   			
 						   		}
@@ -93,7 +120,7 @@ Ext.onReady(function(){
 			    },
 			    interval: 2000 //check progress every 2 seconds	    
 			}
-			Ext.TaskMgr.start(task);
+			//Ext.TaskMgr.start(task);
 		
 			return true;
 
@@ -126,8 +153,7 @@ Ext.onReady(function(){
 	        								 		msg:'Espere mientras se procesan los datos',
 	        								 		icon: Ext.MessageBox.INFO
 	        								 	});
-	        								 	handleUpload();
-	        								 	
+	        								 	handleUploadsinTaskMgr();
 	        								 }
 	        								}
 	        							]	
