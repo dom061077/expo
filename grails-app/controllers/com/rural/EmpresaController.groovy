@@ -396,7 +396,7 @@ class EmpresaController {
 			  def nombre = null
 			  session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":0])
 			  Empresa empresa
-			  def rowserrors = []
+			  def rowerrors = []
 			  for(int r = 1; r < sheet.rows; r++){
 			    //def top = sheet.getCell(0, r).contents
 				empresa = new Empresa(cuit:sheet.getCell(0, r).contents,nombre:sheet.getCell(1, r).contents)
@@ -416,7 +416,7 @@ class EmpresaController {
 					}
 					batch.clear()
 				}
-			  	session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":r+1])			  			
+			  	session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":r+1,"success":true])			  			
 			  }
 			  log.debug("SALVANDO EMPRESS EN TRANSACCION")
    			  Empresa.withTransaction{
@@ -437,12 +437,16 @@ class EmpresaController {
 				}
 				batch.clear()
 			  if(rowerrors.size()>0){
-			  		
+				  rowerrors.each{
+					  log.debug("FILAS CON ERRORES, Mensaje: "+it.msg+", Empresa(cuit: $it.empresa.cuit, nombre: $it.empresa.nombre)")
+					  
+				  }
 			  }				  
 			  render """{success:true, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA"}"""		  
   		  }catch(jxl.read.biff.BiffException ioe){
 		   	 log.info("FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL")
-		   	  render """{success:false, responseText:"FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL"}"""
+		   	 render """{success:false, responseText:"FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL"}"""
+		   	 
 		  }      	
     	
     }
