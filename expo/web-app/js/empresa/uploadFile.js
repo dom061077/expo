@@ -10,6 +10,23 @@ Ext.onReady(function(){
 	*/
 	var mensajeglobal='';
 	
+	function downloadexcelerrores(idcargaexcel){
+		var conn = new Ext.data.Connection();
+		conn.request({
+			url:'downloadfileerrors',
+			method:'POST',
+			params:{
+				id:idcargaexcel
+			},
+			success: function(resp,opt){
+				
+			},
+			failure : function(resp,opt){
+				
+			}
+		});
+	}
+	
 	
 	function handleUploadsinTaskMgr(){
 			 Ext.Ajax.request({
@@ -21,24 +38,51 @@ Ext.onReady(function(){
      			success: function(response,opt){
      				var respuestaJson=Ext.util.JSON.decode(response.responseText)
      				mensajeglobal=respuestaJson.responseText;
-   					if (respuestaJson.success==true){
-     										Ext.MessageBox.hide();
-     										erroresStore.loadData(respuestaJson);
-						   					Ext.MessageBox.show({
-						   						title:'Mensaje',
-						   						msg:'PASO POR EL TRUE'
-						   					});
-   					}else{
-     						
-     							Ext.MessageBox.hide();	
-						   		Ext.MessageBox.show({
-						   						title:'Error',
-						   						msg:'PASO POR EL FALSE'
-						   		});
-						   		
+     				if(respuestaJson){
+     					if (respuestaJson.loginredirect)
+     						window.location="../logout/index";
+     					else
+	   					if (respuestaJson.success==true){
+	     										Ext.MessageBox.hide();
+	     										if (respuestaJson.cantErrores>0)
+	     											Ext.MessageBox.show({
+	     												title:'Mensaje',
+	     												msg:'El archivo fue procesado pero se produjeron '+respuestaJson.cantErrores+' errores. Desea descargar listado de errores?',
+	     												icon: Ext.MessageBox.WARNING,
+	     												buttons: Ext.Msg.YESNO,
+	     												fn:function(btn){
+	     													if (btn=='yes'){
+	     														
+	     														downloadexcelerrores(1);
+	     														
+	     													}
+	     												}
+	     											});
+	     										else
+								   					Ext.MessageBox.show({
+								   						title:'Mensaje',
+								   						msg:'El archivo fue procesado correctamente',
+								   						icon: Ext.MessageBox.INFO
+								   					});
+	   					}else{
+	     						
+	     							Ext.MessageBox.hide();	
+							   		Ext.MessageBox.show({
+							   						title:'Error',
+							   						msg:'Ocurrió un error al subir el archivo. Intente nuevamente y recuerde que debe ser un archivo excel',
+							   						icon: Ext.MessageBox.ERROR
+							   		});
+							   		
+	     				}
+	     					
      				}
-     			}
-
+     			},
+				failure: function(response,opt){
+					Ext.MessageBox.show({
+						title:"Error",
+						msg:"Error en la carga de Excel"
+					});	
+				}
 			});			
 		
 	}
@@ -116,6 +160,11 @@ Ext.onReady(function(){
 					   },
 					   failure: function(response, request){
 					   		//handle failure
+					   	Ext.MessageBox.show({
+					   		title:"Error",
+					   		msg:"Se produjo un error"
+					   		
+					   	});
 					   }
 					});	    
 			    
@@ -129,25 +178,7 @@ Ext.onReady(function(){
 
 	}
 	
-	var erroresReader = new Ext.data.JsonReader({
-		root: 'errors',
-		totalProperty:'totalerrores',
-		fields:[
-			{name:'cuit'},{name:'nombre'},{name:'msgerror'}
-		]
-	});
 	
-	var erroresStore = new Ext.data.Store({reader : erroresReader	});
-	
-	
-	var gridErrores = new Ext.grid.GridPanel({
-		store:erroresStore,
-		columns:[
-			{header: 'C.U.I.T',dataIndex:'cuit'},
-			{header: 'nombre',dataindex:'nombre'},
-			{header: 'Mensaje',dataindex:'msgerror'}
-		]
-	});
 		
 	
 	var uploadForm = new Ext.FormPanel({
@@ -157,9 +188,9 @@ Ext.onReady(function(){
 	        							frame:true,
 	        							renderTo:'formularioupload',
 	        							width: 400,
-	        							height:150,
+	        							height:200,
 	        							fileUpload:true,
-	        							title:'Erores de la Copia',
+	        							title:'Registro de Empresas con Archivo Excel',
 	        							items:[
 	        									{xtype:'textfield',
 	        									 name:'archivoExcel',
@@ -167,19 +198,45 @@ Ext.onReady(function(){
 	        									 inputType:'file'
 	        									
 	        									}/*,progressBar*/
-	        									,gridErrores
+	        									
 	        								],
 	        							buttons:[
 	        								{text:'Subir Archivo',
 	           								 id:'uploadFormId',
 	        								 handler: function(){
 	        								 	//progressBar.updateProgress(0);
-	        								 	Ext.MessageBox.show({
-	        								 		title:'Copiando datos',
-	        								 		msg:'Espere mientras se procesan los datos',
-	        								 		icon: Ext.MessageBox.INFO
+	        								 	var conn = new Ext.data.Connection();
+	        								 	conn.request({
+	        								 		url:'uploadtest',
+	        								 		method:'POST',
+	        								 		success:function(resp,opt){
+	        								 			var respuesta = Ext.decode(resp.responseText);
+	        								 			if(respuesta)
+	        								 				if(respuesta.loginredirect){
+	        								 					window.location="../logout/index";
+	        								 				}else{
+	        								 					if(respuesta.success==true){
+						        								 	Ext.MessageBox.show({
+						        								 		title:'Copiando datos',
+						        								 		msg:'Espere mientras se procesan los datos',
+						        								 		icon: Ext.MessageBox.INFO
+						        								 	});
+						        								 	handleUploadsinTaskMgr();
+	        								 					}else
+	        								 						Ext.MessageBox.show({
+	        								 							title:"Mensaje",
+	        								 							msg:"Se produjo un error desconocido en el proceso del archivo",
+	        								 							icon: Ext.MessageBox.ERROR
+	        								 							
+	        								 						});
+	        								 				}
+	        								 				
+	        								 		},
+	        								 		failure:function(resp,opt){
+	        								 			
+	        								 		}
 	        								 	});
-	        								 	handleUploadsinTaskMgr();
+	        								 	
 	        								 	
 	        								 }
 	        								}

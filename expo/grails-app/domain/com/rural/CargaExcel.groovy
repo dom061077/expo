@@ -5,5 +5,6 @@ class CargaExcel {
 	String nombreArchivo
 	byte[] archivo
     static constraints = {
+		archivo(maxSize:10000000)
     }
 }
