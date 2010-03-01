@@ -519,7 +519,8 @@ class EmpresaController {
     	log.info("INGRESANDO AL METODO downloadfileerrors DEL CONTROLADOR EmpresaController")
     	log.debug("PARAMETROS DE INGRESO: "+params)
     	def cargaexcel = CargaExcel.get(params.id)
-    	response.outputStream << cargaexcel.archivo 
+    	response.outputStream << cargaexcel.archivo
+    	 
     	def header = [:]  
     	header.id = "Id"  
     	header.investigator = "Investigator"  
@@ -535,6 +536,7 @@ class EmpresaController {
     	header.priority = "Priority"
     	response.setHeader("Content-disposition", "attachment; filename=errores-requests.xls")  
     	response.contentType = "application/vnd.ms-excel"
+    	
     	
     }
     
