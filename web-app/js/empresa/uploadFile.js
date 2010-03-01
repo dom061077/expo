@@ -11,8 +11,8 @@ Ext.onReady(function(){
 	var mensajeglobal='';
 	
 	function downloadexcelerrores(idcargaexcel){
-		var conn = new Ext.data.Connection();
-		conn.request({
+		//var conn = new Ext.data.Connection();
+		Ext.Ajax.request({
 			url:'downloadfileerrors',
 			method:'POST',
 			params:{
@@ -52,9 +52,12 @@ Ext.onReady(function(){
 	     												buttons: Ext.Msg.YESNO,
 	     												fn:function(btn){
 	     													if (btn=='yes'){
-	     														
-	     														downloadexcelerrores(1);
-	     														
+	     														//linkdescargaBoxComponent.autoEl={tag: 'a', href: 'http://www.google.com', html: 'Google'}
+	     														//downloadexcelerrores(1);
+	     														Ext.getCmp('linkdescargaId').el.html ='www.ole.clarin.com';
+	     														//Ext.getCmp('linkdescargaId').hide();
+	     														Ext.getCmp('linkdescargaId').update('infobae');
+	     														//Ext.getCmp('linkdescargaId').show();
 	     													}
 	     												}
 	     											});
@@ -178,7 +181,9 @@ Ext.onReady(function(){
 
 	}
 	
+
 	
+
 		
 	
 	var uploadForm = new Ext.FormPanel({
@@ -198,6 +203,11 @@ Ext.onReady(function(){
 	        									 inputType:'file'
 	        									
 	        									}/*,progressBar*/
+	        									,{
+	        										xtype:'box',
+	        										autoEl:{tag: 'a', href: 'http://www.google.com', target:'_blank', html: 'Google'},
+	        										id:'linkdescargaId'
+	        									}
 	        									
 	        								],
 	        							buttons:[
