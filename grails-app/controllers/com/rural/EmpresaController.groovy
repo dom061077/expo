@@ -2,8 +2,12 @@ package com.rural
 
 import grails.converters.JSON
 import jxl.*
+import jxl.write.Label
+import jxl.write.WritableWorkbook
+import jxl.write.WritableSheet
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 import org.springframework.web.multipart.MultipartHttpServletRequest
+import java.io.ByteArrayOutputStream
 
 class EmpresaController {
     
@@ -383,79 +387,76 @@ class EmpresaController {
     
     
     //****************************métodos para el manejo inserción a partir de archivos excel********
+    def uploadtest = {
+    	log.info("INGRESANDO AL METODO uploadtest DELCONTROLADOR EmpresaController")
+    	render(contentType:"text/json"){
+    		success true
+    	}
+    }
+    
     def upload  = {
     	log.info("INGRESANDO AL METODO upload DEL CONTROLADOR EmpresaController")
 	    MultipartHttpServletRequest mpr = (MultipartHttpServletRequest)request;  
-		CommonsMultipartFile fileExcel = (CommonsMultipartFile) mpr.getFile("archivoExcel");  
-		List<Empresa> batch = []     
+		CommonsMultipartFile fileExcel = (CommonsMultipartFile) mpr.getFile("archivoExcel");
+  	    ByteArrayOutputStream fileOutputExcel = new ByteArrayOutputStream()
+  	    
 		  // create our workbook
 		  try{  
-			  Workbook workbook = Workbook.getWorkbook(fileExcel.inputStream)  
-			  Sheet sheet = workbook.getSheet(0)
+			  Workbook workbook = Workbook.getWorkbook(fileExcel.inputStream)
+			  WritableWorkbook workbookCopiado = Workbook.createWorkbook(fileOutputExcel,workbook)
+			  WritableSheet sheet = workbookCopiado.getSheet(0)
+			  //Sheet sheetCopiado = workbookCopiado.getSheet(0)
 			  log.info("LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTO. NOMBRE DEL ARCHIVO: ${fileExcel.name}")
 			  def cuit = null
 			  def nombre = null
 			  session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":0])
 			  Empresa empresa
-			  def rowerrors = []
-			  for(int r = 1; r < sheet.rows; r++){
-			    //def top = sheet.getCell(0, r).contents
+			  int cantErrores = 0
+			  for(int r = 0; r < sheet.rows; r++){
 				empresa = new Empresa(fechaAlta:new Date(),cuit:sheet.getCell(0, r).contents,nombre:sheet.getCell(1, r).contents)
-				batch.add(empresa)
-				if(batch.size()>100){
-					Empresa.withTransaction{
-						for(Empresa emp in batch)
-							if(!emp.hasErrors())
-								//emp.save()
-								log.debug("VALORES DE INSERCION: "+emp.nombre
-										+" "+emp.cuit )
-							else{
-								log.debug("ERRORES DE VALIDACION: $emp.errors.allErrors")
-								log.debug("VALORES DE INSERCION CON ERRORES: "+emp.nombre
-										+" "+emp.cuit )
-							}		
-					}
-					batch.clear()
-				}
-			  	session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":r+1,"success":true])			  			
-			  }
-			  log.debug("SALVANDO EMPRESA EN TRANSACCION")
-			  def cargaExcelInstance = new CargaExcel(fechaCarga:new Date(),nombreArchivo:fileExcel.name,archivo:fileExcel.bytes)
-			  cargaExcelInstance.save()
-   			  Empresa.withTransaction{
-					for(Empresa emp in batch){
-						if(!emp.hasErrors()){
-							if (Empresa.findByNombre(emp.nombre)!=null){
-								log.debug("La Empresa ya existe")
-								rowerrors.add(empresa:emp,msg:"La empresa ya existe")
-							}else{	
-								emp.save()
-								log.debug("EMPRESA SALVADA: "+emp)
-							}							
+				//sheetCopiado.addCell(new Label(0,r,sheet.getCell(0,r).contents))
+				//sheetCopiado.addCell(new Label(1,r,sheet.getCell(1,r).contents))
+				if(!empresa.hasErrors()){
+					
+					if (empresa.nombre.trim().equals("")){
+						log.debug("ERROR DE CARGA, EMPRESA NO PUEDE TENER UN NOMBRE VACIO")
+						sheet.addCell(new Label(2,r,"EMPRESA NO PUEDE TENER UN NOMBRE VACIO"))
+						cantErrores++
+					}else{
+						if (Empresa.findByNombre(empresa.nombre)){
+							log.debug("ERROR DE CARGA, EMPRESA YA EXISTE ")
+							log.debug("VALORES DE INSERCION: "+empresa.nombre+" "+empresa.cuit )
+							sheet.addCell(new Label(2,r,"YA EXISTE UNA EMPRESA CON EL MISMO NOMBRE"))
+							cantErrores++
 						}else{	
-							log.debug("EMPRESA CON ERRORES: $emp.errors.allErrors")
-							rowerrors.add(empresa:emp,msg:"Error desconocido")
+							empresa.save()
+							log.debug("EMPRESA SALVADA")
 						}
 					}
-				}
-				batch.clear()
-			  if(rowerrors.size()>0){
-				  rowerrors.each{
-					  log.debug("FILAS CON ERRORES, Mensaje: "+it.msg+", Empresa(cuit: $it.empresa.cuit, nombre: $it.empresa.nombre)")
-					  
-				  }
-			  }				  
-			  def rowerrorsstr = "errors:["
-			  rowerrors.each{
-			  		rowerrorsstr +="{msgerror:'$it.msg',cuit:'$it.empresa.cuit',nombre:'$it.empresa.nombre'}," 
-			  }
-			  rowerrorsstr+="{mssgerror: '',cuit:'',nombre:''}]"
-			  render """{success:true, totalerrores:$rowerrors.size, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA",$rowerrorsstr}"""
-			  
-			  		  
+				}else{
+					log.debug("ERRORES DE VALIDACION: $emp.errors.allErrors")
+					log.debug("VALORES DE INSERCION CON ERRORES: "+empresa.nombre+" "+empresa.cuit )
+					sheet.addCell(new Label(2,r,empresa.errors.allErrors))
+					cantErrores++
+				}		
+			 }
+			  	//session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":r+1,"success":true])
+ 	
+			 
+			 workbookCopiado.write()
+			 workbookCopiado.close()
+			 log.debug("SALVANDO EMPRESA EN TRANSACCION")
+			 
+			 def cargaExcelInstance = new CargaExcel(fechaCarga:new Date(),nombreArchivo:fileExcel.name,archivo:fileOutputExcel.toByteArray())
+			 cargaExcelInstance.save()
+			 if (cantErrores>0)
+				 render """{success:true, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA", cantErrores:$cantErrores, idcargaexcel:$cargaExcelInstance.id}"""	
+			 else	 
+				 render """{success:true, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA"}"""
   		  }catch(jxl.read.biff.BiffException ioe){
 		   	 log.info("FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL")
-		   	 //recordar que para los taskrunner tengo que renderizar json de esta formarender """{success:false, responseText:"FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL"}"""
+		   	 render """{success:false, responseText:"FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL"}"""
+		   	//recordar que para los taskrunner tengo que renderizar json de esta formarender """{success:false, responseText:"FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL"}"""
 		   	 
 		  }      	
     	
@@ -512,6 +513,29 @@ class EmpresaController {
     			salvados(filasSalvadas)
     		}
     
+    }
+    
+    def downloadfileerrors = {
+    	log.info("INGRESANDO AL METODO downloadfileerrors DEL CONTROLADOR EmpresaController")
+    	log.debug("PARAMETROS DE INGRESO: "+params)
+    	def cargaexcel = CargaExcel.get(params.id)
+    	response.outputStream << cargaexcel.archivo 
+    	def header = [:]  
+    	header.id = "Id"  
+    	header.investigator = "Investigator"  
+    	header.hole = "Hole"  
+    	header.top = "Interval Top (mbsf)"  
+    	header.bottom = "Interval Bottom (mbsf)"  
+    	header.samplesRequested = "Samples Requested"  
+    	header.sampleSpacing = "Sample Spacing (m)"  
+    	header.sampleType = "Volume/Type"  
+    	header.sampleGroup = "Group/Discipline"  
+    	header.notes = "Notes"  
+    	header.status = "Status"  
+    	header.priority = "Priority"
+    	response.setHeader("Content-disposition", "attachment; filename=errores-requests.xls")  
+    	response.contentType = "application/vnd.ms-excel"
+    	
     }
     
 }
