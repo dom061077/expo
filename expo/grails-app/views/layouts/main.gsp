@@ -17,6 +17,7 @@
         <script type="text/javascript">
 			<%
 				out << "var imagePath='"+"${resource(dir:'images')}';";
+				
 			%>        	
         </script>
         			
