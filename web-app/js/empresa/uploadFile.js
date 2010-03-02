@@ -197,7 +197,7 @@ Ext.onReady(function(){
 	        									}/*,progressBar*/
 	        									,{
 	        										xtype:'box',
-	        										autoEl:{tag: 'a', href: 'http://localhost:8080/expo/empresa/downloadfileerrors', target:'_blank', html: 'Descargar Errores'},
+	        										autoEl:{tag: 'a', href: patherroresapp, target:'_blank', html: 'Descargar Errores'},
 	        										hidden:true,
 	        										id:'linkdescargaId'
 	        									}
