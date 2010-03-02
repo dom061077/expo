@@ -44,29 +44,21 @@ Ext.onReady(function(){
      					else
 	   					if (respuestaJson.success==true){
 	     										Ext.MessageBox.hide();
-	     										if (respuestaJson.cantErrores>0)
+	     										if (respuestaJson.cantErrores>0){
 	     											Ext.MessageBox.show({
 	     												title:'Mensaje',
-	     												msg:'El archivo fue procesado pero se produjeron '+respuestaJson.cantErrores+' errores. Desea descargar listado de errores?',
-	     												icon: Ext.MessageBox.WARNING,
-	     												buttons: Ext.Msg.YESNO,
-	     												fn:function(btn){
-	     													if (btn=='yes'){
-	     														//linkdescargaBoxComponent.autoEl={tag: 'a', href: 'http://www.google.com', html: 'Google'}
-	     														//downloadexcelerrores(1);
-	     														Ext.getCmp('linkdescargaId').el.html ='www.ole.clarin.com';
-	     														//Ext.getCmp('linkdescargaId').hide();
-	     														Ext.getCmp('linkdescargaId').update('infobae');
-	     														//Ext.getCmp('linkdescargaId').show();
-	     													}
-	     												}
+	     												msg:'El proceso del archivo excel arrojo algunos errores, verifique el link de errores',
+	     												icon:Ext.MessageBox.INFO
 	     											});
-	     										else
+													Ext.getCmp('linkdescargaId').show();
+	     										}else{
 								   					Ext.MessageBox.show({
 								   						title:'Mensaje',
 								   						msg:'El archivo fue procesado correctamente',
 								   						icon: Ext.MessageBox.INFO
 								   					});
+								   					Ext.getCmp('linkdescargaId').hide();
+	     										}
 	   					}else{
 	     						
 	     							Ext.MessageBox.hide();	
@@ -205,7 +197,8 @@ Ext.onReady(function(){
 	        									}/*,progressBar*/
 	        									,{
 	        										xtype:'box',
-	        										autoEl:{tag: 'a', href: 'http://www.google.com', target:'_blank', html: 'Google'},
+	        										autoEl:{tag: 'a', href: 'http://localhost:8080/expo/empresa/downloadfileerrors', target:'_blank', html: 'Descargar Errores'},
+	        										hidden:true,
 	        										id:'linkdescargaId'
 	        									}
 	        									
