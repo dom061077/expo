@@ -152,6 +152,7 @@ class EmpresaController {
         def empresaInstance = Empresa.get( params.id )
         def expos = JSON.parse(params.exposempresajson)
         def exposaparticipar = JSON.parse(params.exposaparticiparjson)
+        log.debug("EXPOS A PARTICIPAR JSON: "+params.exposaparticiparjson)
         def empIterator = null
         def exposJsonIterator = null
         def isnew
@@ -194,6 +195,7 @@ class EmpresaController {
     	}
 //+++++++++++++++++++++
         //aqui determino las exposaparticpar que se van a agregar
+
         exposaparticipar.each{
     		empIterator = empresaInstance.exposaparticipar.iterator()
     		e=null
@@ -204,7 +206,7 @@ class EmpresaController {
     		}
     		if (isnew){
     			empresaInstance.addToExposaparticipar(Exposicion.get(it.id))
-    			log.debug "SE AGREGO UNA EXPOSICION A LA EMPRESA"
+    			log.debug "SE AGREGO UNA EXPOSICION A LA EMPRESA EN exposaparticipar"
     		}
     	}
     	//aqui determino las exposaparticipar que se van a eliminar
@@ -217,10 +219,10 @@ class EmpresaController {
     		isdeleted=true
 	    	while (exposJsonIterator.hasNext()){
 	    		expoJson=exposJsonIterator.next()
-	    		log.debug ("Id de expo JSON: "+expoJson.id+" Id de expo Empresa "+ e.id)
+	    		log.debug ("Id de expo JSON: "+expoJson.id+" Id de expo Empresa (expo a participar) "+ e.id)
 	    		if((expoJson.id.toString()).compareTo(e.id.toString())==0){
 	    			isdeleted=false
-	    			log.debug("Para NO borrar "+e)
+	    			log.debug("Para NO borrar (exposaparticipar) "+e)
 	    		}
 	    	}
     		if(isdeleted)
@@ -373,7 +375,7 @@ class EmpresaController {
     	log.debug("PARAMETROS: "+params)
     	
     	def empresa = Empresa.get(params.id)
-    	render(contentType:"text	sa/json"){
+    	render(contentType:"text/json"){
     		total empresa.exposaparticipar.size()
     		rows{
     			empresa.exposaparticipar.each{
