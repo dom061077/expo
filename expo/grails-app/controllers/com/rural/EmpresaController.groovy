@@ -373,7 +373,7 @@ class EmpresaController {
     	log.debug("PARAMETROS: "+params)
     	
     	def empresa = Empresa.get(params.id)
-    	render(contentType:"text/json"){
+    	render(contentType:"text	sa/json"){
     		total empresa.exposaparticipar.size()
     		rows{
     			empresa.exposaparticipar.each{
@@ -441,14 +441,15 @@ class EmpresaController {
 				}		
 			 }
 			  	//session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":r+1,"success":true])
- 	
-			 
+			  	
+			  		
 			 workbookCopiado.write()
 			 workbookCopiado.close()
 			 log.debug("SALVANDO EMPRESA EN TRANSACCION")
 			 
 			 def cargaExcelInstance = new CargaExcel(fechaCarga:new Date(),nombreArchivo:fileExcel.name,archivo:fileOutputExcel.toByteArray())
 			 cargaExcelInstance.save()
+			 session.setAttribute("cargaexcelId",cargaExcelInstance.id)			 
 			 if (cantErrores>0)
 				 render """{success:true, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA", cantErrores:$cantErrores, idcargaexcel:$cargaExcelInstance.id}"""	
 			 else	 
@@ -518,7 +519,10 @@ class EmpresaController {
     def downloadfileerrors = {
     	log.info("INGRESANDO AL METODO downloadfileerrors DEL CONTROLADOR EmpresaController")
     	log.debug("PARAMETROS DE INGRESO: "+params)
-    	def cargaexcel = CargaExcel.get(params.id)
+    	def cargaexcelId = session.getAttribute("cargaexcelId")
+    	
+    	log.debug("ID DE CARGA EXCEL: "+cargaexcelId)
+    	def cargaexcel = CargaExcel.get(cargaexcelId)
     	response.outputStream << cargaexcel.archivo
     	 
     	def header = [:]  

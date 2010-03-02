@@ -694,12 +694,27 @@
 		        									 	xtype:'button',
 		        									 	text:'Agregar',
 		        									 	handler: function(){
-		        											if(exposaparticiparStore.find('id',comboExposaParticipar.hiddenField.value<0))
+		        											if(exposaparticiparStore.find('id',comboExpoaParticipar.hiddenField.value<0))
 		        												exposaparticiparStore.insert(0,
-		        													new ds
-		        												);						 		
+		        													new dsexpoModel({
+		        														id:comboExpoaParticipar.hiddenField.value,
+		        														nombre:Ext.getCmp('idExposicionaParticiparAddExpo').getRawValue()
+		        													})
+		        												);
+		        											else
+		        												Ext.MessageBox.show({
+		        													title:'Error',
+		        													msg:'Ya existe la Exposición',
+		        													icon:Ext.MessageBox.ERROR
+		        												});
 		        									 	}
+		        									 },{
+		        									 	xtype:'hidden',
+		        									 	allowBlank:true,
+		        									 	name:'exposaparticiparjson',
+		        									 	id:'exposaparticiparjsonid'
 		        									 }]
+		        									 
 		        									}
 	        									]
 	        								},gridexposaparticipar
