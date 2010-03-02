@@ -384,7 +384,7 @@
 	        														store:exposStore,
 	        														listWidth:200,
 	        														valueField:'id',
-	        														hiddenName:'id'
+	        														hiddenName:'idComboAddExpoaParticipar'
 	        	});
 	        	
 	        		
@@ -670,9 +670,11 @@
 		        										 	 		})
 		        										 	 	);	
 		        										 	else
-		        										 		Ext.Msg.show({title:'Error'
+		        										 		Ext.MessageBox.show({title:'Error'
 		        										 						,msg:'Ya existe la Exposición'
-		        										 						,icon:Ext.Msg.ERROR});
+		        										 						,icon:Ext.Msg.ERROR
+		        										 						,buttons:Ext.MessageBox.OK
+		        										 						});
 	        										 	 }
 	        										 	},{
 	        										 		xtype:'hidden',
@@ -706,12 +708,29 @@
 		        									 	xtype:'button',
 		        									 	text:'Agregar',
 		        									 	handler: function(){
-		        											if(exposaparticiparStore.find('id',comboExpoaParticipar.hiddenField.value<0))
+		        											if(exposaparticiparStore.find('id',comboExpoaParticipar.hiddenField.value)<0)
 		        												exposaparticiparStore.insert(0,
-		        													new ds
-		        												);						 		
+		        													new dsexpoModel({
+		        														id:comboExpoaParticipar.hiddenField.value,
+		        														nombre:Ext.getCmp('idExposicionaParticiparAddExpo').getRawValue()
+		        													})
+		        												);
+		        											else
+		        												Ext.MessageBox.show({
+		        													title:'Error',
+		        													msg:'Ya existe la Exposición',
+		        													icon:Ext.MessageBox.ERROR,
+		        													buttons:Ext.MessageBox.OK
+		        												});
 		        									 	}
-		        									 }]
+		        									 },{
+		        									 	xtype:'hidden',
+		        									 	allowBlank:true,
+		        									 	name:'exposaparticiparjson',
+		        									 	id:'exposaparticiparjsonid'
+	        										 		
+	        										 		
+	        										 	}]
 		        									}
 	        									]
 	        								},gridexposaparticipar
@@ -723,11 +742,21 @@
 		        	          	text:'Guardar',handler: function(){
         	          					var exposStoreArr=[];
         	          					var exposStoreJsonString="";
+        	          					var exposaParticiparJsonString="";
+        	          					var exposaParticiparArr=[]; 
         	          					exposdeempresaStore.each(function(rec){
         	          						exposStoreArr.push(rec.data);
         	          					});
+        	          					
+        	          					exposaparticiparStore.each(function(rec){
+											exposaParticiparArr.push(rec.data)        	          						
+        	          					}
+        	          					);
+        	          					
         	          					exposStoreJsonString=Ext.encode(exposStoreArr);
+        	          					exposaParticiparJsonString=Ext.encode(exposaParticiparArr);
 										Ext.getCmp('exposempresajsonId').setValue(exposStoreJsonString);
+		        	          			Ext.getCmp('exposaparticiparjsonid').setValue(exposaParticiparJsonString);
 		        	          		
 										
 										
@@ -838,6 +867,10 @@
 								});
 								
 	            				exposdeempresaStore.load({
+	            					params:{'id':a.result.data.id}
+	            				});
+	            				
+	            				exposaparticiparStore.load({
 	            					params:{'id':a.result.data.id}
 	            				});
 	            				Ext.getCmp('idDepartamento').setValue(a.result.data.departamentoLn);

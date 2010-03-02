@@ -377,7 +377,7 @@
 	        														store:exposStore,
 	        														listWidth:200,
 	        														valueField:'id',
-	        														hiddenName:'id'
+	        														hiddenName:'idComboAddExpoaParticipar'
 	        	});
 	        		
 	        	var comboExpo = new Ext.form.ComboBox({
@@ -726,12 +726,21 @@
 		        	          	text:'Guardar',handler: function(){
         	          					var exposStoreArr=[];
         	          					var exposStoreJsonString="";
+        	          					var exposaParticiparJsonString="";
+        	          					var exposaParticiparArr=[]; 
         	          					exposdeempresaStore.each(function(rec){
         	          						exposStoreArr.push(rec.data);
         	          					});
+        	          					
+        	          					exposaparticiparStore.each(function(rec){
+											exposaParticiparArr.push(rec.data)        	          						
+        	          					}
+        	          					);
+        	          					
         	          					exposStoreJsonString=Ext.encode(exposStoreArr);
+        	          					exposaParticiparJsonString=Ext.encode(exposaParticiparArr);
 										Ext.getCmp('exposempresajsonId').setValue(exposStoreJsonString);
-		        	          		
+		        	          			Ext.getCmp('exposaparticiparjsonid').setValue(exposaParticiparJsonString);
 										
 										
 			        	          		empresa_form.getForm().submit({
