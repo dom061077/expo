@@ -5,8 +5,9 @@
     
     	<%
     		out << "<script type='text/javascript'>";
-    		out << "var success = ${success};";
-    		out << "var msgupload = '${msgupload}';";
+    		/*out << "var success = ${success};";
+    		out << "var msgupload = '${msgupload}';";*/
+    		out << "var patherroresapp='"+"${createLink(action:'downloadfileerrors',controller:'empresa')}"+"';";
     		out << "</script>";
     	%>
     

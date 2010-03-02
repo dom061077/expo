@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>Empresa List</title>
+        <title>Listado de Empresas</title>
         <script type="text/javascript">
         	Ext.onReady(function(){
             	var store = new Ext.data.JsonStore({
