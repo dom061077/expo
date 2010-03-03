@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>Create Empresa</title>
+        <title>Alta de Empresa</title>
     	<style type="text/css">
 .list {list-style:square;width:500px;padding-left:16px;}
 .list li{padding:2px;font-size:8pt;}
