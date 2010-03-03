@@ -302,7 +302,7 @@ class EmpresaController {
     
     def savejson = {
     	log.info("INGRESANDO AL METODO savejson DE EmpresaController")
-    	log.debug("Parametros Json: "+params)
+    	log.debug("Parametros JSON: "+params)
         def empresaInstance = new Empresa(params)
         empresaInstance.fechaAlta= new Date()
     	log.debug("Valor de Instancia Empresa antes de salvar: "+empresaInstance)

@@ -95,12 +95,14 @@ class VendedorController {
     }
 
     def create = {
+    	log.info("INGRESANDO EL METODO create DE VendedorController")
         def vendedorInstance = new Vendedor()
         vendedorInstance.properties = params
         return ['vendedorInstance':vendedorInstance]
     }
 
     def save = {
+    	
         def vendedorInstance = new Vendedor(params)
         if(!vendedorInstance.hasErrors() && vendedorInstance.save()) {
             flash.message = "Vendedor ${vendedorInstance.id} created"
@@ -110,4 +112,85 @@ class VendedorController {
             render(view:'create',model:[vendedorInstance:vendedorInstance])
         }
     }
+    
+    
+    def savejson = {
+    	log.info("INGRESANDO AL METODO savejson DE VendedorController")
+    	log.debug("Parametros JSON: $params")
+    	def errorList
+    	def vendedorInstance = new Vendedor(params)
+    	if(!vendedorInstance.hasErrors() && vendedorInstance.save()){
+    		log.info("LA INSTANCIA DE Vendedor SE GUARDO CORRECTAMENTE")
+    		render(contentType:"text/json"){
+    			success true
+    			idVendedor vendedorInstance.id
+    		}
+    	}else{
+    		log.info("ERROR DE VALIDACION EN INSTANCIA DE Vendedor")
+    		vendedorInstance.errors.allErrors.each{error->
+    			error.codes.each{
+    				if(g.message(code)!=it)
+    					errorList.add(g.message(code:it))
+    			}
+    		}
+    		render(contentType:"text/json"){
+    			success false
+    			errors{
+    				errorList.each{
+    					title it
+    				}
+    			}
+    		}
+    	}
+    	
+    }
+    
+    def updatejson = {
+    	log.info("INGRESANDO AL METODO updatejson DE VendedorController")
+    	log.debug("Parametros: $params")
+    	def vendedorInstance = Vendedor.get(params.id)
+    	if(vendedorInstance){
+    		/*if(params.version){
+    			if(params.version){
+    				def version = params.version.toLong()
+    				if(vendedorInstance.version > version){
+    					vendedorInstance.errors.rejectValue
+    				}
+    			}
+    		}*/
+    		
+    		vendedorInstance.properties=params
+    		if(!vendedorInstance.hasErrors() && vendedorInstance.save()){
+    			log.info("Instancia de vendedor guardada, renderizando json")
+    			render(contentType:"text/json"){
+    				success true
+    			}
+    		}else{
+    			log.info("Error de validacion en Vendedor")
+    			vendedorInstance.errors.allErrors.each{error->
+    				error.codes.each{
+    					if(g.message(code:it)!=it)
+    						errorList.add(g.message(code:it))
+    				}
+    			}
+    			
+    			render(contentType:"text/json"){
+    				success false
+    				errorList.each{
+    					errors(error(title:it))
+    				}
+    			}
+    		}
+    	}else{
+    		log.info("Vendedor no encontrado con id ${params.id}")
+    		render(contentType:"text/json"){
+    			success false
+    			errors{
+    				error(title:"Vendedor con id ${params.id} no encontrado")
+    			}
+    		}
+    	}
+    	
+    }
+    
 }
