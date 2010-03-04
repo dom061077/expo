@@ -37,6 +37,7 @@ class Empresa {
 		telefonoRepresentante2(blank:true,nullable:true)
 		telefonoRepresentante3(blank:true,nullable:true)		
 		subrubro(blank:true,nullable:true)
+		fechaAlta(blank:true,nullable:true)
     }
 	static belongs = [vendedor:Vendedor, localidad:Localidad, subrubro: SubRubro]
 }
