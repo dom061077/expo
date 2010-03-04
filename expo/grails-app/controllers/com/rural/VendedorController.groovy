@@ -192,5 +192,31 @@ class VendedorController {
     	}
     	
     }
-    
+
+    void deletejson(){
+    	log.info("INGRESANDO AL METODO deletejson DEL CONTROLADOR VendedorController")
+    	log.debug("PARAMETROS: $params")
+    	def vendedorInstance = Vendedor.get(params.id)
+    	if(vendedorInstance){
+    		try{
+    			vendedorInstance.delete(flush:true)
+    			log.info("VENDEDOR ELIMINADO")
+    			render(contentType:"text/json"){
+    				success true
+    			}
+    		}catch(org.springframework.dao.DataIntegrityViolationException e){
+    			log.info("ERROR DE INTEGRIDAD AL INTENTAR ELIMINAR EL VENDEDOR $vendedorInstance.Id")
+    			render(contentType:"text/json"){
+    				success false
+    				msg "No se puede eliminar el vendedor porque es referenciado en otros datos"
+    			}
+    		}
+    	}else{
+    		log.info("EL VENDEDOR CON ID $params.id NO PUDO SER ENCONTRADO")
+    		render(contentType:"text/json"){
+    			success false
+    			msg "EL VENDEDOR CON ID $params.id NO PUDO SER ENCONTRADO"
+    		}
+    	}
+    }
 }
