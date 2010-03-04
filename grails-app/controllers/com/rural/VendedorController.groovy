@@ -117,7 +117,7 @@ class VendedorController {
     def savejson = {
     	log.info("INGRESANDO AL METODO savejson DE VendedorController")
     	log.debug("Parametros JSON: $params")
-    	def errorList
+    	def errorList= []
     	def vendedorInstance = new Vendedor(params)
     	if(!vendedorInstance.hasErrors() && vendedorInstance.save()){
     		log.info("LA INSTANCIA DE Vendedor SE GUARDO CORRECTAMENTE")
@@ -129,8 +129,9 @@ class VendedorController {
     		log.info("ERROR DE VALIDACION EN INSTANCIA DE Vendedor")
     		vendedorInstance.errors.allErrors.each{error->
     			error.codes.each{
-    				if(g.message(code)!=it)
+    				if(g.message(code:it)!=it)
     					errorList.add(g.message(code:it))
+    					
     			}
     		}
     		render(contentType:"text/json"){
@@ -205,7 +206,7 @@ class VendedorController {
     				success true
     			}
     		}catch(org.springframework.dao.DataIntegrityViolationException e){
-    			log.info("ERROR DE INTEGRIDAD AL INTENTAR ELIMINAR EL VENDEDOR $vendedorInstance.Id")
+    			log.info("ERROR DE INTEGRIDAD AL INTENTAR ELIMINAR EL VENDEDOR $vendedorInstance.id")
     			render(contentType:"text/json"){
     				success false
     				msg "No se puede eliminar el vendedor porque es referenciado en otros datos"
@@ -216,6 +217,24 @@ class VendedorController {
     		render(contentType:"text/json"){
     			success false
     			msg "EL VENDEDOR CON ID $params.id NO PUDO SER ENCONTRADO"
+    		}
+    	}
+    }
+    
+    void showjson(){
+    	log.info("INGRESANDO AL METODO showjson DEL CONTROLADOR VendedorController")
+    	log.debug("Parametros: $params")
+    	def vendedorInstance = Vendedor.get(params.id)
+    	if (vendedorInstance){
+    		log.debug("Instancia de vendedor encontrada, renderizando json")
+    		render(contentType:"text/json"){
+    			success true	
+    			data(id :vendedorInstance.id,nombre: vendedorInstance.nombre)
+    		}
+    	}else{
+    		log.debug("Instancia de vendedor no encontrada, renderizando json")
+    		render(contentType:"text/json"){
+    			success false
     		}
     	}
     }

@@ -31,7 +31,11 @@ Ext.onReady(function(){
 								,msg:'Los datos se guardaron correctamente'
 								,buttons:Ext.MessageBox.OK
 								,icon:Ext.MessageBox.INFO
+								,fn:function(btn){
+									window.location='create'
+								}
 							});
+							
 							
 						},
 						failure: function(f,a){
@@ -49,7 +53,12 @@ Ext.onReady(function(){
 														    		for (var i=0; i<a.result.errors.length;i++){
 														    			msg=msg+a.result.errors[i].title+'\r\n';	
 												    				}
-												    				Ext.Msg.alert(msg);
+												    				Ext.MessageBox.show({
+																		title:'Error'
+																		,msg:msg
+																		,icon:Ext.MessageBox.ERROR
+																		,buttons:Ext.MessageBox.OK
+												    				});
 											    				}
 														    }	
 							
@@ -65,5 +74,6 @@ Ext.onReady(function(){
 			}
 			
 		]
-	});	
+	});
+	Ext.getCmp('nombreid').focus();
 });
