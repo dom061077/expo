@@ -545,5 +545,12 @@ class EmpresaController {
     	
     	
     }
+
+    def exportempresastoexcel = {
+    	log.info("INGRESANDO AL METODO exportempresastoexcel DEL CONTROLADOR EmpresaController")
+    	log.debug("PARAMETROS DE INGRESO: "+params)
+    	
+    }
+    
     
 }

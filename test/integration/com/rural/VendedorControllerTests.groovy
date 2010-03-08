@@ -131,8 +131,4 @@ class VendedorControllerTests extends GrailsUnitTestCase {
     	
     }
     
-    void testUpdateJson(){
-    	def vendedorController = new VendedorController()
-    	
-    }
 }

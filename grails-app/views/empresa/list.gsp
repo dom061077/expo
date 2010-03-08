@@ -26,7 +26,7 @@
                           		],
                         stripeRows: true,
                         height:250,
-                        width:450,
+                        width:400,
                         title:'Empresas',
                         iconCls: 'icon-grid', 
                         bbar: new Ext.PagingToolbar({
