@@ -56,7 +56,7 @@ class VendedorController {
     }
 
     def edit = {
-        def vendedorInstance = Vendedor.get( params.id )
+        /*def vendedorInstance = Vendedor.get( params.id )
 
         if(!vendedorInstance) {
             flash.message = "Vendedor not found with id ${params.id}"
@@ -64,7 +64,9 @@ class VendedorController {
         }
         else {
             return [ vendedorInstance : vendedorInstance ]
-        }
+        }*/
+        log.info("INGRESANDO AL METODO AL edit DEL CONTROLADOR VendedorController")
+        return[id:params.id]
     }
 
     def update = {
@@ -194,7 +196,7 @@ class VendedorController {
     	
     }
 
-    void deletejson(){
+    def deletejson={
     	log.info("INGRESANDO AL METODO deletejson DEL CONTROLADOR VendedorController")
     	log.debug("PARAMETROS: $params")
     	def vendedorInstance = Vendedor.get(params.id)
@@ -221,7 +223,7 @@ class VendedorController {
     	}
     }
     
-    void showjson(){
+    def showjson={
     	log.info("INGRESANDO AL METODO showjson DEL CONTROLADOR VendedorController")
     	log.debug("Parametros: $params")
     	def vendedorInstance = Vendedor.get(params.id)
@@ -238,4 +240,6 @@ class VendedorController {
     		}
     	}
     }
+    
+    
 }

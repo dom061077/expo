@@ -11,7 +11,7 @@
     
     <body>
         <div class="nav">
-            <span class="menuButton"><g:link class="create" action="create">Listado de Vendedores</g:link></span>
+            <span class="menuButton"><g:link class="create" action="create">Agregar Vendedor</g:link></span>
         </div>
         <div id="vendedor-grid">
         
