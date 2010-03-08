@@ -26,9 +26,16 @@
                           		],
                         stripeRows: true,
                         height:250,
-                        width:400,
+                        width:440,
                         title:'Empresas',
                         iconCls: 'icon-grid', 
+                        tbar:[{
+                        		icon: imagePath+'/skin/excel.gif'
+                        		,cls:'x-btn-text-icon'
+                        		,handler: function(){
+    									open('exportempresastoexcel?searchCriteria='+Ext.getCmp('searchCriteriaId').getValue(),'_blank')
+                        		}
+                        }],
                         bbar: new Ext.PagingToolbar({
                             	pageSize: 10,
                             	store: store,
@@ -51,7 +58,7 @@
     					renderTo: 'empresa-grid',
     					id:'formSearchId',
     					title:'Listado de Empresas',
-    					width:450,
+    					width:470,
     					frame:true,
     					items: [{
     							layout: 'column',
@@ -61,6 +68,7 @@
     										layout: 'form',
     										items: {
     											xtype: 'textfield',
+    											id:'searchCriteriaId',
     											name: 'searchCriteria',
     											fieldLabel: 'Texto a Buscar',
     											anchor: '0'
