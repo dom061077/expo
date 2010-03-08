@@ -3,6 +3,7 @@ package com.rural
 import grails.converters.JSON
 import jxl.*
 import jxl.write.Label
+import jxl.write.Number
 import jxl.write.WritableWorkbook
 import jxl.write.WritableSheet
 import org.springframework.web.multipart.commons.CommonsMultipartFile
@@ -13,6 +14,7 @@ class EmpresaController {
     
     def index = { redirect(action:list,params:params) }
     def sessionFactory
+    def authenticateService
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
@@ -30,15 +32,16 @@ class EmpresaController {
     def listjson = {
     	log.info("INGRESANDO AL METODO listjson de EmpresaController")
     	log.debug("Parametros: "+params)
-    	def empresas = Empresa.createCriteria().list(
-    					max: params.limit,
-    					offset: params.start,
-    					sort: 'nombre',
-    					order:'asc'
-    			){like('nombre','%'+params.searchCriteria+'%')}
-    	log.debug("Cantidad de Empresas consultadas: "+Empresa.count())
+	    def pagingConfig = [
+	            max: params.limit ?: 10,
+	            offset: params.start ?: 0
+	    ]
+    	
+    	def empresas = Empresa.createCriteria().list(pagingConfig){like('nombre','%'+params.searchCriteria+'%')}
+    			
+    	log.debug("Cantidad de Empresas consultadas: "+empresas.size())
     	render(contentType:'text/json'){
-    		total Empresa.count()
+    		total empresas.size()
     		rows{
     			empresas.each{
     				row(id:it.id,nombre:it.nombre,nombreRepresentante:it.nombreRepresentante,telefono1:it.telefono1)
@@ -545,10 +548,59 @@ class EmpresaController {
     	
     	
     }
+    
+    static def writeExcel(out,map,objects){
+	    	def workbook = Workbook.createWorkbook(out)
+	    	def sheet = workbook.createSheet("Request",0)
+	      // walk through our map and write out the headers  
+	      def c = 0  
+	      map.each() { k, v ->  
+	          // write out our header  
+	          sheet.addCell(new Label(c, 0, v.toString()))  
+	        
+	          // write out the value for each object  
+	          def r = 1  
+	          objects.each() { o ->  
+	              if (o[k] != null) {  
+	                  if (o[k] instanceof java.lang.Number) {  
+	                      sheet.addCell(new Number(c, r, o[k]))  
+	                  } else {  
+	                      sheet.addCell(new Label(c, r, o[k].toString()))  
+	                  }  
+	              }  
+	              r++  
+	          }  
+	          c++  
+	      }  
+	    
+	      // close  
+	      workbook.write()  
+	      workbook.close()    	    	
+    }
 
     def exportempresastoexcel = {
     	log.info("INGRESANDO AL METODO exportempresastoexcel DEL CONTROLADOR EmpresaController")
     	log.debug("PARAMETROS DE INGRESO: "+params)
+    	def user=authenticateService.userDomain()
+    	def empresas = Empresa.createCriteria().list(){like('nombre','%'+params.searchCriteria+'%')}
+    	
+	     // set our header and content type
+	     response.setHeader("Content-disposition", "attachment; filename=${user}-requests.xls")
+	     response.contentType = "application/vnd.ms-excel"
+	 
+	     // define our header map
+	     def header = [:]
+	     header.cuit = "C.U.I.T"
+	     header.nombre = "Nombre"
+	     /*header.top = "Interval Top (mbsf)"
+	     header.bottom = "Interval Bottom (mbsf)"
+	     header.samplesRequested = "Samples Requested"
+	     header.sampleSpacing = "Sample Spacing (m)"
+	     header.sampleType = "Volume/Type"
+	     header.sampleGroup = "Group/Discipline"
+	     header.notes = "Notes"*/
+	 
+	     writeExcel(response.outputStream, header, empresas)    	
     	
     }
     
