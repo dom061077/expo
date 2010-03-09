@@ -131,4 +131,122 @@ class RubroController {
     		}
     	}
     }
+    //----------------------------------Metodos JSON--------------------------
+    
+    def savejson = {
+    	log.info("INGRESANDO AL METODO savejson DEL CONTROLLER RubroController")
+    	log.debug("Parámetros: $params")
+    	def errorList = []
+    	def rubroInstance = new Rubro(params)
+    	if(!rubroInstance.hasErrors() && rubroInstance.save()){
+    		log.info("LA INSTANCIA DE Rubro SE GUARDO CORRECTAMENTE")
+    		render(contentType:"text/json"){
+    			success true
+    			idRubro rubroInstance.id
+    		}
+    	}else{
+    		log.info("ERROR DE VALIDACION EN INSTANCIA DE Rubro")
+    		rubroInstance.errors.allErrors.each{ error ->
+    			error.codes.each{
+    				//if(g.message(code:it)!=it)
+    					errorList.add(g.message(code:it))
+    			}
+    		}
+    		render(contentType:"text/json"){
+    			success false
+    			errors{
+    				errorList.each{
+    					title it
+    				}
+    			}
+    		}
+    	}
+    }
+    
+    def updatejson = {
+    	log.info("INGRESANDO AL METODO updatejson DEL CONTROLLER RubroController")
+    	log.debug("Parámetros : $params")
+    	def rubroInstance = Rubro.get(params.id)
+    	def errorList = []
+    	if (rubroInstance){
+    		rubroInstance.properties=params
+    		if(!rubroInstance.hasErrors() && rubroInstance.save()){
+    			log.info("Instancia de Rubro guardada, renderizando json")
+    			render(contentType:"text/json"){
+    				success true
+    			}
+    		}else{
+    			log.info("Error de validación en instancia de Rubro")
+    			rubroInstance.errors.allErrors.each{error->
+    				error.codes.each{
+    					if(g.message(code:it)!=it)
+    						errorList.add(g.message(code:it))
+    				}
+    			}
+    			render(contentType:"text/json"){
+    				success false
+    				errorList.each{
+    					errors(error(title:it))
+    				}
+    			}
+    			
+    		}
+    	}else{
+    		log.info("Rubro no encontrado con id ${params.id}")
+    		render(contentType:"text/json"){
+    			success false
+    			errors{
+    				error(title:"Rubro con id ${params.id} no encontrado")
+    			}
+    		}
+    	}
+    }
+    
+    def deletejson = {
+    	log.info("INGRESANDO AL METODO deletejson DEL CONTROLLER RubroController")
+    	log.debug("Parametros: $params")
+    	def rubroInstance = Rubro.get(params.id)
+    	if(rubroInstance){
+    		try{
+    			rubroInstance.delete(flush:true)
+    			log.info("RUBRO CON ID $params.id ELIMINADO" )
+    			render(contentType:"text/json"){
+    				success true
+    			}
+    		}catch(org.springframework.dao.DataIntegrityViolationException e){
+    			log.info("ERROR DE INTEGRIDAD AL TRATAR DE ELIMINAR EL Rubro CON ID $params.id")
+    			render(contentType:"text/json"){
+    				success false
+    				msg "No se puede eliminar el vendedor porque es referenciado en otro datos"
+    			}	
+    		}
+    	}else{
+    		log.info("EL RUBRO CON EL ID $params.id NO PUDO SER ENCONTRADO")
+    		render(contentType:"text/json"){
+    			success false
+    			msg "EL RUBRO CON EL ID $params.id NO PUDO SER ENCONTRADO"
+    		}
+    	}
+    }
+    
+    def showjson = {
+    	log.info("INGRSANDO AL METODO showjosn")
+    	log.debug("PARAMETROS: $params")
+    	def rubroInstance = Rubro.get(params.id)
+    	if (rubroInstance){
+    		log.info("Instancia de Rubro encontrada, renderizando json")
+    		render(contentType:"text/json"){
+    			success true
+    			data(id:rubroInstance.id,nombreRubro:rubroInstance.nombreRubro)
+    		}
+    	}else{
+    		log.info("Instancia de Rubro con ID: $params.id NO ENCONTRADA")
+    		render(contentType:"text/json"){
+    			success false
+    			msg "Instancia de Rubro con ID: $params.id NO ENCONTRADA"
+    		}	
+    	}
+    	
+    }
+    
 }
