@@ -15,7 +15,11 @@
 									'id','nombre','nombreRepresentante','telefono1'
 							]
             		});
-            	store.load({params:{start:0, limit:10}});
+        		store.on("beforeload",function(){
+						store.baseParams={
+								searchCriteria:Ext.getCmp('searchCriteriaId').getValue()
+						}
+        		});
             	var grid = new Ext.grid.GridPanel({
                 		store:store,
                 		columns: [
@@ -62,6 +66,7 @@
     					frame:true,
     					items: [{
     							layout: 'column',
+    							
     							anchor: '0',
     							items: [{
     										columnWidth: .5,
@@ -97,6 +102,7 @@
     								]
     						},grid]
     				});
+            	store.load({params:{start:0, limit:10}});
     			
     			
     			
