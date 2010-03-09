@@ -33,15 +33,20 @@ class EmpresaController {
     	log.info("INGRESANDO AL METODO listjson de EmpresaController")
     	log.debug("Parametros: "+params)
 	    def pagingConfig = [
-	            max: params.limit ?: 10,
-	            offset: params.start ?: 0
+	            max: params.limit as Integer ?: 10,
+	            offset: params.start as Integer ?: 0
 	    ]
+    	def totalEmpresas = Empresa.createCriteria().count{
+    			like('nombre','%'+params.searchCriteria+'%')
+    	}
+    	def empresas = Empresa.createCriteria().list(pagingConfig){
+    		like('nombre','%'+params.searchCriteria+'%')
+    	}
     	
-    	def empresas = Empresa.createCriteria().list(pagingConfig){like('nombre','%'+params.searchCriteria+'%')}
     			
-    	log.debug("Cantidad de Empresas consultadas: "+empresas.size())
+    	log.debug("Cantidad de Empresas consultadas: "+Empresa.count())
     	render(contentType:'text/json'){
-    		total empresas.size()
+    		total totalEmpresas
     		rows{
     			empresas.each{
     				row(id:it.id,nombre:it.nombre,nombreRepresentante:it.nombreRepresentante,telefono1:it.telefono1)

@@ -67,4 +67,18 @@ class RubroControllerTests extends GroovyTestCase {
     	
     	assertTrue(subrubros.size()==2)
     }
+    
+    void testSaveJson() {
+		assertTrue (Rubro.count()==0)
+		def rubroController = new RubroController()
+		rubroController.params.nombre='ZINEDINE ZIDANE'
+		rubroController.savejson()
+		def respuesta = rubroController.response.contentAsString
+		def respuestaJson = grails.converters.JSON.parse(respuesta)
+		def rubro = Rubro.get(respuestaJson.idRubro)
+		assertTrue(respuestaJson.success)
+		assertNotNull(rubro)
+    }
+    
+    
 }
