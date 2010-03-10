@@ -7,6 +7,21 @@ import com.rural.Vendedor
 import com.rural.Rubro
 import com.rural.SubRubro
 
+/*   class BootStrap {
+esto es para fixear el error:
+groovy.lang.MissingPropertyException: No such property: save
+      def grailsApplication
+
+      def init = { servletContext ->
+
+         for (dc in grailsApplication) {
+            dc.clazz.count()
+         }
+      }
+   }
+*/
+
+
 class BootStrap {
 	 def authenticateService
 	
