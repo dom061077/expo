@@ -98,4 +98,25 @@ class SubRubroController {
             render(view:'create',model:[subRubroInstance:subRubroInstance])
         }
     }
+    //-----------------------------metodos json---------------------
+    
+    def savejson = {
+    	log.info("INGRESANDO EL METODO savejson DEL CONTROLLER SubRubroController")
+    	log.debug("Parámetros: $params")
+    	def errorList = []
+    	def subrubroInstance = new SubRubro(params)
+    	if (!subrubroInstance.hasErrors() && subrubroInstance.save()){
+    		log.info("INSTANCIA DE SubRubro GUARDADA RENDERIZANDO JSON")
+    	}else{
+    		log.info("ERROR DE VALIDACION EN INSTANCIA DE SubRubro")
+    		subrubroInstance.each{
+    		
+    		}
+    		render(contentType:"text/json"){
+    			success false
+    			
+    		}
+    	}
+    }
+    
 }

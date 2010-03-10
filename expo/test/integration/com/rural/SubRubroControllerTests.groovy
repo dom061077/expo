@@ -3,14 +3,14 @@ package com.rural
 import grails.test.*
 
 class SubRubroControllerTests extends GrailsUnitTestCase {
-	def rubro = null
     protected void setUp() {
         super.setUp()
         def subrubros = SubRubro.list()
         subrubros.each{
         	it.delete()
         }
-        rubro = new Rubro(nombreRubro:"RUBRO PRUEBA").save(flush:true)
+        
+		//def rubro = new Rubro(nombreRubro:"RUBRO PRUEBA")
         
     }
 
@@ -21,7 +21,15 @@ class SubRubroControllerTests extends GrailsUnitTestCase {
 
 
     void testSaveJson() {
+    	Rubro.count()
+		Rubro rubro = new Rubro(nombreRubro:"AUTOMOTOR").save(flush:true)
 		def subrubroController = new SubRubroController()
+		rubro.validate()
+		if(rubro.hasErrors())
+			fail(rubro.errors.allErrors)
+			
+			
+		rubro2.save(flush:true)	
 		subrubroController.params.nombreSubrubro='ZINEDINE ZIDANE'
 		subrubroController.params.rubro=rubro
 		subrubroController.savejson()
@@ -35,8 +43,11 @@ class SubRubroControllerTests extends GrailsUnitTestCase {
     
     
     void testUpdateJson(){ 
-    	def subrubro = new SubRubro(nombreSubrubro:"PABLO RODRIGUEZ GAY",rubro:rubro).save(flush:true)
     	def rubroTest = new Rubro(nombreRubro:'rubro test').save(flush:true)
+    	def subrubro = new SubRubro(nombreSubrubro:"PABLO RODRIGUEZ GAY",rubro:rubro).save(flush:true)
+    	
+    	if(rubroTest.hasErrors())
+    		fail(rubroTest.errors.allErrors)
     	assertNotNull(subrubro)
     	def subrubroController = new SubRubroController()
     	subrubroController.params.id = subrubro.id
