@@ -1,44 +1,36 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
-	var vendedorForm = new Ext.FormPanel({
+	var rubroForm = new Ext.FormPanel({
 		url:'savejson',
-		id:'vendedorFormId',
+		id:'rubroFormId',
 		border:false,
 		renderTo:'formulario_extjs',
 		frame:true,
-		title:'Alta de Vendedor',
+		title:'Alta de Rubro',
 		height:200,
 		width:400,
 		items:[
 				{xtype:'textfield'
-				 ,id:'nombreid'
-				 ,name:'nombre'
-				 ,fieldLabel:'Nombre'
+				 ,id:'nombrerubroid'
+				 ,name:'nombreRubro'
 				 ,allowBlank:false
 				 ,msgTarget:'under'
 				 ,width:260
 				}
-		
 		],
 		buttons:[
-			{
-				text: 'Guardar',
-				handler: function(){
-					vendedorForm.getForm().submit({
-						success: function(f,a){
-							Ext.MessageBox.show({
-								title:'Mensaje'
-								,msg:'Los datos se guardaron correctamente'
-								,buttons:Ext.MessageBox.OK
-								,icon:Ext.MessageBox.INFO
-								,fn:function(btn){
-									window.location='create'
-								}
-							});
-							
-							
-						},
-						failure: function(f,a){
+				{
+					text:'Guardar'
+					,handler:function(){
+						rubroForm.getForm().submit({
+								success: function(f,a){
+									Ext.MessageBox.show({
+										title:'Mensaje'
+										,msg:'Los datos se guardaron correctamente'
+										,icon:Ext.MessageBox.INFO
+									});
+								},
+								failure: function(f,a){
 														    var msg="";
 														    if (a.failureType==Ext.form.Action.CONNECT_FAILURE ||
 														    	a.failureType==Ext.form.Action.SERVER_INVALID){
@@ -61,19 +53,17 @@ Ext.onReady(function(){
 												    				});
 											    				}
 														    }	
-							
-						}
-					});
+								}
+						});
+					}
+				},{
+					text:'Cancelar'
+					,handler: function(){
+						
+						window.location='list';
+					}
 				}
-			},
-			{
-				text:'Cancelar',
-				handler: function(){
-					window.location='list';
-				}
-			}
-			
 		]
 	});
-	Ext.getCmp('nombreid').focus();
+	
 });

@@ -4,13 +4,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>Show Rubro</title>
+        <title>Rubro</title>
     </head>
     <body>
         <div class="nav">
-            <span class="menuButton"><a class="home" href="${resource(dir:'')}">Home</a></span>
-            <span class="menuButton"><g:link class="list" action="list">Rubro List</g:link></span>
-            <span class="menuButton"><g:link class="create" action="create">New Rubro</g:link></span>
+            <span class="menuButton"><g:link class="list" action="list">Listado de Rubros</g:link></span>
+            <span class="menuButton"><g:link class="create" action="create">Alta de Rubro</g:link></span>
         </div>
         <div class="body">
             <h1>Show Rubro</h1>
@@ -55,8 +54,8 @@
             <div class="buttons">
                 <g:form>
                     <input type="hidden" name="id" value="${rubroInstance?.id}" />
-                    <span class="button"><g:actionSubmit class="edit" value="Edit" /></span>
-                    <span class="button"><g:actionSubmit class="delete" onclick="return confirm('Are you sure?');" value="Delete" /></span>
+                    <span class="button"><g:actionSubmit class="edit" value="Modificar" /></span>
+                    <span class="button"><g:actionSubmit class="delete" onclick="return confirm('Esta seguro?');" value="Borrar" /></span>
                 </g:form>
             </div>
         </div>

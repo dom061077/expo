@@ -4,12 +4,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>Create Rubro</title>         
+        <title>Alta de Rubro</title>         
     </head>
     <body>
         <div class="nav">
-            <span class="menuButton"><a class="home" href="${resource(dir:'')}">Home</a></span>
-            <span class="menuButton"><g:link class="list" action="list">Rubro List</g:link></span>
+            <span class="menuButton"><g:link class="list" action="list">Listado de Rubro</g:link></span>
         </div>
         <div class="body">
             <h1>Create Rubro</h1>
@@ -39,7 +38,7 @@
                     </table>
                 </div>
                 <div class="buttons">
-                    <span class="button"><input class="save" type="submit" value="Create" /></span>
+                    <span class="button"><input class="save" type="submit" value="Guardar" /></span>
                 </div>
             </g:form>
         </div>

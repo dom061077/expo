@@ -59,9 +59,9 @@
 					<input type='password' class='text_' name='j_password' id='j_password' />
 				</p>
 				<p>
-					<label for='remember_me'>Recordar</label>
+					<!-- label for='remember_me'>Recordar</label>
 					<input type='checkbox' class='chk' name='_spring_security_remember_me' id='remember_me'
-					<g:if test='${hasCookie}'>checked='checked'</g:if> />
+					<g:if test='${hasCookie}'>checked='checked'</g:if> / -->
 				</p>
 				<p>
 					<input type='submit' value='Login' />
