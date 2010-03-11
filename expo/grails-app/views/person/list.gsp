@@ -1,13 +1,12 @@
 <head>
 	<meta name="layout" content="main" />
-	<title>Person List</title>
+	<title>Listado de Usuariost</title>
 </head>
 
 <body>
 
 	<div class="nav">
-		<span class="menuButton"><a class="home" href="${createLinkTo(dir:'')}">Home</a></span>
-		<span class="menuButton"><g:link class="create" action="create">New Person</g:link></span>
+		<span class="menuButton"><g:link class="create" action="create">Alta de Usuario</g:link></span>
 	</div>
 
 	<div class="body">
@@ -20,10 +19,10 @@
 			<thead>
 				<tr>
 					<g:sortableColumn property="id" title="Id" />
-					<g:sortableColumn property="username" title="Login Name" />
-					<g:sortableColumn property="userRealName" title="Full Name" />
-					<g:sortableColumn property="enabled" title="Enabled" />
-					<g:sortableColumn property="description" title="Description" />
+					<g:sortableColumn property="username" title="Nombre de Usuario" />
+					<g:sortableColumn property="userRealName" title="Nombre Completo" />
+					<g:sortableColumn property="enabled" title="Habilitado" />
+					<g:sortableColumn property="description" title="Descripción" />
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
@@ -37,7 +36,7 @@
 					<td>${person.description?.encodeAsHTML()}</td>
 					<td class="actionButtons">
 						<span class="actionButton">
-							<g:link action="show" id="${person.id}">Show</g:link>
+							<g:link action="show" id="${person.id}">Mostrar</g:link>
 						</span>
 					</td>
 				</tr>

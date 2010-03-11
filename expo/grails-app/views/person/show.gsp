@@ -6,13 +6,12 @@
 <body>
 
 	<div class="nav">
-		<span class="menuButton"><a class="home" href="${createLinkTo(dir:'')}">Home</a></span>
-		<span class="menuButton"><g:link class="list" action="list">Person List</g:link></span>
-		<span class="menuButton"><g:link class="create" action="create">New Person</g:link></span>
+		<span class="menuButton"><g:link class="list" action="list">Listado de Usuarios</g:link></span>
+		<span class="menuButton"><g:link class="create" action="create">Alta de Usuario</g:link></span>
 	</div>
 
 	<div class="body">
-		<h1>Show Person</h1>
+		<h1>Usuario</h1>
 		<g:if test="${flash.message}">
 		<div class="message">${flash.message}</div>
 		</g:if>
@@ -36,12 +35,12 @@
 				</tr>
 
 				<tr class="prop">
-					<td valign="top" class="name">Enabled:</td>
+					<td valign="top" class="name">Habilitado:</td>
 					<td valign="top" class="value">${person.enabled}</td>
 				</tr>
 
 				<tr class="prop">
-					<td valign="top" class="name">Description:</td>
+					<td valign="top" class="name">Descripción:</td>
 					<td valign="top" class="value">${person.description?.encodeAsHTML()}</td>
 				</tr>
 
@@ -51,7 +50,7 @@
 				</tr>
 
 				<tr class="prop">
-					<td valign="top" class="name">Show Email:</td>
+					<td valign="top" class="name">Mostrar Email:</td>
 					<td valign="top" class="value">${person.emailShow}</td>
 				</tr>
 
@@ -73,8 +72,8 @@
 		<div class="buttons">
 			<g:form>
 				<input type="hidden" name="id" value="${person.id}" />
-				<span class="button"><g:actionSubmit class="edit" value="Edit" /></span>
-				<span class="button"><g:actionSubmit class="delete" onclick="return confirm('Are you sure?');" value="Delete" /></span>
+				<span class="button"><g:actionSubmit class="edit" value="Modificar" /></span>
+				<span class="button"><g:actionSubmit class="delete" onclick="return confirm('Esta seguro?');" value="Eliminar" /></span>
 			</g:form>
 		</div>
 

@@ -79,7 +79,7 @@ background: #85ACF7 url('/expo/images/hidr.jpg');
 
 .right li {
 	margin-bottom:5px;
-	list-style-type: square;
+	list-style-type: none;
 	color: #3B6EBF;
 }
 
