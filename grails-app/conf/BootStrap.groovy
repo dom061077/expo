@@ -6,6 +6,9 @@ import com.rural.Exposicion;
 import com.rural.Vendedor
 import com.rural.Rubro
 import com.rural.SubRubro
+import com.rural.seguridad.Person
+import com.rural.seguridad.Authority
+import com.rural.seguridad.Requestmap
 
 /*   class BootStrap {
 esto es para fixear el error:

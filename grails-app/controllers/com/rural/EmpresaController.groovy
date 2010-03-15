@@ -419,24 +419,65 @@ class EmpresaController {
 			  log.info("LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTO. NOMBRE DEL ARCHIVO: ${fileExcel.name}")
 			  def cuit = null
 			  def nombre = null
+			  def rubro = null
+			  def subrubro = null
+			  def vendedor = null
 			  session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":0])
 			  Empresa empresa
 			  int cantErrores = 0
-			  for(int r = 0; r < sheet.rows; r++){
-				empresa = new Empresa(fechaAlta:new Date(),cuit:sheet.getCell(0, r).contents,nombre:sheet.getCell(1, r).contents)
+			  //el archivo tendrá un fila con los nombres de columna por eso comienzo a leer desde la fila 1
+			  for(int r = 1; r < sheet.rows; r++){
+				subrubro = SubRubro.findByNombreSubrubro(sheet.getCell(1,r).contents)
+				if (subrubro==null && sheet.getCell(1,r).contents!=""){
+					log.debug("NO SE ECONTRO EL SUBRUBRO "+sheet.getCell(1,r).contents)
+					rubro = new Rubro(nombreRubro:sheet.getCell(1,r).contents)
+					rubro=rubro.save()
+					subrubro = new SubRubro(nombreSubrubro:sheet.getCell(1,r).contents,rubro:rubro)
+					subrubro=subrubro.save()
+					log.debug("RUBRO y SUBRUBRO "+sheet.getCell(1,r).contents+" INSERTADO")
+				}
+				vendedor = Vendedor.findByNombre(sheet.getCell(12,r).contents)
+				if (vendedor==null && sheet.getCell(12,r).contents!=""){
+					log.debug("NO SE ENCONTRO EL VENDEDOR "+sheet.getCell(12,r).contents)
+					vendedor = new Vendedor(nombre:sheet.getCell(12,r).contents)
+					vendedor.save()
+					log.debug("VENDEDOR "+sheet.getCell(12,r).contents+" INSERTADO")
+				}
+				log.debug("Valores de la planilla excel :"
+						+sheet.getCell(0,r).contents+","+
+						sheet.getCell(1,r).contents+","+
+						sheet.getCell(2,r).contents+","+
+						sheet.getCell(3,r).contents						
+				)	
+				empresa = new Empresa(fechaAlta:new Date()
+						 ,nombre:sheet.getCell(0, r).contents
+						 ,subrubro:subrubro
+						 ,nombreRepresentante:sheet.getCell(2,r).contents
+						 ,telefonoRepresentante1:sheet.getCell(3,r).contents
+						 ,telefonoRepresentante12:sheet.getCell(4,r).contents
+						 ,direccion:sheet.getCell(5,r).contents
+						 ,provinciaFiscal:sheet.getCell(6,r).contents
+						 ,localidadFiscal:sheet.getCell(7,r).contents
+						 ,codigoPostal:sheet.getCell(8,r).contents
+						 ,email:sheet.getCell(9,r).contents
+						 ,sitioWeb:sheet.getCell(10,r).contents
+						 ,observaciones:sheet.getCell(11,r).contents
+						 ,vendedor:vendedor
+				)
 				//sheetCopiado.addCell(new Label(0,r,sheet.getCell(0,r).contents))
 				//sheetCopiado.addCell(new Label(1,r,sheet.getCell(1,r).contents))
+				empresa.validate()
 				if(!empresa.hasErrors()){
 					
 					if (empresa.nombre.trim().equals("")){
 						log.debug("ERROR DE CARGA, EMPRESA NO PUEDE TENER UN NOMBRE VACIO")
-						sheet.addCell(new Label(2,r,"EMPRESA NO PUEDE TENER UN NOMBRE VACIO"))
+						sheet.addCell(new Label(13,r,"EMPRESA NO PUEDE TENER UN NOMBRE VACIO"))
 						cantErrores++
 					}else{
 						if (Empresa.findByNombre(empresa.nombre)){
 							log.debug("ERROR DE CARGA, EMPRESA YA EXISTE ")
 							log.debug("VALORES DE INSERCION: "+empresa.nombre+" "+empresa.cuit )
-							sheet.addCell(new Label(2,r,"YA EXISTE UNA EMPRESA CON EL MISMO NOMBRE"))
+							sheet.addCell(new Label(13,r,"YA EXISTE UNA EMPRESA CON EL MISMO NOMBRE"))
 							cantErrores++
 						}else{	
 							empresa.save()
@@ -444,10 +485,22 @@ class EmpresaController {
 						}
 					}
 				}else{
-					log.debug("ERRORES DE VALIDACION: $emp.errors.allErrors")
+					log.debug("ERRORES DE VALIDACION: $empresa.errors.allErrors")
 					log.debug("VALORES DE INSERCION CON ERRORES: "+empresa.nombre+" "+empresa.cuit )
-					sheet.addCell(new Label(2,r,empresa.errors.allErrors))
-					cantErrores++
+					def erroresstr=""
+					def errorList = []
+					empresa.errors.allErrors.each{error->
+						error.codes.each{
+							if(g.message(code:it)!=it)
+								errorList.add(g.message(code:it))
+						}
+					}
+					errorList.each{
+						erroresstr=erroresstr+it+" "
+						cantErrores++		
+					}
+					sheet.addCell(new Label(13,r,erroresstr))
+					
 				}		
 			 }
 			  	//session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":r+1,"success":true])

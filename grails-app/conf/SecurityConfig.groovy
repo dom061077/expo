@@ -4,9 +4,9 @@ security {
 
 	active = true
 
-	loginUserDomainClass = "Person"
-	authorityDomainClass = "Authority"
-	requestMapClass = "Requestmap"
+	loginUserDomainClass = "com.rural.seguridad.Person"
+	authorityDomainClass = "com.rural.seguridad.Authority"
+	requestMapClass = "com.rural.seguridad.Requestmap"
 	
 	loginFormUrl = "/login"
 	defaultTargetUrl = "/"

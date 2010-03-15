@@ -101,22 +101,128 @@ class SubRubroController {
     //-----------------------------metodos json---------------------
     
     def savejson = {
-    	log.info("INGRESANDO EL METODO savejson DEL CONTROLLER SubRubroController")
+    	log.info("INGRESANDO AL METODO savejson DEL CONTROLLER SubRubroController")
     	log.debug("Parámetros: $params")
     	def errorList = []
     	def subrubroInstance = new SubRubro(params)
     	if (!subrubroInstance.hasErrors() && subrubroInstance.save()){
     		log.info("INSTANCIA DE SubRubro GUARDADA RENDERIZANDO JSON")
+    		render(contentType:"text/json"){
+    			success true
+    			idSubRubro subrubroInstance.id
+    		}
     	}else{
     		log.info("ERROR DE VALIDACION EN INSTANCIA DE SubRubro")
-    		subrubroInstance.each{
-    		
+    		subrubroInstance.errors.allErrors.each{error->
+    			error.codes.each{
+    				if(g.message(code:it)!=it)
+    					errorList.add(g.message(code:it))
+    			}
     		}
     		render(contentType:"text/json"){
     			success false
-    			
+    			errors{
+    				errorList.each{
+    					title it
+    				}
+    			}
     		}
     	}
     }
+    
+    def updatejson = {
+    	log.info("INGRESANDO AL METODO updatejson DEL CONTROLLER SubRubroController")
+    	log.debug("Parámetros: $params")
+    	def errorList = []
+    	def subrubroInstance = SubRubro.get(params.id)
+    	if(subrubroInstance){
+    		/*if(params.version){
+    			if(params.version){
+    				def version = params.version.toLong()
+    				if(subrubroInstance.version > version){
+    					subrubroInstance.errors.rejectValue
+    				}
+    			}
+    		}*/
+    		
+    		subrubroInstance.properties=params
+    		if(!subrubroInstance.hasErrors() && subrubroInstance.save()){
+    			log.info("Instancia de SubRubro guardada, renderizando json")
+    			render(contentType:"text/json"){
+    				success true
+    			}
+    		}else{
+    			log.info("Error de validacion en SubRubro")
+    			subrubroInstance.errors.allErrors.each{error->
+    				error.codes.each{
+    					if(g.message(code:it)!=it)
+    						errorList.add(g.message(code:it))
+    				}
+    			}
+    			
+    			render(contentType:"text/json"){
+    				success false
+    				errorList.each{
+    					errors(error(title:it))
+    				}
+    			}
+    		}
+    	}else{
+    		log.info("subrubro no encontrado con id ${params.id}")
+    		render(contentType:"text/json"){
+    			success false
+    			errors{
+    				error(title:"subrubro con id ${params.id} no encontrado")
+    			}
+    		}
+    	}
+    }
+    
+    def showjson = {
+    	log.info("INGRESANDO AL METODO showjson DEL CONTROLLER SubRubroController")
+    	log.debug("Parámetros: $params")
+    	def subrubroInstance = SubRubro.get(params.id)
+    	if (subrubroInstance){
+    		log.debug("Instancia de subrubro encontrada, renderizando json")
+    		render(contentType:"text/json"){
+    			success true	
+    			data(id :subrubroInstance.id,nombreSubrubro: subrubroInstance.nombreSubrubro,rubroId:subrubroInstance.rubro.id)
+    		}
+    	}else{
+    		log.debug("Instancia de subrubro no encontrada, renderizando json")
+    		render(contentType:"text/json"){
+    			success false
+    		}
+    	}
+    	
+    }
+    
+    def deletejson={
+    	log.info("INGRESANDO AL METODO deletejson DEL CONTROLADOR SubRubroController")
+    	log.debug("PARAMETROS: $params")
+    	def subrubroInstance = SubRubro.get(params.id)
+    	if(subrubroInstance){
+    		try{
+    			subrubroInstance.delete(flush:true)
+    			log.info("SubRubro ELIMINADO")
+    			render(contentType:"text/json"){
+    				success true
+    			}
+    		}catch(org.springframework.dao.DataIntegrityViolationException e){
+    			log.info("ERROR DE INTEGRIDAD AL INTENTAR ELIMINAR EL SubRubro $subrubroInstance.id")
+    			render(contentType:"text/json"){
+    				success false
+    				msg "No se puede eliminar el SubRubro porque es referenciado en otros datos"
+    			}
+    		}
+    	}else{
+    		log.info("EL SubRubro CON ID $params.id NO PUDO SER ENCONTRADO")
+    		render(contentType:"text/json"){
+    			success false
+    			msg "EL SubRubro CON ID $params.id NO PUDO SER ENCONTRADO"
+    		}
+    	}
+    }
+ 
     
 }

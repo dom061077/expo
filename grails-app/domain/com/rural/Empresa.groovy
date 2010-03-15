@@ -1,18 +1,31 @@
 package com.rural
 
+import com.rural.seguridad.*;
+
 class Empresa {
-	
+	//datos comerciales
 	String nombreRepresentante
-	String nombre
+	String direccion
+	String email
+	String nombre//es el nombre comercial
 	String telefono1
 	String telefono2
+	String cargoRep//cargo representante
+	String dniRep
+	String sitioWeb
+	String observaciones
+	
+	//datos fiscales para la facturación
 	String cuit
-	String direccion
+	String razonSocial //apellido y nombre del expositor o razón social
+	String direccionFiscal
+	String localidadFiscal
+	String provinciaFiscal
 	String codigoPostal
+	String pais
+	String telefonoFiscal
+	
 	Date fechaAlta
-	
-	//String localidad
-	
 	Vendedor vendedor
 	Localidad localidad
 	SubRubro subrubro
@@ -20,7 +33,9 @@ class Empresa {
 	String telefonoRepresentante2;
 	String telefonoRepresentante3;
 	
-	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion]
+	
+	
+	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion,empresas:Empresa]//empresas contiene todas las empress con nombre parecido
 	
 	
     static constraints = {
@@ -38,6 +53,18 @@ class Empresa {
 		telefonoRepresentante3(blank:true,nullable:true)		
 		subrubro(blank:true,nullable:true)
 		fechaAlta(blank:true,nullable:true)
+		dniRep(blank:true,nullable:true)
+		cargoRep(blank:true,nullable:true)
+		sitioWeb(blank:true,nullable:true)
+		observaciones(blank:true,nullable:true)
+		razonSocial(blank:true,nullable:true)
+		direccionFiscal(blank:true,nullable:true)
+		
+		localidadFiscal(blank:true,nullable:true)
+		provinciaFiscal(blank:true,nullable:true)
+		pais(blank:true,nullable:true)
+		telefonoFiscal(blank:true,nullable:true)
+		
     }
-	static belongs = [vendedor:Vendedor, localidad:Localidad, subrubro: SubRubro]
+	static belongs = [vendedor:Vendedor, localidad:Localidad, subrubro: SubRubro,usuario:Person]
 }
