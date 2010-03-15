@@ -1,4 +1,4 @@
-
+package com.rural.seguridad
 
 /**
  * Request Map domain class.

@@ -1,3 +1,5 @@
+package com.rural.seguridad
+
 /**
  * Logout Controller (Example).
  */

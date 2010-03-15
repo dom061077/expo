@@ -1,3 +1,6 @@
+<%@ page import="com.rural.seguridad.Person" %>
+
+
 <head>
 	<meta name="layout" content="main" />
 	<title>Create Authority</title>

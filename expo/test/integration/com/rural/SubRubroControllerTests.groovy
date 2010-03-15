@@ -3,6 +3,8 @@ package com.rural
 import grails.test.*
 
 class SubRubroControllerTests extends GrailsUnitTestCase {
+	def rubro = null
+	def messageSource
     protected void setUp() {
         super.setUp()
         def subrubros = SubRubro.list()
@@ -22,14 +24,10 @@ class SubRubroControllerTests extends GrailsUnitTestCase {
 
     void testSaveJson() {
     	Rubro.count()
-		Rubro rubro = new Rubro(nombreRubro:"AUTOMOTOR").save(flush:true)
+		rubro = new Rubro(nombreRubro:"AUTOMOTOR").save(flush:true)
+		assertNotNull(rubro)
 		def subrubroController = new SubRubroController()
-		rubro.validate()
-		if(rubro.hasErrors())
-			fail(rubro.errors.allErrors)
-			
-			
-		rubro2.save(flush:true)	
+    		
 		subrubroController.params.nombreSubrubro='ZINEDINE ZIDANE'
 		subrubroController.params.rubro=rubro
 		subrubroController.savejson()
@@ -44,26 +42,27 @@ class SubRubroControllerTests extends GrailsUnitTestCase {
     
     void testUpdateJson(){ 
     	def rubroTest = new Rubro(nombreRubro:'rubro test').save(flush:true)
-    	def subrubro = new SubRubro(nombreSubrubro:"PABLO RODRIGUEZ GAY",rubro:rubro).save(flush:true)
-    	
-    	if(rubroTest.hasErrors())
-    		fail(rubroTest.errors.allErrors)
+    	rubro = new Rubro(nombreRubro:"rubro update test").save(flush:true)
+    	assertNotNull(rubro)
+    	assertNotNull(rubroTest)
+    	def subrubro = new SubRubro(nombreSubrubro:"PABLO RODRIGUEZ GAY",rubro:rubroTest).save(flush:true)
     	assertNotNull(subrubro)
     	def subrubroController = new SubRubroController()
     	subrubroController.params.id = subrubro.id
     	subrubroController.params.nombreSubrubro = "GAY RODRIGUEZ"
-    	subrubroController.params.rubro = rubroTest
+    	subrubroController.params.rubro = rubro
     	subrubroController.updatejson()
     	def respuesta = subrubroController.response.contentAsString
     	def respuestaJson = grails.converters.JSON.parse(respuesta)
    		subrubro = SubRubro.get(subrubro.id)
    		assertTrue(respuestaJson.success)
     	assertTrue(subrubro.nombreSubrubro=="GAY RODRIGUEZ")
-    	assertTrue(subrubro.rubro.equals(rubroTest))
+    	assertTrue(subrubro.rubro.equals(rubro))
     }
     
     void testDeleteJson(){
-    	def subrubro = new SubRubro(nombreRubro:"RUBRO DE PRUEBA",rubro:rubro).save(flush:true)
+    	rubro = new Rubro(nombreRubro:"RUBRO DE PRUEBA").save(flush:true)
+    	def subrubro = new SubRubro(nombreSubrubro:"SUBRUBRO DE PRUEBA",rubro:rubro).save(flush:true)
     	assertNotNull(subrubro)
     	def subrubroController = new SubRubroController()
     	subrubroController.params.id=subrubro.id
@@ -76,23 +75,32 @@ class SubRubroControllerTests extends GrailsUnitTestCase {
     }
     
     void testShowJson(){
-    	def subrubro = new SubRubro(nombreRubro:"RUBRO DE PRUEBA",rubro:rubro).save(flush:true)
+    	rubro = new Rubro(nombreRubro:"Rubro de Prueba").save(flush:true)
+    	assertNotNull(rubro)
+    	def subrubro = new SubRubro(nombreSubrubro:"SUBRUBRO DE PRUEBA",rubro:rubro).save(flush:true)
     	assertNotNull(subrubro)
     	def subrubroController = new SubRubroController()
     	subrubroController.params.id=subrubro.id
     	subrubroController.showjson()
     	def respuesta = subrubroController.response.contentAsString
     	def respuestaJson = grails.converters.JSON.parse(respuesta)
+    	
     	assertTrue(respuestaJson.success)
-    	subrubro = Rubro.get(subrubro.id)
+    	assertTrue(respuestaJson.data.nombreSubrubro.equals(subrubro.nombreSubrubro))
+    	assertTrue(respuestaJson.data.id==subrubro.id)
+    	assertTrue(respuestaJson.data.rubroId==subrubro.rubro.id)
+    	subrubro = SubRubro.get(subrubro.id)
     	assertNotNull(subrubro)
     }
     
     void testConstraints(){
-    	def subrubro = new SubRubro(nombreRubro:"RIVERPLATENSE").save(flush:true)
+    	rubro = new Rubro(nombreRubro:"Rubro prueba").save(flush:true)
+    	assertNotNull(rubro)
+    	def subrubro = new SubRubro(nombreSubrubro:"RIVERPLATENSE",rubro:rubro).save(flush:true)
+    	assertNotNull(subrubro)
     	def subrubroController = new SubRubroController()
     	Object[] testArgs = {}
-    	subrubroController.params.nombreRubro="RIVERPLATENSE"
+    	subrubroController.params.nombreSubrubro="RIVERPLATENSE"
     	subrubroController.savejson()
     	def respuesta = subrubroController.response.contentAsString
     	def respuestaJson = grails.converters.JSON.parse(respuesta)

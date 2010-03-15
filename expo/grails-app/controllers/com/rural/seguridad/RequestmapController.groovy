@@ -1,4 +1,4 @@
-
+package com.rural.seguridad
 
 import org.springframework.util.StringUtils
 
