@@ -400,7 +400,7 @@
 	        	var empresa_form = new Ext.FormPanel({
 	        	url: 'savejson',
 	        	id:'empresaFormId',
-	        	tbar:toolbar,
+	        	//tbar:toolbar,
 	        	border:false,
 	        	renderTo: 'formulario_extjs',
 	        	frame: true,
@@ -653,8 +653,8 @@
 	        									items:[
 	        										{columnWidth: .8,
 	        										 anchor:'0',
-	        										 layout:'form',
-	        										 items:comboExpo
+	        										 layout:'form'
+	        										 //,items:comboExpo
 	        										},{
 	        										 //columnWidth:.5,
 	        										 layout:'form',
