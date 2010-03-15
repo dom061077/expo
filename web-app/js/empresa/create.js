@@ -470,7 +470,7 @@
 									        	allowBlank: true,
 									        	name:'telefono2',
 									        	layout:'form'
-								        	},{
+								        	},/*{
 								        		xtype: 'combo',
 								        		fieldLabel: 'Provincia',
 								        		id:'idProvincia',
@@ -536,6 +536,18 @@
 								        		msgTarget:'under',
 								        		forceSelection:true,
 								        		width: 200
+								        	}*/
+								        	{
+								        		xtype:'textfield',
+								        		id:'idLocalidadFiscal',
+								        		fieldLabel:'Localidad',
+								        		allowBlank:false,
+								        		width:200
+								        	
+								        	},{
+								        		xtype:'textfield',
+								        		id:'idProvinciaFiscal',
+								        		fieldLabel:'Provincia'
 								        	},{
 								        		xtype: 'combo',
 								        		id: 'idVendedor',
@@ -646,7 +658,7 @@
 	        										},{
 	        										 //columnWidth:.5,
 	        										 layout:'form',
-	        										 items:[{
+	        										 items:[/*{
 	        										 	 xtype:'button',
 	        										 	 text:'Agregar',
 	        										 	 handler: function(){
@@ -662,7 +674,7 @@
 		        										 						,msg:'Ya existe la Exposición'
 		        										 						,icon:Ext.Msg.ERROR});
 	        										 	 }
-	        										 	},{
+	        										 	},*/{
 	        										 		xtype:'hidden',
 	        										 		allowBlank:true,
 	        										 		name:'exposempresajson',
