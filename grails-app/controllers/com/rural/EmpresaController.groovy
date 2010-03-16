@@ -422,12 +422,17 @@ class EmpresaController {
 			  def rubro = null
 			  def subrubro = null
 			  def vendedor = null
+			  StringTokenizer tokenizernombre=null
 			  session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":0])
 			  Empresa empresa
 			  int cantErrores = 0
 			  //el archivo tendrá un fila con los nombres de columna por eso comienzo a leer desde la fila 1
 			  for(int r = 1; r < sheet.rows; r++){
-				subrubro = SubRubro.findByNombreSubrubro(sheet.getCell(1,r).contents)
+				subrubro = SubRubro.createCriteria()list{
+					and{
+						
+					}
+				}
 				if (subrubro==null && sheet.getCell(1,r).contents!=""){
 					log.debug("NO SE ECONTRO EL SUBRUBRO "+sheet.getCell(1,r).contents)
 					rubro = new Rubro(nombreRubro:sheet.getCell(1,r).contents)
@@ -474,15 +479,27 @@ class EmpresaController {
 						sheet.addCell(new Label(13,r,"EMPRESA NO PUEDE TENER UN NOMBRE VACIO"))
 						cantErrores++
 					}else{
-						if (Empresa.findByNombre(empresa.nombre)){
-							log.debug("ERROR DE CARGA, EMPRESA YA EXISTE ")
-							log.debug("VALORES DE INSERCION: "+empresa.nombre+" "+empresa.cuit )
-							sheet.addCell(new Label(13,r,"YA EXISTE UNA EMPRESA CON EL MISMO NOMBRE"))
-							cantErrores++
-						}else{	
+						tokenizernombre = new StringTokenizer(empresa.nombre)
+						def empresassimilares = null
+						while(tokenizernombre.hasMoreTokens()){
+							empresassimilares = Empresa.findAllByNombre(tokenizernombre.nextToken())
+							log.debug("SE ENCONTRARON "+empresassimilares.size()+" SIMILARES PARA $empresa.nombre")
+							if(empresassimilares){
+								empresassimilares.each{
+									empresa.addToEmpresas(it)
+								}
+								log.debug("EMPRESAS SIMILARES: "+empresa.empresas)
+							}
+						}
+						//if (Empresa.findByNombre(empresa.nombre)){
+						//	log.debug("ERROR DE CARGA, EMPRESA YA EXISTE ")
+						//	log.debug("VALORES DE INSERCION: "+empresa.nombre+" "+empresa.cuit )
+						//	sheet.addCell(new Label(13,r,"YA EXISTE UNA EMPRESA CON EL MISMO NOMBRE"))
+						//	cantErrores++
+						//}else{	
 							empresa.save()
 							log.debug("EMPRESA SALVADA")
-						}
+						//}
 					}
 				}else{
 					log.debug("ERRORES DE VALIDACION: $empresa.errors.allErrors")
