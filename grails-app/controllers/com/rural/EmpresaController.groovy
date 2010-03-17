@@ -428,11 +428,7 @@ class EmpresaController {
 			  int cantErrores = 0
 			  //el archivo tendrá un fila con los nombres de columna por eso comienzo a leer desde la fila 1
 			  for(int r = 1; r < sheet.rows; r++){
-				subrubro = SubRubro.createCriteria()list{
-					and{
-						
-					}
-				}
+			  	subrubro=SubRubro.findByNombreSubrubro(sheet.getCell(1,r).contents)
 				if (subrubro==null && sheet.getCell(1,r).contents!=""){
 					log.debug("NO SE ECONTRO EL SUBRUBRO "+sheet.getCell(1,r).contents)
 					rubro = new Rubro(nombreRubro:sheet.getCell(1,r).contents)
@@ -482,7 +478,7 @@ class EmpresaController {
 						tokenizernombre = new StringTokenizer(empresa.nombre)
 						def empresassimilares = null
 						while(tokenizernombre.hasMoreTokens()){
-							empresassimilares = Empresa.findAllByNombre(tokenizernombre.nextToken())
+							empresassimilares = Empresa.findAllByNombre("%"+tokenizernombre.nextToken()+"%")
 							log.debug("SE ENCONTRARON "+empresassimilares.size()+" SIMILARES PARA $empresa.nombre")
 							if(empresassimilares){
 								empresassimilares.each{
