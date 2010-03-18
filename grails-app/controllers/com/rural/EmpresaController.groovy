@@ -452,6 +452,7 @@ class EmpresaController {
 						sheet.getCell(2,r).contents+","+
 						sheet.getCell(3,r).contents						
 				)	
+				
 				empresa = new Empresa(fechaAlta:new Date()
 						 ,nombre:sheet.getCell(0, r).contents
 						 ,subrubro:subrubro
@@ -466,6 +467,7 @@ class EmpresaController {
 						 ,sitioWeb:sheet.getCell(10,r).contents
 						 ,observaciones:sheet.getCell(11,r).contents
 						 ,vendedor:vendedor
+						 ,usuario:authenticateService.userDomain()
 				)
 				//sheetCopiado.addCell(new Label(0,r,sheet.getCell(0,r).contents))
 				//sheetCopiado.addCell(new Label(1,r,sheet.getCell(1,r).contents))
@@ -533,7 +535,7 @@ class EmpresaController {
 			 if (cantErrores>0 || empresasinsertadas==0){
 				 if(empresasinsertadas==0){
 					 log.debug("NO SE INSERTO NINGUNA EMPRESA, RENDERIZANDO MENSAJE DE ERROR")
-					 """{success:false, responseText:"Se produjo algun problema con el archivo excel, ninguna linea fue guardada",idcargaexcel:$cargaExcelInstance.id}"""
+					 render """{success:false, responseText:"Se produjo algun problema con el archivo excel, ninguna linea fue guardada",idcargaexcel:$cargaExcelInstance.id}"""
 				 }
 				 else{
 					 log.debug("ARCHIVO EXCEL PROCESADO CORRECTAMENTE PERO CON ALGUNOS ERRORES")
