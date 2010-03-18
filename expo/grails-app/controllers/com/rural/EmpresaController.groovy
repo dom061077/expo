@@ -422,6 +422,8 @@ class EmpresaController {
 			  def rubro = null
 			  def subrubro = null
 			  def vendedor = null
+			  
+			  def empresasinsertadas=0
 			  StringTokenizer tokenizernombre=null
 			  session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":0])
 			  Empresa empresa
@@ -494,7 +496,9 @@ class EmpresaController {
 						//	cantErrores++
 						//}else{	
 							empresa.save()
+							empresasinsertadas++
 							log.debug("EMPRESA SALVADA")
+							
 						//}
 					}
 				}else{
@@ -526,10 +530,20 @@ class EmpresaController {
 			 def cargaExcelInstance = new CargaExcel(fechaCarga:new Date(),nombreArchivo:fileExcel.name,archivo:fileOutputExcel.toByteArray())
 			 cargaExcelInstance.save()
 			 session.setAttribute("cargaexcelId",cargaExcelInstance.id)			 
-			 if (cantErrores>0)
-				 render """{success:true, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA", cantErrores:$cantErrores, idcargaexcel:$cargaExcelInstance.id}"""	
-			 else	 
+			 if (cantErrores>0 || empresasinsertadas==0){
+				 if(empresasinsertadas==0){
+					 log.debug("NO SE INSERTO NINGUNA EMPRESA, RENDERIZANDO MENSAJE DE ERROR")
+					 """{success:false, responseText:"Se produjo algun problema con el archivo excel, ninguna linea fue guardada",idcargaexcel:$cargaExcelInstance.id}"""
+				 }
+				 else{
+					 log.debug("ARCHIVO EXCEL PROCESADO CORRECTAMENTE PERO CON ALGUNOS ERRORES")
+					 render """{success:true, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA", cantErrores:$cantErrores, idcargaexcel:$cargaExcelInstance.id}"""
+				 }
+			 }
+			 else{
+				 log.debug("ARCHIVO EXCEL PROCESADO CORRECTAMENTE Y SIN ERRORES")
 				 render """{success:true, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA"}"""
+			 }
   		  }catch(jxl.read.biff.BiffException ioe){
 		   	 log.info("FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL")
 		   	 render """{success:false, responseText:"FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL"}"""

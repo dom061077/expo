@@ -29,6 +29,7 @@ class Empresa {
 	Vendedor vendedor
 	Localidad localidad
 	SubRubro subrubro
+	Person usuario
 	String telefonoRepresentante1;
 	String telefonoRepresentante2;
 	String telefonoRepresentante3;
@@ -52,6 +53,7 @@ class Empresa {
 		telefonoRepresentante2(blank:true,nullable:true)
 		telefonoRepresentante3(blank:true,nullable:true)		
 		subrubro(blank:true,nullable:true)
+		//usuario(blank:true,nullable:true)
 		fechaAlta(blank:true,nullable:true)
 		dniRep(blank:true,nullable:true)
 		cargoRep(blank:true,nullable:true)
