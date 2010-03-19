@@ -482,7 +482,9 @@ class EmpresaController {
 						tokenizernombre = new StringTokenizer(empresa.nombre)
 						def empresassimilares = null
 						while(tokenizernombre.hasMoreTokens()){
-							empresassimilares = Empresa.findAllByNombre("%"+tokenizernombre.nextToken()+"%")
+							empresassimilares = Empresa.createCriteria().list{
+								like('nombre',"%"+tokenizernombre.nextToken()+"%")
+							}
 							log.debug("SE ENCONTRARON "+empresassimilares.size()+" SIMILARES PARA $empresa.nombre")
 							if(empresassimilares){
 								empresassimilares.each{
