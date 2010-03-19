@@ -36,7 +36,7 @@ class Empresa {
 	
 	
 	
-	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion,empresas:Empresa]//empresas contiene todas las empress con nombre parecido
+	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion,similud:SimilitudEmpresa]//empresas contiene todas las empress con nombre parecido
 	
 	
     static constraints = {
@@ -54,6 +54,7 @@ class Empresa {
 		telefonoRepresentante3(blank:true,nullable:true)		
 		subrubro(blank:true,nullable:true)
 		//usuario(blank:true,nullable:true)
+		
 		fechaAlta(blank:true,nullable:true)
 		dniRep(blank:true,nullable:true)
 		cargoRep(blank:true,nullable:true)
@@ -66,7 +67,7 @@ class Empresa {
 		provinciaFiscal(blank:true,nullable:true)
 		pais(blank:true,nullable:true)
 		telefonoFiscal(blank:true,nullable:true)
-		
+				
     }
 	static belongs = [vendedor:Vendedor, localidad:Localidad, subrubro: SubRubro,usuario:Person]
 }
