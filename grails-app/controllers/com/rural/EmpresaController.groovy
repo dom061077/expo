@@ -424,6 +424,9 @@ class EmpresaController {
 			  def vendedor = null
 			  
 			  def empresasinsertadas=0
+			  def empresassimilares = null
+			  def token = ""
+			  
 			  StringTokenizer tokenizernombre=null
 			  session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":0])
 			  Empresa empresa
@@ -480,14 +483,19 @@ class EmpresaController {
 						cantErrores++
 					}else{
 						tokenizernombre = new StringTokenizer(empresa.nombre)
-						def empresassimilares = null
 						while(tokenizernombre.hasMoreTokens()){
+							token = tokenizernombre.nextToken()
+							if(token.toUpperCase()!="S.A" && token.toUpperCase()!="S.R.L"
+								&&	token.length()>3 && token.toUpperCase()!="AGRO"
+								&&  token!="S.A.")
 							empresassimilares = Empresa.createCriteria().list{
-								like('nombre',"%"+tokenizernombre.nextToken()+"%")
+								like('nombre',"%"+token+"%")
 							}
-							log.debug("SE ENCONTRARON "+empresassimilares.size()+" SIMILARES PARA $empresa.nombre")
+							log.debug("SE ENCONTRARON "+empresassimilares?.size()+" SIMILARES PARA $empresa.nombre")
 							if(empresassimilares){
 								empresassimilares.each{
+									it.token=token
+									it.save()
 									empresa.addToEmpresas(it)
 								}
 								log.debug("EMPRESAS SIMILARES: "+empresa.empresas)
