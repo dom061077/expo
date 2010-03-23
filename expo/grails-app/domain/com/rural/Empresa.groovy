@@ -15,6 +15,8 @@ class Empresa {
 	String sitioWeb
 	String observaciones
 	
+	String token //token para tomar las empresas similares
+	
 	//datos fiscales para la facturación
 	String cuit
 	String razonSocial //apellido y nombre del expositor o razón social
@@ -36,7 +38,7 @@ class Empresa {
 	
 	
 	
-	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion,similud:SimilitudEmpresa]//empresas contiene todas las empress con nombre parecido
+	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion,empresas:Empresa]//empresas contiene todas las empress con nombre parecido
 	
 	
     static constraints = {
@@ -67,6 +69,7 @@ class Empresa {
 		provinciaFiscal(blank:true,nullable:true)
 		pais(blank:true,nullable:true)
 		telefonoFiscal(blank:true,nullable:true)
+		token(blank:true,nullable:true)
 				
     }
 	static belongs = [vendedor:Vendedor, localidad:Localidad, subrubro: SubRubro,usuario:Person]
