@@ -1,5 +1,5 @@
 package com.rural
-
+//http://www.2paths.com/2009/10/01/one-to-many-relationships-in-grails-forms/
 import com.rural.seguridad.*;
 
 class Empresa {
@@ -41,7 +41,8 @@ class Empresa {
 	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion,empresas:Empresa]//empresas contiene todas las empress con nombre parecido
 	
 	static mapping = {
-			empresas cascade:'all-delete-orphan'
+			empresas cascade:'delete-orphan'
+			exposaparticipar cascade:'delete-orphan'
 
 	}
 	

@@ -81,6 +81,7 @@ class EmpresaController {
         if(empresaInstance) {
             try {
                 empresaInstance.delete()
+
                 log.info("EMPRESA CON ID: "+params.id+" ELIMINADA")
                 //flash.message = "Empresa ${params.id} deleted"
                 //redirect(action:list)
