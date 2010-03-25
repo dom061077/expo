@@ -40,6 +40,10 @@ class Empresa {
 	
 	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion,empresas:Empresa]//empresas contiene todas las empress con nombre parecido
 	
+	static mapping = {
+			empresas cascade:'all-delete-orphan'
+
+	}
 	
     static constraints = {
 		nombre(unique:true)

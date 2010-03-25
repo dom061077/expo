@@ -330,16 +330,6 @@
 	        		
 	        	var gridexpos = new Ext.grid.GridPanel({
 	        		store:exposdeempresaStore,
-	        		tbar:[{	icon: imagePath+'/skin/database_delete.png',
-	        				cls: 'x-btn-text-icon',
-	        				handler: function(){
-	        					var sm = gridexpos.getSelectionModel();
-	        					var sel = sm.getSelected();
-	        					if (sm.hasSelection()){
-	        						gridexpos.getStore().remove(sel);
-	        					}
-	        				}
-	        			  }],
 	        		title:'Exposiciones',
 	        		columns: [
 	        				{header:"id",dataIndex:"id",hidden:true},
@@ -408,7 +398,6 @@
 	        	var empresa_form = new Ext.FormPanel({
 	        	url: 'update',
 	        	id:'empresaFormId',
-	        	tbar:toolbar,
 	        	border:false,
 	        	renderTo: 'formulario_extjs',
 	        	frame: true,
@@ -423,17 +412,12 @@
 	        				deferredRender:false,			
 	        				defaults:{
 									  layout:'form'
-									 
 									 ,labelWidth:80
-									 //,frame:true
 									 ,autoHeight:true
 									 ,anchor:'100% 100%'
 									 ,defaultType:'textfield'
 									 ,bodyStyle:'padding:5px'
 									 ,border:true 
-									 // as we use deferredRender:false we mustn't
-									 // render tabs into display:none containers
-									 //,hideMode:'offsets'
 	        						},
 	        				items:[	
 	        						{
@@ -483,68 +467,21 @@
 									        	name:'telefono2',
 									        	layout:'form'
 								        	},{
-								        		xtype: 'combo',
+								        		xtype: 'textfield',
 								        		fieldLabel: 'Provincia',
 								        		id:'idProvincia',
 								        		name: 'provinciaLn',
-								        		displayField:'nombre',
 								        		allowBlank:false,
 								        		layout:'form',
 								        		msgTarget:'under',
-								        		mode:'local',
-								        		store: provinciasStore,
-								        		forceSelection:true,
-								        		width: 120,
-												listeners: {
-												       'select' : function(cmb, rec, idx) {
-												           var dep = Ext.getCmp('idDepartamento');
-												           
-												           dep.clearValue();
-												           dep.store.load({
-												              params: {'provincianombre': Ext.getCmp('idProvincia').getValue() }
-												           });
-												           dep.enable();
-												           var loc = Ext.getCmp('idLocalidad');
-												           loc.clearValue();
-												           loc.store.removeAll();
-												           loc.disable();
-												       }
-												    }	        		
+								        		width: 120
 								        	},{
-								        		xtype: 'combo',
-								        		fieldLabel: 'Departamento',
-								        		id: 'idDepartamento',
-								        		name: 'departamentoLn',
-								        		displayField:'nombreDep',
-								        		allowBlank:false,
-								        		msgTarget:'under',
-								        		mode:'local',
-								        		store: departamentosStore,
-								        		forceSelection:true,
-								        		layout:'form',
-								        		width: 120,
-								        		listeners: {
-								        				'select' : function (cmb,rec,idx){
-							    							var loc = Ext.getCmp('idLocalidad');
-							    							loc.clearValue();
-							    							loc.store.load({
-							        							params: {'departamentonombre':Ext.getCmp('idDepartamento').getValue()}
-							    							});
-							    							loc.enable();
-								        				}
-								        		}
-								        	},{
-								        		xtype: 'combo',
+								        		xtype: 'textfield',
 								        		id: 'idLocalidad',
 								        		fieldLabel: 'Localidad',
 								        		allowBlank: false,
 								        		name: 'localidadAux',
-								        		hiddenName:'localidad.id',
-								        		displayField:'nombreLoc',
 								        		layout:'form',
-								        		valueField: 'id',
-								        		mode:'local',
-								        		store: localidadesStore,
 								        		msgTarget:'under',
 								        		forceSelection:true,
 								        		width: 200
@@ -646,49 +583,7 @@
 	        							layout:'form',
 	        							defaultType:'panel',
 	        							
-	        							items:[
-	        								{
-	        									layout:'column',
-	        									anchor:'0',
-	        									items:[
-	        										{columnWidth: .8,
-	        										 anchor:'0',
-	        										 layout:'form',
-	        										 items:comboExpo
-	        										},{
-	        										 //columnWidth:.5,
-	        										 layout:'form',
-	        										 items:[{
-	        										 	 xtype:'button',
-	        										 	 text:'Agregar',
-	        										 	 handler: function(){
-	        										 	 	if(exposdeempresaStore.find('id',comboExpo.hiddenField.value)<0)
-		        										 	 	exposdeempresaStore.insert(0,
-		        										 	 		new dsexpoModel({
-		        										 	 			id:comboExpo.hiddenField.value,
-		        										 	 			nombre:Ext.getCmp('idExposicionAddExpo').getRawValue()
-		        										 	 		})
-		        										 	 	);	
-		        										 	else
-		        										 		Ext.MessageBox.show({title:'Error'
-		        										 						,msg:'Ya existe la Exposición'
-		        										 						,icon:Ext.Msg.ERROR
-		        										 						,buttons:Ext.MessageBox.OK
-		        										 						});
-	        										 	 }
-	        										 	},{
-	        										 		xtype:'hidden',
-	        										 		allowBlank:true,
-	        										 		name:'exposempresajson',
-	        										 		id:'exposempresajsonId'
-	        										 		
-	        										 		
-	        										 	}]
-	        										}
-	        									
-	        									]
-	        								},gridexpos
-	        							]
+	        							items:gridexpos
 	        						},{
 	        							title:'Expos a participar',
 	        							layout:'form',
@@ -755,7 +650,7 @@
         	          					
         	          					exposStoreJsonString=Ext.encode(exposStoreArr);
         	          					exposaParticiparJsonString=Ext.encode(exposaParticiparArr);
-										Ext.getCmp('exposempresajsonId').setValue(exposStoreJsonString);
+										//Ext.getCmp('exposempresajsonId').setValue(exposStoreJsonString);
 		        	          			Ext.getCmp('exposaparticiparjsonid').setValue(exposaParticiparJsonString);
 		        	          		
 										
@@ -862,9 +757,6 @@
 	        			},
 	        			success: function(f,a){
 	            				Ext.getCmp('idProvincia').setValue(a.result.data.provinciaLn);
-								Ext.getCmp('idDepartamento').store.load({
-									params: {'provincianombre': Ext.getCmp('idProvincia').getValue() }
-								});
 								
 	            				exposdeempresaStore.load({
 	            					params:{'id':a.result.data.id}
@@ -873,21 +765,24 @@
 	            				exposaparticiparStore.load({
 	            					params:{'id':a.result.data.id}
 	            				});
-	            				Ext.getCmp('idDepartamento').setValue(a.result.data.departamentoLn);
 	            				
-	            				Ext.getCmp('idLocalidad').store.load({
-	            					params: {'departamentonombre':Ext.getCmp('idDepartamento').getValue()}
-	            				});
-	            				
-	            				Ext.getCmp('idLocalidad').setValue(a.result.data.localidadAux);
-	            				Ext.getCmp('idLocalidad').hiddenField.value=a.result.data.localidadId;
-	            				
+								Ext.getCmp('id')	            				
 	            				Ext.getCmp('idVendedor').setValue(a.result.data.vendedor);
 	            				Ext.getCmp('idVendedor').hiddenField.value=a.result.data.vendedorId;
 	            				
 	            				Ext.getCmp('idRubro').setValue(a.result.data.rubro);
 	            				Ext.getCmp('idRubro').hiddenField.value=a.result.data.rubroId;
-	            				
+
+		        				var subrubroCmb = Ext.getCmp('idSubrubro');
+		        				subrubroCmb.clearValue();
+		        				subrubroCmb.store.load({
+		        					params:{'rubroid':Ext.getCmp('idRubro').hiddenField.value}
+		        				});
+		        				subrubroCmb.enable();
+		        				Ext.getCmp('idLocalidad').setValue(a.result.data.localidadAux);
+		        				Ext.getCmp('idProvincia').setValue(a.result.data.provinciaLn);
+		        				
+										            				
 	            				Ext.getCmp('idSubrubro').setValue(a.result.data.subrubro);
 	            				Ext.getCmp('idSubrubro').hiddenField.value=a.result.data.subrubroId;
 	            				
