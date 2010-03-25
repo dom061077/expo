@@ -80,7 +80,7 @@ class EmpresaController {
         def errorList
         if(empresaInstance) {
             try {
-                empresaInstance.delete(flush:true)
+                empresaInstance.delete()
                 log.info("EMPRESA CON ID: "+params.id+" ELIMINADA")
                 //flash.message = "Empresa ${params.id} deleted"
                 //redirect(action:list)
@@ -125,10 +125,8 @@ class EmpresaController {
     			 ,telefonoRepresentante3:empresaInstance.telefonoRepresentante3
     			 ,cuit:empresaInstance.cuit
     			 ,direccion:empresaInstance.direccion
-    			 ,provinciaLn:empresaInstance.localidad?.departamento?.provincia?.nombre
-    			 ,departamentoLn: empresaInstance.localidad?.departamento?.nombreDep
-    			 ,localidadAux: empresaInstance.localidad?.nombreLoc
-    			 ,localidadId: empresaInstance.localidad?.id
+    			 ,provinciaLn:empresaInstance.provinciaFiscal
+    			 ,localidadAux: empresaInstance.localidadFiscal
     			 ,vendedorId: empresaInstance.vendedor?.id
     			 ,vendedor:empresaInstance.vendedor?.nombre
     			 ,rubro:empresaInstance.subrubro?.rubro?.nombreRubro
@@ -158,7 +156,7 @@ class EmpresaController {
     	log.debug("Parametros: ${params}")
     	log.debug("Params.id: "+params.id)
         def empresaInstance = Empresa.get( params.id )
-        def expos = JSON.parse(params.exposempresajson)
+        //def expos = JSON.parse(params.exposempresajson)
         def exposaparticipar = JSON.parse(params.exposaparticiparjson)
         log.debug("EXPOS A PARTICIPAR JSON: "+params.exposaparticiparjson)
         def empIterator = null
@@ -168,40 +166,6 @@ class EmpresaController {
         def expoJson=null
         def e = null
         def errorList = null
-        //aqui determino las expos que se van a agregar
-        expos.each{
-    		empIterator = empresaInstance.expos.iterator()
-    		e=null
-    		isnew=true
-    		while(empIterator.hasNext()){
-    			e=empIterator.next()
-    			if(e.id==it.id) isnew=false
-    		}
-    		if (isnew){
-    			empresaInstance.addToExpos(Exposicion.get(it.id))
-    			log.debug "SE AGREGO UNA EXPOSICION A LA EMPRESA"
-    		}
-    	}
-    	//aqui determino las expos que se van a eliminar
-    	
-    	empIterator = empresaInstance.expos.iterator()
-    	while(empIterator.hasNext()){
-    		e=empIterator.next()
-    		exposJsonIterator = expos.iterator()
-    		expoJson=null
-    		isdeleted=true
-	    	while (exposJsonIterator.hasNext()){
-	    		expoJson=exposJsonIterator.next()
-	    		log.debug ("Id de expo JSON: "+expoJson.id+" Id de expo Empresa "+ e.id)
-	    		if((expoJson.id.toString()).compareTo(e.id.toString())==0){
-	    			isdeleted=false
-	    			log.debug("Para NO borrar "+e)
-	    		}
-	    	}
-    		if(isdeleted)
-    			empIterator.remove()
-    	}
-//+++++++++++++++++++++
         //aqui determino las exposaparticpar que se van a agregar
 
         exposaparticipar.each{
