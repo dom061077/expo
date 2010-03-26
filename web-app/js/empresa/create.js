@@ -542,12 +542,14 @@
 								        		id:'idLocalidadFiscal',
 								        		fieldLabel:'Localidad',
 								        		allowBlank:false,
+								        		name:'localidadFiscal',
 								        		width:200
 								        	
 								        	},{
 								        		xtype:'textfield',
 								        		id:'idProvinciaFiscal',
-								        		fieldLabel:'Provincia'
+								        		fieldLabel:'Provincia',
+								        		name:'provinciaFiscal'
 								        	},{
 								        		xtype: 'combo',
 								        		id: 'idVendedor',
@@ -638,6 +640,14 @@
 								        		msgTarget: 'under',
 								        		layout: 'form',
 								        		name: 'telefonoRepresentante3'
+								        	},{
+								        		xtype:'textfield',
+								        		fieldLabel:'E-mail',
+								        		allowBlank:true,
+								        		msgTarget: 'under',
+								        		layout:'form',
+								        		name:'email',
+								        		vtype:'email'
 								        	}
 	        							]
 	        						},{

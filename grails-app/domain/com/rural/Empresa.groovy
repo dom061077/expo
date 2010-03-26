@@ -40,12 +40,12 @@ class Empresa {
 	
 	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion,empresas:Empresa]//empresas contiene todas las empress con nombre parecido
 	
-	static mapping = {
+/*	static mapping = {
 			empresas cascade:'delete-orphan'
 			exposaparticipar cascade:'delete-orphan'
 
 	}
-	
+	*/
     static constraints = {
 		nombre(unique:true)
 		vendedor(blank:true,nullable:true)
@@ -75,6 +75,7 @@ class Empresa {
 		pais(blank:true,nullable:true)
 		telefonoFiscal(blank:true,nullable:true)
 		token(blank:true,nullable:true)
+		email(blank:true,nullable:true)
 				
     }
 	static belongs = [vendedor:Vendedor, localidad:Localidad, subrubro: SubRubro,usuario:Person]

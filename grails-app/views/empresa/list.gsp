@@ -13,9 +13,23 @@
 							url: 'listjson',
 							fields:[
 									'id','nombre','nombreRepresentante','telefono1'
-							]
+							],
+		        			listeners: {
+			                    loadexception: function(proxy, store, response, e) {
+						                    var jsonObject = Ext.util.JSON.decode(response.responseText);
+						                    if (jsonObject.loginredirect == true)
+						                    		window.location='../logout/index';
+	                    
+						                   }
+	        						
+		        				}							
             		});
+            	store.on('load',function(Store this, Ext.data.Record[] records, Object options){
+            		
+            	});	
+            		
         		store.on("beforeload",function(){
+        			
 						store.baseParams={
 								searchCriteria:Ext.getCmp('searchCriteriaId').getValue()
 						}

@@ -80,6 +80,9 @@ class EmpresaController {
         def errorList
         if(empresaInstance) {
             try {
+            	empresaInstance.exposaparticipar.each{
+            		it.delete()
+            	}
                 empresaInstance.delete()
 
                 log.info("EMPRESA CON ID: "+params.id+" ELIMINADA")
@@ -276,7 +279,9 @@ class EmpresaController {
     def savejson = {
     	log.info("INGRESANDO AL METODO savejson DE EmpresaController")
     	log.debug("Parametros JSON: "+params)
+    	log.debug("Usuario: "+authenticateService.userDomain().id)
         def empresaInstance = new Empresa(params)
+        empresaInstance.usuario=authenticateService.userDomain()
         empresaInstance.fechaAlta= new Date()
     	log.debug("Valor de Instancia Empresa antes de salvar: "+empresaInstance)
 		def expos = JSON.parse(params.exposempresajson)

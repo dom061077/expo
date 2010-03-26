@@ -2,17 +2,20 @@ package com.rural
 
 class Exposicion {
 	String nombre
-	
-	static hasMany = [empresas : Empresa]
+	Empresa empresaParent	
+
+	static hasMany = [empresas:Empresa]
+
     static constraints = {
+    	empresaParent(blank:true,nullable:true)
     }
 	
 	static belongsTo = [Empresa]
 
 	
-	def beforeDelete = {
-		empresa.removeFromExposaparticipar(this)
+/*	def beforeDelete = {
+		empresaParent.exposaparticipar.remove(this)
 		
-	}
+	}*/
 	
 }
