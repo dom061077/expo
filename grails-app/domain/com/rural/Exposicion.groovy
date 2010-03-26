@@ -8,4 +8,11 @@ class Exposicion {
     }
 	
 	static belongsTo = [Empresa]
+
+	
+	def beforeDelete = {
+		empresa.removeFromExposaparticipar(this)
+		
+	}
+	
 }

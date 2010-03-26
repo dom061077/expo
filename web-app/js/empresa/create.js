@@ -564,7 +564,7 @@
 								        		forceSelection:true,
 								        		width: 200
 								        	},{
-								        		xtype: 'textfield',
+								        		xtype: 'combo',
 								        		fieldLabel:'Rubro',
 								        		id:'idRubro',
 								        		allowBlank:false,
