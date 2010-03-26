@@ -78,4 +78,6 @@ class Empresa {
 				
     }
 	static belongs = [vendedor:Vendedor, localidad:Localidad, subrubro: SubRubro,usuario:Person]
+	
+	
 }
