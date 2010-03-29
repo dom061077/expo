@@ -305,15 +305,19 @@
 	        			]
 	        			
 	        			
-	        		}); 
-	        	var exposdeempresaStoreDeleted = new Ext.data.Store({
-	        			
-	        		});	
-	        	
+	        		});
+	        		
+	        	var empresassimilaresStore = new Ext.data.JsonStore({
+	        			totalProperty: 'total',
+	        			root: 'rows',
+	        			url:'listempresassimilares',
+	        			fields:['id','nombre'],
+	        			valueField:'id'
+	        	});	
+	        		
 	        	var exposdeempresaStore= new Ext.data.JsonStore({
 	        			totalProperty: 'total',
 	        			root: 'rows',
-	        			
 	        			url:'listexpos',
 	        			fields:['id','nombre'],
 	        			valueField:'id'
@@ -335,6 +339,17 @@
 	        				{header:"id",dataIndex:"id",hidden:true},
 	        				{header:"Nombre",width:250,dataIndex:"nombre"}
 	        			],
+	        		height:200,
+	        		width:300
+	        	});
+	        	
+	        	var gridsimilares = new Ext.grid.GridPanel({
+	        		store:empresassimilaresStore,
+	        		title:'Empresas con Nombres Similares',
+	        		columns:[
+	        			{header:"id",dataIndex:"id",hidden:true},
+	        			{header:"Nombre",width:250, dataIndex:"nombre"}
+	        		],
 	        		height:200,
 	        		width:300
 	        	});
@@ -401,12 +416,13 @@
 	        	border:false,
 	        	renderTo: 'formulario_extjs',
 	        	frame: true,
-	        	title: 'Modificar de Empresa',
+	        	title: 'Modificar Empresa',
 	        	height:470,
 	        	width: 450,
 	        	items: {	xtype:'tabpanel',
 	        				activeItem:0,
 	        				autoScroll:true,
+	        				enableTabScroll:true,
 	        				border:false,
 	        				anchor:'100% 100%',
 	        				deferredRender:false,			
@@ -575,6 +591,14 @@
 								        		msgTarget: 'under',
 								        		layout: 'form',
 								        		name: 'telefonoRepresentante3'
+								        	},{
+								        		xtype:'textfield',
+								        		fieldLabel:'E-mail',
+								        		allowBlank:true,
+								        		msgTarget: 'under',
+								        		layout:'form',
+								        		name:'email',
+								        		vtype:'email'
 								        	}
 	        							]
 	        						},{
@@ -630,6 +654,11 @@
 	        									]
 	        								},gridexposaparticipar
 	        							]
+	        						},{
+	        							title:'Empresas Similares',
+	        							layout:'form',
+	        							defaultType:'panel',
+	        							items:gridsimilares
 	        						}
 							]},
 	        	buttons: [
@@ -773,10 +802,14 @@
 	            				Ext.getCmp('idRubro').setValue(a.result.data.rubro);
 	            				Ext.getCmp('idRubro').hiddenField.value=a.result.data.rubroId;
 
+	            				empresassimilaresStore.load({
+	            					params:{'id':a.result.data.id}
+	            				});
+	            				
 		        				var subrubroCmb = Ext.getCmp('idSubrubro');
 		        				subrubroCmb.clearValue();
 		        				subrubroCmb.store.load({
-		        					params:{'rubroid':Ext.getCmp('idRubro').hiddenField.value}
+		        					params:{'rubroid':a.result.data.rubroId}
 		        				});
 		        				subrubroCmb.enable();
 		        				Ext.getCmp('idLocalidad').setValue(a.result.data.localidadAux);

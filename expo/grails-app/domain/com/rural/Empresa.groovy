@@ -16,6 +16,7 @@ class Empresa {
 	String observaciones
 	
 	String token //token para tomar las empresas similares
+	Integer totalsimilares
 	
 	//datos fiscales para la facturación
 	String cuit
@@ -75,6 +76,7 @@ class Empresa {
 		pais(blank:true,nullable:true)
 		telefonoFiscal(blank:true,nullable:true)
 		token(blank:true,nullable:true)
+		totalsimilares(blank:true,nullable:true)
 		email(blank:true,nullable:true)
 				
     }

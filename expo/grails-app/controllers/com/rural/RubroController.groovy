@@ -118,16 +118,24 @@ class RubroController {
     def listsubrubrojson = {
         log.info("INGRESANDO AL METODO listsubrubrojson DEL CONTROLLER RubroController")
         log.debug("PARAMETROS ENVIADOS: "+params)
-    	def subrubros = SubRubro.createCriteria().list{
-    	 		eq('rubro.id',new Long(params.rubroid))
-    	}
-    	render(contentType:"text/json"){
-			total subrubros.size()    		
-    		rows{
-
-    			subrubros.each{
-    				row(id:it.id,nombreSubrubro:it.nombreSubrubro)
-    			}
+    	def subrubros = null
+    	if (params.rubroid){
+		    	subrubros = SubRubro.createCriteria().list{
+		    	 		eq('rubro.id',new Long(params.rubroid))
+		    	}
+		    	render(contentType:"text/json"){
+					total subrubros.size()    		
+		    		rows{
+		
+		    			subrubros?.each{
+		    				row(id:it.id,nombreSubrubro:it.nombreSubrubro)
+		    			}
+		    		}
+		    	}
+    	}else{
+    		render(contentType:"text/json"){
+    			total 0
+    			rows{}
     		}
     	}
     }
@@ -230,7 +238,7 @@ class RubroController {
     }
     
     def showjson = {
-    	log.info("INGRSANDO AL METODO showjosn")
+    	log.info("INGRESANDO AL METODO showjosn")
     	log.debug("PARAMETROS: $params")
     	def rubroInstance = Rubro.get(params.id)
     	if (rubroInstance){
