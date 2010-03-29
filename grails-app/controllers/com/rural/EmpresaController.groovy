@@ -368,7 +368,7 @@ class EmpresaController {
     	log.info("INGRESANDO AL METODO listempresassimilares DE EmpresaController")
     	log.debug("PARAMETROS: "+params)
     	
-    	def empresassimilares = Empresa.get(params.id).empresas
+    	def empresassimilares = Empresa.get(params.id)?.empresas
     	render(contentType: "text/json"){
     		total empresassimilares.size()
     		rows{
@@ -381,11 +381,12 @@ class EmpresaController {
     
     def listempresasconsimilitudes = {
     	log.info("INGRESANDO AL METODO listempresasconsimilares DE EMPRESACONTROLLER")
+    	log.debug("PARAMETROS: $params")
     	
 		def empresas = Empresa.createCriteria().list{
-		    or{
-		         eq('totalsimilares',0)   
-		         isNull('totalsimilares')
+		    and{
+		         like('nombre','%'+params.searchCriteria+'%')   
+		         isNotNull('totalsimilares')
 		    }
 		}
     	
