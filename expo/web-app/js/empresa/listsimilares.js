@@ -9,7 +9,7 @@ Ext.onReady(function(){
 	
 	var empresassimilaresDetalleStore = new Ext.data.JsonStore({
 			autoLoad:true,
-			url:'listempresasconsimilitudes',
+			url:'listempresassimilares',
 			root:'rows',
 			fields: ['id','nombre']
 	});
@@ -18,12 +18,20 @@ Ext.onReady(function(){
 			store:empresassimilaresStore,
 			columns: [
     		          {header: "id",dataIndex:'id',hidden:true},		  	
-    		          {header: "Nombre",width:200,sortable:true,dataIndex:'nombre'},
+    		          {header: "Nombre",width:200,sortable:true,dataIndex:'nombre'}
 			],
 			stripRows:true,
 			height:150,
 			width:400,
 			title:'Empresas con nombres similares'
+	});
+
+	gridCabecera.on('rowdblclick',function(grid,rowIndex,e){
+		var r = gridCabecera.getStore().getAt(rowIndex);
+		var selectedId = r.get('id');
+		empresassimilaresDetalleStore.load({
+			params:{id:selectedId}
+		});
 	});
 	
 	var gridDetalle = new Ext.grid.GridPanel({
@@ -63,7 +71,15 @@ Ext.onReady(function(){
 							layout:'form',
 								items:{
 										xtype:'button',
-										text:'Buscar'
+										text:'Buscar',
+										listeners:{
+											click: function(){
+												empresassimilaresStore.load({
+													params:{searchCriteria:Ext.getCmp('searchCriteriaId').getValue()}
+												});
+												
+											}
+										}
 								}
 						}
 				]
