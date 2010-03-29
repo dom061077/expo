@@ -364,7 +364,45 @@ class EmpresaController {
     	}
     }
 
+    def listempresassimilares = {
+    	log.info("INGRESANDO AL METODO listempresassimilares DE EmpresaController")
+    	log.debug("PARAMETROS: "+params)
+    	
+    	def empresassimilares = Empresa.get(params.id).empresas
+    	render(contentType: "text/json"){
+    		total empresassimilares.size()
+    		rows{
+    			empresassimilares.each{
+    				row(id:it.id,nombre:it.nombre)
+    			}
+    		}
+    	}
+    }
     
+    def listempresasconsimilitudes = {
+    	log.info("INGRESANDO AL METODO listempresasconsimilares DE EMPRESACONTROLLER")
+    	
+		def empresas = Empresa.createCriteria().list{
+		    or{
+		         eq('totalsimilares',0)   
+		         isNull('totalsimilares')
+		    }
+		}
+    	
+    	render(contentType: "text/json"){
+    		total empresas.size()
+    		rows{
+    			empresas.each{
+    				row(id:it.id,nombre:it.nombre)
+    			}
+    		}
+    	}
+    }
+    
+    def empresassimilares = {
+    	log.info("INGRESANDO AL METODO empresassimilares DE EMPRESACONTROLLER")
+    	log.debug("ESTE ACTION ES SIMPLEMENTE UN REDIRECT A LA VISTA empresassimilares.gsp")
+    }
     
     //****************************métodos para el manejo inserción a partir de archivos excel********
     def uploadtest = {
@@ -468,6 +506,7 @@ class EmpresaController {
 									it.save()
 									empresa.addToEmpresas(it)
 								}
+								empresa.totalsimilares=empresassimilares.size()
 								log.debug("EMPRESAS SIMILARES: "+empresa.empresas)
 							}
 						}

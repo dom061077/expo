@@ -47,6 +47,7 @@
 				<h2>Navegación</h2>
 				<ul>
 					<li class='controller'><g:link controller="empresa">Empresas </g:link></li>
+					<li class='controller'><g:link controller="empresa" action="empresassimilares">Empresas Similares</g:link></li>
 					<g:ifAllGranted role="ROLE_ADMIN">
 						<li class='controller'><g:link controller="vendedor">Vendedores </g:link> </li>
 						<li class='controller'><g:link controller="rubro">Rubro </g:link> </li>

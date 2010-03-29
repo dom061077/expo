@@ -24,9 +24,6 @@
 	        						
 		        				}							
             		});
-            	store.on('load',function(Store this, Ext.data.Record[] records, Object options){
-            		
-            	});	
             		
         		store.on("beforeload",function(){
         			
@@ -104,6 +101,29 @@
 																	store.load({
 																		params: {'start':0,'limit':10,'searchCriteria':a.result.searchCriteria}
 																	});
+							        	          				},
+							        	          				failure: function(form,action){
+							        	          			        switch (action.failureType) {
+								        	          		            case Ext.form.Action.CLIENT_INVALID:
+								        	          		                Ext.MessageBox.show({
+									        	          		                title:'Fallo',
+									        	          		                msg:'No se puede enviar la petición con valores incorrectos',
+										        	          		            icon:Ext.MessageBox.ERROR,
+										        	          		            buttons:Ext.MessageBox.OK
+								        	          		                });
+								        	          		                break;
+								        	          		            case Ext.form.Action.CONNECT_FAILURE:
+									        	          		            Ext.MessageBox.show({
+										        	          		            title:'Fallo',
+										        	          		            msg:'Error de comunicación con el servidor',
+										        	          		            icon:Ext.MessageBox.ERROR,
+										        	          		            buttons:Ext.MessageBox.OK
+									        	          		            });
+								        	          		                break;
+								        	          		            case Ext.form.Action.SERVER_INVALID:
+								        	          		               Ext.Msg.alert('Failure', action.result.msg);
+							        	          		       		}
+							        	          										        	          					
 							        	          				}
 								        	          		});
     													
