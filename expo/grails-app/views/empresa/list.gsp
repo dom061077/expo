@@ -150,5 +150,18 @@
         <div id="empresa-grid">
         	
         </div>
+        
+		<g:jasperReport
+		                                   controller="empresa"
+		                                   action="ordendereserva"
+		                                   jasper="ordendereserva"
+		                                   format="PDF"
+		                                   name="Graduation">
+		
+		                                   Print Certificates
+		                                   
+         </g:jasperReport>
+		        
+        
     </body>
 </html>
