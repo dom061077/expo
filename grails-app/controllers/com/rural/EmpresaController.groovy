@@ -1,5 +1,7 @@
 package com.rural
 
+//http://sourceforge.net/projects/ireport/files/
+
 import grails.converters.JSON
 import jxl.*
 import jxl.write.Label
@@ -404,6 +406,15 @@ class EmpresaController {
     	log.info("INGRESANDO AL METODO empresassimilares DE EMPRESACONTROLLER")
     	log.debug("ESTE ACTION ES SIMPLEMENTE UN REDIRECT A LA VISTA empresassimilares.gsp")
     }
+    
+    //action de prueba para jasperports
+    
+    def ordendereserva = {
+    	log.info("INGRESANDO A LA ORDEN DE RESERVA")
+    	def empresas = Empresa.list()
+    	chain(controller:'jasper',action:'index',model:[data:empresas],params:params)
+    }
+    
     
     //****************************métodos para el manejo inserción a partir de archivos excel********
     def uploadtest = {
