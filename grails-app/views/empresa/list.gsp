@@ -156,9 +156,8 @@
 		                                   action="ordendereserva"
 		                                   jasper="ordendereserva"
 		                                   format="PDF"
-		                                   name="Graduation">
-		
-		                                   Print Certificates
+		                                   name="empresas">
+		                                   Listado
 		                                   
          </g:jasperReport>
 		        
