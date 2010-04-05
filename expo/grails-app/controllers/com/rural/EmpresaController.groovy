@@ -39,14 +39,14 @@ class EmpresaController {
 	            offset: params.start as Integer ?: 0
 	    ]
     	def totalEmpresas = Empresa.createCriteria().count{
-    			like('nombre','%'+params.searchCriteria+'%')
+    			like('nombre','%'+params?.searchCriteria+'%')
     	}
     	def empresas = Empresa.createCriteria().list(pagingConfig){
-    		like('nombre','%'+params.searchCriteria+'%')
+    		like('nombre','%'+params?.searchCriteria+'%')
     	}
     	
     			
-    	log.debug("Cantidad de Empresas consultadas: "+Empresa.count())
+    	log.debug("Cantidad de Empresas consultadas: "+empresas.size())
     	render(contentType:'text/json'){
     		total totalEmpresas
     		rows{
@@ -286,7 +286,7 @@ class EmpresaController {
         empresaInstance.usuario=authenticateService.userDomain()
         empresaInstance.fechaAlta= new Date()
     	log.debug("Valor de Instancia Empresa antes de salvar: "+empresaInstance)
-		def expos = JSON.parse(params.exposempresajson)
+		def expos = null//JSON.parse(params.exposempresajson)
 		def exposaparticipar = JSON.parse(params.exposaparticiparjson)
 		log.debug("Exposiciones cargadas: "+expos)
 		log.debug("Exposiciones en las que puede participar: "+exposaparticipar)

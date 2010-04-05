@@ -5,9 +5,16 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
         <title>Create OrdenReserva</title>
-        <ext:javascript dir="plugins" file="Ext.ux.PowerWizard.js"/>
+        <ext:stylesheet dir="plugins/wizard/resources/css" file="ext-ux-wiz.css"/>
+        <ext:javascript dir="plugins/wizard" file="CardLayout.js"/>
+        <ext:javascript dir="plugins/wizard" file="Wizard.js"/>
+        <ext:javascript dir="plugins/wizard" file="Header.js"/>        
+        <ext:javascript dir="plugins/wizard" file="Card.js"/>
+
+
         
        	<script type="text/javascript" src='${resource(dir:'js/ordenreserva',file:'create.js')}'></script>
+
                  
     </head>
     <body>
