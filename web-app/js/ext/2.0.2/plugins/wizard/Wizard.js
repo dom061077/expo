@@ -231,7 +231,13 @@ this.showLoadMask(true, 'validating');
              * the index is the id of the card and the specific values
              * are objects with key/value pairs in the form formElementName : value
              */
-            'finish'
+            'finish',
+            /**
+             * @event nextstep
+             * Fires after next buttons is clicked
+             */
+            'nextstep'
+            
         );
 
         Ext.ux.Wiz.superclass.initComponent.call(this);
@@ -543,6 +549,7 @@ this.showLoadMask(true, 'validating');
             this.onFinish();
         } else {
             this.cardPanel.getLayout().setActiveItem(this.currentCard+1);
+            this.fireEvent('nextstep',this)
         }
     }
 });

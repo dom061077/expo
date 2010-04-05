@@ -651,53 +651,6 @@
 								        	}
 	        							]
 	        						},{
-	        							title:'Expos. en las que participó',
-	        							//defaults:{anchor:'-20'},
-	        							layout:'form',
-	        							defaultType:'panel',
-	        							
-	        							items:[
-	        								{
-	        									layout:'column',
-	        									anchor:'0',
-	        									items:[
-	        										{columnWidth: .8,
-	        										 anchor:'0',
-	        										 layout:'form'
-	        										 //,items:comboExpo
-	        										},{
-	        										 //columnWidth:.5,
-	        										 layout:'form',
-	        										 items:[/*{
-	        										 	 xtype:'button',
-	        										 	 text:'Agregar',
-	        										 	 handler: function(){
-	        										 	 	if(exposdeempresaStore.find('id',comboExpo.hiddenField.value)<0)
-		        										 	 	exposdeempresaStore.insert(0,
-		        										 	 		new dsexpoModel({
-		        										 	 			id:comboExpo.hiddenField.value,
-		        										 	 			nombre:Ext.getCmp('idExposicionAddExpo').getRawValue()
-		        										 	 		})
-		        										 	 	);	
-		        										 	else
-		        										 		Ext.Msg.show({title:'Error'
-		        										 						,msg:'Ya existe la Exposición'
-		        										 						,icon:Ext.Msg.ERROR});
-	        										 	 }
-	        										 	},*/{
-	        										 		xtype:'hidden',
-	        										 		allowBlank:true,
-	        										 		name:'exposempresajson',
-	        										 		id:'exposempresajsonId'
-	        										 		
-	        										 		
-	        										 	}]
-	        										}
-	        									
-	        									]
-	        								},gridexpos
-	        							]
-	        						},{
 	        							title:'Expos. a participar',
 	        							layout:'form',
 	        							defaultType:'panel',
@@ -761,7 +714,7 @@
         	          					
         	          					exposStoreJsonString=Ext.encode(exposStoreArr);
         	          					exposaParticiparJsonString=Ext.encode(exposaParticiparArr);
-										Ext.getCmp('exposempresajsonId').setValue(exposStoreJsonString);
+										//Ext.getCmp('exposempresajsonId').setValue(exposStoreJsonString);
 		        	          			Ext.getCmp('exposaparticiparjsonid').setValue(exposaParticiparJsonString);
 										
 										
