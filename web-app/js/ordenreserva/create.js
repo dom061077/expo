@@ -1,14 +1,72 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
 
-	var empresaStore = new Ext.data.JsonStore({
+	//este store es para una búsqueda local de empresas
+	/*var empresaStore = new Ext.data.JsonStore({
 		//autoLoad:true,
 		root:'rows',
 		url:'../empresa/listjson',
 		fields:['id','nombre']
-	});
+	});*/
 	
-	empresaStore.load({params:{'searchCriteria':'a'}});
+    
+/*grilla de búsqueda de empresa*/
+	
+            	var store = new Ext.data.JsonStore({
+							totalProperty: 'total',
+							root: 'rows',
+							url: 'listjson',
+							fields:[
+									'id','nombre','nombreRepresentante','telefono1'
+							],
+		        			listeners: {
+			                    loadexception: function(proxy, store, response, e) {
+						                    var jsonObject = Ext.util.JSON.decode(response.responseText);
+						                    if (jsonObject.loginredirect == true)
+						                    		window.location='../logout/index';
+	                    
+						                   }
+	        						
+		        				}							
+            		});
+            		
+        		store.on("beforeload",function(){
+        			
+						store.baseParams={
+								searchCriteria:Ext.getCmp('searchCriteriaId').getValue()
+						}
+        		});
+            	var grid = new Ext.grid.GridPanel({
+                		store:store,
+                		columns: [
+                		          {header: "id",dataIndex:'id',hidden:true},		  	
+                		          {header: "Nombre",width:200,sortable:true,dataIndex:'nombre'},
+                		          {header: "Representante", width:200,sortable:true,dataIndex:'nombreRepresentante'},
+                		          {header: "telefono1",width:100}
+                          		],
+                        stripeRows: true,
+                        height:250,
+                        width:440,
+                        title:'Empresas',
+                        iconCls: 'icon-grid', 
+                        tbar:[{
+                        		icon: imagePath+'/skin/excel.gif'
+                        		,cls:'x-btn-text-icon'
+                        		,handler: function(){
+    									open('exportempresastoexcel?searchCriteria='+Ext.getCmp('searchCriteriaId').getValue(),'_blank')
+                        		}
+                        }],
+                        bbar: new Ext.PagingToolbar({
+                            	pageSize: 10,
+                            	store: store,
+                            	displayInfo:true,
+                            	displayMsg: 'Visualizando empresas {0} - {1} de {2}',
+                            	emptyMsg: 'No hay empresas para visualizar'
+            				})
+        			});
+//---------------------------------	
+
+	
 	
 	var vendedoresStore = new Ext.data.JsonStore({
 		autoLoad:true,
@@ -53,22 +111,10 @@ Ext.onReady(function(){
 				title : 'Seleccione Empresa y ExposiciÃ³n',
 				monitorValid : true,
 				items : [{
-							xtype:'combo',
-							fieldLabel:'ExposiciÃ³n',
+							xtype:'textfield',
+							fieldLabel:'BÃºsqueda',
 							allowBlank:false
-						},{
-							xtype:'combo',
-							fieldLabel:'Empresa',
-							store:empresaStore,
-							allowBlank:false,
-							name:'empresaseleccion',
-							id:'empresaseleccionId',
-							displayField:'nombre',
-							minListWidth:200,
-							valueField:'id',
-							mode:'local',
-							forceSelection:'true'
-						}
+						},grid
 				
 				]
 			}),
@@ -240,7 +286,8 @@ Ext.onReady(function(){
 			alert('Valor de Id: '+Ext.getCmp('empresaseleccionId').getValue());
 			
 	});
-	
+    
+    
 	wizard.show();
 });
 

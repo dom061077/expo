@@ -26,6 +26,7 @@
         	<div id='formulario_extjs'>
         		
         	</div>
+        	
         </div>
 	</body>
 </html>
