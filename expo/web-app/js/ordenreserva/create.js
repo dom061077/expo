@@ -111,6 +111,11 @@ Ext.onReady(function(){
 				title : 'Seleccione Empresa y Exposición',
 				frame:false,
 				monitorValid : true,
+					allowBlank:false,
+					bodyCssClass: 'x-border-layout-ct',
+					bodyStyle: {
+					            padding: '5px'
+					},				
 				items : [{
 							layout:'column',
 							
@@ -123,12 +128,12 @@ Ext.onReady(function(){
 											xtype:'textfield',
 											fieldLabel:'Búsqueda',
 											width:200,
-											allowBlank:false				
+																						
 										}
 									},
 									{
 										width:60,
-										layout:'form',
+										//layout:'form',
 										frame:false,
 										items:{
 											xtype:'button',
