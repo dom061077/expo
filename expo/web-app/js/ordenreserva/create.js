@@ -109,13 +109,36 @@ Ext.onReady(function(){
 		cards : [
 			new Ext.ux.Wiz.Card({
 				title : 'Seleccione Empresa y Exposición',
+				frame:false,
 				monitorValid : true,
 				items : [{
-							xtype:'textfield',
-							fieldLabel:'Búsqueda',
-							allowBlank:false
-						},grid
-				
+							layout:'column',
+							
+							anchor:'0',
+							items:[
+									{
+										width:350,
+										layout:'form',
+										items:{
+											xtype:'textfield',
+											fieldLabel:'Búsqueda',
+											width:200,
+											allowBlank:false				
+										}
+									},
+									{
+										width:60,
+										layout:'form',
+										frame:false,
+										items:{
+											xtype:'button',
+											text:'Buscar'
+										}
+								
+									}
+									
+							]
+					},grid
 				]
 			}),
 			new Ext.ux.Wiz.Card({
