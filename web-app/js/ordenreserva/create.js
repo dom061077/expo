@@ -15,7 +15,7 @@ Ext.onReady(function(){
             	var store = new Ext.data.JsonStore({
 							totalProperty: 'total',
 							root: 'rows',
-							url: 'listjson',
+							url: '../empresa/listjson',
 							fields:[
 									'id','nombre','nombreRepresentante','telefono1'
 							],
@@ -109,35 +109,39 @@ Ext.onReady(function(){
 		cards : [
 			new Ext.ux.Wiz.Card({
 				title : 'Seleccione Empresa y Exposición',
+				id:'seleccionempresacardId',
 				frame:false,
-				monitorValid : true,
-					allowBlank:false,
-					bodyCssClass: 'x-border-layout-ct',
-					bodyStyle: {
-					            padding: '5px'
-					},				
+				allowBlank:false,
 				items : [{
 							layout:'column',
-							
+							border:false,
 							anchor:'0',
 							items:[
 									{
 										width:350,
 										layout:'form',
+										border:false,
 										items:{
 											xtype:'textfield',
 											fieldLabel:'Búsqueda',
-											width:200,
+											id:'searchCriteriaId',
+											width:200
+											
 																						
 										}
 									},
 									{
 										width:60,
 										//layout:'form',
-										frame:false,
+										border:false,
 										items:{
 											xtype:'button',
-											text:'Buscar'
+											text:'Buscar',
+											listeners:{
+												click: function(){
+														store.load({params: {'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()}});
+												}
+											}
 										}
 								
 									}
@@ -311,7 +315,14 @@ Ext.onReady(function(){
 	
 	wizard.on('nextstep',function(wizard){
 			 
-			alert('Valor de Id: '+Ext.getCmp('empresaseleccionId').getValue());
+
+       var sm = grid.getSelectio...
+       var selectedId = r.get('id');
+       if (this.currentCard > 0 && !selectedId) {
+	            this.cardPanel.getLayout().setActiveItem(this.currentCard - 1);
+       }
+			
+			
 			
 	});
     
