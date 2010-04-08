@@ -11,6 +11,62 @@ Ext.onReady(function(){
 	
     
 /*grilla de b�squeda de empresa*/
+	function loaddatosempresa(empresaid){
+		var conn = new Ext.data.Connection();
+		conn.request({
+			url:'../empresa/editempresajson',
+			method:'POST',
+			params:{
+				id:empresaid
+			},
+			success: function(resp,opt){
+				var respuesta=Ext.decode(resp.responseText);
+				
+				if(respuesta){
+					if(respuesta.loginredirect)
+						window.location='../logout/index';
+					else{
+						if(respuesta.success){
+								Ext.getCmp('empresaId').setValue(respuesta.data.id);
+								Ext.getCmp('nombreId').setValue(respuesta.data.nombre);
+								Ext.getCmp('razonsocialId').setValue(respuesta.data.razonSocial);
+								Ext.getCmp('cuitId').setValue(respuesta.data.cuit);
+								Ext.getCmp('direccionId').setValue(respuesta.data.direccion);
+								Ext.getCmp('telefono1Id').setValue(respuesta.data.telefono1);
+								Ext.getCmp('telefono2Id').setValue(respuesta.data.telefono2);
+								Ext.getCmp('idProvincia').setValue(respuesta.data.provinciaFiscal);
+								Ext.getCmp('idLocalidad').setValue(respuesta.data.localidadFiscal);
+	            				Ext.getCmp('idVendedor').setValue(respuesta.data.vendedor);
+	            				Ext.getCmp('idVendedor').hiddenField.value=respuesta.data.vendedorId;
+	            				
+	            				Ext.getCmp('idRubro').setValue(respuesta.data.rubro);
+	            				Ext.getCmp('idRubro').hiddenField.value=respuesta.data.rubroId;
+		        				var subrubroCmb = Ext.getCmp('idSubrubro');
+		        				subrubroCmb.clearValue();
+		        				subrubroCmb.store.load({
+		        					params:{'rubroid':respuesta.data.rubroId}
+		        				});
+		        				subrubroCmb.enable();
+	            				Ext.getCmp('idSubrubro').setValue(respuesta.data.subrubro);
+	            				Ext.getCmp('idSubrubro').hiddenField.value=respuesta.data.subrubroId;
+
+						
+						}else{
+							Ext.Msg.show({
+								title:'Error',
+								msg:'Se produjo un error al recuperar los datos de la empresa',
+								icon:Ext.MessageBox.ERROR,
+								buttons:Ext.MessageBox.OK,
+								fn:function(btn){
+									wizard.cardPanel.getLayout().setActiveItem(wizard.currentCard - 1);
+								}
+							});
+						}
+					}
+				}
+			}
+		});
+	}
 	
             	var store = new Ext.data.JsonStore({
 							totalProperty: 'total',
@@ -153,6 +209,7 @@ Ext.onReady(function(){
 			new Ext.ux.Wiz.Card({
 				title: 'Datos de Empresa',
 				monitorValid: true,
+				autoScroll:true,
 				width:450,
 				items: [{
 							xtype:'textfield',
@@ -172,7 +229,7 @@ Ext.onReady(function(){
 						},{
 							xtype:'textfield',
 							id:'razonsocialId',
-							fieldLabel:'Razón Social,',
+							fieldLabel:'Razón Social',
 							allowBlank:false,
 							msgTarget:'under',
 							name:'razonSocial'
@@ -314,16 +371,12 @@ Ext.onReady(function(){
 	});
 	
 	wizard.on('nextstep',function(wizard){
-			 
-
-       var sm = grid.getSelectio...
-       var selectedId = r.get('id');
-       if (this.currentCard > 0 && !selectedId) {
-	            this.cardPanel.getLayout().setActiveItem(this.currentCard - 1);
+	   var sel = grid.getSelectionModel().getSelected();
+       if (this.currentCard > 0 && !sel) {
+	           this.cardPanel.getLayout().setActiveItem(this.currentCard - 1);
+       }else{
+		       loaddatosempresa(sel.data.id);
        }
-			
-			
-			
 	});
     
     
