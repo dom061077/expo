@@ -118,30 +118,40 @@ class EmpresaController {
     def editempresajson = {
     	log.info("INGRESANDO AL METODO editJson DE EMPRESACONTROLLER")
     	log.debug("Params: "+params)
-    	def empresaInstance = Empresa.get(params.id)
-    	log.debug("nombre de la localidad: "+empresaInstance.localidad?.nombreLoc)
-    	render(contentType:'text/json'){
-    		success true
-    		data(id:empresaInstance.id,nombre:empresaInstance.nombre
-    			 ,nombreRepresentante:empresaInstance.nombreRepresentante
-    			 ,telefono1:empresaInstance.telefono1
-    			 ,telefono2:empresaInstance.telefono2
-    			 ,telefonoRepresentante1:empresaInstance.telefonoRepresentante1
-    			 ,telefonoRepresentante2:empresaInstance.telefonoRepresentante2
-    			 ,telefonoRepresentante3:empresaInstance.telefonoRepresentante3
-    			 ,cuit:empresaInstance.cuit
-    			 ,direccion:empresaInstance.direccion
-    			 ,provinciaLn:empresaInstance.provinciaFiscal
-    			 ,localidadAux: empresaInstance.localidadFiscal
-    			 ,vendedorId: empresaInstance.vendedor?.id
-    			 ,vendedor:empresaInstance.vendedor?.nombre
-    			 ,rubro:empresaInstance.subrubro?.rubro?.nombreRubro
-    			 ,rubroId:empresaInstance.subrubro?.rubro?.id
-    			 ,subrubro:empresaInstance.subrubro?.nombreSubrubro
-    			 ,subrubroId: empresaInstance.subrubro?.id
-    			)
-    	}
     	
+    	def empresaInstance = Empresa.get(params.id)
+    	if (empresaInstance){
+		    	log.debug("empresaInstance encontrada: "+empresaInstance.id+" nombre: "+empresaInstance.nombre);
+		    	render(contentType:'text/json'){
+		    		success true
+		    		data(id:empresaInstance.id,nombre:empresaInstance.nombre
+		    			 ,nombreRepresentante:empresaInstance.nombreRepresentante
+		    			 ,telefono1:empresaInstance.telefono1
+		    			 ,telefono2:empresaInstance.telefono2
+		    			 ,telefonoRepresentante1:empresaInstance.telefonoRepresentante1
+		    			 ,telefonoRepresentante2:empresaInstance.telefonoRepresentante2
+		    			 ,telefonoRepresentante3:empresaInstance.telefonoRepresentante3
+		    			 ,cuit:empresaInstance.cuit
+		    			 ,razonSocial:empresaInstance.razonSocial
+		    			 ,localidadFiscal:empresaInstance.localidadFiscal
+		    			 ,provinciaFiscal:empresaInstance.provinciaFiscal
+		    			 ,direccion:empresaInstance.direccion
+		    			 ,provinciaLn:empresaInstance.provinciaFiscal
+		    			 ,localidadAux: empresaInstance.localidadFiscal
+		    			 ,vendedorId: empresaInstance.vendedor?.id
+		    			 ,vendedor:empresaInstance.vendedor?.nombre
+		    			 ,rubro:empresaInstance.subrubro?.rubro?.nombreRubro
+		    			 ,rubroId:empresaInstance.subrubro?.rubro?.id
+		    			 ,subrubro:empresaInstance.subrubro?.nombreSubrubro
+		    			 ,subrubroId: empresaInstance.subrubro?.id
+		    			)
+		    	}
+    	}else{
+    		log.debug("empresaInstance no encontrada")
+    		render(contentType:'text/json'){
+    			success false
+    		}
+    	}
     }
     
     def edit = {
