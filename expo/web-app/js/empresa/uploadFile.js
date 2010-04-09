@@ -222,7 +222,7 @@ Ext.onReady(function(){
 						        								 	Ext.MessageBox.show({
 						        								 		title:'Copiando datos',
 						        								 		msg:'Espere mientras se procesan los datos',
-						        								 		icon: Ext.MessageBox.INFO
+						        								 		icon: 'wait_icon'
 						        								 	});
 						        								 	handleUploadsinTaskMgr();
 	        								 					}else

@@ -3,6 +3,11 @@
     margin: 0;
 } 
 
+.wait_icon{
+	background-image:  url('/expo/images/wait_icon.gif');
+	background-repeat: no-repeat;
+}
+
 body {
     background: #fff;
 	font: .74em "Trebuchet MS" Verdana, Arial, sans-serif;

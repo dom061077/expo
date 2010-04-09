@@ -350,22 +350,44 @@ Ext.onReady(function(){
 			new Ext.ux.Wiz.Card({
 				title:'Contacto',
 				monitorValid:true,
-				items: [{
-				
-				}]
-			}),
-			new Ext.ux.Wiz.Card({
-				title:'Expos en las que Participó',
-				monitorValid:false,
-				items:[{
-				}]
-			}),
-			new Ext.ux.Wiz.Card({
-				title:'Expos en las que puede participar',
-				monitorValid:false,
-				items:[{
-				
-				}]
+	        							items:[{xtype: 'textfield',
+								        		fieldLabel: 'Representante',
+								        		allowBlank: false,
+								        		msgTarget:'under',
+								        		layout:'form',
+								        		width:260,
+								        		name: 'nombreRepresentante'
+								        	},{
+								        		xtype: 'textfield',
+								        		fieldLabel:'Teléfono 1',
+								        		allowBlank: true,
+								        		msgTarget:'under',
+								        		layout: 'form',
+								        		name: 'telefonoRepresentante1'
+								        	},{
+								        		xtype: 'textfield',
+								        		fieldLabel:'Teléfono 2',
+								        		allowBlank: true,
+								        		msgTarget: 'under',
+								        		layout:'form',
+								        		name: 'telefonoRepresentante2'
+								        	},{
+								        		xtype: 'textfield',
+								        		fieldLabel:'Teléfono 3',
+								        		allowBlank: true,
+								        		msgTarget: 'under',
+								        		layout: 'form',
+								        		name: 'telefonoRepresentante3'
+								        	},{
+								        		xtype:'textfield',
+								        		fieldLabel:'E-mail',
+								        		allowBlank:true,
+								        		msgTarget: 'under',
+								        		layout:'form',
+								        		name:'email',
+								        		vtype:'email'
+								        	}
+	        							]
 			})
 		]		
 	});
@@ -379,7 +401,11 @@ Ext.onReady(function(){
        }
 	});
     
+	wizard.on('finish',function(wiz,datos){
+		alert(datos);
+	});
     
+	
 	wizard.show();
 });
 
