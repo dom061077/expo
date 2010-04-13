@@ -10,23 +10,10 @@ class EmpresaServiceTests extends GrailsUnitTestCase {
 	def empresa = null
 	def exposicion=null
 	
+	static transactional = false
+	
     protected void setUp() {
         super.setUp()
-        usuario = new Person(username:"admin",userRealName:"Administrador",passwd:"sdjflasf",email:"admin@noexiste.com.ar")
-        usuario.save()
-        
-        empresa = new Empresa(nombre:"empresa de prueba",usuario:usuario)
-        empresa=empresa.save()
-        
-        exposicion = new Exposicion(nombre:"Expo 2010")
-        exposicion.save()
-        
-		Empresa.list().each{
-		    it.delete(flush:true)
-		}
-		Person.list().each{
-		    it.delete(flush:true)
-		}        
         
     }
 
@@ -35,8 +22,22 @@ class EmpresaServiceTests extends GrailsUnitTestCase {
     }
 
     void testGenerarOrdenReserva() {
-    	
+        usuario = new Person(username:"admin6",userRealName:"Administrador",passwd:"sdjflasf",email:"admin@noexiste.com.ar")
+        usuario=usuario.save(flush:true)        
+        empresa = new Empresa(nombre:"empresa de prueba5",usuario:usuario)
+        /*if(empresa.validate())
+        	
+        	empresa=empresa.save(flush:true)
+        else{
+        	
+        	fail("FALLO LA CREACION DE LA EMPRESA "+empresa.errors.allErrors)	
+        }*/
+        exposicion = new Exposicion(nombre:"Expo 2010")
+        exposicion.save(flush:true)
+        
+
     	def ordenReserva = new OrdenReserva(usuario:usuario,expo:exposicion,fechaAlta:new Date(),sector:'7G')
+    	
     	empresa.addToOrdenes(ordenReserva)
     	empresa=empresaService.generarOrdenReserva(empresa)
     	
