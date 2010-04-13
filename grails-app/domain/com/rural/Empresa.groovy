@@ -39,14 +39,13 @@ class Empresa {
 	
 	
 	
-	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion,empresas:Empresa]//empresas contiene todas las empress con nombre parecido
+	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion,empresas:Empresa,ordenes:OrdenReserva]//empresas contiene todas las empress con nombre parecido
 	
-/*	static mapping = {
-			empresas cascade:'delete-orphan'
-			exposaparticipar cascade:'delete-orphan'
+	static mapping = {
+			 cascade:'save-update'
 
 	}
-	*/
+	
     static constraints = {
 		nombre(unique:true)
 		vendedor(blank:true,nullable:true)

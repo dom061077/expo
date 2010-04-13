@@ -6,6 +6,7 @@ class OrdenReserva {
 	Empresa empresa
 	Person usuario
 	Exposicion expo
+	String sector
 	
 	Date fechaAlta
 	static belongs = [empresa:Empresa,usuario:Person,expo:Exposicion] 
