@@ -150,6 +150,10 @@ Ext.onReady(function(){
 		closable:true,
 		modal:true,
 		height:500,
+		previousButtonText:'Anterior',
+		nextButtonText:'Siguiente',
+		cancelButtonText:'Cancelar',
+		finishButtonText:'Finalizar',
 		width:600,
 		headerConfig:{
 			title:'Alta de Orden de Reserva',
@@ -208,6 +212,7 @@ Ext.onReady(function(){
 			}),
 			new Ext.ux.Wiz.Card({
 				title: 'Datos de Empresa',
+				id:'datosempresaId',
 				monitorValid: true,
 				autoScroll:true,
 				width:450,
@@ -349,6 +354,7 @@ Ext.onReady(function(){
 			}),
 			new Ext.ux.Wiz.Card({
 				title:'Contacto',
+				id:'datoscontactoId',
 				monitorValid:true,
 	        							items:[{xtype: 'textfield',
 								        		fieldLabel: 'Representante',
@@ -397,12 +403,17 @@ Ext.onReady(function(){
        if (this.currentCard > 0 && !sel) {
 	           this.cardPanel.getLayout().setActiveItem(this.currentCard - 1);
        }else{
+       		if(this.currentCard==1)
 		       loaddatosempresa(sel.data.id);
        }
 	});
     
 	wizard.on('finish',function(wiz,datos){
-		alert(datos);
+		alert(datos.datosempresaId.cuit);
+		alert(datos.datosempresaId.direccion);
+		alert(datos.datosempresaId.id);
+		alert(datos.datosempresaId.localidadFiscal);
+		
 	});
     
 	
