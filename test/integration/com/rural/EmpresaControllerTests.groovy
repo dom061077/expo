@@ -6,13 +6,15 @@ class EmpresaControllerTests extends GrailsUnitTestCase {
  	def expo = null
  	def expoaparticipar = null
  	def subrubro = null
+ 	def usuario = null
     protected void setUp() {
         super.setUp()
         expo=new Exposicion(nombre:"EXPOSICION NUEVA").save(flush:true)
         expoaparticipar = new Exposicion(nombre:"EXPOSICION A PARTICIPAR").save(flush:true)
         def rubro = new Rubro(nombreRubro:"AUTOMOTOR").save(flush:true)
         subrubro=new SubRubro(nombreSubrubro:"AUTOS",rubro:rubro).save(flush:true)
-        
+        def tipoConcepto = new TipoConcepto(nombre:"DESCUENTO").save()
+        usuario = Person.get(1)
     }
 
     protected void tearDown() {
@@ -20,7 +22,21 @@ class EmpresaControllerTests extends GrailsUnitTestCase {
         
     }
     
+    void generarOrdenReserva(){
+    	assertNotNull(usuario)
+    	def empresa = new Empresa(nombre:"empresa de prueba",usuario:usuario).save(flush:true)
+    	assertNotNull(empresa)
+    	def empresaController = new EmpresaController()
+    	empresaController.params.id=empresa.id
+    	empresaController.params.nombre="empresa modificada"
+    	empresaController.params.razonSocial="empresa modificada razon social"
+    	empresaController.params.detallejson="[{sector:'emprendimientos',lote:'1',subtotal:1900}]"
+    	empresaController.params.conceptosjson="[{id:tipoConcepto.id}]"			
+    }
+    
+    /*
     void testSaveJson(){
+    	assertNotNull(usuario)
     	def empresaController = new EmpresaController()
     	assertTrue(expoaparticipar.id>0)
     	empresaController.params.nombre="ANDRES CAJAL"
@@ -137,5 +153,7 @@ class EmpresaControllerTests extends GrailsUnitTestCase {
     	def respuestaJson = grails.converters.JSON.parse(respuesta)
     	assertTrue(respuestaJson.total==empresa.exposaparticipar.size())
     	assertTrue(respuestaJson.rows.size()==empresa.exposaparticipar.size())
-    }
+    }*/
+    
+    
 }

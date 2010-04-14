@@ -17,6 +17,7 @@ class EmpresaController {
     def index = { redirect(action:list,params:params) }
     def sessionFactory
     def authenticateService
+    def empresaService
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
@@ -735,5 +736,38 @@ class EmpresaController {
     	
     }
     
+    
+    def generarorden = {
+    	log.info("INGRESANDO AL METODO generarorden DEL CONTROLADOR EmpresaController")
+    	log.debug("PARAMETROS DE INGRESO: "+params)
+    	def user = authenticateService.userDomain()
+    	log.debug("USUARIO: "+user.username)
+		def tipoconcepto=null    	
+    	def empresaInstance = Empresa.get(params.id)
+    	def expo = Exposicion.get(params.exposcisionId)
+    	empresaInstance.properties = params
+    	def detallejson = JSON.parse(params.detallejson)
+    	def otrosconceptosjson = JSON.parse(params.conceptosjson)
+    	def ordenReserva = new OrdenReserva(fechaAlta:new Date(),usuario:user,expo:expo)
+    	empresaInstance.addToOrdenes(ordenReserva)
+    	detallejson.each{
+	    	ordenReserva.addToDetalle(new DetalleServicioContratado(sector:detallejson.sector,lote:detallejson.lote,subtotal:detallejson.subtotal))
+	    	tipoconcepto=TipoConcepto.get(otrosconceptosjson.id)
+	    	ordenReserva.addToOtrosconceptos(new OtrosConceptos(descripcion:otrosconceptosjson.descripcion,subtotal:otrosconceptosjson.subtotal,tipo:tipoconcepto))
+    	}
+    	
+    	empresaInstance=empresaService.generarOrdenReserva(empresaInstance)
+    	render(contentType: "text/json"){
+    		success true
+    		id $empresaInstance.orden
+    		rows{
+    			empresas.each{
+    				row(id:it.id,nombre:it.nombre)
+    			}
+    		}
+    	}
+
+    	
+    }
     
 }

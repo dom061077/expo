@@ -16,9 +16,11 @@ class OrdenReservaService {
 
     boolean transactional = true
 
-    def generarOrdenReserva(OrdenReserva ord) {
+    def generarOrdenReserva(OrdenReserva ord,Empresa empresa) {
+    	def empresaInstance = empresa.save()
     	if(ord.validate()){
-    		ord.save();
+    		ord.empresa=empresaInstance	
+    		return ord.save();
     	}else{
     		def message=null
     		ord.errors.allErrors.each{
