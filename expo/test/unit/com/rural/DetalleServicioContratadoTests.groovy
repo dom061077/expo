@@ -2,7 +2,7 @@ package com.rural
 
 import grails.test.*
 
-class EmpresaServiceTests extends GrailsUnitTestCase {
+class DetalleServicioContratadoTests extends GrailsUnitTestCase {
     protected void setUp() {
         super.setUp()
     }
