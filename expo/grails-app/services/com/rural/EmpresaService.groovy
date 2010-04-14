@@ -26,7 +26,7 @@ class EmpresaService {
     		}
     		throw new EmpresaException(message,emp);
     	}
-    	
+		
 
     }
 }
