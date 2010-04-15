@@ -16,7 +16,7 @@ class OrdenReservaService {
 
     
 
-    def generarOrdenReserva(OrdenReserva ord,Empresa empresa) {
+    OrdenReserva generarOrdenReserva(OrdenReserva ord,Empresa empresa) {
     	def empresaInstance = empresa.save()
     	if (empresaInstance==null)
     		throw new OrdenReservaException(message,ord)
