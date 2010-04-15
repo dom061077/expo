@@ -14,9 +14,12 @@ class OrdenReservaServiceTests extends GrailsUnitTestCase {
     protected void setUp() {
         super.setUp()
         usuario = new Person(username:"admin2",userRealName:"Administrador",passwd:"sdjflasf",email:"admin@noexiste.com.ar")
-        usuario.save()
+        usuario=usuario.save()
+		Empresa.list().each{
+		    it.delete(flush:true)
+		}
         
-        empresa = new Empresa(nombre:"empresa de prueba",usuario:usuario).save()
+        empresa = new Empresa(nombre:"empresa de prueba",usuario:usuario).save(flush:true)
         
         
         exposicion = new Exposicion(nombre:"Expo 2010")
@@ -25,12 +28,6 @@ class OrdenReservaServiceTests extends GrailsUnitTestCase {
         tipoconcepto=new TipoConcepto(nombre:"descuento").save(flush:true)
         
         
-		Empresa.list().each{
-		    it.delete(flush:true)
-		}
-		Person.list().each{
-		    it.delete(flush:true)
-		}        
         
     }
 
@@ -52,6 +49,9 @@ class OrdenReservaServiceTests extends GrailsUnitTestCase {
     	ordenReserva.addToDetalle(new DetalleServicioContratado(sector:"emprendimientos",lote:"uno",subtotal:1900))
     	ordenReserva.addToOtrosconceptos(new OtrosConceptos(descripcion:"DESCUENTO",tipo:tipoconcepto,subtotal:500))
     	ordenReserva=ordenReservaService.generarOrdenReserva(ordenReserva,empresa)
-    	asertNotNull(ordenReserva)
+    	assertNotNull(ordenReserva)
+    	assertTrue(ordenReserva.detalle.size()==1)
+    	assertTrue(ordenReserva.otrosconceptos.size()==1)
+    	assertTrue(ordenReserva.empresa.nombre.equals("empresa modificada"))
     }
 }
