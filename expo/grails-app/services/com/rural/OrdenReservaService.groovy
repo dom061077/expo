@@ -3,7 +3,7 @@ package com.rural
 class OrdenReservaException extends RuntimeException{
 	String message
 	OrdenReserva ordenReserva
-
+	
 	
 	public OrdenReservaException(String message,OrdenReserva ord){
 		super(message)
@@ -14,12 +14,14 @@ class OrdenReservaException extends RuntimeException{
 
 class OrdenReservaService {
 
-    boolean transactional = true
+    
 
     def generarOrdenReserva(OrdenReserva ord,Empresa empresa) {
     	def empresaInstance = empresa.save()
+    	if (empresaInstance==null)
+    		throw new OrdenReservaException(message,ord)
+		ord.empresa=empresaInstance	
     	if(ord.validate()){
-    		ord.empresa=empresaInstance	
     		return ord.save();
     	}else{
     		def message=null
