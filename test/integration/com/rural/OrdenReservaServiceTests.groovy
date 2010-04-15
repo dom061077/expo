@@ -3,6 +3,7 @@ package com.rural
 import grails.test.*
 import com.rural.*
 import com.rural.seguridad.*
+import grails.converters.*
 
 
 class OrdenReservaServiceTests extends GrailsUnitTestCase {
