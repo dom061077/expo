@@ -4,7 +4,8 @@ import com.rural.seguridad.*
 import grails.converters.JSON
 
 class OrdenReservaController {
-    def provinciaService
+    def ordenReservaService
+    def authenticateService
     
     def index = { redirect(action:list,params:params) }
     	
@@ -104,21 +105,29 @@ class OrdenReservaController {
     
     def generarordenreserva = {
     	log.info("INGRESANDO AL METODO generarordenreserva DEL CONTROLADOR OrdenReservaController")
-    	//if (provinciaService==null)
-    	//	fail("Orden Reserva Service es nulo")
+    	def iterarDetalleJson = {OrdenReserva ord, def detalle->
+	    	detalle.each{
+	    		ord.addToDetalle(new DetalleServicioContratado(sector:it.sector,lote:it.lote,subtotal:it.subtotal))
+	    	}
+    	}
+    
     	def ordenReservaInstance = new OrdenReserva(params)
     	def detallejson = JSON.parse(params.detallejson)
     	def otrosconceptosjson = JSON.parse(params.otrosconceptosjson)
     	def empresaInstance = Empresa.get(params.empresa.id)
     	empresaInstance.properties=ordenReservaInstance.empresa
-    	
-    	detallejson.each{
-    		ordenReservaInstance.addToDetalle(new DetalleServicioContratado(sector:it.sector,lote:it.lote,subtotal:it.subtotal))
-    	}
-    	otrosconceptosjson.each{
-    		ordenReservaInstance.addToOtrosconceptos(new OtrosConceptos(descripcion:it.descripcion,subtotal:it.subtotal,tipo:it.tipoconcepto))
-    	}
-		provinciaService.generarOrdenReserva(ordenReservaInstance,empresaInstance)    	
+   		ordenReservaInstance.usuario=authenticateService.userDomain()
+   	
+   		iterarDetalleJson(ordenReservaInstance,detallejson)
+   	
+    	/*otrosconceptosjson.each{ordenReservaInstance,item->
+    		ordenReservaInstance.addToOtrosconceptos(new OtrosConceptos(descripcion:item.descripcion,subtotal:item.subtotal,tipo:item.tipoconcepto))
+    	}*/
+		ordenReservaService.generarOrdenReserva(ordenReservaInstance,empresaInstance)
+		render(contentType: "text/json"){
+			success true
+			ordenid ordenReservaInstance.id
+		}   	
     }
     
     
