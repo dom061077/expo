@@ -5,6 +5,7 @@ import com.rural.seguridad.*
 import com.rural.*
 
 class OrdenReservaControllerTests extends GrailsUnitTestCase {
+	def ordenReservaService
 	def usuario = null
 	def empresa = null
 	def tipoconcepto = null
@@ -32,6 +33,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 
     void testGenerarOrden() {
 			def ordenreservaController = new OrdenReservaController()
+			ordenreservaController.provinciaService=ordenReservaService
 	    	ordenreservaController.params.empresa=empresa
 	    	ordenreservaController.params.empresa.nombre="empresa modificada"
 	    	ordenreservaController.params.empresa.razonSocial="empresa modificada razon social"

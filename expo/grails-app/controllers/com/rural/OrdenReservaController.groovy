@@ -4,7 +4,7 @@ import com.rural.seguridad.*
 import grails.converters.JSON
 
 class OrdenReservaController {
-    def ordenReservaService
+    def provinciaService
     
     def index = { redirect(action:list,params:params) }
     	
@@ -104,8 +104,8 @@ class OrdenReservaController {
     
     def generarordenreserva = {
     	log.info("INGRESANDO AL METODO generarordenreserva DEL CONTROLADOR OrdenReservaController")
-    	if (ordenReservaService==null)
-    		fail("Orden Reserva Service es nulo")
+    	//if (provinciaService==null)
+    	//	fail("Orden Reserva Service es nulo")
     	def ordenReservaInstance = new OrdenReserva(params)
     	def detallejson = JSON.parse(params.detallejson)
     	def otrosconceptosjson = JSON.parse(params.otrosconceptosjson)
@@ -118,7 +118,7 @@ class OrdenReservaController {
     	otrosconceptosjson.each{
     		ordenReservaInstance.addToOtrosconceptos(new OtrosConceptos(descripcion:it.descripcion,subtotal:it.subtotal,tipo:it.tipoconcepto))
     	}
-		ordenReservaService.generarOrdenReserva(ordenReservaInstance,empresaInstance)    	
+		provinciaService.generarOrdenReserva(ordenReservaInstance,empresaInstance)    	
     }
     
     
