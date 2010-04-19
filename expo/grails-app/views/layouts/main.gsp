@@ -21,7 +21,7 @@
 			%>        	
 
         </script>
-        			
+	        			
 
 </head>
 <body>
@@ -57,6 +57,13 @@
 						<li class='controller'><g:link controller="empresa" action="uploadFile">Subir Archivos Excel</g:link></li>
 					</g:ifAllGranted>
 				</ul>
+			   <div id="navmenu">
+			    <a class="current" href="/">Work</a><br />
+			    <a href="/blog/all">Blog</a><br />
+			    <a href="/about">About</a><br />
+			    <a href="/contact">Contact</a><br />
+			
+			   </div>
 				
 			</g:isLoggedIn>
 			

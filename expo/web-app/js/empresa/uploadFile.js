@@ -10,6 +10,8 @@ Ext.onReady(function(){
 	*/
 	var mensajeglobal='';
 	
+	var uploadMask = new Ext.LoadMask(Ext.getBody(),{msg:'Copiando Datos...'}); 
+	
 	function downloadexcelerrores(idcargaexcel){
 		//var conn = new Ext.data.Connection();
 		Ext.Ajax.request({
@@ -41,34 +43,40 @@ Ext.onReady(function(){
      				if(respuestaJson){
      					if (respuestaJson.loginredirect)
      						window.location="../logout/index";
-     					else
-	   					if (respuestaJson.success==true){
-	     										Ext.MessageBox.hide();
-	     										if (respuestaJson.cantErrores>0){
-	     											Ext.MessageBox.show({
-	     												title:'Mensaje',
-	     												msg:'El proceso del archivo excel arrojo algunos errores, verifique el link de errores',
-	     												icon:Ext.MessageBox.INFO
-	     											});
-													Ext.getCmp('linkdescargaId').show();
-	     										}else{
-								   					Ext.MessageBox.show({
-								   						title:'Mensaje',
-								   						msg:'El archivo fue procesado correctamente',
-								   						icon: Ext.MessageBox.INFO
-								   					});
-								   					Ext.getCmp('linkdescargaId').hide();
-	     										}
-	   					}else{
-	     						
-	     							Ext.MessageBox.hide();	
-							   		Ext.MessageBox.show({
-							   						title:'Error',
-							   						msg:'Ocurrió un error al subir el archivo. Intente nuevamente y recuerde que debe ser un archivo excel',
-							   						icon: Ext.MessageBox.ERROR
-							   		});
-							   		
-	     				}
+     					else{
+			   					if (respuestaJson.success==true){
+			     										//Ext.MessageBox.hide();
+			   											uploadMask.hide();
+			     										if (respuestaJson.cantErrores>0){
+			     											Ext.MessageBox.show({
+			     												title:'Mensaje',
+			     												msg:'El proceso del archivo excel arrojo algunos errores, verifique el link de errores',
+			     												icon:Ext.MessageBox.INFO
+			     											});
+															
+			     										}else{
+										   					Ext.MessageBox.show({
+										   						title:'Mensaje',
+										   						msg:'El archivo fue procesado correctamente',
+										   						icon: Ext.MessageBox.INFO
+										   					});
+										   					
+			     										}
+			   					}else{
+			     						
+			     							uploadMask.hide();//Ext.MessageBox.hide();	
+									   		Ext.MessageBox.show({
+									   						title:'Error',
+									   						msg:respuestaJson.responseText,
+									   						icon: Ext.MessageBox.ERROR
+									   		});
+									   		
+			     				}
+			     				if(respuestaJson.showlink)
+			     					Ext.getCmp('linkdescargaId').show();
+			     				else
+			     					Ext.getCmp('linkdescargaId').hide();
+     					}
 	     					
      				}
      			},
@@ -219,11 +227,12 @@ Ext.onReady(function(){
 	        								 					window.location="../logout/index";
 	        								 				}else{
 	        								 					if(respuesta.success==true){
-						        								 	Ext.MessageBox.show({
+						        								 	/*Ext.MessageBox.show({
 						        								 		title:'Copiando datos',
 						        								 		msg:'Espere mientras se procesan los datos',
 						        								 		icon: 'wait_icon'
-						        								 	});
+						        								 	});*/
+	        								 						uploadMask.show();
 						        								 	handleUploadsinTaskMgr();
 	        								 					}else
 	        								 						Ext.MessageBox.show({

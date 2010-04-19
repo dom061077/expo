@@ -806,6 +806,10 @@
 	            					params:{'id':a.result.data.id}
 	            				});
 	            				
+	            				empresassimilaresStore.load({
+	            					params:{'id':a.result.data.id}	
+	            				});
+	            				
 		        				var subrubroCmb = Ext.getCmp('idSubrubro');
 		        				subrubroCmb.clearValue();
 		        				subrubroCmb.store.load({

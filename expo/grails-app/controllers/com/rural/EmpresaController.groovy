@@ -382,6 +382,7 @@ class EmpresaController {
     	log.debug("PARAMETROS: "+params)
     	
     	def empresassimilares = Empresa.get(params.id)?.empresas
+    	log.debug("Empresa analizada: ")
     	render(contentType: "text/json"){
     		total empresassimilares.size()
     		rows{
@@ -423,7 +424,7 @@ class EmpresaController {
     def ordendereserva = {
     	log.info("INGRESANDO A LA ORDEN DE RESERVA")
     	log.debug("PARAMETROS: $params")
-    	def empresas = Empresa.createCriteria.list{
+    	def empresas = Empresa.createCriteria().list{
     		like('nombre','%$param.searchCriteria%')
     	}
     	chain(controller:'jasper',action:'index',model:[data:empresas],params:params)
@@ -580,16 +581,16 @@ class EmpresaController {
 			 if (cantErrores>0 || empresasinsertadas==0){
 				 if(empresasinsertadas==0){
 					 log.debug("NO SE INSERTO NINGUNA EMPRESA, RENDERIZANDO MENSAJE DE ERROR")
-					 render """{success:false, responseText:"Se produjo algun problema con el archivo excel, ninguna linea fue guardada",idcargaexcel:$cargaExcelInstance.id}"""
+					 render """{success:false,showlink:true, responseText:"Se produjo algun problema con el archivo excel, ninguna linea fue guardada",idcargaexcel:$cargaExcelInstance.id}"""
 				 }
 				 else{
 					 log.debug("ARCHIVO EXCEL PROCESADO CORRECTAMENTE PERO CON ALGUNOS ERRORES")
-					 render """{success:true, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA", cantErrores:$cantErrores, idcargaexcel:$cargaExcelInstance.id}"""
+					 render """{success:true,showlink:true, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA", cantErrores:$cantErrores, idcargaexcel:$cargaExcelInstance.id}"""
 				 }
 			 }
 			 else{
 				 log.debug("ARCHIVO EXCEL PROCESADO CORRECTAMENTE Y SIN ERRORES")
-				 render """{success:true, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA"}"""
+				 render """{success:true,showlink:false, responseText:"LA LECTURA Y APERTURA DEL ARCHIVO EXCEL ES CORRECTA"}"""
 			 }
   		  }catch(jxl.read.biff.BiffException ioe){
 		   	 log.info("FALLO LA LECTURA Y APERTURA DEL ARCHIVO EXCEL")

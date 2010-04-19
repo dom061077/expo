@@ -42,7 +42,7 @@ class Empresa {
 	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion,empresas:Empresa,ordenes:OrdenReserva]//empresas contiene todas las empress con nombre parecido
 	
 	static mapping = {
-			 cascade:'save-update'
+			 //cascade:'save-update'
 
 	}
 	

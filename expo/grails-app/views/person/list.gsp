@@ -46,7 +46,7 @@
 		</div>
 
 		<div class="paginateButtons">
-			<g:paginate total="${Person.count()}" />
+			<g:paginate total="${personInstanceTotal}" />
 		</div>
 
 	</div>
