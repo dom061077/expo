@@ -17,8 +17,9 @@
 		        			listeners: {
 			                    loadexception: function(proxy, store, response, e) {
 						                    var jsonObject = Ext.util.JSON.decode(response.responseText);
-						                    if (jsonObject.loginredirect == true)
-						                    		window.location='../logout/index';
+						                    if (jsonObject)
+							                    if (jsonObject.loginredirect == true)
+							                    		window.location='../logout/index';
 	                    
 						                   }
 	        						

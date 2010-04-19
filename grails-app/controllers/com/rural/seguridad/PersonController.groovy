@@ -21,7 +21,8 @@ class PersonController {
 		if (!params.max) {
 			params.max = 10
 		}
-		[personList: Person.list(params)]
+		log.debug("TOTAL DE USUARIOS: "+Person.count())
+		[personList: Person.list(params), personInstanceTotal: Person.count() ]
 	}
 
 	def show = {
