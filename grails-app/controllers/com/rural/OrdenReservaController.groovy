@@ -110,7 +110,7 @@ class OrdenReservaController {
     	log.debug("PARAMETROS DE INGRESO: "+params)
     	def iterarDetalleJson = {OrdenReserva ord, def detalle->
 	    	detalle.each{
-	    		ord.addToDetalle(new DetalleServicioContratado(sector:it.sector,lote:it.lote,subtotal:it.subtotal))
+	    		ord.addToDetalle(new DetalleServicioContratado(sector:it.sector,lote:it.lote,subTotal:it.subTotal))
 	    	}
     	}
     	
@@ -118,7 +118,7 @@ class OrdenReservaController {
     		def tipoConcepto
     		conceptos.each{
     			tipoConcepto = TipoConcepto.get(new Long(it.id))
-    			ord.addToOtrosconceptos(new OtrosConceptos(descripcion:it.descripcion,subtotal:it.subtotal,tipo:tipoConcepto))
+    			ord.addToOtrosconceptos(new OtrosConceptos(descripcion:it.descripcion,subTotal:it.subTotal,tipo:tipoConcepto))
     		}
     	}
     

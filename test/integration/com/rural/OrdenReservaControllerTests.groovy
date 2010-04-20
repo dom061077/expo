@@ -61,8 +61,8 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.params.empresa=empresa
 	    	ordenreservaController.params.empresa.nombre="empresa modificada"
 	    	ordenreservaController.params.empresa.razonSocial="empresa modificada razon social"
-	    	ordenreservaController.params.detallejson="[{sector:'emprendimientos',lote:'1',subtotal:1900}]"
-	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subtotal:95,id:$tipoConcepto.id}]"			
+	    	ordenreservaController.params.detallejson="[{sector:'emprendimientos',lote:'1',subTotal:1900}]"
+	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"			
 			ordenreservaController.generarordenreserva()
 			def empresaInstance=Empresa.get(empresa.id)
 			assertTrue(empresaInstance.nombre.equals("empresa modificada"))
@@ -74,6 +74,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			assertTrue(ordenreservaInstance.otrosconceptos.size()==1)
 			assertTrue(ordenreservaInstance.empresa.nombre.equals("empresa modificada"))
 			assertTrue(ordenreservaInstance.empresa.razonSocial.equals("empresa modificada razon social"))
+			assertTrue(ordenreservaInstance.subTotal==1805)
 			
     }
     
