@@ -155,7 +155,7 @@
 		<g:jasperReport
 		                                   controller="empresa"
 		                                   action="ordendereserva"
-		                                   jasper="ordendereserva"
+		                                   jasper="ordendereserva2"
 		                                   format="PDF"
 		                                   name="empresas">
 		                                   Listado
