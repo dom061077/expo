@@ -757,10 +757,10 @@ class EmpresaController {
 	    	ordenReserva.addToOtrosconceptos(new OtrosConceptos(descripcion:otrosconceptosjson.descripcion,subtotal:otrosconceptosjson.subtotal,tipo:tipoconcepto))
     	}
     	
-    	empresaInstance=empresaService.generarOrdenReserva(empresaInstance)
+    	ordenReserva=empresaService.generarOrdenReserva(empresaInstance)
     	render(contentType: "text/json"){
     		success true
-    		id $empresaInstance.orden
+    		id ordenReserva.id
     		rows{
     			empresas.each{
     				row(id:it.id,nombre:it.nombre)
