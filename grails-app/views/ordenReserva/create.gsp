@@ -19,8 +19,7 @@
     </head>
     <body>
         <div class="nav">
-            <span class="menuButton"><a class="home" href="${resource(dir:'')}">Home</a></span>
-            <span class="menuButton"><g:link class="list" action="list">OrdenReserva List</g:link></span>
+            <span class="menuButton"><g:link class="list" action="list">Listado Ordenes de Reserva</g:link></span>
         </div>
         <div class="body">
         	<div id='formulario_extjs'>

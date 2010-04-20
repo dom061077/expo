@@ -3,7 +3,7 @@ package com.rural
 class OrdenReservaException extends RuntimeException{
 	String message
 	OrdenReserva ordenReserva
-	boolean transactional = false 
+	boolean transactional = true 
 	
 	public OrdenReservaException(String message,OrdenReserva ord){
 		super(message)
@@ -18,6 +18,7 @@ class OrdenReservaService {
 
     OrdenReserva generarOrdenReserva(OrdenReserva ord,Empresa empresa) {
     	def empresaInstance = empresa.save()
+    	
     	if (empresaInstance==null)
     		throw new OrdenReservaException(message,ord)
 		ord.empresa=empresaInstance
@@ -33,4 +34,14 @@ class OrdenReservaService {
     	}
     		
     }
+    
+    boolean anularOrdenReserva(Long id){
+    	def ordenReservaInstance = OrdenReserva.get(id)
+    	if (ordenReservaInstance)
+    		ordenReservaInstance.anulada = true
+    	else
+    		throw new OrdenReservaException("No se pudo anular la orden de reserva. Orden inexistente, $id",ordenReservaInstance)
+    	
+    }
 }
+

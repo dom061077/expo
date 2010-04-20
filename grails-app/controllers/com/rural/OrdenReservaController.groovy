@@ -87,9 +87,11 @@ class OrdenReservaController {
     }
 
     def create = {
-        def ordenReservaInstance = new OrdenReserva()
+        /*def ordenReservaInstance = new OrdenReserva()
         ordenReservaInstance.properties = params
-        return ['ordenReservaInstance':ordenReservaInstance]
+        return ['ordenReservaInstance':ordenReservaInstance]*/
+        log.info("INGRESANDO AL METODO create DEL CONTROLADOR OrdenReservaController")
+        
     }
 
     def save = {
@@ -105,10 +107,19 @@ class OrdenReservaController {
     
     def generarordenreserva = {
     	log.info("INGRESANDO AL METODO generarordenreserva DEL CONTROLADOR OrdenReservaController")
+    	log.debug("PARAMETROS DE INGRESO: "+params)
     	def iterarDetalleJson = {OrdenReserva ord, def detalle->
 	    	detalle.each{
 	    		ord.addToDetalle(new DetalleServicioContratado(sector:it.sector,lote:it.lote,subtotal:it.subtotal))
 	    	}
+    	}
+    	
+    	def iterarConceptos = {OrdenReserva ord, def conceptos->
+    		def tipoConcepto
+    		conceptos.each{
+    			tipoConcepto = TipoConcepto.get(new Long(it.id))
+    			ord.addToOtrosconceptos(new OtrosConceptos(descripcion:it.descripcion,subtotal:it.subtotal,tipo:tipoConcepto))
+    		}
     	}
     
     	def ordenReservaInstance = new OrdenReserva(params)
@@ -119,15 +130,30 @@ class OrdenReservaController {
    		ordenReservaInstance.usuario=authenticateService.userDomain()
    	
    		iterarDetalleJson(ordenReservaInstance,detallejson)
-   	
-    	/*otrosconceptosjson.each{ordenReservaInstance,item->
-    		ordenReservaInstance.addToOtrosconceptos(new OtrosConceptos(descripcion:item.descripcion,subtotal:item.subtotal,tipo:item.tipoconcepto))
-    	}*/
-		ordenReservaService.generarOrdenReserva(ordenReservaInstance,empresaInstance)
+   		iterarConceptos(ordenReservaInstance,otrosconceptosjson)
+   		
+		ordenReservaInstance=ordenReservaService.generarOrdenReserva(ordenReservaInstance,empresaInstance)
 		render(contentType: "text/json"){
 			success true
 			ordenid ordenReservaInstance.id
 		}   	
+    }
+    
+    def anularordenreserva = {
+    	log.info("INGRESANDO AL METODO anularordenreserva DEL CONTROLADOR OrdenReservaController")
+    	log.debug("PARAMETROS "+params)
+    	try{
+    		ordenReservaService.anularOrdenReserva(params.id)
+    		render(contentType: "text/json"){
+    			success true
+    			
+    		}
+    	}catch(OrdenReservaException e){
+    		render(contentType: "text/json"){
+    			success false
+    			msg e.message
+    		}
+    	}
     }
     
     

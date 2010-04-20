@@ -17,9 +17,9 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	def authenticateService
 	def usuario = null
 	def empresa = null
-	def tipoconcepto = null
+	def tipoConcepto = null
 	def exposicion = null
-	boolean transactional = false	
+	boolean transactional = true	
 	
     protected void setUp() {
         super.setUp()
@@ -44,7 +44,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
         exposicion = new Exposicion(nombre:"Expo 2010")
         exposicion.save()
         
-        tipoconcepto=new TipoConcepto(nombre:"descuento").save(flush:true)        
+        tipoConcepto=new TipoConcepto(nombre:"descuento").save(flush:true)        
     }
 
     protected void tearDown() {
@@ -62,15 +62,46 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.params.empresa.nombre="empresa modificada"
 	    	ordenreservaController.params.empresa.razonSocial="empresa modificada razon social"
 	    	ordenreservaController.params.detallejson="[{sector:'emprendimientos',lote:'1',subtotal:1900}]"
-	    	ordenreservaController.params.otrosconceptosjson="[{id:tipoConcepto.id}]"			
+	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subtotal:95,id:$tipoConcepto.id}]"			
 			ordenreservaController.generarordenreserva()
+			def empresaInstance=Empresa.get(empresa.id)
+			assertTrue(empresaInstance.nombre.equals("empresa modificada"))
 			def respuesta = ordenreservaController.response.contentAsString
 			def respuestaJson = grails.converters.JSON.parse(respuesta)
-			def ordenreservaInstance = OrdenReserva.get(respuestaJson.id)
+			def ordenreservaInstance = OrdenReserva.get(respuestaJson.ordenid)
 			assertNotNull(ordenreservaInstance)
-			fail("nombre empresa: "+ordenReservaInstance.empresa.nombre+" - nombre fiscal "+empresa.razonSocial)
+			assertTrue(ordenreservaInstance.detalle.size()==1)
+			assertTrue(ordenreservaInstance.otrosconceptos.size()==1)
 			assertTrue(ordenreservaInstance.empresa.nombre.equals("empresa modificada"))
 			assertTrue(ordenreservaInstance.empresa.razonSocial.equals("empresa modificada razon social"))
 			
     }
+    
+    void testAnularOrden(){
+    	def ordenReservaInstance = new OrdenReserva(usuario:usuario,empresa:empresa,expo:exposicion,fechaAlta:new Date())
+    	if (ordenReservaInstance.validate())
+    		ordenReservaInstance.save(flush:true)
+    	else
+    		fail("Error de validacion: "+ordenReservaInstance.errors.allErrors)
+    	assertNotNull(ordenReservaInstance)
+    	def ordenReservaController = new OrdenReservaController()
+    	ordenReservaController.params.id=ordenReservaInstance.id
+    	ordenReservaController.ordenReservaService = ordenReservaService
+    	ordenReservaController.anularordenreserva(ordenReservaInstance.id)
+    	def respuesta = ordenReservaController.response.contentAsString
+    	def respuestaJson = grails.converters.JSON.parse(respuesta)
+    	ordenReservaInstance = OrdenReserva.get(ordenReservaInstance.id)
+    	assertTrue(respuestaJson.success)
+    	assertTrue(ordenReservaInstance.anulada)
+    }
+    
+   void testFailAnularOrden(){
+	   def ordenReservaController = new OrdenReservaController()
+	   ordenReservaController.params.id=0
+	   ordenReservaController.ordenReservaService = ordenReservaService
+	   ordenReservaController.anularordenreserva()
+	   def respuesta = ordenReservaController.response.contentAsString
+	   def respuestaJson = grails.converters.JSON.parse(respuesta)
+	   assertFalse(respuestaJson.success)
+   }
 }

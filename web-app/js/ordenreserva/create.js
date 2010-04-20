@@ -409,11 +409,28 @@ Ext.onReady(function(){
 	});
     
 	wizard.on('finish',function(wiz,datos){
-		alert(datos.datosempresaId.cuit);
+		/*alert(datos.datosempresaId.cuit);
 		alert(datos.datosempresaId.direccion);
 		alert(datos.datosempresaId.id);
 		alert(datos.datosempresaId.localidadFiscal);
-		
+		*/
+		var conn = new Ext.data.Connection();
+		conn.request({
+			url:'generarordenreserva',
+			method:'POST',
+			params:{
+				
+			},
+			success: function(resp,opt){
+				
+			},
+			failure: function(resp,opt){
+				Ext.MessageBox.show({
+					title:'Error',
+					msg:'Se produjo un error al intentar generar la orden de reserva'
+				});	
+			}
+		});
 	});
     
 	
