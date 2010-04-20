@@ -6,7 +6,7 @@ class DetalleServicioContratado {
 
 	String sector
 	String lote
-	Double subtotal
+	Double subTotal=0
 	
 	OrdenReserva ordenReserva
 	static belongs = [ordenReserva:OrdenReserva]

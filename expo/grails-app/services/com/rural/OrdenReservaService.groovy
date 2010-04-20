@@ -18,9 +18,16 @@ class OrdenReservaService {
 
     OrdenReserva generarOrdenReserva(OrdenReserva ord,Empresa empresa) {
     	def empresaInstance = empresa.save()
+    	ord.detalle.each{
+    		ord.subTotal=ord.subTotal+it.subTotal
+    	}
     	
+    	ord.detalle.each{
+    		ord.subTotal+=it.subTotal
+    	}
     	if (empresaInstance==null)
     		throw new OrdenReservaException(message,ord)
+    		
 		ord.empresa=empresaInstance
 		ord.fechaAlta=new Date()	
     	if(ord.validate()){

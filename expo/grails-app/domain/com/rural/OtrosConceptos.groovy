@@ -3,7 +3,7 @@ package com.rural
 class OtrosConceptos {
 	
 	String descripcion
-	Double subtotal
+	Double subTotal=0
 	OrdenReserva ordenReserva
 	TipoConcepto tipo
 	
