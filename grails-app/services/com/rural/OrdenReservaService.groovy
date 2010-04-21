@@ -22,7 +22,7 @@ class OrdenReservaService {
     		ord.subTotal=ord.subTotal+it.subTotal
     	}
     	
-    	ord.detalle.each{
+    	ord.otrosconceptos.each{
     		ord.subTotal+=it.subTotal
     	}
     	if (empresaInstance==null)

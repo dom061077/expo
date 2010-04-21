@@ -74,7 +74,8 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			assertTrue(ordenreservaInstance.otrosconceptos.size()==1)
 			assertTrue(ordenreservaInstance.empresa.nombre.equals("empresa modificada"))
 			assertTrue(ordenreservaInstance.empresa.razonSocial.equals("empresa modificada razon social"))
-			assertTrue(ordenreservaInstance.subTotal==1805)
+			if(ordenreservaInstance.subTotal!=1805)
+				fail("SubTotal erroneo: deberia ser 1805 pero resultó en: $ordenreservaInstance.subTotal")
 			
     }
     
