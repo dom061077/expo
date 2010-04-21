@@ -99,6 +99,7 @@
     												click: function(){
 							        	          		formSearch.getForm().submit({
 																success: function(f,a){
+																	document.getElementById('searchCriteriaJasperId').value=a.result.searchCriteria;
 																	store.load({
 																		params: {'start':0,'limit':10,'searchCriteria':a.result.searchCriteria}
 																	});
@@ -158,7 +159,8 @@
 		                                   jasper="ordendereserva2"
 		                                   format="PDF"
 		                                   name="empresas">
-		                                   Listado
+		         <input type="hidden" name="searchCriteriaJasper" id="searchCriteriaJasperId" value=""/>                          
+		                                   
 		                                   
          </g:jasperReport>
 		        

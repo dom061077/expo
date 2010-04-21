@@ -425,8 +425,9 @@ class EmpresaController {
     	log.info("INGRESANDO A LA ORDEN DE RESERVA")
     	log.debug("PARAMETROS: $params")
     	def empresas = Empresa.createCriteria().list{
-    		like('nombre','%$param.searchCriteria%')
+    		like('nombre','%'+params.searchCriteriaJasper+'%')
     	}
+    	log.debug("LA CANTIDAD DE EMPRESAS PARA JASPERREPORTS ES: "+empresas.size())
     	chain(controller:'jasper',action:'index',model:[data:empresas],params:params)
     }
     
