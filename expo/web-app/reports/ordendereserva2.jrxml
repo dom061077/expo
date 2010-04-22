@@ -28,6 +28,7 @@
 
 	<field name="id" class="java.lang.Long"/>
 	<field name="nombre" class="java.lang.String"/>
+	<field name="vendedor.nombre" class="java.lang.String"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
