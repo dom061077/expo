@@ -1,6 +1,7 @@
 package com.rural
 
 //http://sourceforge.net/projects/ireport/files/
+//http://old.nabble.com/Re%3A-Alternatives-to-Jasper-Reports--p25120572.html
 
 import grails.converters.JSON
 import jxl.*
@@ -11,9 +12,11 @@ import jxl.write.WritableSheet
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 import org.springframework.web.multipart.MultipartHttpServletRequest
 import java.io.ByteArrayOutputStream
+import net.sf.jasperreports.engine.util.SimpleFileResolver
+import net.sf.jasperreports.engine.JRParameter 
 
 class EmpresaController {
-    
+     
     def index = { redirect(action:list,params:params) }
     def sessionFactory
     def authenticateService
@@ -428,9 +431,25 @@ class EmpresaController {
     		like('nombre','%'+params.searchCriteriaJasper+'%')
     	}
     	empresas.each{
-    		log.debug(it.vendedor.nombre)
-    	}
+    		log.debug(it.vendedor?.nombre)
+    		log.debug(it.exposaparticipar)
+    	} 
+		/*String reportsDirPath = servletContext.getRealPath("/reports/");
+		File reportsDir = new File(reportsDirPath);
+		if (!reportsDir.exists()) {
+		    throw new FileNotFoundException(String.valueOf(reportsDir));
+		}
+		//params.put(JRParameter.REPORT_FILE_RESOLVER, new SimpleFileResolver(reportsDir))    	
     	log.debug("LA CANTIDAD DE EMPRESAS PARA JASPERREPORTS ES: "+empresas.size())
+    	log.debug("Report Dir Path: "+reportsDirPath)
+    	*/
+		String reportsDirPath = servletContext.getRealPath("/reports/");
+		params.put("reportsDirPath", reportsDirPath);
+		
+		     	
+    	
+    	log.debug("PARAMETROS: "+params)
+    	
     	chain(controller:'jasper',action:'index',model:[data:empresas],params:params)
     }
     
