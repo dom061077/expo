@@ -156,7 +156,7 @@
 		<g:jasperReport
 		                                   controller="empresa"
 		                                   action="ordendereserva"
-		                                   jasper="ordendereserva2"
+		                                   jasper="report1"
 		                                   format="PDF"
 		                                   name="empresas">
 		         <input type="hidden" name="searchCriteriaJasper" id="searchCriteriaJasperId" value=""/>                          

@@ -427,6 +427,9 @@ class EmpresaController {
     	def empresas = Empresa.createCriteria().list{
     		like('nombre','%'+params.searchCriteriaJasper+'%')
     	}
+    	empresas.each{
+    		log.debug(it.vendedor.nombre)
+    	}
     	log.debug("LA CANTIDAD DE EMPRESAS PARA JASPERREPORTS ES: "+empresas.size())
     	chain(controller:'jasper',action:'index',model:[data:empresas],params:params)
     }
