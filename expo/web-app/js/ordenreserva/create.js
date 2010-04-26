@@ -159,6 +159,39 @@ Ext.onReady(function(){
 	
 //------------------------------------------------------------------------------------        			
 	
+//------------------Grid para Editar Otros Conceptos------------------
+	var storeOtrosConceptos = new Ext.data.Store({
+		data:[],
+		reader: new Ext.data.ArrayReader(
+			{id:'id'},
+			['id','descripcion',{name:'subTotal',type:'float'}]
+			)
+	});
+	var gridOtrosConceptos = new Ext.grid.EditorGridPanel({
+			frame:false,
+			title:'',
+			height:250,
+			width:'250',
+			store:storeOtrosConceptos,
+			tbar:[
+				{text:'Agregar',
+				 handler: function (){
+				 	
+				 }
+				},{
+				 text:'Borrar',
+				 handler: function(){
+				 	
+				 }
+				}
+			],
+			columns:[
+				{header:'Descripción',dataIndex:'descripcion',editor:{xtype:'textfield',allowBlank:false}},
+				{header:'Importe',dataIndex:'subTotal',editor:{xtype:'numbre',allowBlank:false}}
+			]
+	});
+	
+//--------------------------------------------------------------------	
 	
 	var vendedoresStore = new Ext.data.JsonStore({
 		autoLoad:true,
@@ -442,7 +475,7 @@ Ext.onReady(function(){
 				title:'Otros Conceptos',
 				id:'otrosconceptosId',
 				monitorValid:true,
-				items:[gridDetalleServicioContratado]
+				items:[gridOtrosConceptos]
 			})
 		]		
 	});
