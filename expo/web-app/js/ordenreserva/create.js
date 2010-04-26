@@ -122,6 +122,42 @@ Ext.onReady(function(){
         			});
 //---------------------------------	
 
+        			
+//-------------------Grid para Editar el detalle de servicios contratados-------------
+	var storeDetalle = new Ext.data.Store({
+		data:[],
+		reader: new Ext.data.ArrayReader(
+			{id:'id'},
+			['id','sector','lote',{name:'subTotal',type:'float'}]
+			)
+	});
+	var gridDetalleServicioContratado = new Ext.grid.EditorGridPanel({
+			frame:false,
+			title:'',
+			height:250,
+			width:'250',
+			store:storeDetalle,
+			tbar:[
+				{text:'Agregar',
+				 handler: function (){
+				 	
+				 }
+				},{
+				 text:'Borrar',
+				 handler: function(){
+				 	
+				 }
+				}
+			],
+			columns:[
+				{header:'Sector',dataIndex:'sector',editor:{xtype:'textfield',allowBlank:false}},
+				{header:'Lote',dataIndex:'lote',editor:{xtype:'textfield',allowBlank:false}},
+				{header:'Importe',dataIndex:'subTotal',editor:{xtype:'numbre',allowBlank:false}}
+			]
+	});
+        			
+	
+//------------------------------------------------------------------------------------        			
 	
 	
 	var vendedoresStore = new Ext.data.JsonStore({
@@ -143,6 +179,7 @@ Ext.onReady(function(){
 		url:'../rubro/listsubrubrojson',
 		fields: ['id','nombreSubrubro']
 	});
+	
 	
 	
 	var wizard = new Ext.ux.Wiz({
@@ -394,6 +431,18 @@ Ext.onReady(function(){
 								        		vtype:'email'
 								        	}
 	        							]
+			}),
+			new Ext.ux.Wiz.Card({
+				title:'Datos del Servicio Contratado',
+				id:'datosserviciocontratadoId',
+				monitorValid:true,
+				items:[gridDetalleServicioContratado]
+			}),
+			new Ext.ux.Wiz.Card({
+				title:'Otros Conceptos',
+				id:'otrosconceptosId',
+				monitorValid:true,
+				items:[gridDetalleServicioContratado]
 			})
 		]		
 	});

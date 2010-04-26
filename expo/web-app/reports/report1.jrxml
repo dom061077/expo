@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="186"/>
+	<property name="ireport.y" value="79"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
@@ -23,48 +23,48 @@
 		<band height="35" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="78" splitType="Stretch">
+		<band height="55" splitType="Stretch">
 			<staticText>
-				<reportElement x="68" y="33" width="100" height="20"/>
+				<reportElement x="98" y="6" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Nombre Empresa]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="236" y="32" width="100" height="20"/>
+				<reportElement x="266" y="5" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Nombre Vendedor]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="0" y="53" width="100" height="20"/>
+				<reportElement x="30" y="26" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{id}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="68" y="52" width="100" height="20"/>
+				<reportElement x="98" y="25" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="269" y="58" width="100" height="20"/>
+				<reportElement x="267" y="26" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{vendedor.nombre}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="57" splitType="Stretch"/>
-	</detail>
-	<columnFooter>
-		<band height="122" splitType="Stretch">
+		<band height="57" splitType="Stretch">
 			<subreport>
-				<reportElement x="36" y="10" width="447" height="100"/>
+				<reportElement x="30" y="6" width="447" height="42"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{exposaparticipar})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"detallereport1.jasper")]]></subreportExpression>
 			</subreport>
 		</band>
+	</detail>
+	<columnFooter>
+		<band height="122" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="54" splitType="Stretch"/>
+		<band height="33" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
 		<band height="42" splitType="Stretch"/>
