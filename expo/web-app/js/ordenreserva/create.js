@@ -124,24 +124,50 @@ Ext.onReady(function(){
 
         			
 //-------------------Grid para Editar el detalle de servicios contratados-------------
+	var detalleModel =  Ext.data.Record.create([
+		'id',
+		'sector',
+		'lote',
+		{name:'subTotal',type:'float'}
+	]);        			
 	var storeDetalle = new Ext.data.Store({
-		data:[],
+		data:[
+			[1,'sector1','lote1',2.5],
+			[2,'sector1','lote1',2.5],
+			[3,'sector1','lote1',2.5]			
+		],
 		reader: new Ext.data.ArrayReader(
 			{id:'id'},
-			['id','sector','lote',{name:'subTotal',type:'float'}]
+			detalleModel
 			)
+	});
+	
+	var sector_edit = new Ext.form.TextField({
+		allowBlank:false,
+		maxLength:20
+	});
+	
+	var lote_edit = new Ext.form.TextField({
+		allowBlank:false,
+		maxLength:20
+	});
+	
+	var subtotal_edit = new Ext.form.TextField({
+		allowBlank:false,
+		maxLength:10
 	});
 	
 	var gridDetalleServicioContratado = new Ext.grid.EditorGridPanel({
 			frame:false,
 			title:'',
-			height:250,
-			width:'250',
+			height:200,
+			width:400,
 			store:storeDetalle,
 			tbar:[
 				{text:'Agregar',
 				 handler: function (){
-					gridDetalleServicioContratado.getStore().insert(gridDetalleServicioContratado.getStore().getCount(),[{id:0,sector:'',lote:'',subTotal:0}]);
+					gridDetalleServicioContratado.getStore().insert(0
+						,new detalleModel({id:0,sector:'s',lote:'l',subTotal:0}));
 					gridDetalleServicioContratado.startEditing(gridDetalleServicioContratado.getStore().getCount()-1,0);
 				 }
 				},{
@@ -152,9 +178,10 @@ Ext.onReady(function(){
 				}
 			],
 			columns:[
-				{header:'Sector',dataIndex:'sector',editor:{xtype:'textfield',allowBlank:false}},
-				{header:'Lote',dataIndex:'lote',editor:{xtype:'textfield',allowBlank:false}},
-				{header:'Importe',dataIndex:'subTotal',editor:{xtype:'numbre',allowBlank:false}}
+				{header:'id',dataIndex:'id'},
+				{header:'Sector',dataIndex:'sector',editor:sector_edit},
+				{header:'Lote',dataIndex:'lote',editor:lote_edit},
+				{header:'Importe',dataIndex:'subTotal',editor:subtotal_edit}
 			]
 	});
         			
