@@ -131,6 +131,7 @@ Ext.onReady(function(){
 			['id','sector','lote',{name:'subTotal',type:'float'}]
 			)
 	});
+	
 	var gridDetalleServicioContratado = new Ext.grid.EditorGridPanel({
 			frame:false,
 			title:'',
@@ -140,7 +141,8 @@ Ext.onReady(function(){
 			tbar:[
 				{text:'Agregar',
 				 handler: function (){
-				 	
+					gridDetalleServicioContratado.getStore().insert(gridDetalleServicioContratado.getStore().getCount(),[{id:0,sector:'',lote:'',subTotal:0}]);
+					gridDetalleServicioContratado.startEditing(gridDetalleServicioContratado.getStore().getCount()-1,0);
 				 }
 				},{
 				 text:'Borrar',
