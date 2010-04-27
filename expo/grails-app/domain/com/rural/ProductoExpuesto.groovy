@@ -1,6 +1,6 @@
 package com.rural
 
-class ProductosExpuestos {
+class ProductoExpuesto {
 
 	String descripcion
 	OrdenReserva ordenReserva

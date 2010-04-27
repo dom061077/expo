@@ -121,10 +121,14 @@ class OrdenReservaController {
     			ord.addToOtrosconceptos(new OtrosConceptos(descripcion:it.descripcion,subTotal:it.subTotal,tipo:tipoConcepto))
     		}
     	}
-    
+    	
     	def ordenReservaInstance = new OrdenReserva(params)
     	def detallejson = JSON.parse(params.detallejson)
     	def otrosconceptosjson = JSON.parse(params.otrosconceptosjson)
+    	def productosjson = JSON.parse(params.productosjson)
+    	productosJson.each{
+    		ordenReservaInstance.addToProductos(new ProductoExpuesto(descripcion:it))
+    	}
     	def empresaInstance = Empresa.get(params.empresa.id)
     	empresaInstance.properties=ordenReservaInstance.empresa
    		ordenReservaInstance.usuario=authenticateService.userDomain()
