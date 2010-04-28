@@ -132,9 +132,9 @@ Ext.onReady(function(){
 	]);        			
 	var storeDetalle = new Ext.data.Store({
 		data:[
-			[1,'sector1','lote1',2.5],
+			/*[1,'sector1','lote1',2.5],
 			[2,'sector1','lote1',2.5],
-			[3,'sector1','lote1',2.5]			
+			[3,'sector1','lote1',2.5]*/			
 		],
 		reader: new Ext.data.ArrayReader(
 			{id:'id'},
@@ -167,18 +167,31 @@ Ext.onReady(function(){
 				{text:'Agregar',
 				 handler: function (){
 					gridDetalleServicioContratado.getStore().insert(0
-						,new detalleModel({id:0,sector:'s',lote:'l',subTotal:0}));
+						,new detalleModel({id:0,sector:'<Ingrese el Sector>',lote:'<Ingrese el Lote>',subTotal:0}));
 					gridDetalleServicioContratado.startEditing(gridDetalleServicioContratado.getStore().getCount()-1,0);
 				 }
 				},{
 				 text:'Borrar',
 				 handler: function(){
-				 	
+				 	var sm = gridDetalleServicioContratado.getSelectionModel();
+				 	var sel = sm.getSelected();
+				 	if(sm.hasSelection()){
+				 		Ext.MessageBox.show({
+				 			title:'Eliminar',
+				 			buttons:Ext.MessageBox.YESNO,
+				 			msg:'Elimina el registro seleccionado?',
+				 			fn: function(btn){
+				 				if (btn=='yes'){
+				 					gridDetalleServicioContratado.getStore().remove(sel);
+				 				}
+				 			}
+				 		});
+				 	}
 				 }
 				}
 			],
 			columns:[
-				{header:'id',dataIndex:'id'},
+				/*{header:'id',dataIndex:'id'},*/
 				{header:'Sector',dataIndex:'sector',editor:sector_edit},
 				{header:'Lote',dataIndex:'lote',editor:lote_edit},
 				{header:'Importe',dataIndex:'subTotal',editor:subtotal_edit}
@@ -546,5 +559,6 @@ Ext.onReady(function(){
     
 	
 	wizard.show();
+	Ext.getCmp('searchCriteriaId').focus('',10);	
 });
 
