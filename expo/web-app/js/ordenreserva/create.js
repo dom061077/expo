@@ -163,12 +163,22 @@ Ext.onReady(function(){
 			height:200,
 			width:400,
 			store:storeDetalle,
+			selModel: new Ext.grid.RowSelectionModel(),
 			tbar:[
 				{text:'Agregar',
 				 handler: function (){
-					gridDetalleServicioContratado.getStore().insert(0
-						,new detalleModel({id:0,sector:'<Ingrese el Sector>',lote:'<Ingrese el Lote>',subTotal:0}));
-					gridDetalleServicioContratado.startEditing(gridDetalleServicioContratado.getStore().getCount()-1,0);
+				 	if(gridDetalleServicioContratado.getStore().getCount()<3){
+						gridDetalleServicioContratado.getStore().insert(0
+							,new detalleModel({id:0,sector:'Ingrese el Sector',lote:'Ingrese el Lote',subTotal:0}));
+						gridDetalleServicioContratado.startEditing(gridDetalleServicioContratado.getStore().getCount()-1,0);
+				 	}else{
+				 		Ext.MessageBox.show({
+				 			title:'Advertencia',
+				 			msg:'Solo se pueden agregar tres lineas de detalle',
+				 			icon:Ext.MessageBox.WARNING,
+				 			buttons:Ext.MessageBox.OK
+				 		});
+				 	}
 				 }
 				},{
 				 text:'Borrar',
@@ -176,16 +186,7 @@ Ext.onReady(function(){
 				 	var sm = gridDetalleServicioContratado.getSelectionModel();
 				 	var sel = sm.getSelected();
 				 	if(sm.hasSelection()){
-				 		Ext.MessageBox.show({
-				 			title:'Eliminar',
-				 			buttons:Ext.MessageBox.YESNO,
-				 			msg:'Elimina el registro seleccionado?',
-				 			fn: function(btn){
-				 				if (btn=='yes'){
-				 					gridDetalleServicioContratado.getStore().remove(sel);
-				 				}
-				 			}
-				 		});
+	 					gridDetalleServicioContratado.getStore().remove(sel);
 				 	}
 				 }
 				}
@@ -202,6 +203,11 @@ Ext.onReady(function(){
 //------------------------------------------------------------------------------------        			
 	
 //------------------Grid para Editar Otros Conceptos------------------
+	var otrosConceptosModel = Ext.data.Record.create([
+		'id',
+		'descripcion',
+		{name:'subTotal',type:'float'}
+	]);
 	var storeOtrosConceptos = new Ext.data.Store({
 		data:[],
 		reader: new Ext.data.ArrayReader(
@@ -209,6 +215,17 @@ Ext.onReady(function(){
 			['id','descripcion',{name:'subTotal',type:'float'}]
 			)
 	});
+	
+	var descripcion_edit = new Ext.form.TextField({
+		allowBlank:false,
+		maxLenght:20
+	});
+	
+	var subTotal_edit = new Ext.form.TextField({
+		allowBlank:false,
+		maxLenght:20
+	});
+	
 	var gridOtrosConceptos = new Ext.grid.EditorGridPanel({
 			frame:false,
 			title:'',
@@ -529,6 +546,11 @@ Ext.onReady(function(){
        }else{
        		if(this.currentCard==1)
 		       loaddatosempresa(sel.data.id);
+		    if(this.currentCard==2)
+		    	Ext.getCmp('nombreId').focus('',10);
+		    if(this.currentCard==4 && gridDetalleServicioContratado.getStore().getCount()==0)
+		    	this.cardPanel.getLayout().setActiveItem(this.currentCard - 1);
+		    	
        }
 	});
     
@@ -538,6 +560,25 @@ Ext.onReady(function(){
 		alert(datos.datosempresaId.id);
 		alert(datos.datosempresaId.localidadFiscal);
 		*/
+		var storeDetalle = gridDetalleServicioContratado.getStore();
+		var storeOtrosConceptos = gridOtrosConceptos.getStore();
+		var detallejsonArr=[];
+		var detallejsonStr = '';
+		var otrosconceptosjsonArr=[];
+		var otrosconceptosjsonStr='';
+		
+		storeDetalle.data.each(function(rec){
+				detallejsonArr.push(rec.data);
+			}
+		);
+		storeOtrosConceptos.data.each(function(rec){
+				otrosconceptosjsonArr.push(rec.data);
+			}
+		);
+		detallejson=Ext.encode(detallejsonArr);
+		otrosconceptosjsonStr = Ext.encode(otrosconceptosjsonArr);
+		
+		
 		var conn = new Ext.data.Connection();
 		conn.request({
 			url:'generarordenreserva',
