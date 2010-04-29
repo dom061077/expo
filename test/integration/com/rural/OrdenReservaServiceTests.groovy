@@ -46,9 +46,10 @@ class OrdenReservaServiceTests extends GrailsUnitTestCase {
     	
     	empresa.nombre="empresa modificada"
     	
-    	def ordenReserva = new OrdenReserva(usuario:usuario,expo:exposicion,fechaAlta:new Date(),sector:'7G')
+    	def ordenReserva = new OrdenReserva(usuario:usuario,expo:exposicion,fechaAlta:new Date(),anio:2010)
     	ordenReserva.addToDetalle(new DetalleServicioContratado(sector:"emprendimientos",lote:"uno",subtotal:1900))
     	ordenReserva.addToOtrosconceptos(new OtrosConceptos(descripcion:"DESCUENTO",tipo:tipoconcepto,subtotal:500))
+    	ordenReserva.addToProductos(new ProductoExpuesto(descripcion:'Producto Expuesto'))
     	ordenReserva=ordenReservaService.generarOrdenReserva(ordenReserva,empresa)
     	assertNotNull(ordenReserva)
     	assertTrue(ordenReserva.detalle.size()==1)

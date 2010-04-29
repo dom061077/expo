@@ -126,8 +126,9 @@ class OrdenReservaController {
     	def detallejson = JSON.parse(params.detallejson)
     	def otrosconceptosjson = JSON.parse(params.otrosconceptosjson)
     	def productosjson = JSON.parse(params.productosjson)
-    	productosJson.each{
-    		ordenReservaInstance.addToProductos(new ProductoExpuesto(descripcion:it))
+    	productosjson.each{
+    		ordenReservaInstance.addToProductos(new ProductoExpuesto(descripcion:'hola'))
+    		
     	}
     	def empresaInstance = Empresa.get(params.empresa.id)
     	empresaInstance.properties=ordenReservaInstance.empresa

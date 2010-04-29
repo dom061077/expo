@@ -57,13 +57,14 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			ordenreservaController.ordenReservaService=ordenReservaService
 			ordenreservaController.authenticateService=authenticateService
 			ordenreservaController.params.expo=exposicion
+			ordenreservaController.params.anio=2010
 			ordenreservaController.params.usuario=usuario
 	    	ordenreservaController.params.empresa=empresa
 	    	ordenreservaController.params.empresa.nombre="empresa modificada"
 	    	ordenreservaController.params.empresa.razonSocial="empresa modificada razon social"
 	    	ordenreservaController.params.detallejson="[{sector:'emprendimientos',lote:'1',subTotal:1900}]"
 	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"
-	    	ordenreservaController.params.productosjson="[{descripcion:'QUESOS Y QUESILLOS','MEMBRILLO'}]"
+	    	ordenreservaController.params.productosjson="[{descripcion:'QUESOS Y QUESILLOS'},{descripcion:'MEMBRILLO'}]"
 			ordenreservaController.generarordenreserva()
 			def empresaInstance=Empresa.get(empresa.id)
 			assertTrue(empresaInstance.nombre.equals("empresa modificada"))
@@ -81,7 +82,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
     }
     
     void testAnularOrden(){
-    	def ordenReservaInstance = new OrdenReserva(usuario:usuario,empresa:empresa,expo:exposicion,fechaAlta:new Date())
+    	def ordenReservaInstance = new OrdenReserva(usuario:usuario,empresa:empresa,expo:exposicion,fechaAlta:new Date(),anio:2010)
     	if (ordenReservaInstance.validate())
     		ordenReservaInstance.save(flush:true)
     	else
