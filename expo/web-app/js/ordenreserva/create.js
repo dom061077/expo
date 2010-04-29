@@ -152,14 +152,14 @@ Ext.onReady(function(){
 		maxLength:20
 	});
 	
-	var subtotal_edit = new Ext.form.TextField({
+	var subtotal_edit = new Ext.form.NumberField({
 		allowBlank:false,
 		maxLength:10
 	});
 	
 	var gridDetalleServicioContratado = new Ext.grid.EditorGridPanel({
 			frame:false,
-			title:'',
+			title:'Detalle Servicio Contratado',
 			height:200,
 			width:400,
 			store:storeDetalle,
@@ -221,21 +221,87 @@ Ext.onReady(function(){
 		maxLenght:20
 	});
 	
-	var subTotal_edit = new Ext.form.TextField({
+	var subTotal_edit = new Ext.form.NumberField({
 		allowBlank:false,
 		maxLenght:20
 	});
 	
 	var gridOtrosConceptos = new Ext.grid.EditorGridPanel({
 			frame:false,
-			title:'',
+			title:'Otros conceptos',
 			height:250,
-			width:'250',
+			width:250,
 			store:storeOtrosConceptos,
+			selModel: new Ext.grid.RowSelectionModel(),
 			tbar:[
 				{text:'Agregar',
 				 handler: function (){
-				 	
+				 	if(gridOtrosConceptos.getStore().getCount()<3){
+						gridOtrosConceptos.getStore().insert(0
+							,new detalleModel({id:0,descripcion:'Ingrese Texto',subTotal:0}));
+						gridOtrosConceptos.startEditing(gridOtrosConceptos.getStore().getCount()-1,0);
+				 	}else{
+				 		Ext.MessageBox.show({
+				 			title:'Advertencia',
+				 			msg:'Solo se pueden agregar tres lineas de detalle',
+				 			icon:Ext.MessageBox.WARNING,
+				 			buttons:Ext.MessageBox.OK
+				 		});
+				 	}
+				 }
+				},{
+				 text:'Borrar',
+				 handler: function(){
+				 	var sm = gridOtrosConceptos.getSelectionModel();
+				 	var sel = sm.getSelected();
+				 	if(sm.hasSelection()){
+	 					gridOtrosConceptos.getStore().remove(sel);
+				 	}
+				 }
+				}
+			],
+			columns:[
+				{header:'Descripción',dataIndex:'descripcion',editor:descripcion_edit},
+				{header:'Importe',dataIndex:'subTotal',editor:subTotal_edit}
+			]
+	});
+	
+//--------------------------------------------------------------------	
+
+//------------------------Grid Productos que se exponen--------------
+	var productosExpuestosModel = Ext.data.Record.create([
+		'id',
+		'descripcion'
+	]);
+	var storeProductosExpuestos = new Ext.data.Store({
+		data:[],
+		reader: new Ext.data.ArrayReader(
+			{id:'id'},
+			['id','descripcion']
+		)
+	});
+	var gridProductosExpuestos = new Ext.grid.GridPanel({
+		frame:false,
+		title:'Productos que se Exponen',
+		height:250,
+		width:250,
+		store:storeProductosExpuestos,
+		selModel: new Ext.grid.RowSelectionModel(),
+		tbar:[
+				{text:'Agregar',
+				 handler: function (){
+				 	if(gridProductosExpuestos.getStore().getCount()<3){
+						gridProductosExpuestos.getStore().insert(0
+							,new detalleModel({id:0,descripcion:'Ingrese texto'}));
+						gridProductosExpuestos.startEditing(gridProductosExpuestos.getStore().getCount()-1,0);
+				 	}else{
+				 		Ext.MessageBox.show({
+				 			title:'Advertencia',
+				 			msg:'Solo se pueden agregar tres lineas de detalle',
+				 			icon:Ext.MessageBox.WARNING,
+				 			buttons:Ext.MessageBox.OK
+				 		});
+				 	}
 				 }
 				},{
 				 text:'Borrar',
@@ -245,13 +311,10 @@ Ext.onReady(function(){
 				}
 			],
 			columns:[
-				{header:'Descripción',dataIndex:'descripcion',editor:{xtype:'textfield',allowBlank:false}},
-				{header:'Importe',dataIndex:'subTotal',editor:{xtype:'numbre',allowBlank:false}}
+				{header:'Descripción',dataIndex:'descripcion',editor:{xtype:'textfield',allowBlank:false}}
 			]
 	});
-	
-//--------------------------------------------------------------------	
-	
+//-------------------------------------------------------------------	
 	var vendedoresStore = new Ext.data.JsonStore({
 		autoLoad:true,
 		root:'rows',
@@ -271,6 +334,14 @@ Ext.onReady(function(){
 		url:'../rubro/listsubrubrojson',
 		fields: ['id','nombreSubrubro']
 	});
+	
+	var exposicionStore = new Ext.data.JsonStore({
+		root:'rows',
+		url:'../exposicion/listjson',
+		fields:['id','nombre']
+	});
+	
+	exposicionStore.load();
 	
 	
 	
@@ -535,6 +606,33 @@ Ext.onReady(function(){
 				id:'otrosconceptosId',
 				monitorValid:true,
 				items:[gridOtrosConceptos]
+			}),
+			new Ext.ux.Wiz.Card({
+				title:'Exposición',
+				id:'exposicionId',
+				monitorValid:true,
+				items:[{
+					xtype:'combo',
+					fieldLabel:'Exposición',
+					name:'exposicionField',
+					hiddenName:'expo.id',
+					valueField:'id',
+					displayField:'nombre',
+					store:exposicionStore,
+					width:200,
+					listWidth:200,
+					mode:'local',
+					id:'exposicionCombo',
+					allowBlank:false,
+					forceSelection:true,
+					allowBlank:false
+				}]
+			}),
+			new Ext.ux.Wiz.Card({
+				title:'Productos que se Exponen',
+				id:'productosexpuestosId',
+				monitorValid:true,
+				items:[gridProductosExpuestos]
 			})
 		]		
 	});
@@ -584,7 +682,7 @@ Ext.onReady(function(){
 			url:'generarordenreserva',
 			method:'POST',
 			params:{
-				
+								
 			},
 			success: function(resp,opt){
 				
