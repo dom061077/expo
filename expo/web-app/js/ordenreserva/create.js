@@ -273,6 +273,11 @@ Ext.onReady(function(){
 		'id',
 		'descripcion'
 	]);
+	var productodesc_edit = new Ext.form.TextField({
+	
+	});
+	
+	
 	var storeProductosExpuestos = new Ext.data.Store({
 		data:[],
 		reader: new Ext.data.ArrayReader(
@@ -280,7 +285,7 @@ Ext.onReady(function(){
 			['id','descripcion']
 		)
 	});
-	var gridProductosExpuestos = new Ext.grid.GridPanel({
+	var gridProductosExpuestos = new Ext.grid.EditorGridPanel({
 		frame:false,
 		title:'Productos que se Exponen',
 		height:250,
@@ -306,12 +311,16 @@ Ext.onReady(function(){
 				},{
 				 text:'Borrar',
 				 handler: function(){
-				 	
+				 	var sm = gridOtrosConceptos.getSelectionModel();
+				 	var sel = sm.getSelected();
+				 	if(sm.hasSelection()){
+	 					gridOtrosConceptos.getStore().remove(sel);
+				 	}
 				 }
 				}
 			],
 			columns:[
-				{header:'Descripción',dataIndex:'descripcion',editor:{xtype:'textfield',allowBlank:false}}
+				{header:'Descripción',dataIndex:'descripcion',editor:productodesc_edit}
 			]
 	});
 //-------------------------------------------------------------------	
@@ -608,6 +617,12 @@ Ext.onReady(function(){
 				items:[gridOtrosConceptos]
 			}),
 			new Ext.ux.Wiz.Card({
+				title:'Productos que se Exponen',
+				id:'productosexpuestosId',
+				monitorValid:true,
+				items:[gridProductosExpuestos]
+			}),
+			new Ext.ux.Wiz.Card({
 				title:'Exposición',
 				id:'exposicionId',
 				monitorValid:true,
@@ -625,18 +640,26 @@ Ext.onReady(function(){
 					id:'exposicionCombo',
 					allowBlank:false,
 					forceSelection:true,
-					allowBlank:false
-				}]
-			}),
-			new Ext.ux.Wiz.Card({
-				title:'Productos que se Exponen',
-				id:'productosexpuestosId',
-				monitorValid:true,
-				items:[gridProductosExpuestos]
+					allowBlank:false},
+					{xtype:'combo',
+					 id:0,
+					 fieldLabel:'Año',
+					 name:'anio',
+					 fields:['id','descripcion'],
+					 data:[[2010,'2010'],[2011,'2011'],[2012,'2012'],[2013,'2013']]},
+					{xtype:'radio',
+					 fieldLabel:'Res.Ins.',
+					 name:'iva1'
+					 },
+					 {xtype:'radio',
+					  name:'iva2',
+					  fieldLabel:'No Ins.'
+					 }	 
+				]
 			})
+			
 		]		
 	});
-	
 	wizard.on('nextstep',function(wizard){
 	   var sel = grid.getSelectionModel().getSelected();
        if (this.currentCard > 0 && !sel) {
@@ -682,7 +705,23 @@ Ext.onReady(function(){
 			url:'generarordenreserva',
 			method:'POST',
 			params:{
-								
+				nombre:datos.datosempresaId.nombre,
+				nombreRepresentante:datos.datosempresaId.nombreRepresentante,
+				direccion:datos.datosempresaId.direccion,
+				email:datos.datosempresaId.email,
+				telefono1:datos.datosempresaId.telefono1,
+				telefono2:datos.datosempresaId.telefono2,
+				cargoRep:datos.datosempresaId.cargoRep,
+				dniRep:datos.datosempresaId.dniRep,
+				sitioWeb:datos.datosempresaId.sitioWeb,
+				observaciones:datos.datosempresaId.observaciones,
+				cuit:datos.datosempresaId.cuit,
+				razonSocial:datos.datosempresaId.razonSocial,
+				direccionFiscal:datos.datosempresaId.direccionFiscal,
+				localidadFiscal:datos.datosempresaId.localidadFiscal,
+				provinciaFiscal:datos.datosempresaId.provinciaFiscal,
+				codigoPostal:datos.datosempresaId.codigoPostal
+				
 			},
 			success: function(resp,opt){
 				

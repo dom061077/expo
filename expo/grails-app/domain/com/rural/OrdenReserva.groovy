@@ -12,6 +12,7 @@ class OrdenReserva {
 	Double ivaSujNoCateg=0
 	Double subTotal=0
 	Double total=0
+	Integer anio
 	
 	
 	Date fechaAlta
