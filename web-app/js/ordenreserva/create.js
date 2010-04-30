@@ -38,7 +38,11 @@ Ext.onReady(function(){
 								Ext.getCmp('idLocalidad').setValue(respuesta.data.localidadFiscal);
 	            				Ext.getCmp('idVendedor').setValue(respuesta.data.vendedor);
 	            				Ext.getCmp('idVendedor').hiddenField.value=respuesta.data.vendedorId;
-	            				
+	            				Ext.getCmp('idNombreRepresentante').setValue(respuesta.data.nombreRepresentante);
+	            				Ext.getCmp('idTelefonoRepresentante1').setValue(respuesta.data.telefonoRepresentante1);
+	            				Ext.getCmp('idTelefonoRepresentante2').setValue(respuesta.data.telefonoRepresentante2);
+	            				Ext.getCmp('idTelefonoRepresentante3').setValue(respuesta.data.telefonoRepresentante3);
+	            				Ext.getCmp('idEmail').setValue(respuesta.data.email);
 	            				Ext.getCmp('idRubro').setValue(respuesta.data.rubro);
 	            				Ext.getCmp('idRubro').hiddenField.value=respuesta.data.rubroId;
 		        				var subrubroCmb = Ext.getCmp('idSubrubro');
@@ -504,7 +508,7 @@ Ext.onReady(function(){
 								        		fieldLabel:'Vendedor',
 								        		allowBlank: false,
 								        		name: 'vendedor',
-								        		hiddenName:'vendedor.id',
+								        		hiddenName:'vendedor_id',
 								        		displayField:'nombre',
 								        		hideMode:'offsets',
 								        		minListWidth:200,
@@ -524,7 +528,7 @@ Ext.onReady(function(){
 								        		hideMode:'offsets',
 								        		minListWidth:200,
 								        		name: 'rubro',
-								        		hiddenName:'rubro.id',
+								        		hiddenName:'rubro_id',
 								        		displayField:'nombreRubro',
 								        		valueField:'id',
 								        		mode : 'local',
@@ -551,7 +555,7 @@ Ext.onReady(function(){
 								        		minListWidth:200,
 								        		msgTarget:'under',
 								        		name: 'subrubro',
-								        		hiddenName:'subrubro.id',
+								        		hiddenName:'subrubro_id',
 								        		displayField:'nombreSubrubro',
 								        		valueField:'id',
 								        		mode:'local',
@@ -568,6 +572,7 @@ Ext.onReady(function(){
 	        							items:[{xtype: 'textfield',
 								        		fieldLabel: 'Representante',
 								        		allowBlank: false,
+								        		id:'idNombreRepresentante',
 								        		msgTarget:'under',
 								        		layout:'form',
 								        		width:260,
@@ -576,6 +581,7 @@ Ext.onReady(function(){
 								        		xtype: 'textfield',
 								        		fieldLabel:'Teléfono 1',
 								        		allowBlank: true,
+								        		id:'idTelefonoRepresentante1',
 								        		msgTarget:'under',
 								        		layout: 'form',
 								        		name: 'telefonoRepresentante1'
@@ -583,12 +589,14 @@ Ext.onReady(function(){
 								        		xtype: 'textfield',
 								        		fieldLabel:'Teléfono 2',
 								        		allowBlank: true,
+								        		id:'idTelefonoRepresentante2',
 								        		msgTarget: 'under',
 								        		layout:'form',
 								        		name: 'telefonoRepresentante2'
 								        	},{
 								        		xtype: 'textfield',
 								        		fieldLabel:'Teléfono 3',
+								        		id:'idTelefonoRepresentante3',
 								        		allowBlank: true,
 								        		msgTarget: 'under',
 								        		layout: 'form',
@@ -598,6 +606,7 @@ Ext.onReady(function(){
 								        		fieldLabel:'E-mail',
 								        		allowBlank:true,
 								        		msgTarget: 'under',
+								        		id:'idEmail',
 								        		layout:'form',
 								        		name:'email',
 								        		vtype:'email'
@@ -642,11 +651,17 @@ Ext.onReady(function(){
 					forceSelection:true,
 					allowBlank:false},
 					{xtype:'combo',
-					 id:0,
+					 id:'idAnio',
 					 fieldLabel:'Año',
 					 name:'anio',
-					 fields:['id','descripcion'],
-					 data:[[2010,'2010'],[2011,'2011'],[2012,'2012'],[2013,'2013']]},
+					 displayField:'descripcion',
+					 valueField:'id',
+					 mode:'local',
+					 forceSelection:true,
+					 store: new Ext.data.SimpleStore({
+					 	fields:['id','descripcion'],
+					 	data : [['2010','2010'],['2011','2011'],['2012','2012']]
+					 })},
 					{xtype:'radio',
 					 fieldLabel:'Res.Ins.',
 					 name:'iva1'
@@ -706,21 +721,28 @@ Ext.onReady(function(){
 			method:'POST',
 			params:{
 				nombre:datos.datosempresaId.nombre,
+				'vendedor.id':datos.datosempresaId.vendedor_id,
+				codigoPostal:datos.datosempresaId.codigoPostal,
 				nombreRepresentante:datos.datosempresaId.nombreRepresentante,
-				direccion:datos.datosempresaId.direccion,
-				email:datos.datosempresaId.email,
 				telefono1:datos.datosempresaId.telefono1,
 				telefono2:datos.datosempresaId.telefono2,
+				cuit:datos.datosempresaId.cuit,
+				direccion:datos.datosempresaId.direccion,
+				telefonoRepresentante1:datos.datoscontactoId.telefonoRepresentante1,
+				telefonoRepresentante2:datos.datoscontactoId.telefonoRepresentante2,
+				telefonoRepresentante3:datos.datoscontactoId.telefonoRepresentante3,
+				'subrubro.id':datos.datosempresaId.subrubro_id,
+				dniRep:datos.datoscontactoId.
+				
+				email:datos.datosempresaId.email,
 				cargoRep:datos.datosempresaId.cargoRep,
 				dniRep:datos.datosempresaId.dniRep,
 				sitioWeb:datos.datosempresaId.sitioWeb,
 				observaciones:datos.datosempresaId.observaciones,
-				cuit:datos.datosempresaId.cuit,
 				razonSocial:datos.datosempresaId.razonSocial,
 				direccionFiscal:datos.datosempresaId.direccionFiscal,
 				localidadFiscal:datos.datosempresaId.localidadFiscal,
 				provinciaFiscal:datos.datosempresaId.provinciaFiscal,
-				codigoPostal:datos.datosempresaId.codigoPostal
 				
 			},
 			success: function(resp,opt){
