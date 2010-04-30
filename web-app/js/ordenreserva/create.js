@@ -562,6 +562,10 @@ Ext.onReady(function(){
 								        		forceSelection:true,
 								        		store:subrubroStore,
 								        		width:200
+							        		},{
+							        			xtype:'textfield',
+							        			fieldLabel:'Codigo Postal',
+							        			allowBlank:false
 							        		}
 				]
 			}),
@@ -642,6 +646,7 @@ Ext.onReady(function(){
 					hiddenName:'expo.id',
 					valueField:'id',
 					displayField:'nombre',
+					msgTarget:'under',
 					store:exposicionStore,
 					width:200,
 					listWidth:200,
@@ -663,13 +668,42 @@ Ext.onReady(function(){
 					 	data : [['2010','2010'],['2011','2011'],['2012','2012']]
 					 })},
 					{xtype:'radio',
+					 id:'resinsradioId',
 					 fieldLabel:'Res.Ins.',
-					 name:'iva1'
+					 name:'resins'
 					 },
 					 {xtype:'radio',
-					  name:'iva2',
-					  fieldLabel:'No Ins.'
-					 }	 
+					  id:'noinsradioId',
+					  fieldLabel:'No Ins.',
+					  name:'noins'
+					 },
+					 {xtype:'radio',
+					  id:'exentoId',	
+					  fieldLabel:'Exento',
+					  name:'exento'
+					 },
+					 {xtype:'radio',
+					  id:'consfinalId',
+					  fieldLabel:'Cons.Final',
+					  name:'consfinal'
+					 },
+					 {xtype:'radio',
+					  id:'monotributoId',
+					  fieldLabel:'Monotributo',
+					  name:'monotributo'
+					 },
+					 {xtype:'numberfield',
+					  fieldLabel:'Valor Res.Ins.',
+					  name:'resinsValor',
+					  id:'resinsvalorId',
+					  msgTarget:'under'
+					 },
+					 {xtype:'numberfield',
+					  fieldLabel:'Valor No Ins.',
+					  name:'noinsValor',
+					  id:'noinsvalorId',
+					  msgTarget:'under'
+					 }
 				]
 			})
 			
@@ -689,7 +723,57 @@ Ext.onReady(function(){
 		    	
        }
 	});
-    
+	
+	function radioHandler(check,checked){
+		if(Ext.getCmp('noinsradioId').getName()!=check.getName()&& checked)
+			Ext.getCmp('noinsradioId').setValue(false);
+		if(Ext.getCmp('exentoId').getName()!=check.getName()&& checked)
+			Ext.getCmp('exentoId').setValue(false);
+		if(Ext.getCmp('consfinalId').getName()!=check.getName()&& checked)
+			Ext.getCmp('consfinalId').setValue(false);
+		if(Ext.getCmp('monotributoId').getName()!=check.getName()&& checked)
+			Ext.getCmp('monotributoId').setValue(false);
+		if(Ext.getCmp('resinsradioId').getName()!=check.getName() && checked)
+			Ext.getCmp('resinsradioId').setValue(false);
+	}
+	Ext.getCmp('resinsradioId').on('check',function(check,checked){
+		radioHandler(check,checked);			
+	});
+	Ext.getCmp('noinsradioId').on('check',function(check,checked){
+		radioHandler(check,checked);			
+	});
+	Ext.getCmp('exentoId').on('check',function(check,checked){
+		radioHandler(check,checked);
+	});
+	Ext.getCmp('consfinalId').on('check',function(check,checked){
+		radioHandler(check,checked);
+	});
+	Ext.getCmp('monotributoId').on('check',function(check,checked){
+		radioHandler(check,checked);
+	});
+	
+	Ext.getCmp('resinsvalorId').on('valid',function(wiz,datos){
+		var flag=false;
+		if (Ext.getCmp('noinsradioId').checked)
+			flag=true;	
+		if (Ext.getCmp('exentoId').checked)
+			flag=true;
+		if (Ext.getCmp('consfinalId').checked)
+			flag=true;
+		if (Ext.getCmp('monotributoId').checked)
+			flag=true;
+		if (Ext.getCmp('resinsradioId').checked)
+			flag=true;
+		if (!flag)
+			Ext.MessageBox.show({
+				title:'Error',
+				msg:'Seleccione una condición de I.V.A',
+				icon:Ext.MessageBox.ERROR,
+				buttons:Ext.MessageBox.OK
+			});
+	});
+	
+		
 	wizard.on('finish',function(wiz,datos){
 		/*alert(datos.datosempresaId.cuit);
 		alert(datos.datosempresaId.direccion);
@@ -702,7 +786,6 @@ Ext.onReady(function(){
 		var detallejsonStr = '';
 		var otrosconceptosjsonArr=[];
 		var otrosconceptosjsonStr='';
-		
 		storeDetalle.data.each(function(rec){
 				detallejsonArr.push(rec.data);
 			}
@@ -713,14 +796,13 @@ Ext.onReady(function(){
 		);
 		detallejson=Ext.encode(detallejsonArr);
 		otrosconceptosjsonStr = Ext.encode(otrosconceptosjsonArr);
-		
-		
 		var conn = new Ext.data.Connection();
 		conn.request({
 			url:'generarordenreserva',
 			method:'POST',
 			params:{
 				nombre:datos.datosempresaId.nombre,
+				
 				'vendedor.id':datos.datosempresaId.vendedor_id,
 				codigoPostal:datos.datosempresaId.codigoPostal,
 				nombreRepresentante:datos.datosempresaId.nombreRepresentante,
@@ -732,8 +814,7 @@ Ext.onReady(function(){
 				telefonoRepresentante2:datos.datoscontactoId.telefonoRepresentante2,
 				telefonoRepresentante3:datos.datoscontactoId.telefonoRepresentante3,
 				'subrubro.id':datos.datosempresaId.subrubro_id,
-				dniRep:datos.datoscontactoId.
-				
+				dniRep:datos.datoscontactoId.dniRep,
 				email:datos.datosempresaId.email,
 				cargoRep:datos.datosempresaId.cargoRep,
 				dniRep:datos.datosempresaId.dniRep,
@@ -743,6 +824,8 @@ Ext.onReady(function(){
 				direccionFiscal:datos.datosempresaId.direccionFiscal,
 				localidadFiscal:datos.datosempresaId.localidadFiscal,
 				provinciaFiscal:datos.datosempresaId.provinciaFiscal,
+				codigoPostal:datos.datosempresaId.codigoPostal
+				
 				
 			},
 			success: function(resp,opt){
