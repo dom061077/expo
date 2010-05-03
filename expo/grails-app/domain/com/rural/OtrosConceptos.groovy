@@ -10,6 +10,7 @@ class OtrosConceptos {
 	static belongs = [ordenReserva:OrdenReserva,tipo:TipoConcepto]
 
     static constraints = {
+    	tipo(blank:true,nullable:true)
     }
     
 }

@@ -130,7 +130,7 @@ class OrdenReservaController {
     		ordenReservaInstance.addToProductos(new ProductoExpuesto(descripcion:'hola'))
     		
     	}
-    	def empresaInstance = Empresa.get(params.empresa.id)
+    	def empresaInstance = Empresa.get(params.id)
     	empresaInstance.properties=ordenReservaInstance.empresa
    		ordenReservaInstance.usuario=authenticateService.userDomain()
    	
@@ -142,6 +142,27 @@ class OrdenReservaController {
 			success true
 			ordenid ordenReservaInstance.id
 		}   	
+    }
+    
+    def ordenreservareporte = {
+    	log.info("INGRESANDO AL METODO ordenreservareporte DEL CONTROLADOR OrdenReservaController")
+    	log.debug("PARAMETROS ENVIADOS: "+params)
+    	def ordenReservaInstance = OrdenReserva.get(params.id)
+    	List ordenList = new ArrayList()
+    	ordenList.add(ordenReservaInstance)
+    	ordenReservaInstance.detalle.each{
+    		log.debug(it)
+    	}
+    	ordenReservaInstance.otrosconceptos.each{
+    		log.debug(it)
+    	}
+    	ordenReservaInstance.productos.each{
+    		log.debug(it)
+    	}
+    	
+		String reportsDirPath = servletContext.getRealPath("/reports/");
+		params.put("reportsDirPath", reportsDirPath);
+		chain(controller:'jasper',action:'index',model:[data:ordenList],params:params)
     }
     
     def anularordenreserva = {

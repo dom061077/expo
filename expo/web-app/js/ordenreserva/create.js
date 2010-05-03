@@ -53,7 +53,9 @@ Ext.onReady(function(){
 		        				subrubroCmb.enable();
 	            				Ext.getCmp('idSubrubro').setValue(respuesta.data.subrubro);
 	            				Ext.getCmp('idSubrubro').hiddenField.value=respuesta.data.subrubroId;
-
+								Ext.getCmp('idDnirep').value=respuesta.data.dniRep;
+								Ext.getCmp('idCodigopostal').value=respuesta.data.codigoPostal;
+								
 						
 						}else{
 							Ext.Msg.show({
@@ -565,6 +567,7 @@ Ext.onReady(function(){
 							        		},{
 							        			xtype:'textfield',
 							        			fieldLabel:'Codigo Postal',
+							        			id:'idCodigopostal',
 							        			allowBlank:false
 							        		}
 				]
@@ -614,6 +617,21 @@ Ext.onReady(function(){
 								        		layout:'form',
 								        		name:'email',
 								        		vtype:'email'
+								        	},{
+								        		xtype:'textfield',
+								        		fieldLabel:'Sitio Web',
+								        		allowBlank:true,
+								        		msgTarget:'under',
+								        		id:'idSitioweb'
+								        	},{
+								        		xtype:'numberfield',
+								        		fieldLabel:'D.N.I',
+								        		allowBlank:false,
+								        		msgTarget:'under',
+								        		id:'idDnirep',
+								        		layout:'form',
+								        		name:'dniRep'
+								        		
 								        	}
 	        							]
 			}),
@@ -643,7 +661,7 @@ Ext.onReady(function(){
 					xtype:'combo',
 					fieldLabel:'Exposición',
 					name:'exposicionField',
-					hiddenName:'expo.id',
+					hiddenName:'expo_id',
 					valueField:'id',
 					displayField:'nombre',
 					msgTarget:'under',
@@ -786,6 +804,8 @@ Ext.onReady(function(){
 		var detallejsonStr = '';
 		var otrosconceptosjsonArr=[];
 		var otrosconceptosjsonStr='';
+		var productosjsonArr = [];
+		var productosjsonStr ='';
 		storeDetalle.data.each(function(rec){
 				detallejsonArr.push(rec.data);
 			}
@@ -794,16 +814,20 @@ Ext.onReady(function(){
 				otrosconceptosjsonArr.push(rec.data);
 			}
 		);
-		detallejson=Ext.encode(detallejsonArr);
+		storeProductosExpuestos.data.each(function(rec){
+			productosjsonArr.push(rec.data);
+		});
+		
+		detallejsonStr=Ext.encode(detallejsonArr);
 		otrosconceptosjsonStr = Ext.encode(otrosconceptosjsonArr);
+		productosjsonStr = Ext.encode(productosjsonArr);
 		var conn = new Ext.data.Connection();
 		conn.request({
 			url:'generarordenreserva',
 			method:'POST',
 			params:{
+				id:datos.datosempresaId.id,
 				nombre:datos.datosempresaId.nombre,
-				
-				'vendedor.id':datos.datosempresaId.vendedor_id,
 				codigoPostal:datos.datosempresaId.codigoPostal,
 				nombreRepresentante:datos.datosempresaId.nombreRepresentante,
 				telefono1:datos.datosempresaId.telefono1,
@@ -824,12 +848,20 @@ Ext.onReady(function(){
 				direccionFiscal:datos.datosempresaId.direccionFiscal,
 				localidadFiscal:datos.datosempresaId.localidadFiscal,
 				provinciaFiscal:datos.datosempresaId.provinciaFiscal,
-				codigoPostal:datos.datosempresaId.codigoPostal
+				codigoPostal:datos.datosempresaId.codigoPostal,
+				'vendedor.id':datos.datosempresaId.vendedor_id,
+				detallejson:detallejsonStr,
+				otrosconceptosjson:otrosconceptosjsonStr,
+				productosjson:productosjsonStr,
+				anio:datos.exposicionId.anio,
+				'expo.id':datos.exposicionId.expo_id
 				
 				
 			},
 			success: function(resp,opt){
-				
+				var respuesta = Ext.decode(resp.responseText);
+				alert('el id es: '+respuesta.ordenid)
+				window.location='ordenreservareporte?target=_blank&_format&_name=ordenReservaInstance&_file=OrdenReserva&id='+respuesta.ordenid
 			},
 			failure: function(resp,opt){
 				Ext.MessageBox.show({
