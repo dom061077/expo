@@ -150,6 +150,7 @@ class OrdenReservaController {
     	def ordenReservaInstance = OrdenReserva.get(params.id)
     	List ordenList = new ArrayList()
     	ordenList.add(ordenReservaInstance)
+    	log.debug(ordenReservaInstance.empresa.nombre)
     	ordenReservaInstance.detalle.each{
     		log.debug(it)
     	}
@@ -159,9 +160,10 @@ class OrdenReservaController {
     	ordenReservaInstance.productos.each{
     		log.debug(it)
     	}
-    	
+    	log.debug("Orden Reserva: $ordenReservaInstance")
 		String reportsDirPath = servletContext.getRealPath("/reports/");
 		params.put("reportsDirPath", reportsDirPath);
+		log.debug("Parametros: $params")
 		chain(controller:'jasper',action:'index',model:[data:ordenList],params:params)
     }
     

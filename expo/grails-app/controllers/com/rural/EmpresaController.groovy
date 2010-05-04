@@ -138,6 +138,7 @@ class EmpresaController {
 		    			 ,telefonoRepresentante3:empresaInstance.telefonoRepresentante3
 		    			 ,cuit:empresaInstance.cuit
 		    			 ,razonSocial:empresaInstance.razonSocial
+		    			 ,codigoPostal:empresaInstance.codigoPostal
 		    			 ,localidadFiscal:empresaInstance.localidadFiscal
 		    			 ,provinciaFiscal:empresaInstance.provinciaFiscal
 		    			 ,direccion:empresaInstance.direccion
@@ -149,6 +150,10 @@ class EmpresaController {
 		    			 ,rubroId:empresaInstance.subrubro?.rubro?.id
 		    			 ,subrubro:empresaInstance.subrubro?.nombreSubrubro
 		    			 ,subrubroId: empresaInstance.subrubro?.id
+		    			 ,dniRep:empresaInstance.dniRep
+		    			 ,cargoRep:empresaInstance.cargoRep
+		    			 ,email:empresaInstance.email
+		    			 ,sitioWeb:empresaInstance.sitioWeb
 		    			)
 		    	}
     	}else{
