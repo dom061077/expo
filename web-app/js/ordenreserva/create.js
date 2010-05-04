@@ -43,8 +43,10 @@ Ext.onReady(function(){
 	            				Ext.getCmp('idTelefonoRepresentante2').setValue(respuesta.data.telefonoRepresentante2);
 	            				Ext.getCmp('idTelefonoRepresentante3').setValue(respuesta.data.telefonoRepresentante3);
 	            				Ext.getCmp('idEmail').setValue(respuesta.data.email);
+	            				Ext.getCmp('idSitioweb').setValue(respuesta.data.witioWeb);
 	            				Ext.getCmp('idRubro').setValue(respuesta.data.rubro);
 	            				Ext.getCmp('idRubro').hiddenField.value=respuesta.data.rubroId;
+	            				Ext.getCmp('idCodigopostal').setValue(respuesta.data.codigoPostal);
 		        				var subrubroCmb = Ext.getCmp('idSubrubro');
 		        				subrubroCmb.clearValue();
 		        				subrubroCmb.store.load({
@@ -53,8 +55,7 @@ Ext.onReady(function(){
 		        				subrubroCmb.enable();
 	            				Ext.getCmp('idSubrubro').setValue(respuesta.data.subrubro);
 	            				Ext.getCmp('idSubrubro').hiddenField.value=respuesta.data.subrubroId;
-								Ext.getCmp('idDnirep').value=respuesta.data.dniRep;
-								Ext.getCmp('idCodigopostal').value=respuesta.data.codigoPostal;
+								Ext.getCmp('idDnirep').setValue(respuesta.data.dniRep);
 								
 						
 						}else{
@@ -468,7 +469,7 @@ Ext.onReady(function(){
 							allowBlank: false,
 							width:260,
 							msgTarget:'under',
-							name:'direccion'			
+							name:'direccionFiscal'			
 						},{
 							xtype:'textfield',
 							id:'telefono1Id',
@@ -567,6 +568,7 @@ Ext.onReady(function(){
 							        		},{
 							        			xtype:'textfield',
 							        			fieldLabel:'Codigo Postal',
+							        			name:'codigoPostal',
 							        			id:'idCodigopostal',
 							        			allowBlank:false
 							        		}
@@ -622,7 +624,8 @@ Ext.onReady(function(){
 								        		fieldLabel:'Sitio Web',
 								        		allowBlank:true,
 								        		msgTarget:'under',
-								        		id:'idSitioweb'
+								        		id:'idSitioweb',
+								        		name:'sitioWeb'
 								        	},{
 								        		xtype:'numberfield',
 								        		fieldLabel:'D.N.I',
@@ -829,7 +832,7 @@ Ext.onReady(function(){
 				id:datos.datosempresaId.id,
 				nombre:datos.datosempresaId.nombre,
 				codigoPostal:datos.datosempresaId.codigoPostal,
-				nombreRepresentante:datos.datosempresaId.nombreRepresentante,
+				nombreRepresentante:datos.datoscontactoId.nombreRepresentante,
 				telefono1:datos.datosempresaId.telefono1,
 				telefono2:datos.datosempresaId.telefono2,
 				cuit:datos.datosempresaId.cuit,
@@ -839,10 +842,10 @@ Ext.onReady(function(){
 				telefonoRepresentante3:datos.datoscontactoId.telefonoRepresentante3,
 				'subrubro.id':datos.datosempresaId.subrubro_id,
 				dniRep:datos.datoscontactoId.dniRep,
-				email:datos.datosempresaId.email,
+				email:datos.datoscontactoId.email,
 				cargoRep:datos.datosempresaId.cargoRep,
-				dniRep:datos.datosempresaId.dniRep,
-				sitioWeb:datos.datosempresaId.sitioWeb,
+				dniRep:datos.datoscontactoId.dniRep,
+				sitioWeb:datos.datoscontactoId.sitioWeb,
 				observaciones:datos.datosempresaId.observaciones,
 				razonSocial:datos.datosempresaId.razonSocial,
 				direccionFiscal:datos.datosempresaId.direccionFiscal,
@@ -861,7 +864,7 @@ Ext.onReady(function(){
 			success: function(resp,opt){
 				var respuesta = Ext.decode(resp.responseText);
 				alert('el id es: '+respuesta.ordenid)
-				window.location='ordenreservareporte?target=_blank&_format&_name=ordenReservaInstance&_file=OrdenReserva&id='+respuesta.ordenid
+				window.location='ordenreservareporte?target=_blank&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+respuesta.ordenid
 			},
 			failure: function(resp,opt){
 				Ext.MessageBox.show({
