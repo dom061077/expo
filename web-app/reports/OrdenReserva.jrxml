@@ -5,23 +5,25 @@
 	<property name="ireport.y" value="0"/>
 	<subDataset name="dataset1"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\Users\\Andrea\\workspace\\expo\\web-app\\reports\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
 	</parameter>
-	<field name="razonSocial" class="java.lang.String"/>
-	<field name="cuit" class="java.lang.String"/>
-	<field name="direccionFiscal" class="java.lang.String"/>
-	<field name="provinciaFiscal" class="java.lang.String"/>
-	<field name="codigoPostal" class="java.lang.String"/>
-	<field name="telefonoFiscal" class="java.lang.String"/>
-	<field name="nombre" class="java.lang.String"/>
-	<field name="direccion" class="java.lang.String"/>
-	<field name="nombreRepresentante" class="java.lang.String"/>
-	<field name="email" class="java.lang.String"/>
-	<field name="cargoRep" class="java.lang.String"/>
-	<field name="telefonoRepresentante1" class="java.lang.String"/>
-	<field name="dniRep" class="java.lang.String"/>
+	<parameter name="reportsDirPath" class="java.lang.String"/>
+	<field name="empresa.razonSocial" class="java.lang.String"/>
+	<field name="empresa.cuit" class="java.lang.String"/>
+	<field name="empresa.direccionFiscal" class="java.lang.String"/>
+	<field name="empresa.provinciaFiscal" class="java.lang.String"/>
+	<field name="empresa.codigoPostal" class="java.lang.String"/>
+	<field name="empresa.telefonoFiscal" class="java.lang.String"/>
+	<field name="empresa.nombre" class="java.lang.String"/>
+	<field name="empresa.direccion" class="java.lang.String"/>
+	<field name="empresa.nombreRepresentante" class="java.lang.String"/>
+	<field name="empresa.email" class="java.lang.String"/>
+	<field name="empresa.cargoRep" class="java.lang.String"/>
+	<field name="empresa.telefonoRepresentante1" class="java.lang.String"/>
+	<field name="empresa.dniRep" class="java.lang.String"/>
 	<field name="detalle" class="java.util.Collection"/>
 	<field name="otrosconceptos" class="java.util.Collection"/>
+	<field name="fechaAlta" class="java.util.Date"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -37,7 +39,7 @@
 			<staticText>
 				<reportElement x="393" y="32" width="49" height="20"/>
 				<textElement>
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="Tahoma" isBold="true"/>
 				</textElement>
 				<text><![CDATA[FECHA:]]></text>
 			</staticText>
@@ -70,12 +72,19 @@
 				<text><![CDATA[www.srt.org.ar - informes@srt.org.ar]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="393" y="49" width="49" height="12"/>
+				<reportElement x="393" y="49" width="49" height="15"/>
 				<textElement>
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="Tahoma" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nº:]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="449" y="33" width="100" height="15"/>
+				<textElement>
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{fechaAlta}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -88,86 +97,88 @@
 				<text><![CDATA[DATOS DE FACTURACION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="8" y="19" width="212" height="13"/>
+				<reportElement x="8" y="19" width="192" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Expositor: Nombre y Apellido o Razón Social:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="9" y="31" width="57" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[C.U.I.T Nº:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="9" y="45" width="57" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dirección:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="9" y="59" width="57" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Provincia:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="246" y="58" width="22" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[C.P:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="438" y="59" width="22" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tel.:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="218" y="19" width="100" height="13"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{razonSocial}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="72" y="32" width="100" height="13"/>
+				<reportElement x="204" y="19" width="100" height="13"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{cuit}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.razonSocial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="72" y="31" width="100" height="13"/>
+				<textElement>
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.cuit}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="72" y="46" width="100" height="13"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{direccionFiscal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.direccionFiscal}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="72" y="60" width="100" height="14"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{provinciaFiscal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.provinciaFiscal}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="270" y="58" width="100" height="14"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{codigoPostal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.codigoPostal}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="463" y="58" width="90" height="14"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{telefonoFiscal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.telefono1}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -183,49 +194,49 @@
 			<staticText>
 				<reportElement x="8" y="23" width="88" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre Comercial:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="8" y="37" width="48" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Domicilio:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="348" y="37" width="32" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Mail:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="8" y="51" width="130" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Representante ante la Expo:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="8" y="66" width="38" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cargo:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="208" y="67" width="20" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tel:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="359" y="67" width="86" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Doc. de Identidad:]]></text>
 			</staticText>
@@ -234,58 +245,58 @@
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombre}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.nombre}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="59" y="37" width="242" height="13"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{direccion}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.direccion}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="384" y="36" width="109" height="13"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{email}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.email}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="136" y="52" width="406" height="13"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombreRepresentante}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.nombreRepresentante}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="49" y="67" width="115" height="13"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{cargoRep}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.cargoRep}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="227" y="67" width="126" height="13"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{telefonoRepresentante1}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.telefonoRepresentante1}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="447" y="67" width="96" height="13"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{dniRep}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.dniRep}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="233" splitType="Stretch">
-			<subreport>
+			<subreport isUsingCache="false" runToBottom="false">
 				<reportElement x="9" y="35" width="533" height="23"/>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "otrosconceptos.jasper"]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalle})]]></dataSourceExpression>
+				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"detalleserviciocontratado.jasper")]]></subreportExpression>
 			</subreport>
 			<staticText>
 				<reportElement x="5" y="84" width="119" height="13"/>
@@ -297,14 +308,14 @@
 			<staticText>
 				<reportElement x="377" y="69" width="50" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SubTotal:]]></text>
 			</staticText>
 			<subreport>
 				<reportElement x="11" y="96" width="531" height="20"/>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "otrosconceptos.jasper"]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{otrosconceptos})]]></dataSourceExpression>
+				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"otrosconceptos.jasper")]]></subreportExpression>
 			</subreport>
 			<staticText>
 				<reportElement x="5" y="7" width="203" height="13"/>
@@ -316,7 +327,7 @@
 			<staticText>
 				<reportElement x="377" y="160" width="50" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SubTotal:]]></text>
 			</staticText>
