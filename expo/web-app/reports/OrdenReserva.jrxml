@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrdenReserva" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="59"/>
 	<property name="ireport.y" value="0"/>
 	<subDataset name="dataset1"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -24,6 +24,8 @@
 	<field name="detalle" class="java.util.Collection"/>
 	<field name="otrosconceptos" class="java.util.Collection"/>
 	<field name="fechaAlta" class="java.util.Date"/>
+	<field name="empresa.telefono1" class="java.lang.String"/>
+	<field name="numero" class="java.lang.Long"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -85,6 +87,13 @@
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{fechaAlta}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="449" y="48" width="100" height="14"/>
+				<textElement>
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{numero}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -141,7 +150,7 @@
 			<textField>
 				<reportElement x="204" y="19" width="100" height="13"/>
 				<textElement>
-					<font fontName="Tahoma"/>
+					<font fontName="Tahoma" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.razonSocial}]]></textFieldExpression>
 			</textField>
