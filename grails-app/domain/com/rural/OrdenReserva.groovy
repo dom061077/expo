@@ -14,17 +14,34 @@ class OrdenReserva {
 	Double total=0
 	Integer anio
 	
-	
+	Long numero
 	Date fechaAlta
 	static belongs = [empresa:Empresa,usuario:Person,expo:Exposicion] 
 
 	static hasMany = [detalle:DetalleServicioContratado,otrosconceptos:OtrosConceptos,productos:ProductoExpuesto]
 	
     static constraints = {
+    	numero(blank:true,nullable:true)
     }
     
     
     static mapping = {
     	
     }
+    
+    def sigNumero(){
+    	def c = OrdenReserva.createCriteria()
+    	def lastNum = c.get{
+    		projections{
+    			max("numero")
+    		}
+    		
+    	}
+		return lastNum ? lastNum+1 : 1    	
+    }
+    
+    def beforeInsert={
+    	numero = sigNumero()
+    }
+    
 }
