@@ -43,10 +43,11 @@ Ext.onReady(function(){
 	            				Ext.getCmp('idTelefonoRepresentante2').setValue(respuesta.data.telefonoRepresentante2);
 	            				Ext.getCmp('idTelefonoRepresentante3').setValue(respuesta.data.telefonoRepresentante3);
 	            				Ext.getCmp('idEmail').setValue(respuesta.data.email);
-	            				Ext.getCmp('idSitioweb').setValue(respuesta.data.witioWeb);
+	            				Ext.getCmp('idSitioweb').setValue(respuesta.data.sitioWeb);
 	            				Ext.getCmp('idRubro').setValue(respuesta.data.rubro);
 	            				Ext.getCmp('idRubro').hiddenField.value=respuesta.data.rubroId;
 	            				Ext.getCmp('idCodigopostal').setValue(respuesta.data.codigoPostal);
+	            				Ext.getCmp('idCargorep').setValue(respuesta.data.cargoRep);
 		        				var subrubroCmb = Ext.getCmp('idSubrubro');
 		        				subrubroCmb.clearValue();
 		        				subrubroCmb.store.load({
@@ -469,7 +470,7 @@ Ext.onReady(function(){
 							allowBlank: false,
 							width:260,
 							msgTarget:'under',
-							name:'direccionFiscal'			
+							name:'direccion'			
 						},{
 							xtype:'textfield',
 							id:'telefono1Id',
@@ -635,6 +636,12 @@ Ext.onReady(function(){
 								        		layout:'form',
 								        		name:'dniRep'
 								        		
+								        	},{
+								        		xtype:'textfield',
+								        		fieldLabel:'Cargo Representante',
+								        		id:'idCargorep',
+								        		layout:'form',
+								        		name:'cargoRep'
 								        	}
 	        							]
 			}),
@@ -843,7 +850,7 @@ Ext.onReady(function(){
 				'subrubro.id':datos.datosempresaId.subrubro_id,
 				dniRep:datos.datoscontactoId.dniRep,
 				email:datos.datoscontactoId.email,
-				cargoRep:datos.datosempresaId.cargoRep,
+				cargoRep:datos.datoscontactoId.cargoRep,
 				dniRep:datos.datoscontactoId.dniRep,
 				sitioWeb:datos.datoscontactoId.sitioWeb,
 				observaciones:datos.datosempresaId.observaciones,
@@ -867,10 +874,23 @@ Ext.onReady(function(){
 				window.location='ordenreservareporte?target=_blank&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+respuesta.ordenid
 			},
 			failure: function(resp,opt){
-				Ext.MessageBox.show({
-					title:'Error',
-					msg:'Se produjo un error al intentar generar la orden de reserva'
-				});	
+				var respuesta = Ext.decode(resp.responseText);
+				if(respuesta.result){
+					if(respuesta.result.loginredirect==true)
+						Ext.MessageBox.show({
+							title:'Mensaje',
+							icon:Ext.MessageBox.INFO,
+							buttons:Ext.MessageBox.OK,
+							fn:function(btn){
+								window.location='../logout/index';
+							}
+						});
+				}else{
+					Ext.MessageBox.show({
+						title:'Error',
+						msg:'Se produjo un error al intentar generar la orden de reserva'
+					});
+				}
 			}
 		});
 	});

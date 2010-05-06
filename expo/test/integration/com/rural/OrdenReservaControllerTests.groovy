@@ -53,6 +53,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 
     void testGenerarOrden() {
     		assertNotNull(authenticateService.userDomain())
+	    	assertNotNull(empresa)
 			def ordenreservaController = new OrdenReservaController()
 			ordenreservaController.ordenReservaService=ordenReservaService
 			ordenreservaController.authenticateService=authenticateService
