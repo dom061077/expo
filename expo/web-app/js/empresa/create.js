@@ -65,9 +65,17 @@
                             loadexception: function(proxy, store, response, e) {
                                 //alert("Response Text>>"+Ext.util.JSON.encode(response.responseText));
                                 var jsonObject = Ext.util.JSON.decode(response.responseText);
-                                if (jsonObject.loginredirect == true)
-                                		window.location='../logout/index';
-                                
+			                    if (response.status==0)
+				                    	Ext.MessageBox.show({
+					                    		title:'Error',
+					                    		msg:'Error de comunicación con el servidor',
+					                    		icon:Ext.MessageBox.ERROR,
+					                    		buttons:Ext.MessageBox.OK
+				                    	});
+				                else{    	
+					                    if (jsonObject.loginredirect == true)
+				                    		window.location='../logout/index';
+					               }                                    
                                }
 	        			}
 	        			 
@@ -80,10 +88,18 @@
 	        			listeners: {
 		                    loadexception: function(proxy, store, response, e) {
 					                    var jsonObject = Ext.util.JSON.decode(response.responseText);
-					                    if (jsonObject.loginredirect == true)
-					                    		window.location='../logout/index';
-                    
-					                   }
+					                    if (response.status==0)
+						                    	Ext.MessageBox.show({
+						                    		title:'Error',
+						                    		msg:'Error de comunicación con el servidor',
+						                    		icon:Ext.MessageBox.ERROR,
+						                    		buttons:Ext.MessageBox.OK
+						                    	});
+						                else{    	
+						                    if (jsonObject.loginredirect == true)
+						                    		window.location='../logout/index';
+						               }                    
+					               }
         						
 	        				}
 	        		});	

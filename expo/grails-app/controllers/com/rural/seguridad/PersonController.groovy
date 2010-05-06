@@ -24,6 +24,38 @@ class PersonController {
 		log.debug("TOTAL DE USUARIOS: "+Person.count())
 		[personList: Person.list(params), personInstanceTotal: Person.count() ]
 	}
+	
+	def listjson = {
+		log.info("INGRESANDO AL METODO listjson DEL CONTROLADOR PersonController")
+		log.debug("PARAMETROS INGRESADOS $params")
+		def pagingConfig = [
+			max: params.limit as Integer ?: 10,
+			offset: params.start as Integer ?: 0
+		]
+		
+		def totalUsuarios = Person.createCriteria().count{
+			or{
+				like('username','%'+params?.searchCriteria+'%')
+				like('userRealName','%'+params?.searchCriteria+'%')
+			}
+		}		
+		
+		def usuarios = Person.createCriteria().list(pagingConfig){
+			or{
+				like('username','%'+params?.searchCriteria+'%')
+				like('userRealName','%'+params?.searchCriteria+'%')
+			}				
+		}
+		
+		render(contentType:"text/json"){
+			total totalUsuarios
+			rows{
+				usuarios.each{
+					row(id:it.id,username:it.username,userRealName:it.userRealName)
+				}
+			}
+		}
+	}
 
 	def show = {
 		def person = Person.get(params.id)

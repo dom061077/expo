@@ -43,6 +43,7 @@ class EmpresaController {
 	            max: params.limit as Integer ?: 10,
 	            offset: params.start as Integer ?: 0
 	    ]
+	    
     	def totalEmpresas = Empresa.createCriteria().count{
     			like('nombre','%'+params?.searchCriteria+'%')
     	}
@@ -393,9 +394,9 @@ class EmpresaController {
     	def empresassimilares = Empresa.get(params.id)?.empresas
     	log.debug("Empresa analizada: ")
     	render(contentType: "text/json"){
-    		total empresassimilares.size()
+    		total empresassimilares?.size()
     		rows{
-    			empresassimilares.each{
+    			empresassimilares?.each{
     				row(id:it.id,nombre:it.nombre)
     			}
     		}
