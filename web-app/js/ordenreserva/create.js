@@ -86,9 +86,17 @@ Ext.onReady(function(){
 		        			listeners: {
 			                    loadexception: function(proxy, store, response, e) {
 						                    var jsonObject = Ext.util.JSON.decode(response.responseText);
-						                    if (jsonObject.loginredirect == true)
-						                    		window.location='../logout/index';
-	                    
+						                    if (response.status==0)
+						                    	Ext.MessageBox.show({
+						                    		title:'Error',
+						                    		msg:'Error de comunicación con el servidor',
+						                    		icon:Ext.MessageBox.ERROR,
+						                    		buttons:Ext.MessageBox.OK
+						                    	});
+						                    else{
+							                    if (jsonObject.loginredirect == true)
+							                    		window.location='../logout/index';
+						                    }
 						                   }
 	        						
 		        				}							
@@ -385,7 +393,7 @@ Ext.onReady(function(){
         },   
 		cards : [
 			new Ext.ux.Wiz.Card({
-				title : 'Seleccione Empresa y Exposición',
+				title : 'Seleccione Empresa',
 				id:'seleccionempresacardId',
 				frame:false,
 				allowBlank:false,
@@ -870,8 +878,18 @@ Ext.onReady(function(){
 			},
 			success: function(resp,opt){
 				var respuesta = Ext.decode(resp.responseText);
-				alert('el id es: '+respuesta.ordenid)
-				window.location='ordenreservareporte?target=_blank&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+respuesta.ordenid
+				if(respuesta.result){
+					if(respuesta.result.loginredirect==true)
+						Ext.MessageBox.show({
+							title:'Mensaje',
+							icon:Ext.MessageBox.INFO,
+							buttons:Ext.MessageBox.OK,
+							fn:function(btn){
+								window.location='../logout/index';
+							}
+						});
+				}else				
+					window.location='ordenreservareporte?target=_blank&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+respuesta.ordenid
 			},
 			failure: function(resp,opt){
 				var respuesta = Ext.decode(resp.responseText);
