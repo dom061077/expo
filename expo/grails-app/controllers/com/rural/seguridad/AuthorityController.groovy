@@ -15,6 +15,19 @@ class AuthorityController {
 		redirect action: list, params: params
 	}
 
+	def listjson= {
+		log.info("INGRESANDO AL METODO listjson DEL CONTROLLER Authority")
+		def roles = Authority.list()
+		render(contentType:"text/json"){
+			success true
+			rows{
+				roles.each{
+					row(id:it.id,description:it.description)
+				}
+			}
+		}
+	}
+
 	/**
 	 * Display the list authority page.
 	 */

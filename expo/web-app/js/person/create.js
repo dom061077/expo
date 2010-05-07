@@ -1,5 +1,55 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
+
+	var rolesStore = new Ext.data.JsonStore({
+		
+		root:'rows',
+		fields:['id','description'],
+		url:'../authority/listjson',
+		valueField:'id'
+		
+	});
+	
+	rolesStore.load();
+	/*var gridroles = new Ext.grid.GridPanel({
+		store:rolesStore,
+		tbar:[
+			{
+				icon: imagePath+'/skin/database_delete.png',
+				cls:'x-btn-text-icon',
+				handler: function(){
+					var sm = gridroles.getSelectionModel();
+					var sel = sm.getSelected();
+					if (sm.hasSelection()){
+						gridroles.getStore().remove(sel);
+					}
+				},
+				title:'Roles de Usuario',
+				columns:[
+					{header:"id",dataIndex:"id",hidden:true},
+					{header:"Descripción",dataIndex:"description"}
+				]
+			}
+		],
+		height:200,
+		width:300
+		
+	});*/
+	
+	var comboRoles = new Ext.form.ComboBox({
+		layout:'form',
+		id:'idComboroles',
+		fieldLabel:'Rol',
+		mode:'local',
+		store:rolesStore,
+		displayField:'description',
+		listWidth:200,
+		valueField:'id',
+		forceSelection:true,
+		allowBlank:false,
+		hiddenName:'rol',
+		msgTarget:'under'
+	});
 	
 	var formusuario = new Ext.form.FormPanel({
 		url:'savejson',
@@ -14,11 +64,15 @@ Ext.onReady(function(){
 				{xtype:'textfield',
 				 id:'usernameId',
 				 name:'username',
+				 allowBlank:false,
+				 msgTarget:'under',
 				 fieldLabel:'Usuario'
 				},{
 				 xtype:'textfield',
 				 id:'userrealnameId',
 				 name:'userRealName',
+				 allowBlank:false,
+				 msgTarget:'under',
 				 fieldLabel:'Nombre Real'
 				},{
 				 xtype:'checkbox',
@@ -28,20 +82,66 @@ Ext.onReady(function(){
 				},{
 					xtype:'textfield',
 					id:'descriptionId',
+					allowBlank:false,
+					msgTarget:'under',
 					name:'description',
 					fieldLabel:'Descripción'
 				},{
 					xtype:'textfield',
 					inputType:'password',
 					id:'passwdId',
+					allowBlank:false,
+					msgTarget:'under',
 					name:'passwd',
-					fieldLabel:'Contraseña'
-				}
+					fieldLabel:'Contraseña',
+					maxLength:'15',
+					minLength:'5'
+				},{
+					layout:'column',
+					anchor:'0',
+					items:[
+						{ layout:'column',
+						  anchor:'0',
+						  items:[
+						  	{
+						  		columnWidth:.8,
+						  		anchor:'0',
+						  		layout:'form',
+						  		items:comboRoles
+						  	}/*,{
+						  		layout:'form',
+						  		items:[
+						  			{
+						  				xtype:'button',
+						  				text:'Agregar',
+						  				handler:function(){
+						  					
+						  				}
+						  			}
+						  		]
+						  	}*/
+						  ]
+						}
+					]
+				}/*,gridroles*/
 		],
 	  buttons:[
 	           {
 	        	   text:'Guardar',handler:function(){
-	        	   		
+	        			formusuario.getForm().submit({
+	        				success: function(f,a){
+	        					Ext.MessageBox.show({
+									title:"Mensaje",
+									msg:"El Usuario se agregó correctamente",
+									icon:Ext.MessageBox.INFO,
+									buttons:Ext.MessageBox.OK,
+									fn:function(btn){
+										window.location='create';
+									}
+	        					});
+	        					
+	        				}
+	        			});   		
 	        	   }	
 	           },{
 	        	   text:'Cancelar',

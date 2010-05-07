@@ -1,5 +1,6 @@
 package com.rural.seguridad
 
+//http://jlorenzen.blogspot.com/2009/11/learning-with-grails-security-extjs.html#rest
 
 /**
  * User controller.
@@ -23,6 +24,31 @@ class PersonController {
 		}
 		log.debug("TOTAL DE USUARIOS: "+Person.count())
 		[personList: Person.list(params), personInstanceTotal: Person.count() ]
+	}
+	
+	def savejson = {
+		log.info("INGREANDO AL METODO savejson DEL CONTROLADOR PersonController")
+		log.debug("PARAMETROS INGRESADOS $params")
+		params.passwd=authenticateService.encodePassword(params.passwd)
+		def usuarioInstance = new Person(params)
+		def authority = Authority.get(params.rol)
+		authority.addToPeople(usuarioInstance)
+		if (!usuarioInstance.hasErrors() && usuarioInstance.save()){
+			render(contentType:"text/json"){
+				success true
+				idUsuario usuarioInstance.id
+			}
+		}else{
+			render(contentType:"text/json"){
+				success false
+				errors{
+					usuarioInstance.errors.allErrors.each{
+						title it.defaultMessage
+					}
+				}
+			}
+		}
+		
 	}
 	
 	def listjson = {
