@@ -1,6 +1,6 @@
 <head>
 	<meta name="layout" content="main" />
-	<title>Create Person</title>
+	<title>Alta de Usuario</title>
 	<script type="text/javascript" src='${resource(dir:'js/person',file:'create.js')}'></script>
 </head>
 

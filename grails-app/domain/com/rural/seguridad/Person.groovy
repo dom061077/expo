@@ -32,6 +32,7 @@ class Person {
 		username(blank: false, unique: true)
 		userRealName(blank: false)
 		passwd(blank: false)
+		email(blank:true,nullable:true)
 		enabled()
 	}
 }
