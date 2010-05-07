@@ -8,13 +8,13 @@ Ext.onReady(function(){
 		renderTo:'formulario_extjs',
 		frame:true,
 		title:'Alta de Usuario',
-		height:450,
+		height:350,
 		width:450,
 		items:[
 				{xtype:'textfield',
 				 id:'usernameId',
 				 name:'username',
-				 fieldLabel:'Nombre de Usuario'
+				 fieldLabel:'Usuario'
 				},{
 				 xtype:'textfield',
 				 id:'userrealnameId',
@@ -23,10 +23,35 @@ Ext.onReady(function(){
 				},{
 				 xtype:'checkbox',
 				 id:'enabledId',
-				 name:''
+				 name:'enabled',
+				 fieldLabel:'Habilitado'
+				},{
+					xtype:'textfield',
+					id:'descriptionId',
+					name:'description',
+					fieldLabel:'Descripción'
+				},{
+					xtype:'textfield',
+					inputType:'password',
+					id:'passwdId',
+					name:'passwd',
+					fieldLabel:'Contraseña'
 				}
-		]
+		],
+	  buttons:[
+	           {
+	        	   text:'Guardar',handler:function(){
+	        	   		
+	        	   }	
+	           },{
+	        	   text:'Cancelar',
+	        	   handler:function(){
+	        	   		window.location='list'
+	        	   }
+	           }
+	  ]
 		
 	});
+	Ext.getCmp('usernameId').focus('',10);
 	
 });
