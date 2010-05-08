@@ -137,7 +137,10 @@ class LoginController {
 	// Denial page (data|view|json) for Ajax access.
 	def deniedAjax = {
 		//this is example:
-		render "{error: 'access denied'}"
+		render (contentType:"text/json"){
+			success true
+			denegado true
+		}
 	}
 
 	/**

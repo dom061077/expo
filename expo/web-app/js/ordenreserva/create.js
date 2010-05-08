@@ -344,7 +344,17 @@ Ext.onReady(function(){
 		autoLoad:true,
 		root:'rows',
 		url: '../vendedor/listjson',
-		fields: ['id','nombre']
+		fields: ['id','nombre'],
+		listeners:{
+			loadexception: function(proxy,store,response,e){
+				/*var jsonObject = Ext.util.JSON.decode(response.responseText);
+				if(jsonObject.denegado)
+					Ext.MessageBox.show({
+						title:'Mensaje',
+						msg:'No est· autorizado a ingresar a esta opci√≥n'
+					});*/
+			}
+		}
 	});
 	
 	var rubroStore = new Ext.data.JsonStore({

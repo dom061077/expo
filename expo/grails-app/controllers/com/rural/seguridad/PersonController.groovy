@@ -82,6 +82,27 @@ class PersonController {
 			}
 		}
 	}
+	
+	def showjson={
+		log.info("INGRESANDO AL METODO showjson del CONTROLADOR PersonController")
+		log.debug("Parametros: $params")
+		def usuarioInstance = Person.get(params.id);
+		if(usuarioInstance){
+			log.debug("Instancia de usuario encontrada, renderizando json")
+			render(contentType:"text/json"){
+				success true
+				data(id:usuarioInstance.id,username:it.username,userRealName:it.userRealName
+						,enabled:it.enabled,email:it.email,emailShow:it.emailShow
+						,description:it.description
+						,passwd:it.passwd)
+			}
+		}else{
+			log.debug("Instancia de usuario no encontrada, renderizando json");
+			render(contentType:"text/json"){
+				success false
+			}
+		}
+	}
 
 	def show = {
 		def person = Person.get(params.id)
