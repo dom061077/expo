@@ -68,4 +68,13 @@ Ext.onReady(function(){
 		]
 	});
 	
+	gridusuarios.on('rowdblclick',function(grid,rowIndex,e){
+		                  var r = grid.getStore().getAt(rowIndex);
+		                  var selectedId = r.get('id');
+		                  usuariosStore.reload({params: {id_ft: selectedId}});
+		                  window.location = 'edit?id='+selectedId;
+
+		}
+	);
+	
 });
