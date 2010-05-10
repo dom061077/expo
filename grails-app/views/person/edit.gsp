@@ -1,11 +1,11 @@
 <head>
 	<%
-		out << "<script type='javascript'>";
-		out << "var usuarioId=${id}";
+		out << "<script type='text/javascript'>";
+		out << "var usuarioId = ${id};";
 		out << "</script>";
 	%>
 	<meta name="layout" content="main" />
-	<title>Edit Person</title>
+	<title>Modificar Usuario</title>
 	<script type="text/javascript" src='${resource(dir:'js/person',file:'edit.js')}'</script>	
 </head>
 
