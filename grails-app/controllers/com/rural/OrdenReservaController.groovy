@@ -109,17 +109,23 @@ class OrdenReservaController {
     	log.info("INGRESANDO AL METODO generarordenreserva DEL CONTROLADOR OrdenReservaController")
     	log.debug("PARAMETROS DE INGRESO: "+params)
     	def iterarDetalleJson = {OrdenReserva ord, def detalle->
+    		def total=0
 	    	detalle.each{
 	    		ord.addToDetalle(new DetalleServicioContratado(sector:it.sector,lote:it.lote,subTotal:it.subTotal))
+	    		total=total+it.subTotal
 	    	}
+	    	ord.total=total
     	}
     	
     	def iterarConceptos = {OrdenReserva ord, def conceptos->
     		def tipoConcepto
+    		def total=0
     		conceptos.each{
     			tipoConcepto = TipoConcepto.get(new Long(it.id))
     			ord.addToOtrosconceptos(new OtrosConceptos(descripcion:it.descripcion,subTotal:it.subTotal,tipo:tipoConcepto))
+    			total=total+it.subTotal
     		}
+    		ord.total=total
     	}
     	
     	def ordenReservaInstance = new OrdenReserva(params)
@@ -127,7 +133,7 @@ class OrdenReservaController {
     	def otrosconceptosjson = JSON.parse(params.otrosconceptosjson)
     	def productosjson = JSON.parse(params.productosjson)
     	productosjson.each{
-    		ordenReservaInstance.addToProductos(new ProductoExpuesto(descripcion:'hola'))
+    		ordenReservaInstance.addToProductos(new ProductoExpuesto(descripcion:it.descripcion))
     		
     	}
     	def empresaInstance = Empresa.get(params.id)
@@ -184,5 +190,32 @@ class OrdenReservaController {
     	}
     }
     
-    
+    def listjson = {
+    	log.info("INGRESANDO AL METODO listjson DEL CONTROLADOR OrdenReservaController")
+    	log.debug("PARAMETROS $params")
+    	def pagingconfig = [
+    		max: params.limit as Integer ?:10,
+    		offset: params.start as Integer ?:0
+    	]
+    	
+    	def totalOrdenes = OrdenReserva.createCriteria().count{
+    		empresa{
+    			like('nombre','%'+params?.searchCriteria+'%')
+   			}
+    	}
+    	def ordenes = OrdenReserva.createCriteria().list(pagingconfig){
+    		empresa{
+   				like('nombre','%'+params?.searchCriteria+'%')
+    		}
+    	}
+    	log.debug("Cantidad de Ordenes Consultadas: "+ordenes.size()+" - total count() $totalOrdenes")
+    	render(contentType:"text/json"){
+    		total totalOrdenes
+    		rows{
+    			ordenes.each{
+    				row(id:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre,empresaNombre:it.empresa.nombre)
+    			}
+    		}
+    	}
+    }
 }

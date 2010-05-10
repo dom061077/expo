@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrdenReserva" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="75"/>
 	<subDataset name="dataset1"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
@@ -26,6 +26,8 @@
 	<field name="fechaAlta" class="java.util.Date"/>
 	<field name="empresa.telefono1" class="java.lang.String"/>
 	<field name="numero" class="java.lang.Long"/>
+	<field name="productos" class="java.util.Collection"/>
+	<field name="subTotal" class="java.lang.Double"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -85,7 +87,7 @@
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.util.Date"><![CDATA[$F{fechaAlta}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{fechaAlta})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="449" y="48" width="100" height="14"/>
@@ -98,20 +100,9 @@
 	</title>
 	<pageHeader>
 		<band height="79" splitType="Stretch">
-			<staticText>
-				<reportElement x="3" y="4" width="165" height="13"/>
-				<textElement>
-					<font fontName="Arial" size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[DATOS DE FACTURACION]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="8" y="19" width="192" height="13"/>
-				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Expositor: Nombre y Apellido o Razón Social:]]></text>
-			</staticText>
+			<rectangle>
+				<reportElement x="2" y="2" width="549" height="76"/>
+			</rectangle>
 			<staticText>
 				<reportElement x="9" y="31" width="57" height="13"/>
 				<textElement>
@@ -148,19 +139,19 @@
 				<text><![CDATA[Tel.:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="204" y="19" width="100" height="13"/>
-				<textElement>
-					<font fontName="Tahoma" isBold="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.razonSocial}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="72" y="31" width="100" height="13"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.cuit}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="9" y="4" width="165" height="13"/>
+				<textElement>
+					<font fontName="Arial" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DE FACTURACION]]></text>
+			</staticText>
 			<textField>
 				<reportElement x="72" y="46" width="100" height="13"/>
 				<textElement>
@@ -183,25 +174,35 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.codigoPostal}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="463" y="58" width="90" height="14"/>
+				<reportElement x="463" y="58" width="86" height="14"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.telefono1}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="234" y="19" width="306" height="13"/>
+				<textElement>
+					<font fontName="Tahoma" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.razonSocial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="8" y="19" width="226" height="13"/>
+				<textElement>
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Expositor-Nombre y Apellido o Razón Social:]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>
 		<band height="84" splitType="Stretch">
+			<rectangle>
+				<reportElement x="2" y="1" width="549" height="82"/>
+			</rectangle>
 			<staticText>
-				<reportElement x="5" y="6" width="194" height="13"/>
-				<textElement>
-					<font fontName="Arial" size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[DATOS CATALOGO EXPOSITORES]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="8" y="23" width="88" height="13"/>
+				<reportElement x="8" y="23" width="98" height="13"/>
 				<textElement>
 					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
@@ -222,7 +223,7 @@
 				<text><![CDATA[Mail:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="8" y="51" width="130" height="13"/>
+				<reportElement x="8" y="51" width="145" height="13"/>
 				<textElement>
 					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
@@ -236,21 +237,21 @@
 				<text><![CDATA[Cargo:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="208" y="67" width="20" height="13"/>
+				<reportElement x="175" y="67" width="20" height="13"/>
 				<textElement>
 					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tel:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="359" y="67" width="86" height="13"/>
+				<reportElement x="329" y="67" width="98" height="13"/>
 				<textElement>
 					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Doc. de Identidad:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="99" y="24" width="109" height="13"/>
+				<reportElement x="109" y="22" width="384" height="13"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
@@ -271,7 +272,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.email}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="136" y="52" width="406" height="13"/>
+				<reportElement x="156" y="52" width="357" height="13"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
@@ -285,60 +286,115 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.cargoRep}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="227" y="67" width="126" height="13"/>
+				<reportElement x="197" y="67" width="126" height="13"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.telefonoRepresentante1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="447" y="67" width="96" height="13"/>
+				<reportElement x="426" y="67" width="96" height="13"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.dniRep}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="9" y="6" width="194" height="13"/>
+				<textElement>
+					<font fontName="Arial" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[DATOS CATALOGO EXPOSITORES]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="233" splitType="Stretch">
-			<subreport isUsingCache="false" runToBottom="false">
-				<reportElement x="9" y="35" width="533" height="23"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalle})]]></dataSourceExpression>
-				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"detalleserviciocontratado.jasper")]]></subreportExpression>
-			</subreport>
+		<band height="476" splitType="Stretch">
+			<rectangle>
+				<reportElement x="2" y="1" width="549" height="438"/>
+			</rectangle>
 			<staticText>
-				<reportElement x="5" y="84" width="119" height="13"/>
+				<reportElement x="9" y="141" width="119" height="13"/>
 				<textElement>
-					<font fontName="Arial" size="11" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[OTROS CONCEPTOS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="377" y="69" width="50" height="13"/>
+				<reportElement x="387" y="119" width="50" height="13"/>
 				<textElement>
 					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SubTotal:]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="11" y="96" width="531" height="20"/>
+				<reportElement x="9" y="157" width="531" height="14"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{otrosconceptos})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"otrosconceptos.jasper")]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="5" y="7" width="203" height="13"/>
+				<reportElement x="9" y="7" width="203" height="13"/>
 				<textElement>
-					<font fontName="Arial" size="11" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[DATOS DEL SERVICIO CONTRATADO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="377" y="160" width="50" height="13"/>
+				<reportElement x="387" y="249" width="50" height="13"/>
 				<textElement>
 					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SubTotal:]]></text>
+			</staticText>
+			<subreport isUsingCache="false" runToBottom="false">
+				<reportElement x="9" y="23" width="533" height="14"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalle})]]></dataSourceExpression>
+				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"detalleserviciocontratado.jasper")]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement x="2" y="136" width="549" height="5"/>
+			</line>
+			<line>
+				<reportElement x="2" y="134" width="549" height="5"/>
+			</line>
+			<staticText>
+				<reportElement x="9" y="274" width="186" height="13"/>
+				<textElement>
+					<font fontName="Arial" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[PRODUCTOS QUE SE EXPONEN]]></text>
+			</staticText>
+			<line>
+				<reportElement x="2" y="264" width="549" height="5"/>
+			</line>
+			<line>
+				<reportElement x="2" y="262" width="549" height="5"/>
+			</line>
+			<subreport>
+				<reportElement x="10" y="292" width="336" height="19"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{productos})]]></dataSourceExpression>
+				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"otrosconceptos.jasper")]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="417" y="288" width="50" height="13"/>
+				<textElement>
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SubTotal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="306" width="113" height="13"/>
+				<textElement>
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[I.V.A Tasa General]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="329" width="50" height="13"/>
+				<textElement>
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[I.V.A R.N.I:]]></text>
 			</staticText>
 		</band>
 	</detail>
