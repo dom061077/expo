@@ -5,6 +5,8 @@ package com.rural.seguridad
 /**
  * User controller.
  */
+
+ 
 class PersonController {
 
 	def authenticateService
@@ -87,14 +89,20 @@ class PersonController {
 		log.info("INGRESANDO AL METODO showjson del CONTROLADOR PersonController")
 		log.debug("Parametros: $params")
 		def usuarioInstance = Person.get(params.id);
+		def authority = null
+		usuarioInstance.authorities.each{
+			authority = it
+		}
 		if(usuarioInstance){
 			log.debug("Instancia de usuario encontrada, renderizando json")
 			render(contentType:"text/json"){
 				success true
-				data(id:usuarioInstance.id,username:it.username,userRealName:it.userRealName
-						,enabled:it.enabled,email:it.email,emailShow:it.emailShow
-						,description:it.description
-						,passwd:it.passwd)
+				data(id:usuarioInstance.id,username:usuarioInstance.username,userRealName:usuarioInstance.userRealName
+						,enabled:usuarioInstance.enabled,email:usuarioInstance.email,emailShow:usuarioInstance.emailShow
+						,authorityId:authority?.id
+						,description:usuarioInstance.description
+						,authorityDesc:authority?.description
+						,passwd:'')
 			}
 		}else{
 			log.debug("Instancia de usuario no encontrada, renderizando json");
@@ -102,6 +110,58 @@ class PersonController {
 				success false
 			}
 		}
+	}
+	
+	def updatejson = {
+		log.info("INGRESANDO EL METODO updatejson DEL CONTROLLER updatejson")
+		log.debug("PARAMETROS: $params")
+		if(params.enabled.equals('on'))
+			params.enabled=true
+		else
+			params.enabled=false
+		def person = Person.get(params.id)
+		if (!person) {
+			render(contentType:"text/json"){
+				success false
+				errors{
+					title "Usuario no encontrado con Id: $params.id"
+				}
+			}
+			return
+		}
+
+		/*
+		long version = params.version.toLong()
+		if (person.version > version) {
+			render(contentType:"text/json"){
+				success false
+				errors{
+					title "Otro usuario esta ha modificado este registro mientras estaba intentandolo Ud."
+				}
+			}
+			
+		}*/
+		def oldPassword = person.passwd
+		person.properties = params
+		if (!params.passwd.equals(oldPassword)) {
+			person.passwd = authenticateService.encodePassword(params.passwd)
+		}
+		if (person.save()) {
+			Authority.findAll().each { it.removeFromPeople(person) }
+			Authority.get(params.rol).addToPeople(person)
+			render(contentType:"text/json"){
+				success true
+			}
+		}
+		else {
+			render(contentType:"text/json"){
+				success false
+				errors{
+					title "Error de validacion en el registro"
+				}
+			}
+		}
+		
 	}
 
 	def show = {
@@ -126,38 +186,68 @@ class PersonController {
 	 * he should be removed from those authorities which he is involved.
 	 */
 	def delete = {
+		try{
+		Person.withTransaction{
 
-		def person = Person.get(params.id)
-		if (person) {
-			def authPrincipal = authenticateService.principal()
-			//avoid self-delete if the logged-in user is an admin
-			if (!(authPrincipal instanceof String) && authPrincipal.username == person.username) {
-				flash.message = "You can not delete yourself, please login as another admin and try again"
+			def person = Person.get(params.id)
+			if (person) {
+				def authPrincipal = authenticateService.principal()
+				//avoid self-delete if the logged-in user is an admin
+				if (!(authPrincipal instanceof String) && authPrincipal.username == person.username) {
+					//flash.message = "You can not delete yourself, please login as another admin and try again"
+					render(contentType:"text/json"){
+						success false
+						msg "No puede borrarse a si mismo"
+					}
+				}
+				else {
+					//first, delete this person from People_Authorities table.
+							try{
+									Authority.findAll().each { it.removeFromPeople(person) }
+									person.delete(flush:true)
+									//flash.message = "Person $params.id deleted."
+									render(contentType:"text/json"){
+										success true 
+										msg "Usuario Eliminado"
+									}
+									
+							}catch(Exception e){
+								
+								
+							}
+							
+				}
 			}
 			else {
-				//first, delete this person from People_Authorities table.
-				Authority.findAll().each { it.removeFromPeople(person) }
-				person.delete()
-				flash.message = "Person $params.id deleted."
+				//flash.message = "Person not found with id $params.id"
+				render(contentType:"text/json"){
+					success false
+					msg "Usuario no encontrado"
+				}
 			}
 		}
-		else {
-			flash.message = "Person not found with id $params.id"
+		//redirect action: list
+		}catch(org.springframework.dao.DataIntegrityViolationException e){
+			render(contentType:"text/json"){
+				success false
+				msg "No se puede eliminar el Usuario porque es referenciado en otro registro"
+			}
 		}
-
-		redirect action: list
 	}
 
 	def edit = {
 
-		def person = Person.get(params.id)
+		/*def person = Person.get(params.id)
 		if (!person) {
 			flash.message = "Person not found with id $params.id"
 			redirect action: list
 			return
 		}
 
-		return buildPersonModel(person)
+		return buildPersonModel(person)*/
+		log.info("INGRESANDO AL METODO edit DEL CONTROLLER PersonController")
+		log.debug("Parametros $params")
+		return [id:params.id]
 	}
 
 	/**

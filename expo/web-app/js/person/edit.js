@@ -2,7 +2,7 @@ Ext.onReady(function(){
 	Ext.QuickTips.init();
 	
 	var rolesStore = new Ext.data.JsonStore({
-		
+		autoLoad:true,
 		root:'rows',
 		fields:['id','description'],
 		url:'../authority/listjson',
@@ -26,7 +26,7 @@ Ext.onReady(function(){
 	});
 	
 	var formusuario = new Ext.form.FormPanel({
-		url:'savejson',
+		url:'updatejson',
 		id:'formusuarioId',
 		border:false,
 		renderTo:'formulario_extjs',
@@ -35,7 +35,13 @@ Ext.onReady(function(){
 		height:350,
 		width:450,
 		items:[
-				{xtype:'textfield',
+				{
+				 xtype:'textfield',
+				 id:'usuarioId',
+				 name:'id',
+				 hidden:true,
+				 hideLabel:true
+				},{xtype:'textfield',
 				 id:'usernameId',
 				 name:'username',
 				 allowBlank:false,
@@ -102,7 +108,7 @@ Ext.onReady(function(){
 			buttons:[
 				{	text:'Guardar'
 					,handler:function(){
-						vendedor_form.getForm().submit({
+						formusuario.getForm().submit({
 							success: function(f,a){
 					        	          					Ext.Msg.alert('Mensaje','Los datos se guardaron correctamente',
 																	function(btn,text){
@@ -147,10 +153,10 @@ Ext.onReady(function(){
 								if(btn=='yes'){
 															var conn = new Ext.data.Connection();
 															conn.request({
-																url:'deletejson',
+																url:'delete',
 																method:'POST',
 																params:{
-																	id:Ext.getCmp('vendedorId').getValue()
+																	id:Ext.getCmp('usuarioId').getValue()
 																},
 																success: function(resp,opt){
 																	var respuesta = Ext.decode(resp.responseText);
@@ -209,13 +215,16 @@ Ext.onReady(function(){
 			id:usuarioId	
 		},
 		success:function(f,a){
-			
-			Ext.getCmp('usuarioId').setValue(a.result.data.username);
+			Ext.getCmp('usuarioId').setValue(a.result.data.id);
+			Ext.getCmp('usernameId').setValue(a.result.data.username);
 			Ext.getCmp('userrealnameId').setValue(a.result.data.userRealName);
 			Ext.getCmp('enabledId').setValue(a.result.data.enabled);
-			Ext.getCmp('descriptionId').setValue(a.result.data.description);			
-			Ext.getCmp('passwdId').setValue(a.result.data.passwd);			
-			Ext.getCmp('passwdId').setValue(a.result.data.passwd);			
+			Ext.getCmp('descriptionId').setValue(a.result.data.description);
+			Ext.getCmp('passwdId').setValue(a.result.data.passwd);
+			Ext.getCmp('idComboroles').hiddenField.value=a.result.data.authorityId
+			Ext.getCmp('idComboroles').setValue(a.result.data.authorityDesc);
+			Ext.getCmp('idComboroles').hiddenField.value=a.result.data.authorityId
+			
 		}
 	});
 });
