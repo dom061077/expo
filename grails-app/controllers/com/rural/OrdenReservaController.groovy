@@ -161,7 +161,7 @@ class OrdenReservaController {
     		log.debug(it)
     	}
     	ordenReservaInstance.otrosconceptos.each{
-    		log.debug(it)
+    		log.debug(it.subTotal)
     	}
     	ordenReservaInstance.productos.each{
     		log.debug(it)
