@@ -9,24 +9,22 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="28" splitType="Stretch">
-			<staticText>
-				<reportElement x="457" y="4" width="9" height="13"/>
-				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[$:]]></text>
-			</staticText>
+		<band height="18" splitType="Stretch">
 			<textField>
-				<reportElement x="14" y="4" width="423" height="20"/>
+				<reportElement x="14" y="4" width="369" height="14"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="479" y="4" width="100" height="20"/>
+			<staticText>
+				<reportElement x="446" y="4" width="7" height="14"/>
 				<textElement/>
+				<text><![CDATA[$]]></text>
+			</staticText>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="465" y="4" width="62" height="14"/>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotal}]]></textFieldExpression>
 			</textField>
 		</band>

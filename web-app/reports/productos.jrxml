@@ -5,9 +5,9 @@
 	<property name="ireport.y" value="0"/>
 	<field name="descripcion" class="java.lang.String"/>
 	<detail>
-		<band height="22" splitType="Stretch">
+		<band height="18" splitType="Stretch">
 			<textField>
-				<reportElement x="16" y="3" width="245" height="15"/>
+				<reportElement x="14" y="3" width="245" height="15"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
