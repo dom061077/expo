@@ -12,14 +12,14 @@
 	<detail>
 		<band height="18" splitType="Stretch">
 			<staticText>
-				<reportElement x="437" y="4" width="9" height="13"/>
+				<reportElement x="446" y="5" width="9" height="13"/>
 				<textElement>
 					<font fontName="Tahoma" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[$:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="13" y="4" width="38" height="13"/>
+				<reportElement x="14" y="4" width="38" height="13"/>
 				<textElement>
 					<font fontName="Tahoma" size="10" isBold="false"/>
 				</textElement>
@@ -33,21 +33,21 @@
 				<text><![CDATA[Lote Nº:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="56" y="4" width="200" height="14"/>
+				<reportElement x="56" y="4" width="185" height="14"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{sector}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="308" y="4" width="122" height="14"/>
+				<reportElement x="308" y="4" width="114" height="14"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{lote}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="446" y="4" width="61" height="13"/>
+				<reportElement x="465" y="5" width="61" height="13"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotal}]]></textFieldExpression>
 			</textField>
