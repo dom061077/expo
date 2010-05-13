@@ -48,9 +48,13 @@ Ext.onReady(function(){
         		,handler: function(){
         				var sm = grid.getSelectionModel();
         				var sel = sm.getSelected();
-        				if (sm.hasSelection())
-							open('ordenreservareporte?_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.id
+        				if (sm.hasSelection()){
+							open('ordenreservareporte?tipo=ORIGINAL&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.id
 							,'_blank')
+							open('ordenreservareporte?tipo=DUPLICADO&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.id
+							,'_blank')
+        				}
+							
         		}
         }],
         bbar: new Ext.PagingToolbar({
