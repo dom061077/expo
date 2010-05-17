@@ -23,12 +23,13 @@ class OrdenReservaService {
     	}
     	
     	ord.otrosconceptos.each{
-    		ord.subTotal+=it.subTotal
+    		ord.subTotal=ord.subTotal+it.subTotal
     	}
     	if (empresaInstance==null)
     		throw new OrdenReservaException(message,ord)
-    		
-		ord.empresa=empresaInstance
+    	ord.ivaGral=ord.subTotal+ord.subTotal*ord.ivaGral/100
+    	ord.ivaRni=ord.subTotal+ord.subTotal*ord.ivaRni/100	
+		ord.empresa=empresaInstance 
 		ord.fechaAlta=new Date()	
     	if(ord.validate()){
     		return ord.save();
