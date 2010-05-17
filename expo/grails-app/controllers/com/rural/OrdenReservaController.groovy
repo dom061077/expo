@@ -156,6 +156,7 @@ class OrdenReservaController {
     	def ordenReservaInstance = OrdenReserva.get(params.id)
     	List ordenList = new ArrayList()
     	ordenList.add(ordenReservaInstance)
+    	ordenList.add(ordenReservaInstance)    	
     	log.debug(ordenReservaInstance.empresa.nombre)
     	ordenReservaInstance.detalle.each{
     		log.debug(it)

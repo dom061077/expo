@@ -19,9 +19,10 @@ import net.sf.jasperreports.engine.JRParameter
 class EmpresaController {
      
     def index = { redirect(action:list,params:params) }
-    def sessionFactory
     def authenticateService
     def empresaService
+    def sessionFactory
+    
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
@@ -475,6 +476,8 @@ class EmpresaController {
 		CommonsMultipartFile fileExcel = (CommonsMultipartFile) mpr.getFile("archivoExcel");
   	    ByteArrayOutputStream fileOutputExcel = new ByteArrayOutputStream()
   	    
+  	    
+  	    
 		  // create our workbook
 		  try{  
 			  Workbook workbook = Workbook.getWorkbook(fileExcel.inputStream)
@@ -497,6 +500,7 @@ class EmpresaController {
 			  Empresa empresa
 			  int cantErrores = 0
 			  //el archivo tendrá un fila con los nombres de columna por eso comienzo a leer desde la fila 1
+			  Empresa.withSession{session->
 			  for(int r = 1; r < sheet.rows; r++){
 			  	subrubro=SubRubro.findByNombreSubrubro(sheet.getCell(1,r).contents)
 				if (subrubro==null && sheet.getCell(1,r).contents!=""){
@@ -598,6 +602,8 @@ class EmpresaController {
 					
 				}		
 			 }
+			  session.clear()
+			 }//llave de la session
 			  	//session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":r+1,"success":true])
 			  	
 			  		
