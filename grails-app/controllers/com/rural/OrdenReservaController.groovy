@@ -167,6 +167,9 @@ class OrdenReservaController {
     	ordenReservaInstance.productos.each{
     		log.debug(it)
     	}
+    	
+    	log.debug(ordenReservaInstance.expo.nombre)
+    	
     	log.debug("Orden Reserva: $ordenReservaInstance")
 		String reportsDirPath = servletContext.getRealPath("/reports/");
 		params.put("reportsDirPath", reportsDirPath);

@@ -184,7 +184,8 @@ Ext.onReady(function(){
 				{text:'Agregar',
 				 handler: function (){
 				 	if(gridDetalleServicioContratado.getStore().getCount()<3){
-						gridDetalleServicioContratado.getStore().insert(0
+						gridDetalleServicioContratado.getStore().insert(
+							(gridDetalleServicioContratado.getStore().getCount()-1>=0?gridDetalleServicioContratado.getStore().getCount():0)
 							,new detalleModel({id:0,sector:'Ingrese el Sector',lote:'Ingrese el Lote',subTotal:0}));
 						gridDetalleServicioContratado.startEditing(gridDetalleServicioContratado.getStore().getCount()-1,0);
 				 	}else{
@@ -253,7 +254,8 @@ Ext.onReady(function(){
 				{text:'Agregar',
 				 handler: function (){
 				 	if(gridOtrosConceptos.getStore().getCount()<3){
-						gridOtrosConceptos.getStore().insert(0
+						gridOtrosConceptos.getStore().insert(
+							gridOtrosConceptos.getStore().getCount()-1>=0?gridOtrosConceptos.getStore().getCount():0	
 							,new detalleModel({id:0,descripcion:'Ingrese Texto',subTotal:0}));
 						gridOtrosConceptos.startEditing(gridOtrosConceptos.getStore().getCount()-1,0);
 				 	}else{
@@ -312,7 +314,8 @@ Ext.onReady(function(){
 				{text:'Agregar',
 				 handler: function (){
 				 	if(gridProductosExpuestos.getStore().getCount()<3){
-						gridProductosExpuestos.getStore().insert(0
+						gridProductosExpuestos.getStore().insert(
+							gridProductosExpuestos.getStore().getCount()-1>=0?gridProductosExpuestos.getStore().getCount():0
 							,new detalleModel({id:0,descripcion:'Ingrese texto'}));
 						gridProductosExpuestos.startEditing(gridProductosExpuestos.getStore().getCount()-1,0);
 				 	}else{

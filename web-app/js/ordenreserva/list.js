@@ -51,8 +51,6 @@ Ext.onReady(function(){
         				if (sm.hasSelection()){
 							open('ordenreservareporte?tipo=ORIGINAL&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.id
 							,'_blank')
-							open('ordenreservareporte?tipo=DUPLICADO&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.id
-							,'_blank')
         				}
 							
         		}
