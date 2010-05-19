@@ -7,7 +7,8 @@ import grails.converters.*
 
 
 class OrdenReservaServiceTests extends GrailsUnitTestCase {
-	def ordenReservaService 
+	def ordenReservaService
+	def reciboService
 	def usuario = null
 	def empresa = null
 	def exposicion = null
@@ -55,5 +56,10 @@ class OrdenReservaServiceTests extends GrailsUnitTestCase {
     	assertTrue(ordenReserva.detalle.size()==1)
     	assertTrue(ordenReserva.otrosconceptos.size()==1)
     	assertTrue(ordenReserva.empresa.nombre.equals("empresa modificada"))
+    	
+    	Recibo rec = reciboService.generarRecibo(ordenReserva.id)
+    	assertNotNull(rec)
+    	assertTrue(rec.numero==1)
+    	
     }
 }
