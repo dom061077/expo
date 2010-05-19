@@ -885,7 +885,9 @@ Ext.onReady(function(){
 				otrosconceptosjson:otrosconceptosjsonStr,
 				productosjson:productosjsonStr,
 				anio:datos.exposicionId.anio,
-				'expo.id':datos.exposicionId.expo_id
+				'expo.id':datos.exposicionId.expo_id,
+				ivaGralCheck:datos.datosempresa
+				
 				
 				
 			},

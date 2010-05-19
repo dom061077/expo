@@ -92,7 +92,15 @@ class ReciboController {
 		log.Info("INGRESANDO LA METODO createjson DEL CONTROLADOR ReciboController")
 		log.Info("PARAMETROS: $params")
 		def recibo = reciboService.generarRecibo(new Long(params.id))
-		n2t numero = new n2t(recibo.total)
+		int entero = recibo.total.intValue()
+		Double totalaux = (recibo.total - entero)*100
+//		int decimal = totalaux.intValue()
+		 
+		
+		n2t numero2Letra = new n2t()
+		
+		
+
 		if(recibo){
 			render(contentType="text/json"){
 				success true
@@ -100,7 +108,8 @@ class ReciboController {
 				numero	recibo.numero
 				empresa_nombre recibo.ordenReserva.empresa.nombre
 				total recibo.total
-				totalletras 
+				totalletras "SON "+numeroLetra.convertirLetras(entero)+" PESOS CON "
+					+numeroLetra.convertirLetras(decimal)+" CENTAVOS" 
 			}
 		}
     }

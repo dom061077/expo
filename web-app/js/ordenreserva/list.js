@@ -45,14 +45,40 @@ Ext.onReady(function(){
         tbar:[{
         		icon: imagePath+'/pdf.gif'
         		,cls:'x-btn-text-icon'
+        		,text:'Reporte'
         		,handler: function(){
         				var sm = grid.getSelectionModel();
         				var sel = sm.getSelected();
         				if (sm.hasSelection()){
+						var conn = new Ext.data.Connection();
+						conn.request({
+							url:'../recibo/createjson',
+							method:'POST',
+							params:{
+								id:empresaid
+							},
+							success:function(resp,opt){
+								
+							}
+						});
+        					
 							open('ordenreservareporte?tipo=ORIGINAL&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.id
 							,'_blank')
         				}
 							
+        		}
+        	},{
+        		icon: imagePath+'/'
+        		,cls:'x-btn-text-icon'
+        		,text:'Recibo'
+        		,handler: function(){
+        			var sm = grid.getSelectionModel();
+        			var sel = sm.getSelected();
+        			if (sm.hasSelection()){
+        					
+							open('ordenreservareporte?tipo=ORIGINAL&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.id
+							,'_blank')
+        			}
         		}
         }],
         bbar: new Ext.PagingToolbar({

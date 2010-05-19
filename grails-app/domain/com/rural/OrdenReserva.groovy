@@ -13,6 +13,11 @@ class OrdenReserva {
 	Double subTotal=0
 	Double total=0
 	Integer anio
+	Boolean ivaGralCheck = false
+	Boolean ivaRniCheck = false
+	Boolean exentoCheck = false
+	Boolean consFinalCheck = false
+	Boolean monotributoCheck = false
 	
 	Long numero
 	Date fechaAlta
