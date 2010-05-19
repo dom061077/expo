@@ -3,7 +3,6 @@ package com.rural
 class OrdenReservaException extends RuntimeException{
 	String message
 	OrdenReserva ordenReserva
-	boolean transactional = true 
 	
 	public OrdenReservaException(String message,OrdenReserva ord){
 		super(message)
@@ -13,6 +12,7 @@ class OrdenReservaException extends RuntimeException{
 }
 
 class OrdenReservaService {
+	boolean transactional = true 
 
     
 
@@ -23,13 +23,12 @@ class OrdenReservaService {
     	}
     	
     	ord.otrosconceptos.each{
-    		ord.subTotal=ord.subTotal+it.subTotal
+    		ord.subTotal+=it.subTotal
     	}
     	if (empresaInstance==null)
     		throw new OrdenReservaException(message,ord)
-    	ord.ivaGral=ord.subTotal+ord.subTotal*ord.ivaGral/100
-    	ord.ivaRni=ord.subTotal+ord.subTotal*ord.ivaRni/100	
-		ord.empresa=empresaInstance 
+    		
+		ord.empresa=empresaInstance
 		ord.fechaAlta=new Date()	
     	if(ord.validate()){
     		return ord.save();
