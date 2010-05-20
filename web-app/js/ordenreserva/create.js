@@ -886,7 +886,11 @@ Ext.onReady(function(){
 				productosjson:productosjsonStr,
 				anio:datos.exposicionId.anio,
 				'expo.id':datos.exposicionId.expo_id,
-				ivaGralCheck:datos.datosempresa
+				ivaGralCheck:datos.exposicionId.resins,
+				ivaRniCheck:datos.exposicionId.noins,
+				exentoCheck:datos.exposicionId.exento,
+				consFinalCheck:datos.exposicionId.monotributo,
+				monotributoCheck:(datos.exposicionId.resinsValor=='on'?true:false)
 				
 				
 				
