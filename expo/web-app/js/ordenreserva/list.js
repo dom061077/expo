@@ -50,17 +50,6 @@ Ext.onReady(function(){
         				var sm = grid.getSelectionModel();
         				var sel = sm.getSelected();
         				if (sm.hasSelection()){
-						var conn = new Ext.data.Connection();
-						conn.request({
-							url:'../recibo/createjson',
-							method:'POST',
-							params:{
-								id:empresaid
-							},
-							success:function(resp,opt){
-								
-							}
-						});
         					
 							open('ordenreservareporte?tipo=ORIGINAL&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.id
 							,'_blank')
@@ -75,9 +64,20 @@ Ext.onReady(function(){
         			var sm = grid.getSelectionModel();
         			var sel = sm.getSelected();
         			if (sm.hasSelection()){
+						var conn = new Ext.data.Connection();
+						conn.request({
+							url:'../recibo/createjson',
+							method:'POST',
+							params:{
+								id:empresaid
+							},
+							success:function(resp,opt){
+								open('ordenreservareporte?tipo=ORIGINAL&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.id
+										,'_blank')
+								
+							}
+						});
         					
-							open('ordenreservareporte?tipo=ORIGINAL&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.id
-							,'_blank')
         			}
         		}
         }],

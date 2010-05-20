@@ -34,11 +34,11 @@
 	<field name="total" class="java.lang.Double"/>
 	<field name="anio" class="java.lang.Integer"/>
 	<field name="expo.nombre" class="java.lang.String"/>
+	<field name="ivaGralCheck" class="java.lang.Boolean"/>
 	<variable name="subtotal" class="java.lang.Double"/>
 	<variable name="tipo" class="java.lang.String">
 		<variableExpression><![CDATA[($V{PAGE_NUMBER}==0 ? "ORIGINAL" : "DUPLICADO")]]></variableExpression>
-		<initialValueExpression><![CDATA["ORIGINAL"
-]]></initialValueExpression>
+		<initialValueExpression><![CDATA["ORIGINAL"]]></initialValueExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -229,6 +229,20 @@
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{expo.nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="179" y="109" width="33" height="13"/>
+				<textElement>
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[I.V.A:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="217" y="109" width="17" height="13"/>
+				<textElement>
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Boolean"><![CDATA[$F{ivaGralCheck}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
