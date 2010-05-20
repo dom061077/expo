@@ -886,10 +886,10 @@ Ext.onReady(function(){
 				productosjson:productosjsonStr,
 				anio:datos.exposicionId.anio,
 				'expo.id':datos.exposicionId.expo_id,
-				ivaGralCheck:datos.exposicionId.resins,
-				ivaRniCheck:datos.exposicionId.noins,
-				exentoCheck:datos.exposicionId.exento,
-				consFinalCheck:datos.exposicionId.monotributo,
+				ivaGralCheck:(datos.exposicionId.resins=='on'?true:false),
+				ivaRniCheck:(datos.exposicionId.noins=='on'?true:false),
+				exentoCheck:(datos.exposicionId.exento=='on'?true:false),
+				consFinalCheck:(datos.exposicionId.monotributo=='on'?true:false),
 				monotributoCheck:(datos.exposicionId.resinsValor=='on'?true:false)
 				
 				
