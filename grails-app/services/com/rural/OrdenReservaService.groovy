@@ -28,6 +28,9 @@ class OrdenReservaService {
     	if (empresaInstance==null)
     		throw new OrdenReservaException(message,ord)
     		
+    	ord.ivaGral = ord.subTotal*ord.porcentajeResIns/100
+    	ord.ivaRni = ord.subTotal*ord.porcentajeResNoIns/100	
+    	ord.total=ord.subTotal+ord.ivaGral+ord.ivaRni	
 		ord.empresa=empresaInstance
 		ord.fechaAlta=new Date()	
     	if(ord.validate()){

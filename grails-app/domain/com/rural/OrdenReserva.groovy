@@ -18,6 +18,8 @@ class OrdenReserva {
 	Boolean exentoCheck = false
 	Boolean consFinalCheck = false
 	Boolean monotributoCheck = false
+	Float porcentajeResIns
+	Float porcentajeResNoIns
 	
 	Long numero
 	Date fechaAlta

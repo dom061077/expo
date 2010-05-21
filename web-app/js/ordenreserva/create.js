@@ -889,8 +889,10 @@ Ext.onReady(function(){
 				ivaGralCheck:(datos.exposicionId.resins=='on'?true:false),
 				ivaRniCheck:(datos.exposicionId.noins=='on'?true:false),
 				exentoCheck:(datos.exposicionId.exento=='on'?true:false),
-				consFinalCheck:(datos.exposicionId.monotributo=='on'?true:false),
-				monotributoCheck:(datos.exposicionId.resinsValor=='on'?true:false)
+				consFinalCheck:(datos.exposicionId.consfinal=='on'?true:false),
+				monotributoCheck:(datos.exposicionId.monotributo=='on'?true:false),
+				porcentajeResIns:datos.exposicionId.resinsValor,
+				porcentajeResNoIns:datos.exposicionId.noinsValor
 				
 				
 				
