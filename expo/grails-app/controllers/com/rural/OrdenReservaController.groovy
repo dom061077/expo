@@ -129,6 +129,8 @@ class OrdenReservaController {
     	}
     	
     	def ordenReservaInstance = new OrdenReserva(params)
+    	ordenReservaInstance.porcentajeResIns=new Float(params.porcentajeResIns)
+    	ordenReservaInstance.porcentajeResNoIns=new Float(params.porcentajeResNoIns)
     	def detallejson = JSON.parse(params.detallejson)
     	def otrosconceptosjson = JSON.parse(params.otrosconceptosjson)
     	def productosjson = JSON.parse(params.productosjson)
@@ -142,7 +144,8 @@ class OrdenReservaController {
    	
    		iterarDetalleJson(ordenReservaInstance,detallejson)
    		iterarConceptos(ordenReservaInstance,otrosconceptosjson)
-   		
+   		log.debug("PORCENTAJE IVA RESINS: "+ordenReservaInstance.porcentajeResIns)
+   		log.debug("PORCENTAJE IVA RESNOINS: "+ordenReservaInstance.porcentajeResNoIns)
 		ordenReservaInstance=ordenReservaService.generarOrdenReserva(ordenReservaInstance,empresaInstance)
 		render(contentType: "text/json"){
 			success true
