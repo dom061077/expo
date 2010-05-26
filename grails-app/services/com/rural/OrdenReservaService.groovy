@@ -28,6 +28,8 @@ class OrdenReservaService {
     	if (empresaInstance==null)
     		throw new OrdenReservaException(message,ord)
     		
+    	log.debug("PORCENTAJE ResIns ANTES DEL CALCULO")
+    	log.debug("PROCENTAJE ResNoIns ANTES DEL CALCULO")
     	ord.ivaGral = ord.subTotal*ord.porcentajeResIns/100
     	ord.ivaRni = ord.subTotal*ord.porcentajeResNoIns/100	
     	ord.total=ord.subTotal+ord.ivaGral+ord.ivaRni	

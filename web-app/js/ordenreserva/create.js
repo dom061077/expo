@@ -170,7 +170,8 @@ Ext.onReady(function(){
 	
 	var subtotal_edit = new Ext.form.NumberField({
 		allowBlank:false,
-		maxLength:10
+		maxLength:10,
+		minValue:1
 	});
 	
 	var gridDetalleServicioContratado = new Ext.grid.EditorGridPanel({
@@ -744,14 +745,20 @@ Ext.onReady(function(){
 					 {xtype:'numberfield',
 					  fieldLabel:'Valor Res.Ins.',
 					  name:'resinsValor',
+					  allowBlank:false,
+					  minValue:0,
 					  id:'resinsvalorId',
-					  msgTarget:'under'
+					  msgTarget:'under',
+					  value:0
 					 },
 					 {xtype:'numberfield',
 					  fieldLabel:'Valor No Ins.',
 					  name:'noinsValor',
+					  allowBlank:false,
+					  minValue:0,
 					  id:'noinsvalorId',
-					  msgTarget:'under'
+					  msgTarget:'under',
+					  value:0
 					 }
 				]
 			})
@@ -801,6 +808,7 @@ Ext.onReady(function(){
 		radioHandler(check,checked);
 	});
 	
+	/*
 	Ext.getCmp('resinsvalorId').on('valid',function(wiz,datos){
 		var flag=false;
 		if (Ext.getCmp('noinsradioId').checked)
@@ -820,7 +828,7 @@ Ext.onReady(function(){
 				icon:Ext.MessageBox.ERROR,
 				buttons:Ext.MessageBox.OK
 			});
-	});
+	});*/
 	
 		
 	wizard.on('finish',function(wiz,datos){
@@ -829,6 +837,37 @@ Ext.onReady(function(){
 		alert(datos.datosempresaId.id);
 		alert(datos.datosempresaId.localidadFiscal);
 		*/
+		if (datos.exposicionId.resinsValor==0 && datos.exposicionId.noinsValor ){
+			Ext.MessageBox.show({
+				title:'Error',
+				msg:'Ingrese una valor mayor a cero para I.V.A Res. Ins.',
+				icon:Ext.MessageBox.ERROR,
+				buttons:Ext.MessageBox.OK
+			});
+			return false;
+		}
+		
+		var flag=false;
+		if (Ext.getCmp('noinsradioId').checked)
+			flag=true;	
+		if (Ext.getCmp('exentoId').checked)
+			flag=true;
+		if (Ext.getCmp('consfinalId').checked)
+			flag=true;
+		if (Ext.getCmp('monotributoId').checked)
+			flag=true;
+		if (Ext.getCmp('resinsradioId').checked)
+			flag=true;
+		if (!flag){
+			Ext.MessageBox.show({
+				title:'Error',
+				msg:'Seleccione una condición de I.V.A',
+				icon:Ext.MessageBox.ERROR,
+				buttons:Ext.MessageBox.OK
+			});
+			return false;
+		}
+		
 		var storeDetalle = gridDetalleServicioContratado.getStore();
 		var storeOtrosConceptos = gridOtrosConceptos.getStore();
 		var detallejsonArr=[];
@@ -932,6 +971,7 @@ Ext.onReady(function(){
 				}
 			}
 		});
+		
 	});
     
 	
