@@ -35,6 +35,10 @@
 	<field name="anio" class="java.lang.Integer"/>
 	<field name="expo.nombre" class="java.lang.String"/>
 	<field name="ivaGralCheck" class="java.lang.Boolean"/>
+	<field name="ivaRniCheck" class="java.lang.Boolean"/>
+	<field name="exentoCheck" class="java.lang.Boolean"/>
+	<field name="consFinalCheck" class="java.lang.Boolean"/>
+	<field name="monotributoCheck" class="java.lang.Boolean"/>
 	<variable name="subtotal" class="java.lang.Double"/>
 	<variable name="tipo" class="java.lang.String">
 		<variableExpression><![CDATA[($V{PAGE_NUMBER}==0 ? "ORIGINAL" : "DUPLICADO")]]></variableExpression>
@@ -231,19 +235,67 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{expo.nombre}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="179" y="109" width="33" height="13"/>
+				<reportElement x="174" y="109" width="33" height="13"/>
 				<textElement>
 					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[I.V.A:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="217" y="109" width="17" height="13"/>
+			<image>
+				<reportElement x="258" y="109" width="16" height="13"/>
+				<imageExpression class="java.io.File"><![CDATA[$F{ivaGralCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="208" y="109" width="57" height="13"/>
 				<textElement>
-					<font fontName="Tahoma"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Boolean"><![CDATA[$F{ivaGralCheck}]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Resp.Insc.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="277" y="109" width="50" height="13"/>
+				<textElement>
+					<font fontName="Tahoma" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No Resp.]]></text>
+			</staticText>
+			<image>
+				<reportElement x="322" y="109" width="16" height="13"/>
+				<imageExpression class="java.io.File"><![CDATA[$F{ivaRniCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="341" y="109" width="37" height="13"/>
+				<textElement>
+					<font fontName="Tahoma" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Exento]]></text>
+			</staticText>
+			<image>
+				<reportElement x="376" y="109" width="16" height="13"/>
+				<imageExpression class="java.io.File"><![CDATA[$F{exentoCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="394" y="109" width="55" height="13"/>
+				<textElement>
+					<font fontName="Tahoma" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cons.Final]]></text>
+			</staticText>
+			<image>
+				<reportElement x="446" y="109" width="16" height="13"/>
+				<imageExpression class="java.io.File"><![CDATA[$F{consFinalCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="465" y="109" width="61" height="13"/>
+				<textElement>
+					<font fontName="Tahoma" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monotributo]]></text>
+			</staticText>
+			<image>
+				<reportElement x="527" y="109" width="16" height="13"/>
+				<imageExpression class="java.io.File"><![CDATA[$F{monotributoCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
+			</image>
 		</band>
 	</pageHeader>
 	<columnHeader>
