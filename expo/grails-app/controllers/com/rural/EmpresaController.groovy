@@ -562,6 +562,7 @@ class EmpresaController {
 							}
 							log.debug("SE ENCONTRARON "+empresassimilares?.size()+" SIMILARES PARA $empresa.nombre")
 							if(empresassimilares){
+								log.debug("ITERANDO LAS EMPRESAS SIMILARES")
 								empresassimilares.each{
 									it.token=token
 									it.save()
