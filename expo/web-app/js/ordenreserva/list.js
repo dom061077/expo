@@ -69,7 +69,7 @@ Ext.onReady(function(){
 							url:'../recibo/createjson',
 							method:'POST',
 							params:{
-								id:empresaid
+								id:sel.data.id
 							},
 							success:function(resp,opt){
 								open('ordenreservareporte?tipo=ORIGINAL&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.id

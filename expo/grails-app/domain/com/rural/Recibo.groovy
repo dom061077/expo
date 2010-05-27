@@ -10,6 +10,8 @@ class Recibo {
     }
 	
 	static belongsTo = [ordenReserva:OrdenReserva]
+	
+	static hasMany = [cheques:Cheque]
 
     def sigNumero(){
     	def c = Recibo.createCriteria()
