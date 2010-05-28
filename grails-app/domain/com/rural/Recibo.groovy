@@ -3,7 +3,10 @@ package com.rural
 class Recibo {
 	Long numero
 	Date fechaAlta
+	Boolean anulado = false
 	Double total
+	Double efectivo
+	String concepto
 	OrdenReserva ordenReserva
     static constraints = {
 		numero(blank:true,nullable:true)
