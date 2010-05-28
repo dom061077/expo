@@ -16,12 +16,24 @@ class ReciboService {
 
     boolean transactional = true
 
-    Recibo generarRecibo(Long ordId) {
+    Recibo generarRecibo(Long ordId,String concepto,Double efectivo,cheques) {
     		def ord = OrdenReserva.get(ordId)
     		
+    		Double totalCancelado = 0
+    		ord.recibos.each{
+    			totalCancelado = totalCancelado + it.total
+    		}
+    		
     		if(ord){
-    			def recibo = new Recibo(fechaAlta:new Date(),ordenReserva:ord,total:ord.total)
+    			def recibo = new Recibo(fechaAlta:new Date(),ordenReserva:ord,efectivo:efectivo,concepto:concepto,total:0)
     			
+    			cheques.each{
+    				recibo.addToCheques(it)
+    				recibo.total=recibo.total+it.importe	
+    			}
+    			recibo.total=recibo.total+efectivo
+    			if ((recibo.total+totalCancelado)>ord.total)
+    				throw new ReciboException('El total ('+recibo.total+') de recibo supera el total ('+ord.total+') pendiente de pago de la orden de reserva',recibo)
     			if(recibo.save()){
     				return recibo
     			}else{
