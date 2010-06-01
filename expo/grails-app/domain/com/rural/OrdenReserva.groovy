@@ -20,6 +20,8 @@ class OrdenReserva {
 	Boolean monotributoCheck = false
 	Float porcentajeResIns=0
 	Float porcentajeResNoIns=0
+	String observacion
+	
 	
 	Long numero
 	Date fechaAlta

@@ -111,7 +111,8 @@ class OrdenReservaController {
     	def iterarDetalleJson = {OrdenReserva ord, def detalle->
     		def total=0
 	    	detalle.each{
-	    		ord.addToDetalle(new DetalleServicioContratado(sector:it.sector,lote:it.lote,subTotal:it.subTotal))
+	    		def sector = Sector.get(it.sector_id)
+	    		ord.addToDetalle(new DetalleServicioContratado(sector:sector,subTotal:it.subTotal))
 	    		total=total+it.subTotal
 	    	}
 	    	ord.total=total
@@ -138,10 +139,15 @@ class OrdenReservaController {
     		ordenReservaInstance.addToProductos(new ProductoExpuesto(descripcion:it.descripcion))
     		
     	}
-    	def empresaInstance = Empresa.get(params.id)
-    	empresaInstance.properties=ordenReservaInstance.empresa
+    	def empresaInstance
+    	if (params.id){
+	    	empresaInstance = Empresa.get(params.id)
+	    	empresaInstance.properties=ordenReservaInstance.empresa
+		}else{
+			empresaInstance = new Empresa(params.empresa.properties)
+			empresaInstance.usuario=authenticateService.userDomain()
+		}    	
    		ordenReservaInstance.usuario=authenticateService.userDomain()
-   	
    		iterarDetalleJson(ordenReservaInstance,detallejson)
    		iterarConceptos(ordenReservaInstance,otrosconceptosjson)
    		log.debug("PORCENTAJE IVA RESINS: "+ordenReservaInstance.porcentajeResIns)

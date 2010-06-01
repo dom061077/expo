@@ -4,13 +4,13 @@ package com.rural
 
 class DetalleServicioContratado {
 
-	String sector
-	String lote
 	Double subTotal=0
+	Sector sector
 	
 	OrdenReserva ordenReserva
-	static belongs = [ordenReserva:OrdenReserva]
+	static belongs = [ordenReserva:OrdenReserva,sector:Sector]
 	
     static constraints = {
+    	sector(blank:false,nullable:false)
     }
 }
