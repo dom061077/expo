@@ -3,6 +3,8 @@ import com.rural.Provincia;
 import com.rural.Departamento;
 import com.rural.Localidad;
 import com.rural.Exposicion;
+import com.rural.Lote
+import com.rural.Sector
 import com.rural.Vendedor
 import com.rural.Rubro
 import com.rural.SubRubro
@@ -101,10 +103,31 @@ class BootStrap {
 				provincia = new Provincia(nombre:"CATAMARCA").save()
 				provincia = new Provincia(nombre:"BUENOS AIRES").save()
 				
-				new Exposicion(nombre:"EXPO CONSTRUCCION").save()
-				new Exposicion(nombre:"EXPO TUCUMAN").save()
+				def expo = new Exposicion(nombre:"EXPO TUCUMAN")
+				def lote = new Lote(nombre:"EMPRENDIMIENTOS")
+				def sector = new Sector(nombre:"SECTOR Z")
+				lote.addToSectores(sector)
+				sector = new Sector(nombre:"SECTOR Y")
+				lote.addToSectores(sector)
+				lote.save()
+				
+				
+				expo.addToLotes(lote)
+				expo.save()
+				
+				expo=new Exposicion(nombre:"EXPO CONSTRUCCION")
+				lote = new Lote(nombre:"GANADERO")
+				sector = new Sector(nombre:"SECTOR A")
+				lote.addToSectores(sector)
+				sector = new Sector(nombre:"SECTOR B")
+				lote.addToSectores(sector)
+				expo.addToLotes(lote)
+				
 				
 				new Vendedor(nombre:'PRUEBA').save()
+				new Vendedor(nombre:"MARCELA").save()
+				
+				
 				
 				
 				Rubro rubro=new Rubro(nombreRubro:"CONSTRUCCION").save()

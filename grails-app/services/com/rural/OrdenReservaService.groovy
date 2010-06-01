@@ -17,16 +17,20 @@ class OrdenReservaService {
     
 
     OrdenReserva generarOrdenReserva(OrdenReserva ord,Empresa empresa) {
-    	def empresaInstance = empresa.save()
-    	ord.detalle.each{
-    		ord.subTotal=ord.subTotal+it.subTotal
-    	}
     	
     	ord.otrosconceptos.each{
     		ord.subTotal+=it.subTotal
     	}
-    	if (empresaInstance==null)
-    		throw new OrdenReservaException(message,ord)
+    	if (!empresa.validate()){
+    		throw new OrdenReservaException("Ocurrio un error al tratar de salvar los datos de la empresa. "
+    			+empresa.errors.allErrors,ord)
+   		}
+    	def empresaInstance = empresa.save()
+	    ord.detalle.each{
+    			ord.subTotal=ord.subTotal+it.subTotal
+    			if (ord.expo!=it.sector.lote.expo)
+	    				throw new OrdenReservaException("Sector asignado no pertenece a la Exposición",ord)
+    		}
     		
     	log.debug("PORCENTAJE ResIns ANTES DEL CALCULO")
     	log.debug("PROCENTAJE ResNoIns ANTES DEL CALCULO")
@@ -36,7 +40,9 @@ class OrdenReservaService {
 		ord.empresa=empresaInstance
 		ord.fechaAlta=new Date()	
     	if(ord.validate()){
-    		return ord.save();
+    		ord = ord.save();
+    		return ord
+    		
     	}else{
     		def message=null
     		ord.errors.allErrors.each{

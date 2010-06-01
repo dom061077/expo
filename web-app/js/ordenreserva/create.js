@@ -598,7 +598,7 @@ Ext.onReady(function(){
 				]
 			}),
 			new Ext.ux.Wiz.Card({
-				title:'Contacto',
+				title:'Contacto y Exposición',
 				id:'datoscontactoId',
 				monitorValid:true,
 	        							items:[{xtype: 'textfield',
@@ -664,8 +664,36 @@ Ext.onReady(function(){
 								        		id:'idCargorep',
 								        		layout:'form',
 								        		name:'cargoRep'
-								        	}
-	        							]
+								        	},{
+												xtype:'combo',
+												fieldLabel:'Exposición',
+												name:'exposicionField',
+												hiddenName:'expo_id',
+												valueField:'id',
+												displayField:'nombre',
+												msgTarget:'under',
+												store:exposicionStore,
+												width:200,
+												listWidth:200,
+												mode:'local',
+												id:'exposicionCombo',
+												allowBlank:false,
+												forceSelection:true,
+												allowBlank:false},
+												{xtype:'combo',
+												 id:'idAnio',
+												 fieldLabel:'Año',
+												 name:'anio',
+												 displayField:'descripcion',
+												 valueField:'id',
+												 mode:'local',
+												 forceSelection:true,
+												 store: new Ext.data.SimpleStore({
+												 	fields:['id','descripcion'],
+												 	data : [['2010','2010'],['2011','2011'],['2012','2012']]
+												 })
+											 	}								        	
+	        								]
 			}),
 			new Ext.ux.Wiz.Card({
 				title:'Datos del Servicio Contratado',
@@ -689,34 +717,7 @@ Ext.onReady(function(){
 				title:'Exposición',
 				id:'exposicionId',
 				monitorValid:true,
-				items:[{
-					xtype:'combo',
-					fieldLabel:'Exposición',
-					name:'exposicionField',
-					hiddenName:'expo_id',
-					valueField:'id',
-					displayField:'nombre',
-					msgTarget:'under',
-					store:exposicionStore,
-					width:200,
-					listWidth:200,
-					mode:'local',
-					id:'exposicionCombo',
-					allowBlank:false,
-					forceSelection:true,
-					allowBlank:false},
-					{xtype:'combo',
-					 id:'idAnio',
-					 fieldLabel:'Año',
-					 name:'anio',
-					 displayField:'descripcion',
-					 valueField:'id',
-					 mode:'local',
-					 forceSelection:true,
-					 store: new Ext.data.SimpleStore({
-					 	fields:['id','descripcion'],
-					 	data : [['2010','2010'],['2011','2011'],['2012','2012']]
-					 })},
+				items:[
 					{xtype:'radio',
 					 id:'resinsradioId',
 					 fieldLabel:'Res.Ins.',
