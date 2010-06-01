@@ -109,7 +109,7 @@ class BootStrap {
 				lote.addToSectores(sector)
 				sector = new Sector(nombre:"SECTOR Y")
 				lote.addToSectores(sector)
-				lote.save()
+				//lote.save()
 				
 				
 				expo.addToLotes(lote)
@@ -122,7 +122,7 @@ class BootStrap {
 				sector = new Sector(nombre:"SECTOR B")
 				lote.addToSectores(sector)
 				expo.addToLotes(lote)
-				
+				expo.save()
 				
 				new Vendedor(nombre:'PRUEBA').save()
 				new Vendedor(nombre:"MARCELA").save()
