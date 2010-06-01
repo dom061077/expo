@@ -140,13 +140,48 @@ Ext.onReady(function(){
 
         			
 //-------------------Grid para Editar el detalle de servicios contratados-------------
+    
+	var loteModel = Ext.data.Record.create([
+		'id','nombre'
+	]);
+	var storeLote = new Ext.data.JsonStore({
+		autoLoad:true,
+		root:'rows',
+		url: '../lote/listjson',
+		fields: ['id','nombre'],
+		reader: new Ext.data.ArrayReader(
+			{id:'id'},
+			loteModel
+			)
+		
+	});
+	function lote_nombre(val){
+		return storeLote.queryBy(function(rec){
+				return rec.data.id == val;
+			}).itemAt(0).data.nombre;
+	}
+	
+	var storeSector = new Ext.data.JsonStore({
+		autoLoad:true,
+		root:'rows',
+		url:'../sector/listjson',
+		fields: ['id','nombre']
+	});
+	
+	function sector_nombre(val){
+		return storeSector.queryBy(function(rec){
+		}).itamAt(0).data.nombre;
+		
+	}
+	
 	var detalleModel =  Ext.data.Record.create([
 		'id',
 		'sector',
 		'lote',
 		{name:'subTotal',type:'float'}
-	]);        			
+	]);	
 	var storeDetalle = new Ext.data.Store({
+		//fields:['id','nombre'],
 		data:[
 			/*[1,'sector1','lote1',2.5],
 			[2,'sector1','lote1',2.5],
@@ -156,6 +191,22 @@ Ext.onReady(function(){
 			{id:'id'},
 			detalleModel
 			)
+	});
+	
+	var comboboxLote = new Ext.form.ComboBox({
+		triggerAction: 'all',
+		mode: 'local',
+		store : storeLote,
+		displayField: 'nombre',
+		valueField:'id'
+	});
+	
+	var comboboxSector = new Ext.form.ComboBox({
+		triggerAction: 'all',
+		mode: 'local',
+		store: storeSector,
+		displayField: 'nombre',
+		valueField: 'id'
 	});
 	
 	var sector_edit = new Ext.form.TextField({
@@ -211,8 +262,8 @@ Ext.onReady(function(){
 			],
 			columns:[
 				/*{header:'id',dataIndex:'id'},*/
-				{header:'Sector',dataIndex:'sector',editor:sector_edit},
-				{header:'Lote',dataIndex:'lote',editor:lote_edit},
+				{header:'Lote',dataIndex:'lote',editor:comboboxLote, renderer:lote_nombre},
+				{header:'Sector',dataIndex:'sector',editor:comboboxSector,renderer:sector_nombre},
 				{header:'Importe',dataIndex:'subTotal',editor:subtotal_edit}
 			]
 	});
@@ -229,7 +280,7 @@ Ext.onReady(function(){
 	var storeOtrosConceptos = new Ext.data.Store({
 		data:[],
 		reader: new Ext.data.ArrayReader(
-			{id:'id'},
+			
 			['id','descripcion',{name:'subTotal',type:'float'}]
 			)
 	});
@@ -714,7 +765,7 @@ Ext.onReady(function(){
 				items:[gridProductosExpuestos]
 			}),
 			new Ext.ux.Wiz.Card({
-				title:'Exposición',
+				title:'Datos Impositivos',
 				id:'exposicionId',
 				monitorValid:true,
 				items:[
@@ -768,17 +819,17 @@ Ext.onReady(function(){
 	});
 	wizard.on('nextstep',function(wizard){
 	   var sel = grid.getSelectionModel().getSelected();
-       if (this.currentCard > 0 && !sel) {
+       /*if (this.currentCard > 0) {
 	           this.cardPanel.getLayout().setActiveItem(this.currentCard - 1);
        }else{
        		if(this.currentCard==1)
-		       loaddatosempresa(sel.data.id);
+		       loaddatosempresa(sel.data.id);*/
 		    if(this.currentCard==2)
 		    	Ext.getCmp('nombreId').focus('',10);
-		    if(this.currentCard==4 && gridDetalleServicioContratado.getStore().getCount()==0)
-		    	this.cardPanel.getLayout().setActiveItem(this.currentCard - 1);
+		    //if(this.currentCard==4 && gridDetalleServicioContratado.getStore().getCount()==0)
+		    //	this.cardPanel.getLayout().setActiveItem(this.currentCard - 1);
 		    	
-       }
+       //}
 	});
 	
 	function radioHandler(check,checked){
@@ -974,6 +1025,7 @@ Ext.onReady(function(){
 		});
 		
 	});
+	
     
 	
 	wizard.show();
