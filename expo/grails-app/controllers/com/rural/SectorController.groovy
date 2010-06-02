@@ -19,7 +19,7 @@ class SectorController {
     		}
     	}
     	render(contentType:"text/json"){
-    		total Sector.count()
+    		total sectores.size()
     		rows{
     			sectores.each{
     				row(id:it.id,nombre:it.nombre)
