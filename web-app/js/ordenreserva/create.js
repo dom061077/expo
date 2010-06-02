@@ -11,6 +11,60 @@ Ext.onReady(function(){
 	
     
 /*grilla de búsqueda de empresa*/
+	
+	function validarcuit(cuit){
+		if (typeof(cuit) == 'undefined')
+			return true;
+		if (cuit == '')
+			return true;
+		var coeficiente = new Array(10);
+		var cuit_rearmado='';
+		coeficiente[0]=5;
+		coeficiente[1]=4;
+		coeficiente[2]=3;
+		coeficiente[3]=2;
+		coeficiente[4]=7;
+		coeficiente[5]=6;
+		coeficiente[6]=5;
+		coeficiente[7]=4;
+		coeficiente[8]=3;
+		coeficiente[9]=2;
+		var resultado=1;
+		var verificador;
+		var veri_nro;
+		/*for (var i=0; i < cuit.length; i= i +1) {   
+			if ((String.charCodeAt(cuit.substring(i, 1)) >= 48) && (String.charCodeAt(cuit.substring(i, 1)) <= 57))
+			{
+				cuit_rearmado = cuit_rearmado + cuit.substring(i, 1);
+			}
+		}*/
+		cuit_rearmado= cuit.replace('-','');
+		cuit_rearmado = cuit_rearmado.replace('-','');
+	
+		if (cuit_rearmado.length != 11) {  // si to estan todos los digitos
+			resultado=0;
+		} else {
+			sumador = 0;
+			verificador = cuit_rearmado.substr(10, 1); //tomo el digito verificador
+	
+			for (i=0; i <=9; i=i+1) { 
+				sumador = sumador + (cuit_rearmado.substr(i, 1)) * coeficiente[i];//separo cada digito y lo multiplico por el coeficiente
+			}
+	
+			resultado = sumador % 11;
+			resultado = 11 - resultado;  //saco el digito verificador
+			veri_nro = verificador;
+	
+			if (veri_nro != resultado) {
+				resultado=0;
+			} else { 
+				cuit_rearmado = cuit_rearmado.substr(0, 2) + "-" + cuit_rearmado.substr(2, 8) + "-" + cuit_rearmado.substr(10, 1); 
+			}
+		}		
+		return resultado;		
+	}
+	
+	
 	function loaddatosempresa(empresaid){
 		var conn = new Ext.data.Connection();
 		conn.request({
@@ -145,7 +199,7 @@ Ext.onReady(function(){
 		'id','nombre'
 	]);
 	var storeLote = new Ext.data.JsonStore({
-		autoLoad:true,
+		//autoLoad:true,
 		root:'rows',
 		url: '../lote/listjson',
 		fields: ['id','nombre'],
@@ -168,7 +222,7 @@ Ext.onReady(function(){
 	]);
 	
 	var storeSector = new Ext.data.JsonStore({
-		autoLoad:true,
+		//autoLoad:true,
 		root:'rows',
 		url:'../sector/listjson',
 		fields: ['id','nombre'],
@@ -678,7 +732,14 @@ Ext.onReady(function(){
 							        			name:'codigoPostal',
 							        			id:'idCodigopostal',
 							        			allowBlank:false
-							        		}
+							        		},{
+											 		xtype:'button',
+											 		listeners:{
+											 			'click':function(){
+											 				alert(validarcuit(Ext.getCmp('cuitId').getValue()));
+											 			}
+											 		}
+											 	}
 				]
 			}),
 			new Ext.ux.Wiz.Card({
@@ -754,6 +815,8 @@ Ext.onReady(function(){
 												name:'exposicionField',
 												hiddenName:'expo_id',
 												valueField:'id',
+												hiddenName:'exposicioid',
+												hiddenField:'id',
 												displayField:'nombre',
 												msgTarget:'under',
 												store:exposicionStore,
@@ -763,7 +826,18 @@ Ext.onReady(function(){
 												id:'exposicionCombo',
 												allowBlank:false,
 												forceSelection:true,
-												allowBlank:false},
+												allowBlank:false,
+												listeners: {
+														'select': function(cmb,rec,idx){
+															var lote = Ext.getCmp('comboboxLoteId');
+															//lote.clearValue();
+															lote.store.load({
+																params:{'exposicion_id':Ext.getCmp('exposicionCombo').hiddenField.value}
+															});
+															lote.enable();
+														}
+													}
+												},
 												{xtype:'combo',
 												 id:'idAnio',
 												 fieldLabel:'AÃ±o',
@@ -776,7 +850,7 @@ Ext.onReady(function(){
 												 	fields:['id','descripcion'],
 												 	data : [['2010','2010'],['2011','2011'],['2012','2012']]
 												 })
-											 	}								        	
+											 	}
 	        								]
 			}),
 			new Ext.ux.Wiz.Card({

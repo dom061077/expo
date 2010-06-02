@@ -11,9 +11,15 @@ class LoteController {
 
 	def listjson = {
 		log.info("INGRESANDO AL METODO listjson DEL CONTROLLER LoteController")
-		def lotes = Lote.list() 
+		log.debug("PARAMETROS $params")
+		def c = Lote.createCriteria()
+		def lotes = c.list{
+			expo{
+				eq('id', new Long(params.exposicion_id))
+			}
+		} 
 		render(contentType:"text/json"){
-			total Lote.count()
+			total lotes.size()
 			rows{
 				lotes.each{
 					row(id:it.id,nombre:it.nombre)
