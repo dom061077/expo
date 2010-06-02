@@ -11,7 +11,13 @@ class SectorController {
     
     def listjson = {
     	log.info("INGRESANDO AL METODO listjson DEL CONTROLLER SectorController")
-    	def sectores = Sector.list()
+    	log.debug("PARAMETROS INGRESADOS: $params")
+    	def c = Sector.createCriteria()
+    	def sectores = c.list{
+    		lote{
+    			eq('id',new Long(params.lote_id))
+    		}
+    	}
     	render(contentType:"text/json"){
     		total Sector.count()
     		rows{
