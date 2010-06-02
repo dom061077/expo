@@ -156,28 +156,46 @@ Ext.onReady(function(){
 		
 	});
 	function lote_nombre(val){
+		if(val>0)
 		return storeLote.queryBy(function(rec){
 				return rec.data.id == val;
 			}).itemAt(0).data.nombre;
+		else
+			return 'Seleccione Lote';
 	}
+	var sectorModel = Ext.data.Record.create([
+		'id','nombre'
+	]);
 	
 	var storeSector = new Ext.data.JsonStore({
 		autoLoad:true,
 		root:'rows',
 		url:'../sector/listjson',
-		fields: ['id','nombre']
+		fields: ['id','nombre'],
+		reader: new Ext.data.ArrayReader(
+			{id:'id'},
+			sectorModel	
+		)
 	});
 	
 	function sector_nombre(val){
-		return storeSector.queryBy(function(rec){
-		}).itamAt(0).data.nombre;
+		if(val>0){
+			var busqueda=storeSector.queryBy(function(rec){
+					return rec.data.id == val;
+				});
+			if (busqueda.itemAt(0))
+				return busqueda.itemAt(0).data.nombre;
+			else
+				return '';
+		}else
+			return 'Seleccione Sector';
 		
 	}
 	
 	var detalleModel =  Ext.data.Record.create([
 		'id',
-		'sector',
 		'lote',
+		'sector',
 		{name:'subTotal',type:'float'}
 	]);	
 	var storeDetalle = new Ext.data.Store({
@@ -195,14 +213,28 @@ Ext.onReady(function(){
 	
 	var comboboxLote = new Ext.form.ComboBox({
 		triggerAction: 'all',
+		id:'comboboxLoteId',
 		mode: 'local',
 		store : storeLote,
 		displayField: 'nombre',
-		valueField:'id'
+		valueField:'id',
+		hiddenName:'lote_id',
+		hiddenField:'id',
+		listeners: {
+			'select': function(cmb,rec,idx){
+				var sector = Ext.getCmp('comboboxSectorId');
+				//sector.clearValue();
+				sector.store.load({
+					params:{'lote_id':Ext.getCmp('comboboxLoteId').hiddenField.value}
+				});
+				sector.enable();
+			}
+		}
 	});
 	
 	var comboboxSector = new Ext.form.ComboBox({
 		triggerAction: 'all',
+		id:'comboboxSectorId',
 		mode: 'local',
 		store: storeSector,
 		displayField: 'nombre',
@@ -238,7 +270,7 @@ Ext.onReady(function(){
 				 	if(gridDetalleServicioContratado.getStore().getCount()<3){
 						gridDetalleServicioContratado.getStore().insert(
 							(gridDetalleServicioContratado.getStore().getCount()-1>=0?gridDetalleServicioContratado.getStore().getCount():0)
-							,new detalleModel({id:0,sector:'Ingrese el Sector',lote:'Ingrese el Lote',subTotal:0}));
+							,new detalleModel({id:0,sector:null,lote:null,subTotal:0}));
 						gridDetalleServicioContratado.startEditing(gridDetalleServicioContratado.getStore().getCount()-1,0);
 				 	}else{
 				 		Ext.MessageBox.show({
@@ -278,11 +310,12 @@ Ext.onReady(function(){
 		{name:'subTotal',type:'float'}
 	]);
 	var storeOtrosConceptos = new Ext.data.Store({
+		
 		data:[],
 		reader: new Ext.data.ArrayReader(
-			
-			['id','descripcion',{name:'subTotal',type:'float'}]
-			)
+			{id:'id'},	
+			otrosConceptosModel
+		)
 	});
 	
 	var descripcion_edit = new Ext.form.TextField({
