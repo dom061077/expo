@@ -17,7 +17,7 @@ Ext.onReady(function(){
 	cuitVal: /^\d{2}\-\d{8}\-\d{1}$/, 
 	//cuitMask:/d{2}\-\d{8}\-\d{1}$/,
 	//cuitRe:/^\d{2}\-\d{8}\-\d{1}$/,
-	cuitText:'C.U.I.T inválido',
+	cuitText:'Ingrese un C.U.I.T correcto',
 	cuit :
 			function (cuit){
 				
@@ -255,7 +255,7 @@ Ext.onReady(function(){
 	var detalleModel =  Ext.data.Record.create([
 		'id',
 		'lote',
-		'sector',
+		'sector_id',
 		{name:'subTotal',type:'float'}
 	]);	
 	var storeDetalle = new Ext.data.Store({
@@ -355,7 +355,7 @@ Ext.onReady(function(){
 			columns:[
 				/*{header:'id',dataIndex:'id'},*/
 				{header:'Lote',dataIndex:'lote',editor:comboboxLote, renderer:lote_nombre},
-				{header:'Sector',dataIndex:'sector',editor:comboboxSector,renderer:sector_nombre},
+				{header:'Sector',dataIndex:'sector_id',editor:comboboxSector,renderer:sector_nombre},
 				{header:'Importe',dataIndex:'subTotal',editor:subtotal_edit}
 			]
 	});
@@ -822,7 +822,7 @@ Ext.onReady(function(){
 												name:'exposicionField',
 												hiddenName:'expo_id',
 												valueField:'id',
-												hiddenName:'exposicioid',
+												hiddenName:'exposicionid',
 												hiddenField:'id',
 												displayField:'nombre',
 												msgTarget:'under',
@@ -925,6 +925,12 @@ Ext.onReady(function(){
 					  id:'noinsvalorId',
 					  msgTarget:'under',
 					  value:0
+					 },
+					 {xtype:'textfield',
+					  fieldLabel:'Observación',
+					  maxLength:255,
+					  name:'observacion',
+					  id:'observacionId'
 					 }
 				]
 			})
@@ -933,13 +939,45 @@ Ext.onReady(function(){
 	});
 	wizard.on('nextstep',function(wizard){
 	   var sel = grid.getSelectionModel().getSelected();
-       /*if (this.currentCard > 0) {
-	           this.cardPanel.getLayout().setActiveItem(this.currentCard - 1);
-       }else{
-       		if(this.currentCard==1)
-		       loaddatosempresa(sel.data.id);*/
-		    if(this.currentCard==2)
-		    	Ext.getCmp('nombreId').focus('',10);
+	   if(this.currentCard==1){
+			   if(sel){
+				  		loaddatosempresa(sel.data.id);
+			   }else{
+						Ext.getCmp('empresaId').setValue(null);
+						Ext.getCmp('nombreId').setValue(null);
+						Ext.getCmp('razonsocialId').setValue(null);
+						Ext.getCmp('cuitId').setValue(null);
+						Ext.getCmp('direccionId').setValue(null);
+						Ext.getCmp('telefono1Id').setValue(null);
+						Ext.getCmp('telefono2Id').setValue(null);
+						Ext.getCmp('idProvincia').setValue(null);
+						Ext.getCmp('idLocalidad').setValue(null);
+						Ext.getCmp('idVendedor').setValue(null);
+						Ext.getCmp('idVendedor').hiddenField.value=null;
+						Ext.getCmp('idNombreRepresentante').setValue(null);
+						Ext.getCmp('idTelefonoRepresentante1').setValue(null);
+						Ext.getCmp('idTelefonoRepresentante2').setValue(null);
+						Ext.getCmp('idTelefonoRepresentante3').setValue(null);
+						Ext.getCmp('idEmail').setValue(null);
+						Ext.getCmp('idSitioweb').setValue(null);
+						Ext.getCmp('idRubro').setValue(null);
+						Ext.getCmp('idRubro').hiddenField.value=null;
+						Ext.getCmp('idCodigopostal').setValue(null);
+						Ext.getCmp('idCargorep').setValue(null);
+						var subrubroCmb = Ext.getCmp('idSubrubro');
+						subrubroCmb.clearValue();
+						subrubroCmb.store.load({
+							params:{'rubroid':null}
+						});
+						subrubroCmb.enable();
+						Ext.getCmp('idSubrubro').setValue(null);
+						Ext.getCmp('idSubrubro').hiddenField.value=null;
+						Ext.getCmp('idDnirep').setValue(null);
+			   			
+			   }
+	   }
+       if(this.currentCard==2)
+		  	Ext.getCmp('nombreId').focus('',10);
 		    //if(this.currentCard==4 && gridDetalleServicioContratado.getStore().getCount()==0)
 		    //	this.cardPanel.getLayout().setActiveItem(this.currentCard - 1);
 		    	
@@ -1063,44 +1101,41 @@ Ext.onReady(function(){
 			method:'POST',
 			params:{
 				id:datos.datosempresaId.id,
-				nombre:datos.datosempresaId.nombre,
-				codigoPostal:datos.datosempresaId.codigoPostal,
-				nombreRepresentante:datos.datoscontactoId.nombreRepresentante,
-				telefono1:datos.datosempresaId.telefono1,
-				telefono2:datos.datosempresaId.telefono2,
-				cuit:datos.datosempresaId.cuit,
-				direccion:datos.datosempresaId.direccion,
-				telefonoRepresentante1:datos.datoscontactoId.telefonoRepresentante1,
-				telefonoRepresentante2:datos.datoscontactoId.telefonoRepresentante2,
-				telefonoRepresentante3:datos.datoscontactoId.telefonoRepresentante3,
-				'subrubro.id':datos.datosempresaId.subrubro_id,
-				dniRep:datos.datoscontactoId.dniRep,
-				email:datos.datoscontactoId.email,
-				cargoRep:datos.datoscontactoId.cargoRep,
-				dniRep:datos.datoscontactoId.dniRep,
-				sitioWeb:datos.datoscontactoId.sitioWeb,
-				observaciones:datos.datosempresaId.observaciones,
-				razonSocial:datos.datosempresaId.razonSocial,
-				direccionFiscal:datos.datosempresaId.direccionFiscal,
-				localidadFiscal:datos.datosempresaId.localidadFiscal,
-				provinciaFiscal:datos.datosempresaId.provinciaFiscal,
-				codigoPostal:datos.datosempresaId.codigoPostal,
-				'vendedor.id':datos.datosempresaId.vendedor_id,
+				'empresa.nombre':datos.datosempresaId.nombre,
+				'empresa.codigoPostal':datos.datosempresaId.codigoPostal,
+				'empresa.nombreRepresentante':datos.datoscontactoId.nombreRepresentante,
+				'empresa.telefono1':datos.datosempresaId.telefono1,
+				'empresa.telefono2':datos.datosempresaId.telefono2,
+				'empresa.cuit':datos.datosempresaId.cuit,
+				'empresa.direccion':datos.datosempresaId.direccion,
+				'empresa.telefonoRepresentante1':datos.datoscontactoId.telefonoRepresentante1,
+				'empresa.telefonoRepresentante2':datos.datoscontactoId.telefonoRepresentante2,
+				'empresa.telefonoRepresentante3':datos.datoscontactoId.telefonoRepresentante3,
+				'empresa.subrubro.id':datos.datosempresaId.subrubro_id,
+				'empresa.dniRep':datos.datoscontactoId.dniRep,
+				'empresa.email':datos.datoscontactoId.email,
+				'empresa.cargoRep':datos.datoscontactoId.cargoRep,
+				'empresa.dniRep':datos.datoscontactoId.dniRep,
+				'empresa.sitioWeb':datos.datoscontactoId.sitioWeb,
+				'empresa.razonSocial':datos.datosempresaId.razonSocial,
+				'empresa.direccionFiscal':datos.datosempresaId.direccionFiscal,
+				'empresa.localidadFiscal':datos.datosempresaId.localidadFiscal,
+				'empresa.provinciaFiscal':datos.datosempresaId.provinciaFiscal,
+				'empresa.codigoPostal':datos.datosempresaId.codigoPostal,
+				'empresa.vendedor.id':datos.datosempresaId.vendedor_id,
 				detallejson:detallejsonStr,
 				otrosconceptosjson:otrosconceptosjsonStr,
 				productosjson:productosjsonStr,
-				anio:datos.exposicionId.anio,
-				'expo.id':datos.exposicionId.expo_id,
+				anio:datos.datoscontactoId.anio,
+				'expo.id':datos.datoscontactoId.exposicionid,
 				ivaGralCheck:(datos.exposicionId.resins=='on'?true:false),
 				ivaRniCheck:(datos.exposicionId.noins=='on'?true:false),
 				exentoCheck:(datos.exposicionId.exento=='on'?true:false),
 				consFinalCheck:(datos.exposicionId.consfinal=='on'?true:false),
 				monotributoCheck:(datos.exposicionId.monotributo=='on'?true:false),
 				porcentajeResIns:datos.exposicionId.resinsValor,
-				porcentajeResNoIns:datos.exposicionId.noinsValor
-				
-				
-				
+				porcentajeResNoIns:datos.exposicionId.noinsValor,
+				observacion:datos.exposicionId.observacion
 			},
 			success: function(resp,opt){
 				var respuesta = Ext.decode(resp.responseText);
@@ -1115,7 +1150,7 @@ Ext.onReady(function(){
 							}
 						});
 				}else				
-					window.location='ordenreservareporte?target=_blank&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+respuesta.ordenid
+					;//window.location='ordenreservareporte?target=_blank&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+respuesta.ordenid
 			},
 			failure: function(resp,opt){
 				var respuesta = Ext.decode(resp.responseText);
