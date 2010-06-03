@@ -7,63 +7,69 @@ Ext.onReady(function(){
 		root:'rows',
 		url:'../empresa/listjson',
 		fields:['id','nombre']
-	});*/
+	});
+	/^\d{2}\-\d{8}\-\d{1}$/,
+	*/
 	
     
 /*grilla de búsqueda de empresa*/
-	
-	function validarcuit(cuit){
-		if (typeof(cuit) == 'undefined')
-			return true;
-		if (cuit == '')
-			return true;
-		var coeficiente = new Array(10);
-		var cuit_rearmado='';
-		coeficiente[0]=5;
-		coeficiente[1]=4;
-		coeficiente[2]=3;
-		coeficiente[3]=2;
-		coeficiente[4]=7;
-		coeficiente[5]=6;
-		coeficiente[6]=5;
-		coeficiente[7]=4;
-		coeficiente[8]=3;
-		coeficiente[9]=2;
-		var resultado=1;
-		var verificador;
-		var veri_nro;
-		/*for (var i=0; i < cuit.length; i= i +1) {   
-			if ((String.charCodeAt(cuit.substring(i, 1)) >= 48) && (String.charCodeAt(cuit.substring(i, 1)) <= 57))
-			{
-				cuit_rearmado = cuit_rearmado + cuit.substring(i, 1);
+	Ext.apply(Ext.form.VTypes,{
+	cuitVal: /^\d{2}\-\d{8}\-\d{1}$/, 
+	//cuitMask:/d{2}\-\d{8}\-\d{1}$/,
+	//cuitRe:/^\d{2}\-\d{8}\-\d{1}$/,
+	cuitText:'C.U.I.T invÃ¡lido',
+	cuit :
+			function (cuit){
+				
+				if (!Ext.form.VTypes.cuitVal.test(cuit))
+					return false;
+				if (typeof(cuit) == 'undefined')
+					return true;
+				if (cuit == '')
+					return true;
+				var coeficiente = new Array(10);
+				var cuit_rearmado='';
+				coeficiente[0]=5;
+				coeficiente[1]=4;
+				coeficiente[2]=3;
+				coeficiente[3]=2;
+				coeficiente[4]=7;
+				coeficiente[5]=6;
+				coeficiente[6]=5;
+				coeficiente[7]=4;
+				coeficiente[8]=3;
+				coeficiente[9]=2;
+				var resultado=1;
+				var verificador;
+				var veri_nro;
+				cuit_rearmado= cuit.replace('-','');
+				cuit_rearmado = cuit_rearmado.replace('-','');
+			
+				if (cuit_rearmado.length != 11) {  // si to estan todos los digitos
+					resultado=0;
+				} else {
+					sumador = 0;
+					verificador = cuit_rearmado.substr(10, 1); //tomo el digito verificador
+			
+					for (i=0; i <=9; i=i+1) { 
+						sumador = sumador + (cuit_rearmado.substr(i, 1)) * coeficiente[i];//separo cada digito y lo multiplico por el coeficiente
+					}
+			
+					resultado = sumador % 11;
+					resultado = 11 - resultado;  //saco el digito verificador
+					veri_nro = verificador;
+			
+					if (veri_nro != resultado) {
+						//resultado=0;
+						return false;
+					} else { 
+						//cuit_rearmado = cuit_rearmado.substr(0, 2) + "-" + cuit_rearmado.substr(2, 8) + "-" + cuit_rearmado.substr(10, 1);
+						return true;
+					}
+				}		
+						
 			}
-		}*/
-		cuit_rearmado= cuit.replace('-','');
-		cuit_rearmado = cuit_rearmado.replace('-','');
-	
-		if (cuit_rearmado.length != 11) {  // si to estan todos los digitos
-			resultado=0;
-		} else {
-			sumador = 0;
-			verificador = cuit_rearmado.substr(10, 1); //tomo el digito verificador
-	
-			for (i=0; i <=9; i=i+1) { 
-				sumador = sumador + (cuit_rearmado.substr(i, 1)) * coeficiente[i];//separo cada digito y lo multiplico por el coeficiente
-			}
-	
-			resultado = sumador % 11;
-			resultado = 11 - resultado;  //saco el digito verificador
-			veri_nro = verificador;
-	
-			if (veri_nro != resultado) {
-				resultado=0;
-			} else { 
-				cuit_rearmado = cuit_rearmado.substr(0, 2) + "-" + cuit_rearmado.substr(2, 8) + "-" + cuit_rearmado.substr(10, 1); 
-			}
-		}		
-		return resultado;		
-	}
-	
+		});
 	
 	function loaddatosempresa(empresaid){
 		var conn = new Ext.data.Connection();
@@ -622,6 +628,7 @@ Ext.onReady(function(){
 							fieldLabel:'C.U.I.T',
 							allowBlank:false,
 							msgTarget:'under',
+							vtype:'cuit',
 							name:'cuit'
 						},{
 							xtype:'textfield',
