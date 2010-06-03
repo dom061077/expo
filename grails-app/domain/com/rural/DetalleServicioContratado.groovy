@@ -5,12 +5,12 @@ package com.rural
 class DetalleServicioContratado {
 
 	Double subTotal=0
-	Sector sector
+	Lote lote
 	
 	OrdenReserva ordenReserva
-	static belongs = [ordenReserva:OrdenReserva,sector:Sector]
+	static belongs = [ordenReserva:OrdenReserva,lote:Lote]
 	
     static constraints = {
-    	sector(blank:false,nullable:false)
+    	lote(blank:false,nullable:false)
     }
 }

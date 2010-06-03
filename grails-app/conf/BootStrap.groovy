@@ -106,22 +106,16 @@ class BootStrap {
 				def expo = new Exposicion(nombre:"EXPO TUCUMAN")
 				def lote = new Lote(nombre:"EMPRENDIMIENTOS")
 				def sector = new Sector(nombre:"SECTOR Z")
-				lote.addToSectores(sector)
-				sector = new Sector(nombre:"SECTOR Y")
-				lote.addToSectores(sector)
-				//lote.save()
+				sector.addToLotes(lote)
 				
-				
-				expo.addToLotes(lote)
+				expo.addToSectores(sector)
 				expo.save()
 				
 				expo=new Exposicion(nombre:"EXPO CONSTRUCCION")
 				lote = new Lote(nombre:"GANADERO")
 				sector = new Sector(nombre:"SECTOR A")
-				lote.addToSectores(sector)
-				sector = new Sector(nombre:"SECTOR B")
-				lote.addToSectores(sector)
-				expo.addToLotes(lote)
+				sector.addToLotes(lote)
+				expo.addToSectores(sector)
 				expo.save()
 				
 				new Vendedor(nombre:'PRUEBA').save()

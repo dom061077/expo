@@ -28,7 +28,7 @@ class OrdenReservaService {
     	def empresaInstance = empresa.save()
 	    ord.detalle.each{
     			ord.subTotal=ord.subTotal+it.subTotal
-    			if (ord.expo!=it.sector.lote.expo)
+    			if (ord.expo!=it.lote.sector.expo)
 	    				throw new OrdenReservaException("Sector asignado no pertenece a la Exposición",ord)
     		}
     		
