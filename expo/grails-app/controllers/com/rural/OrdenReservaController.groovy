@@ -130,6 +130,7 @@ class OrdenReservaController {
     	}
     	
     	def ordenReservaInstance = new OrdenReserva(params)
+    	log.debug("LOS DATOS DE EMPRESA ASIGNADOS POR LA ORDEN DE RESERVA SON: "+ordenReservaInstance.empresa.properties)
     	ordenReservaInstance.porcentajeResIns=new Float(params.porcentajeResIns)
     	ordenReservaInstance.porcentajeResNoIns=new Float(params.porcentajeResNoIns)
     	def detallejson = JSON.parse(params.detallejson)
@@ -142,10 +143,13 @@ class OrdenReservaController {
     	def empresaInstance
     	if (params.id){
 	    	empresaInstance = Empresa.get(params.id)
-	    	empresaInstance.properties=ordenReservaInstance.empresa
+	    	empresaInstance.properties=ordenReservaInstance.empresa.properties
+	    	empresaInstance.usuario = authenticateService.userDomain()
 		}else{
-			empresaInstance = new Empresa(params.empresa.properties)
+			empresaInstance = new Empresa(params.empresa)
 			empresaInstance.usuario=authenticateService.userDomain()
+			log.debug("PROPIEDADES DE EMPRESA: "+empresaInstance.properties)
+			log.debug("PROPIEDADES DE ORDEN DE RESERVA: "+ordenReservaInstance.properties)
 		}    	
    		ordenReservaInstance.usuario=authenticateService.userDomain()
    		iterarDetalleJson(ordenReservaInstance,detallejson)
@@ -169,6 +173,7 @@ class OrdenReservaController {
     	log.debug(ordenReservaInstance.empresa.nombre)
     	ordenReservaInstance.detalle.each{
     		log.debug(it)
+    		log.debug(it.sector.lote.nombre)
     	}
     	ordenReservaInstance.otrosconceptos.each{
     		log.debug(it.subTotal)
