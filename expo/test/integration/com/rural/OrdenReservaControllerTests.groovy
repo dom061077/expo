@@ -66,7 +66,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			ordenreservaController.params.empresa = new Empresa()
 	    	ordenreservaController.params.empresa.nombre="empresa nueva"
 	    	ordenreservaController.params.empresa.razonSocial="empresa nueva razon social"
-	    	ordenreservaController.params.detallejson="[{sector_id:$sector.id,subTotal:1900}]"
+	    	ordenreservaController.params.detallejson="[{lote_id:$lote.id,subTotal:1900}]"
 	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"
 	    	ordenreservaController.params.observacion="OBSERVACION "
 	    	ordenreservaController.params.porcentajeResIns=21
@@ -101,7 +101,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.params.empresa=empresa
 	    	ordenreservaController.params.empresa.nombre="empresa modificada"
 	    	ordenreservaController.params.empresa.razonSocial="empresa modificada razon social"
-	    	ordenreservaController.params.detallejson="[{sector_id:$sector.id,subTotal:1900}]"
+	    	ordenreservaController.params.detallejson="[{lote_id:$lote.id,subTotal:1900}]"
 	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"
 	    	ordenreservaController.params.observacion="OBSERVACION "
 	    	ordenreservaController.params.porcentajeResIns=21

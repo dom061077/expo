@@ -31,9 +31,9 @@ class OrdenReservaServiceTests extends GrailsUnitTestCase {
         exposicion = new Exposicion(nombre:"Expo 2010")
         lote=new Lote(nombre:"LOTE EMPRENDIMIENTOS")
         sector=new Sector(nombre:"SECTOR Z")
-        lote.addToSectores(sector)
-        lote.save()
-		exposicion.addToLotes(lote)
+        sector.addToLotes(lote)
+        //sector.save()
+		exposicion.addToSectores(sector)
         exposicion.save()
 		        
         
@@ -56,12 +56,13 @@ class OrdenReservaServiceTests extends GrailsUnitTestCase {
     	assertNotNull(empresa)
     	assertNotNull(tipoconcepto)
     	
+    	
     	empresa.nombre="empresa modificada"
     	
     	def ordenReserva = new OrdenReserva(usuario:usuario,expo:exposicion,fechaAlta:new Date()
     		,observacion:"TEXTO DE PRUEBA"
 	    	,anio:2010,porcentajeResIns:21,porcentajeResNoIns:0)
-    	ordenReserva.addToDetalle(new DetalleServicioContratado(subTotal:1900,sector:sector))
+    	ordenReserva.addToDetalle(new DetalleServicioContratado(subTotal:1900,lote:lote))
     	ordenReserva.addToOtrosconceptos(new OtrosConceptos(descripcion:"DESCUENTO",tipo:tipoconcepto,subTotal:500))
     	ordenReserva.addToProductos(new ProductoExpuesto(descripcion:'Producto Expuesto'))
     	ordenReserva=ordenReservaService.generarOrdenReserva(ordenReserva,empresa)
@@ -110,7 +111,7 @@ class OrdenReservaServiceTests extends GrailsUnitTestCase {
     	def ordenReserva = new OrdenReserva(usuario:usuario,expo:exposicion2,fechaAlta:new Date()
     		,observacion:"TEXTO DE PRUEBA"
 	    	,anio:2010,porcentajeResIns:21,porcentajeResNoIns:0)
-    	ordenReserva.addToDetalle(new DetalleServicioContratado(subTotal:1900,sector:sector))
+    	ordenReserva.addToDetalle(new DetalleServicioContratado(subTotal:1900,lote:lote))
     	try{
     		ordenReserva=ordenReservaService.generarOrdenReserva(ordenReserva,empresa)
     		fail("NO SE PRODUJO LA FALLA DE VALIDACION DE SECTOR ICORRECTO")

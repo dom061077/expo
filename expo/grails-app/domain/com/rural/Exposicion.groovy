@@ -3,7 +3,7 @@ package com.rural
 class Exposicion {
 	String nombre
 
-	static hasMany = [empresas:Empresa,lotes:Lote]
+	static hasMany = [empresas:Empresa,sectores:Sector]
 
     static constraints = {
     }
