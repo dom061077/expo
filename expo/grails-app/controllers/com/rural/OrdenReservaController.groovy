@@ -146,7 +146,7 @@ class OrdenReservaController {
 	    	empresaInstance.properties=ordenReservaInstance.empresa.properties
 	    	empresaInstance.usuario = authenticateService.userDomain()
 		}else{
-			empresaInstance = new Empresa(params.empresa)
+			empresaInstance = ordenReservaInstance.empresa
 			empresaInstance.usuario=authenticateService.userDomain()
 			log.debug("PROPIEDADES DE EMPRESA: $params.empresa.nombre, $params.empresa.cuit")
 			log.debug("PROPIEDADES DE ORDEN DE RESERVA: "+ordenReservaInstance.properties)
