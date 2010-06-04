@@ -14,8 +14,8 @@ class SectorController {
     	log.debug("PARAMETROS INGRESADOS: $params")
     	def c = Sector.createCriteria()
     	def sectores = c.list{
-    		lote{
-    			eq('id',new Long(params.lote_id))
+    		expo{
+    			eq('id',new Long(params.exposicion_id))
     		}
     	}
     	render(contentType:"text/json"){
