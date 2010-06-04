@@ -4,8 +4,8 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="subTotal" class="java.lang.Double"/>
-	<field name="sector.nombre" class="java.lang.String"/>
-	<field name="sector.lote.nombre" class="java.lang.String"/>
+	<field name="lote.sector.nombre" class="java.lang.String"/>
+	<field name="lote.nombre" class="java.lang.String"/>
 	<variable name="subTotalDetalle" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{subTotal}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
@@ -41,14 +41,14 @@
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{sector.nombre}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{lote.sector.nombre}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="308" y="4" width="114" height="14"/>
 				<textElement>
 					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{sector.lote.nombre}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{lote.nombre}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="465" y="5" width="61" height="13"/>

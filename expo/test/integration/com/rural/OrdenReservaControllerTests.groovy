@@ -20,6 +20,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	def tipoConcepto = null
 	def exposicion = null
 	def sector = null
+	def lote = null
 	boolean transactional = true	
 	
     protected void setUp() {
@@ -41,10 +42,10 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
         
         empresa = new Empresa(nombre:"empresa de prueba",usuario:usuario).save(flush:true)
         sector = new Sector(nombre:"EMPRENDIMIENTOS PRODUCTIVOS")
-        def lote = new Lote(nombre:"LOTE 8")
-        lote.addToSectores(sector)
+        lote = new Lote(nombre:"LOTE 8")
+        sector.addToLotes(lote)
         exposicion = new Exposicion(nombre:"Expo 2010")
-        exposicion.addToLotes(lote)
+        exposicion.addToSectores(sector)
         exposicion.save()
         
         tipoConcepto=new TipoConcepto(nombre:"descuento").save(flush:true)        

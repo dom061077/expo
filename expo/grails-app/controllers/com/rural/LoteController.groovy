@@ -14,8 +14,8 @@ class LoteController {
 		log.debug("PARAMETROS $params")
 		def c = Lote.createCriteria()
 		def lotes = c.list{
-			expo{
-				eq('id', new Long(params.exposicion_id))
+			sector{
+				eq('id', new Long(params.sector_id))
 			}
 		} 
 		render(contentType:"text/json"){

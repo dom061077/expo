@@ -254,8 +254,8 @@ Ext.onReady(function(){
 	
 	var detalleModel =  Ext.data.Record.create([
 		'id',
-		'lote',
-		'sector_id',
+		'sector',
+		'lote_id',
 		{name:'subTotal',type:'float'}
 	]);	
 	var storeDetalle = new Ext.data.Store({
@@ -279,7 +279,7 @@ Ext.onReady(function(){
 		displayField: 'nombre',
 		valueField:'id',
 		hiddenName:'lote_id',
-		hiddenField:'id',
+		hiddenField:'id'/*,
 		listeners: {
 			'select': function(cmb,rec,idx){
 				var sector = Ext.getCmp('comboboxSectorId');
@@ -289,7 +289,7 @@ Ext.onReady(function(){
 				});
 				sector.enable();
 			}
-		}
+		}*/
 	});
 	
 	var comboboxSector = new Ext.form.ComboBox({
@@ -298,7 +298,17 @@ Ext.onReady(function(){
 		mode: 'local',
 		store: storeSector,
 		displayField: 'nombre',
-		valueField: 'id'
+		valueField: 'id',
+		hiddenName:'sector_id',
+		hiddenField:'id',
+		listeners: {
+			'select': function(cmb,rec,idx){
+				var lote = Ext.getCmp('comboboxLoteId')
+				lote.store.load({
+					params:{'sector_id':Ext.getCmp('comboboxSectorId').hiddenField.value}
+				});
+			}
+		}
 	});
 	
 	var sector_edit = new Ext.form.TextField({
@@ -354,8 +364,8 @@ Ext.onReady(function(){
 			],
 			columns:[
 				/*{header:'id',dataIndex:'id'},*/
-				{header:'Lote',dataIndex:'lote',editor:comboboxLote, renderer:lote_nombre},
-				{header:'Sector',dataIndex:'sector_id',editor:comboboxSector,renderer:sector_nombre},
+				{header:'Sector',dataIndex:'sector',editor:comboboxSector, renderer:sector_nombre},
+				{header:'Lote',dataIndex:'lote_id',editor:comboboxLote,renderer:lote_nombre},
 				{header:'Importe',dataIndex:'subTotal',editor:subtotal_edit}
 			]
 	});
@@ -836,12 +846,12 @@ Ext.onReady(function(){
 												allowBlank:false,
 												listeners: {
 														'select': function(cmb,rec,idx){
-															var lote = Ext.getCmp('comboboxLoteId');
+															var sector = Ext.getCmp('comboboxSectorId');
 															//lote.clearValue();
-															lote.store.load({
+															sector.store.load({
 																params:{'exposicion_id':Ext.getCmp('exposicionCombo').hiddenField.value}
 															});
-															lote.enable();
+															sector.enable();
 														}
 													}
 												},

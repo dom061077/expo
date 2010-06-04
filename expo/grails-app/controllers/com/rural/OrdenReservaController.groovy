@@ -111,8 +111,8 @@ class OrdenReservaController {
     	def iterarDetalleJson = {OrdenReserva ord, def detalle->
     		def total=0
 	    	detalle.each{
-	    		def sector = Sector.get(it.sector_id)
-	    		ord.addToDetalle(new DetalleServicioContratado(sector:sector,subTotal:it.subTotal))
+	    		def lote = Lote.get(it.lote_id)
+	    		ord.addToDetalle(new DetalleServicioContratado(lote:lote,subTotal:it.subTotal))
 	    		total=total+it.subTotal
 	    	}
 	    	ord.total=total
@@ -148,7 +148,7 @@ class OrdenReservaController {
 		}else{
 			empresaInstance = new Empresa(params.empresa)
 			empresaInstance.usuario=authenticateService.userDomain()
-			log.debug("PROPIEDADES DE EMPRESA: "+empresaInstance.properties)
+			log.debug("PROPIEDADES DE EMPRESA: $params.empresa.nombre, $params.empresa.cuit")
 			log.debug("PROPIEDADES DE ORDEN DE RESERVA: "+ordenReservaInstance.properties)
 		}    	
    		ordenReservaInstance.usuario=authenticateService.userDomain()
@@ -173,7 +173,7 @@ class OrdenReservaController {
     	log.debug(ordenReservaInstance.empresa.nombre)
     	ordenReservaInstance.detalle.each{
     		log.debug(it)
-    		log.debug(it.sector.lote.nombre)
+    		log.debug(it.lote.sector.nombre)
     	}
     	ordenReservaInstance.otrosconceptos.each{
     		log.debug(it.subTotal)
