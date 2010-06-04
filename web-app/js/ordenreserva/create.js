@@ -216,11 +216,15 @@ Ext.onReady(function(){
 		
 	});
 	function lote_nombre(val){
-		if(val>0)
-		return storeLote.queryBy(function(rec){
-				return rec.data.id == val;
-			}).itemAt(0).data.nombre;
-		else
+		if(val>0){
+			var busqueda=storeLote.queryBy(function(rec){
+					return rec.data.id == val;
+				});
+			if (busqueda.itemAt(0))
+				return busqueda.itemAt(0).data.nombre;
+			else
+				return '';
+		}else
 			return 'Seleccione Lote';
 	}
 	var sectorModel = Ext.data.Record.create([
@@ -749,14 +753,7 @@ Ext.onReady(function(){
 							        			name:'codigoPostal',
 							        			id:'idCodigopostal',
 							        			allowBlank:false
-							        		},{
-											 		xtype:'button',
-											 		listeners:{
-											 			'click':function(){
-											 				alert(validarcuit(Ext.getCmp('cuitId').getValue()));
-											 			}
-											 		}
-											 	}
+							        		}
 				]
 			}),
 			new Ext.ux.Wiz.Card({
@@ -1090,10 +1087,34 @@ Ext.onReady(function(){
 		var otrosconceptosjsonStr='';
 		var productosjsonArr = [];
 		var productosjsonStr ='';
+		var flagdetallecero=false;
 		storeDetalle.data.each(function(rec){
+				if(! rec.data.subTotal>0){
+					flagdetallecero=true
+					return false;
+					/*Ext.MessageBox.show({
+						title:'Error',
+						msg:'El detalle del servicio contratado tiene una linea con importe cero',
+						icon:Ext.MessageBox.ERROR,
+						button:Ext.MessageBox.OK,
+						fn:function(btn){
+							return false;
+						}
+					});	*/
+				}
 				detallejsonArr.push(rec.data);
 			}
 		);
+		if (flagdetallecero){
+				Ext.MessageBox.show({
+						title:'Error',
+						msg:'El detalle del servicio contratado tiene una linea con importe cero',
+						icon:Ext.MessageBox.ERROR,
+						button:Ext.MessageBox.OK,
+					});
+				return false;	
+		}
+					
 		storeOtrosConceptos.data.each(function(rec){
 				otrosconceptosjsonArr.push(rec.data);
 			}
@@ -1160,7 +1181,7 @@ Ext.onReady(function(){
 							}
 						});
 				}else				
-					;//window.location='ordenreservareporte?target=_blank&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+respuesta.ordenid
+					window.location='ordenreservareporte?target=_blank&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+respuesta.ordenid; 
 			},
 			failure: function(resp,opt){
 				var respuesta = Ext.decode(resp.responseText);
