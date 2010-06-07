@@ -171,6 +171,7 @@ class OrdenReservaController {
     	ordenList.add(ordenReservaInstance)
     	ordenList.add(ordenReservaInstance)    	
     	log.debug(ordenReservaInstance.empresa.nombre)
+    	log.debug(ordenReservaInstance.empresa.vendedor.nombre)
     	ordenReservaInstance.detalle.each{
     		log.debug(it)
     		log.debug(it.lote.sector.nombre)
@@ -181,6 +182,7 @@ class OrdenReservaController {
     	ordenReservaInstance.productos.each{
     		log.debug(it)
     	}
+    	
     	
     	log.debug(ordenReservaInstance.expo.nombre)
     	
@@ -236,4 +238,5 @@ class OrdenReservaController {
     		}
     	}
     }
+    
 }

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrdenReserva" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="237"/>
 	<subDataset name="dataset1"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
@@ -39,6 +39,7 @@
 	<field name="exentoCheck" class="java.lang.Boolean"/>
 	<field name="consFinalCheck" class="java.lang.Boolean"/>
 	<field name="monotributoCheck" class="java.lang.Boolean"/>
+	<field name="empresa.vendedor.nombre" class="java.lang.String"/>
 	<variable name="subtotal" class="java.lang.Double"/>
 	<variable name="tipo" class="java.lang.String">
 		<variableExpression><![CDATA[($V{PAGE_NUMBER}==0 ? "ORIGINAL" : "DUPLICADO")]]></variableExpression>
@@ -411,7 +412,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="413" splitType="Stretch">
+		<band height="520" splitType="Stretch">
 			<rectangle>
 				<reportElement x="2" y="1" width="549" height="389"/>
 			</rectangle>
@@ -533,6 +534,81 @@
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="5" y="393" width="24" height="10"/>
+				<textElement>
+					<font fontName="Tahoma" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nota:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="35" y="393" width="492" height="10"/>
+				<textElement>
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Expresamos nuestro total consentimiento y conformidad con las disposiciones del Reglamento General de Exposición de la Sociedad Rural de Tucumán.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="45" y="440" width="49" height="14"/>
+				<textElement>
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Intervino]]></text>
+			</staticText>
+			<line>
+				<reportElement x="20" y="427" width="121" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="24" y="429" width="100" height="13"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.vendedor.nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="375" y="440" width="49" height="14"/>
+				<textElement>
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Expositor]]></text>
+			</staticText>
+			<line>
+				<reportElement x="341" y="427" width="121" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="5" y="463" width="24" height="10"/>
+				<textElement>
+					<font fontName="Tahoma" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nota:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="35" y="463" width="242" height="10"/>
+				<textElement>
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Los pagos deben realizarse a la Orden de SOCIEDAD RURAL DE TUCUMAN.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="475" width="544" height="10"/>
+				<textElement>
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Los precios designados no incluyen impuestos u otros derivados de la explotación de la actividad de cada expositor.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="485" width="544" height="28"/>
+				<textElement>
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[La reserva está sujeta a distribución definitiva y disponibilidad de los espacios. Cualquier otro requerimiento de la adjunta, respecto a especificaciones, deberá
+ ser solicitada por nota. Los gastos que eventualmente ocasione el presente serán asumidos en su totalidad por S.R.T.
+Obligatoriamente deberá ser presentada la constancia que acredite la condición del expositor frente al I.V.A (F576 F460. Comunicación DGI, etc. )]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>

@@ -63,21 +63,15 @@ Ext.onReady(function(){
         		,handler: function(){
         			var sm = grid.getSelectionModel();
         			var sel = sm.getSelected();
-        			if (sm.hasSelection()){
-						var conn = new Ext.data.Connection();
-						conn.request({
-							url:'../recibo/createjson',
-							method:'POST',
-							params:{
-								id:sel.data.id
-							},
-							success:function(resp,opt){
-								open('ordenreservareporte?tipo=ORIGINAL&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.id
-										,'_blank')
-								
-							}
-						});
-        					
+        			if (sm.hasSelection())
+        				window.location='../recibo/create';	
+        			else{
+        				Ext.MessageBox.show({
+        					title:'Advertencia',
+        					msg:'Seleccione una fila de la grilla para generar el recibo',
+        					icon:Ext.MessageBox.WARNING,
+        					buttons:Ext.MessageBox.OK
+        				});	
         			}
         		}
         }],
