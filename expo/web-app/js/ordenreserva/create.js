@@ -1102,7 +1102,7 @@ Ext.onReady(function(){
 						title:'Error',
 						msg:'El detalle del servicio contratado tiene una linea con importe cero',
 						icon:Ext.MessageBox.ERROR,
-						button:Ext.MessageBox.OK,
+						button:Ext.MessageBox.OK
 					});
 				return false;	
 		}
