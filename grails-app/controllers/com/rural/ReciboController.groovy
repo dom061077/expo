@@ -122,6 +122,22 @@ class ReciboController {
             render(view:'create',model:[reciboInstance:reciboInstance])
         }
     }
+	
+    def listchequesjson = {
+    	log.info("INGRESANDO AL METODO listchequesjson DEL CONTROLADOR ReciboController")
+    	log.debug("PARAMETROS $params")
+    	def recibo = Recibo.get(params.id)
+    	render(contentType:"text/json"){
+    		total recibo.cheques.size()
+    		rows{
+    			recibo.cheques.each{
+    				row(numero:it.numero,banco,importe:it.importe)
+    			}
+    		}
+    	}
+    }
+	
+	
 }
 
 
