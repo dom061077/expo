@@ -57,8 +57,8 @@ class ReciboControllerTests extends GrailsUnitTestCase {
     	def ordenReserva = new OrdenReserva(usuario:usuario,expo:exposicion,fechaAlta:new Date()
     		,observacion:"TEXTO DE PRUEBA"
 	    	,anio:2010,porcentajeResIns:21,porcentajeResNoIns:0)
-    	ordenReserva.addToDetalle(new DetalleServicioContratado(subTotal:1900,lote:lote))
-    	ordenReserva.addToOtrosconceptos(new OtrosConceptos(descripcion:"DESCUENTO",tipo:tipoconcepto,subTotal:500.20))
+    	ordenReserva.addToDetalle(new DetalleServicioContratado(subTotal:1900.20,lote:lote))
+    	ordenReserva.addToOtrosconceptos(new OtrosConceptos(descripcion:"DESCUENTO",tipo:tipoconcepto,subTotal:500))
     	ordenReserva.addToProductos(new ProductoExpuesto(descripcion:'Producto Expuesto'))
     	ordenReserva=ordenReservaService.generarOrdenReserva(ordenReserva,empresa)
     	assertNotNull(ordenReserva)
@@ -66,19 +66,18 @@ class ReciboControllerTests extends GrailsUnitTestCase {
     	assertTrue(ordenReserva.detalle.size()==1)
     	assertTrue(ordenReserva.otrosconceptos.size()==1)
     	assertTrue(ordenReserva.empresa.nombre.equals("empresa de prueba"))
-    //	assertTrue(ordenReserva.total==2904.242)	
-    	
+    	//fail("TOTAL DE LA ORDEN: "+ordenReserva.total)
+    	assertTrue(ordenReserva.total==2904.24)	
     	def reciboController = new ReciboController()
     	reciboController.reciboService = reciboService
     	reciboController.params.ordenreservaid=ordenReserva.id
     	reciboController.params.concepto=''
     	reciboController.params.efectivo=4
-    	reciboController.params.chequesjson="[{numero:'0000789',banco:'BANCO DEL TUCUMAN',importe:2000},{numero:'0123456',banco:'BANCO DE LA NACION ARGENTINA',importe:900}]"
+    	reciboController.params.chequesjson="[{numero:'0000789',banco:'BANCO DEL TUCUMAN',importe:2000},{numero:'0123456',banco:'BANCO DE LA NACION ARGENTINA',importe:900.24}]"
     	reciboController.createjson()
     	def respuesta = reciboController.response.contentAsString
     	def respuestaJson = grails.converters.JSON.parse(respuesta)
     	assertTrue(respuestaJson.success)
-    	fail("TOTAL EN PESOS ES: "+respuestaJson.totalletras+", numero de recibo: "+respuestaJson.numero+", nombre empresa: "+respuestaJson.empresa_nombre+", importe: "+respuestaJson.total)
-    		
+    	//fail("TOTAL EN PESOS ES: "+respuestaJson.totalletras+", numero de recibo: "+respuestaJson.numero+", nombre empresa: "+respuestaJson.empresa_nombre+", importe: "+respuestaJson.total)
     }
 }

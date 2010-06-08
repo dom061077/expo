@@ -32,6 +32,7 @@ class ReciboService {
     				recibo.total=recibo.total+it.importe	
     			}
     			recibo.total=recibo.total+efectivo
+    			recibo.total=Math.round(recibo.total*Math.pow(10,2))/Math.pow(10,2);
     			if ((recibo.total+totalCancelado)>ord.total)
     				throw new ReciboException('El total ('+recibo.total+') de recibo supera el total ('+ord.total+') pendiente de pago de la orden de reserva',recibo)
     			if(recibo.save()){

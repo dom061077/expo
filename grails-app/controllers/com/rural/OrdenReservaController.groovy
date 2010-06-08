@@ -170,6 +170,7 @@ class OrdenReservaController {
     	List ordenList = new ArrayList()
     	ordenList.add(ordenReservaInstance)
     	ordenList.add(ordenReservaInstance)    	
+    	ordenList.add(ordenReservaInstance)    	
     	log.debug(ordenReservaInstance.empresa.nombre)
     	log.debug(ordenReservaInstance.empresa.vendedor.nombre)
     	ordenReservaInstance.detalle.each{

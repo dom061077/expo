@@ -14,7 +14,6 @@ class OrdenReservaException extends RuntimeException{
 class OrdenReservaService {
 	boolean transactional = true 
 
-    
 
     OrdenReserva generarOrdenReserva(OrdenReserva ord,Empresa empresa) {
     	
@@ -36,7 +35,8 @@ class OrdenReservaService {
     	log.debug("PROCENTAJE ResNoIns ANTES DEL CALCULO")
     	ord.ivaGral = ord.subTotal*ord.porcentajeResIns/100
     	ord.ivaRni = ord.subTotal*ord.porcentajeResNoIns/100	
-    	ord.total=ord.subTotal+ord.ivaGral+ord.ivaRni	
+    	ord.total=ord.subTotal+ord.ivaGral+ord.ivaRni
+    	ord.total=Math.round(ord.total*Math.pow(10,2))/Math.pow(10,2);
 		ord.empresa=empresaInstance
 		ord.fechaAlta=new Date()	
     	if(ord.validate()){
