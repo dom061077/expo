@@ -1,31 +1,45 @@
 Ext.onReady(function (){
 	Ext.QuickTips.init();
 	
+    function formatDate(value){
+        return value ? value.dateFormat('d/m/y') : '';
+    }
+	
 	var cm = new Ext.grid.ColumnModel({
 		columns:[
 			{
 				id: 'numero',
 				header: 'Número',
 				dataIndex: 'numero',
-				width:100,
+				width:90,
 				editor: new Ext.form.TextField({
 					allowBlank:false
 				})
 			},{
 				header: 'Banco',
 				dataIndex:'banco',
-				width:200,
+				width:180,
 				editor: new Ext.form.TextField({
 					allowBlank:false
 				})
 			},{
 				header: 'Importe',
 				dataIndex:'importe',
-				width:100,
+				width:90,
 				editor: new Ext.form.TextField({
 					allowBlank:false,
 					allowNegative:false,
 					maxValue:1000000
+				})
+			},{
+				header:'Fecha Venc.',
+				dataIndex:'fechavencimiento',
+				width:95,
+				renderer:formatDate,
+				editor: new Ext.form.DateField({
+					format:'d/m/y',
+					disabledDays:[0,6],
+					disabledDaysText: 'El vencimiento no puede ser un fin de semana'
 				})
 			}
 		]
@@ -40,7 +54,8 @@ Ext.onReady(function (){
 			fields:[
 				{name: 'numero',type:'string'},
 				{name: 'banco',type:'string'},
-				{name: 'importe', type: 'string'}
+				{name: 'importe', type: 'string'},
+				{name: 'vencimiento', type: 'date'}
 			]
 		})
 	});
@@ -48,8 +63,8 @@ Ext.onReady(function (){
 	var grid = new Ext.grid.EditorGridPanel({
 		store:store,
 		cm:cm,
-		width:400,
-		height:300,
+		width:450,
+		height:280,
 		title:'Cheques',
 		selModel: new Ext.grid.RowSelectionModel(),
 		tbar:[
@@ -97,6 +112,10 @@ Ext.onReady(function (){
 		frame:true,
 		items:[
 			{
+				xtype:'hidden',
+				id:'ordenreservaId',
+				name:'ordenreservaId'
+			},{
 				xtype: 'textarea',
 				id:'conceptoId',
 				name:'concepto',
@@ -178,7 +197,7 @@ Ext.onReady(function (){
 			},{
 			 	text:'Cancelar',
 			 	handler: function(){
-			 		window.location='../orderReserva/list';
+			 		window.location='../ordenReserva/list';
 			 	}
 			}
 		]

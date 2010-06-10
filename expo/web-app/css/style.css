@@ -158,3 +158,9 @@ background: #85ACF7 url('/expo/images/hidr.jpg');
 .ext-ux-wiz-Header-stepIndicator-active {
     background-position:0px 0px !important;
 }
+
+
+.x-date-middle {
+padding-top: 2px; padding-bottom: 2px;
+width: 130px; / * FF3 * /
+} 

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrdenReserva" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="282"/>
 	<subDataset name="dataset1"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
@@ -412,7 +412,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="520" splitType="Stretch">
+		<band height="565" splitType="Stretch">
 			<rectangle>
 				<reportElement x="2" y="1" width="549" height="389"/>
 			</rectangle>
@@ -601,14 +601,17 @@
 				<text><![CDATA[Los precios designados no incluyen impuestos u otros derivados de la explotación de la actividad de cada expositor.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="485" width="544" height="28"/>
-				<textElement>
+				<reportElement x="5" y="485" width="444" height="61"/>
+				<textElement textAlignment="Justified">
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
-				<text><![CDATA[La reserva está sujeta a distribución definitiva y disponibilidad de los espacios. Cualquier otro requerimiento de la adjunta, respecto a especificaciones, deberá
- ser solicitada por nota. Los gastos que eventualmente ocasione el presente serán asumidos en su totalidad por S.R.T.
+				<text><![CDATA[La reserva está sujeta a distribución definitiva y disponibilidad de los espacios. Cualquier otro requerimiento de la adjunta, respecto a especificaciones, deberá ser solicitada por nota. Los gastos que eventualmente ocasione el presente serán asumidos en su totalidad por S.R.T.
 Obligatoriamente deberá ser presentada la constancia que acredite la condición del expositor frente al I.V.A (F576 F460. Comunicación DGI, etc. )]]></text>
 			</staticText>
+			<image>
+				<reportElement x="462" y="484" width="89" height="80"/>
+				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Andrea\\workspace\\expo\\web-app\\reports\\rural.jpg"]]></imageExpression>
+			</image>
 		</band>
 	</detail>
 </jasperReport>
