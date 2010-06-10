@@ -2,6 +2,11 @@
 <%@ page import="com.rural.Recibo" %>
 <html>
     <head>
+    	<%
+    		out << "<script type='text/javascript'>";
+    		out << "var ordenreservaId=${ordenreservaId};"
+    		out << "</script>";
+    	%>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
         <title>Alta de Recibo</title>

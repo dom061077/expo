@@ -167,10 +167,6 @@ class OrdenReservaController {
     	log.info("INGRESANDO AL METODO ordenreservareporte DEL CONTROLADOR OrdenReservaController")
     	log.debug("PARAMETROS ENVIADOS: "+params)
     	def ordenReservaInstance = OrdenReserva.get(params.id)
-    	List ordenList = new ArrayList()
-    	ordenList.add(ordenReservaInstance)
-    	ordenList.add(ordenReservaInstance)    	
-    	ordenList.add(ordenReservaInstance)    	
     	log.debug(ordenReservaInstance.empresa.nombre)
     	log.debug(ordenReservaInstance.empresa.vendedor.nombre)
     	ordenReservaInstance.detalle.each{
@@ -183,9 +179,12 @@ class OrdenReservaController {
     	ordenReservaInstance.productos.each{
     		log.debug(it)
     	}
-    	
-    	
     	log.debug(ordenReservaInstance.expo.nombre)
+    	
+    	List ordenList = new ArrayList()
+    	ordenList.add(ordenReservaInstance)
+    	ordenList.add(ordenReservaInstance)    	
+    	//ordenList.add(ordenReservaInstance)    	
     	
     	log.debug("Orden Reserva: $ordenReservaInstance")
 		String reportsDirPath = servletContext.getRealPath("/reports/");
