@@ -144,6 +144,7 @@ class EmpresaController {
 		    			 ,localidadFiscal:empresaInstance.localidadFiscal
 		    			 ,provinciaFiscal:empresaInstance.provinciaFiscal
 		    			 ,direccion:empresaInstance.direccion
+		    			 ,direccionFiscal:empresaInstance.direccionFiscal
 		    			 ,provinciaLn:empresaInstance.provinciaFiscal
 		    			 ,localidadAux: empresaInstance.localidadFiscal
 		    			 ,vendedorId: empresaInstance.vendedor?.id

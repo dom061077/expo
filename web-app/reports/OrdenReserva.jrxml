@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrdenReserva" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrdenReserva" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="5">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -42,365 +42,294 @@
 	<field name="empresa.vendedor.nombre" class="java.lang.String"/>
 	<variable name="subtotal" class="java.lang.Double"/>
 	<variable name="tipo" class="java.lang.String">
-		<variableExpression><![CDATA[($V{PAGE_NUMBER}==0 ? "ORIGINAL" : "DUPLICADO")]]></variableExpression>
-		<initialValueExpression><![CDATA["ORIGINAL"]]></initialValueExpression>
+		<variableExpression><![CDATA[($V{PAGE_NUMBER}==0 ? "ORIGINAL - CLIENTE " : ($V{PAGE_NUMBER} == 1 ? "DUPLICADO - CONTADURIA" : "TRIPLICADO - DEPTO. EXPOSICIONES"))]]></variableExpression>
+		<initialValueExpression><![CDATA["ORIGINAL - CLIENTE"]]></initialValueExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<pageHeader>
-		<band height="153" splitType="Stretch">
+	<columnHeader>
+		<band height="237" splitType="Stretch">
 			<rectangle>
-				<reportElement x="2" y="76" width="549" height="76"/>
+				<reportElement x="2" y="153" width="549" height="82"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="9" y="109" width="57" height="13"/>
+				<reportElement x="8" y="175" width="98" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[C.U.I.T Nº:]]></text>
+				<text><![CDATA[Nombre Comercial:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="9" y="123" width="57" height="13"/>
+				<reportElement x="8" y="189" width="48" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Dirección:]]></text>
+				<text><![CDATA[Domicilio:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="9" y="137" width="57" height="13"/>
+				<reportElement x="348" y="189" width="32" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Provincia:]]></text>
+				<text><![CDATA[Mail:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="246" y="136" width="22" height="13"/>
+				<reportElement x="8" y="203" width="145" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[C.P:]]></text>
+				<text><![CDATA[Representante ante la Expo:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="438" y="137" width="22" height="13"/>
+				<reportElement x="8" y="218" width="38" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Tel.:]]></text>
+				<text><![CDATA[Cargo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="175" y="219" width="20" height="13"/>
+				<textElement>
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tel:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="329" y="219" width="98" height="13"/>
+				<textElement>
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Doc. de Identidad:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="72" y="109" width="100" height="13"/>
+				<reportElement x="109" y="174" width="384" height="13"/>
 				<textElement>
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.cuit}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.nombre}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="9" y="82" width="165" height="13"/>
-				<textElement>
-					<font fontName="Arial" size="11" isBold="true" isUnderline="true"/>
-				</textElement>
-				<text><![CDATA[DATOS DE FACTURACION]]></text>
-			</staticText>
 			<textField>
-				<reportElement x="72" y="124" width="100" height="13"/>
+				<reportElement x="59" y="189" width="242" height="13"/>
 				<textElement>
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.direccion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="72" y="138" width="100" height="14"/>
+				<reportElement x="384" y="188" width="109" height="13"/>
 				<textElement>
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.provinciaFiscal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.email}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="270" y="136" width="100" height="14"/>
+				<reportElement x="156" y="204" width="357" height="13"/>
 				<textElement>
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.codigoPostal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.nombreRepresentante}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="463" y="136" width="86" height="14"/>
+				<reportElement x="49" y="219" width="115" height="13"/>
 				<textElement>
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.telefono1}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.cargoRep}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="234" y="97" width="306" height="13"/>
+				<reportElement x="197" y="219" width="126" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" isBold="false"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.razonSocial}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.telefonoRepresentante1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="426" y="219" width="96" height="13"/>
+				<textElement>
+					<font fontName="Courier New" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.dniRep}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="8" y="97" width="226" height="13"/>
+				<reportElement x="9" y="156" width="194" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true" isUnderline="true"/>
 				</textElement>
-				<text><![CDATA[Expositor-Nombre y Apellido o Razón Social:]]></text>
+				<text><![CDATA[DATOS CATALOGO EXPOSITORES]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="190" y="24" width="160" height="19"/>
-				<textElement>
-					<font fontName="Tahoma" size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Sociedad Rural de Tucumán]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="166" y="40" width="208" height="34"/>
-				<textElement textAlignment="Center">
-					<font fontName="Tahoma" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Camino del Perú 1050 - (4105) Cevil Redondo - Tucumán
-Tel./Fax (0381) 4347777/63467/6258
-www.srt.org.ar - informes@srt.org.ar]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="383" y="54" width="22" height="15"/>
+				<reportElement x="381" y="53" width="22" height="15"/>
 				<textElement>
 					<font fontName="Tahoma" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nº:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="425" y="37" width="100" height="15"/>
-				<textElement>
-					<font fontName="Tahoma"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{fechaAlta})]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="447" y="54" width="91" height="14" isRemoveLineWhenBlank="true"/>
-				<textElement>
-					<font fontName="Tahoma" size="11" isBold="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[($F{numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
-			</textField>
+			<image>
+				<reportElement x="444" y="108" width="16" height="13"/>
+				<imageExpression class="java.io.File"><![CDATA[$F{consFinalCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="525" y="108" width="16" height="13"/>
+				<imageExpression class="java.io.File"><![CDATA[$F{monotributoCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
+			</image>
 			<staticText>
-				<reportElement x="411" y="54" width="35" height="14"/>
+				<reportElement x="463" y="108" width="61" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="11" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[0002-]]></text>
+				<text><![CDATA[Monotributo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="383" y="15" width="165" height="20"/>
+				<reportElement x="436" y="136" width="22" height="13"/>
 				<textElement>
-					<font fontName="Arial" size="12" isBold="true"/>
+					<font fontName="Tahoma" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[ORDEN DE CONTRATACION]]></text>
+				<text><![CDATA[Tel.:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="383" y="37" width="39" height="13"/>
+				<reportElement x="381" y="36" width="39" height="13"/>
 				<textElement>
 					<font fontName="Tahoma" isBold="true"/>
 				</textElement>
 				<text><![CDATA[FECHA:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="209" y="6" width="100" height="20"/>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" size="12" isBold="true"/>
+				<reportElement x="461" y="135" width="86" height="14"/>
+				<textElement>
+					<font fontName="Tahoma"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$V{tipo}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.telefono1}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="19" y="37" width="100" height="16"/>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{anio}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="6" y="15" width="160" height="20"/>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{expo.nombre}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="174" y="109" width="33" height="13"/>
-				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[I.V.A:]]></text>
-			</staticText>
 			<image>
-				<reportElement x="258" y="109" width="16" height="13"/>
-				<imageExpression class="java.io.File"><![CDATA[$F{ivaGralCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
-			</image>
-			<staticText>
-				<reportElement x="208" y="109" width="57" height="13"/>
-				<textElement>
-					<font fontName="Tahoma" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Resp.Insc.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="277" y="109" width="50" height="13"/>
-				<textElement>
-					<font fontName="Tahoma" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[No Resp.]]></text>
-			</staticText>
-			<image>
-				<reportElement x="322" y="109" width="16" height="13"/>
-				<imageExpression class="java.io.File"><![CDATA[$F{ivaRniCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
-			</image>
-			<staticText>
-				<reportElement x="341" y="109" width="37" height="13"/>
-				<textElement>
-					<font fontName="Tahoma" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Exento]]></text>
-			</staticText>
-			<image>
-				<reportElement x="376" y="109" width="16" height="13"/>
+				<reportElement x="374" y="108" width="16" height="13"/>
 				<imageExpression class="java.io.File"><![CDATA[$F{exentoCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="394" y="109" width="55" height="13"/>
+				<reportElement x="164" y="39" width="208" height="34"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Camino del Perú 1050 - Cevil Redondo - Tucumán - (4105)
+Tel./ Fax: (0381) - 4347777/6146/6258
+www.srt.org.ar - informes@srt.org.ar]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="445" y="53" width="91" height="14" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font fontName="Courier New" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="188" y="23" width="160" height="19"/>
+				<textElement>
+					<font fontName="Tahoma" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sociedad Rural de Tucumán]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="409" y="53" width="35" height="14"/>
+				<textElement>
+					<font fontName="Courier New" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[0002-]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="3" y="75" width="549" height="76"/>
+			</rectangle>
+			<textField>
+				<reportElement x="423" y="36" width="100" height="15"/>
+				<textElement>
+					<font fontName="Courier New" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{fechaAlta})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="81" width="165" height="13"/>
+				<textElement>
+					<font fontName="Arial" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DE FACTURACION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="392" y="14" width="154" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ORDEN DE CONTRATACION]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="144" y="3" width="245" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{tipo}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="256" y="108" width="16" height="13"/>
+				<imageExpression class="java.io.File"><![CDATA[$F{ivaGralCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="392" y="108" width="55" height="13"/>
 				<textElement>
 					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cons.Final]]></text>
 			</staticText>
-			<image>
-				<reportElement x="446" y="109" width="16" height="13"/>
-				<imageExpression class="java.io.File"><![CDATA[$F{consFinalCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
-			</image>
 			<staticText>
-				<reportElement x="465" y="109" width="61" height="13"/>
+				<reportElement x="275" y="108" width="50" height="13"/>
 				<textElement>
 					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Monotributo]]></text>
-			</staticText>
-			<image>
-				<reportElement x="527" y="109" width="16" height="13"/>
-				<imageExpression class="java.io.File"><![CDATA[$F{monotributoCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
-			</image>
-		</band>
-	</pageHeader>
-	<columnHeader>
-		<band height="84" splitType="Stretch">
-			<rectangle>
-				<reportElement x="2" y="1" width="549" height="82"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="8" y="23" width="98" height="13"/>
-				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Nombre Comercial:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="8" y="37" width="48" height="13"/>
-				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Domicilio:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="348" y="37" width="32" height="13"/>
-				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Mail:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="8" y="51" width="145" height="13"/>
-				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Representante ante la Expo:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="8" y="66" width="38" height="13"/>
-				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Cargo:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="175" y="67" width="20" height="13"/>
-				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Tel:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="329" y="67" width="98" height="13"/>
-				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Doc. de Identidad:]]></text>
+				<text><![CDATA[No Resp.]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="109" y="22" width="384" height="13"/>
+				<reportElement x="268" y="135" width="100" height="14"/>
 				<textElement>
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.nombre}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.codigoPostal}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="59" y="37" width="242" height="13"/>
+				<reportElement x="70" y="108" width="100" height="13"/>
 				<textElement>
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.direccion}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.cuit}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="384" y="36" width="109" height="13"/>
+				<reportElement x="70" y="123" width="100" height="13"/>
 				<textElement>
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.email}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.direccionFiscal}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="156" y="52" width="357" height="13"/>
+				<reportElement x="265" y="96" width="273" height="13"/>
 				<textElement>
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.nombreRepresentante}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="49" y="67" width="115" height="13"/>
-				<textElement>
-					<font fontName="Tahoma"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.cargoRep}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="197" y="67" width="126" height="13"/>
-				<textElement>
-					<font fontName="Tahoma"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.telefonoRepresentante1}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="426" y="67" width="96" height="13"/>
-				<textElement>
-					<font fontName="Tahoma"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.dniRep}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.razonSocial}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="9" y="4" width="194" height="13"/>
+				<reportElement x="6" y="96" width="262" height="13"/>
 				<textElement>
-					<font fontName="Arial" size="11" isBold="true" isUnderline="true"/>
+					<font fontName="Bookman Old Style" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[DATOS CATALOGO EXPOSITORES]]></text>
+				<text><![CDATA[EXPOSITOR-NOMBRE Y APELLIDO O RAZON SOCIAL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="339" y="108" width="37" height="13"/>
+				<textElement>
+					<font fontName="Tahoma" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Exento]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="399" splitType="Stretch">
+		<band height="554" splitType="Stretch">
 			<rectangle>
 				<reportElement x="2" y="1" width="549" height="389"/>
 			</rectangle>
@@ -450,21 +379,21 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 			<staticText>
 				<reportElement x="350" y="288" width="110" height="13"/>
 				<textElement textAlignment="Right">
-					<font fontName="Tahoma" size="10" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SubTotal:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="350" y="306" width="110" height="13"/>
 				<textElement textAlignment="Right">
-					<font fontName="Tahoma" size="10" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[I.V.A Tasa General:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="350" y="323" width="110" height="13"/>
 				<textElement textAlignment="Right">
-					<font fontName="Tahoma" size="10" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[I.V.A R.N.I:]]></text>
 			</staticText>
@@ -476,42 +405,42 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 			<staticText>
 				<reportElement x="350" y="340" width="110" height="13"/>
 				<textElement textAlignment="Right">
-					<font fontName="Tahoma" size="10" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[I.V.A Suj. No Categ.:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="350" y="359" width="112" height="15"/>
 				<textElement textAlignment="Right">
-					<font fontName="Tahoma" size="11" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A PAGAR:]]></text>
 			</staticText>
 			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="465" y="288" width="73" height="13"/>
 				<textElement textAlignment="Right">
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotal}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="465" y="306" width="73" height="13"/>
 				<textElement textAlignment="Right">
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ivaGral}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="465" y="323" width="73" height="13"/>
 				<textElement textAlignment="Right">
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ivaRni}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="465" y="340" width="73" height="13"/>
 				<textElement textAlignment="Right">
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ivaSujNoCateg}]]></textFieldExpression>
 			</textField>
@@ -522,88 +451,86 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
-		</band>
-	</detail>
-	<pageFooter>
-		<band height="145">
 			<staticText>
-				<reportElement x="9" y="61" width="24" height="10"/>
-				<textElement>
-					<font fontName="Tahoma" size="7" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Nota:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="40" y="61" width="335" height="10"/>
-				<textElement>
-					<font fontName="Tahoma" size="7" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Los pagos deben realizarse a la Orden de SOCIEDAD RURAL DE TUCUMAN.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="9" y="71" width="376" height="10"/>
-				<textElement>
-					<font fontName="Tahoma" size="7" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Los precios designados no incluyen impuestos u otros derivados de la explotación de la actividad de cada expositor.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="9" y="2" width="24" height="10"/>
-				<textElement>
-					<font fontName="Tahoma" size="7" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Nota:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="38" y="2" width="492" height="10"/>
-				<textElement>
-					<font fontName="Tahoma" size="7" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Expresamos nuestro total consentimiento y conformidad con las disposiciones del Reglamento General de Exposición de la Sociedad Rural de Tucumán.]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="24" y="33" width="100" height="13"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.vendedor.nombre}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="375" y="44" width="49" height="14"/>
-				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Expositor]]></text>
-			</staticText>
-			<line>
-				<reportElement x="341" y="31" width="121" height="1"/>
-				<graphicElement>
-					<pen lineStyle="Dashed"/>
-				</graphicElement>
-			</line>
-			<staticText>
-				<reportElement x="45" y="44" width="49" height="14"/>
-				<textElement>
-					<font fontName="Tahoma" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Intervino]]></text>
-			</staticText>
-			<line>
-				<reportElement x="20" y="31" width="121" height="1"/>
-				<graphicElement>
-					<pen lineStyle="Dashed"/>
-				</graphicElement>
-			</line>
-			<staticText>
-				<reportElement x="8" y="81" width="446" height="32"/>
+				<reportElement x="6" y="523" width="464" height="27"/>
 				<textElement textAlignment="Justified">
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[La reserva está sujeta a distribución definitiva y disponibilidad de los espacios. Cualquier otro requerimiento de la adjunta, respecto a especificaciones, deberá ser solicitada por nota. Los gastos que eventualmente ocasione el presente serán asumidos en su totalidad por S.R.T.
 Obligatoriamente deberá ser presentada la constancia que acredite la condición del expositor frente al I.V.A (F576 F460. Comunicación DGI, etc. )]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="60" y="458" width="49" height="14"/>
+				<textElement>
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Intervino]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="513" width="376" height="10"/>
+				<textElement>
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Los precios designados no incluyen impuestos u otros derivados de la explotación de la actividad de cada expositor.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="503" width="24" height="10"/>
+				<textElement>
+					<font fontName="Tahoma" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nota:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="349" y="455" width="121" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="6" y="396" width="24" height="10"/>
+				<textElement>
+					<font fontName="Tahoma" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nota:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="35" y="476" width="100" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Courier New" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.vendedor.nombre}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="28" y="455" width="121" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="36" y="396" width="492" height="10"/>
+				<textElement>
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Expresamos nuestro total consentimiento y conformidad con las disposiciones del Reglamento General de Exposición de la Sociedad Rural de Tucumán.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="38" y="503" width="335" height="10"/>
+				<textElement>
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Los pagos deben realizarse a la Orden de SOCIEDAD RURAL DE TUCUMAN.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="385" y="458" width="49" height="14"/>
+				<textElement>
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Expositor]]></text>
+			</staticText>
 			<image>
-				<reportElement x="463" y="61" width="89" height="80"/>
+				<reportElement x="475" y="472" width="80" height="73"/>
 				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.jpg")]]></imageExpression>
 			</image>
 		</band>
-	</pageFooter>
+	</detail>
 </jasperReport>
