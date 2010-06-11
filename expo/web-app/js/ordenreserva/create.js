@@ -92,6 +92,7 @@ Ext.onReady(function(){
 								Ext.getCmp('razonsocialId').setValue(respuesta.data.razonSocial);
 								Ext.getCmp('cuitId').setValue(respuesta.data.cuit);
 								Ext.getCmp('direccionId').setValue(respuesta.data.direccion);
+								Ext.getCmp('direccionfiscalId').setValue(respuesta.data.direccionFiscal);
 								Ext.getCmp('telefono1Id').setValue(respuesta.data.telefono1);
 								Ext.getCmp('telefono2Id').setValue(respuesta.data.telefono2);
 								Ext.getCmp('idProvincia').setValue(respuesta.data.provinciaFiscal);
@@ -646,6 +647,14 @@ Ext.onReady(function(){
 							name:'direccion'			
 						},{
 							xtype:'textfield',
+							id:'direccionfiscalId',
+							fieldLabel:'Dirección Fiscal',
+							allowBlank: false,
+							width:260,
+							msgTarget: 'under',
+							name: 'direccionFiscal'
+						},{
+							xtype:'textfield',
 							id:'telefono1Id',
 							fieldLabel:'Teléfono 1',
 							allowBlank: false,
@@ -947,6 +956,7 @@ Ext.onReady(function(){
 						Ext.getCmp('razonsocialId').setValue(null);
 						Ext.getCmp('cuitId').setValue(null);
 						Ext.getCmp('direccionId').setValue(null);
+						Ext.getCmp('direccionfiscalId').setValue(null);
 						Ext.getCmp('telefono1Id').setValue(null);
 						Ext.getCmp('telefono2Id').setValue(null);
 						Ext.getCmp('idProvincia').setValue(null);

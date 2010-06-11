@@ -184,7 +184,7 @@ class OrdenReservaController {
     	List ordenList = new ArrayList()
     	ordenList.add(ordenReservaInstance)
     	ordenList.add(ordenReservaInstance)    	
-    	//ordenList.add(ordenReservaInstance)    	
+    	ordenList.add(ordenReservaInstance)    	
     	
     	log.debug("Orden Reserva: $ordenReservaInstance")
 		String reportsDirPath = servletContext.getRealPath("/reports/");

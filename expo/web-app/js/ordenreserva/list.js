@@ -64,7 +64,7 @@ Ext.onReady(function(){
         			var sm = grid.getSelectionModel();
         			var sel = sm.getSelected();
         			if (sm.hasSelection())
-        				window.location='../recibo/create';	
+        				window.location='../recibo/create?ordenreservaId='+sel.data.id;	
         			else{
         				Ext.MessageBox.show({
         					title:'Advertencia',

@@ -85,7 +85,7 @@ class ReciboController {
     def create = {
         def reciboInstance = new Recibo()
         reciboInstance.properties = params
-        return ['reciboInstance':reciboInstance]
+        return ['reciboInstance':reciboInstance,ordenreservaId:params.ordenreservaId]
     }
     
     def createjson = {
@@ -97,7 +97,7 @@ class ReciboController {
 		chequesjson.each{
 			cheques.add(new Cheque(numero:it.numero,banco:it.banco,importe:it.importe))
 		}
-		def recibo = reciboService.generarRecibo(new Long(params.ordenreservaid),params.concepto,params.efectivo,cheques)
+		def recibo = reciboService.generarRecibo(new Long(params.ordenreservaid),params.concepto,new Double(params.efectivo),cheques)
 		int entero = recibo.total.intValue()
 		Double totalaux = (recibo.total - entero)*100
 		int decimal = totalaux.intValue()

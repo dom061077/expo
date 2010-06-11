@@ -114,7 +114,8 @@ Ext.onReady(function (){
 			{
 				xtype:'hidden',
 				id:'ordenreservaId',
-				name:'ordenreservaId'
+				name:'ordenreservaid',
+				value:ordenreservaId
 			},{
 				xtype: 'textarea',
 				id:'conceptoId',
@@ -175,7 +176,7 @@ Ext.onReady(function (){
 			 						Ext.MessageBox.show({
 			 							title:'Datos de retorno json',
 			 							msg:'Numero de recibo: '+a.result.numero+', total: '+a.result.total
-			 								+', total en letras: '+a.result.totalenletras,
+			 								+', total en letras: '+a.result.totalletras,
 			 							buttons:Ext.MessageBox.OK	
 			 						});
 			 					}else

@@ -4,7 +4,7 @@
     <head>
     	<%
     		out << "<script type='text/javascript'>";
-    		out << "var ordenreservaId=${ordenreservaId};"
+    		out << "var ordenreservaId = ${ordenreservaId};"
     		out << "</script>";
     	%>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
