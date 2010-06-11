@@ -796,7 +796,7 @@ Ext.onReady(function(){
 								        	},{
 								        		xtype:'textfield',
 								        		fieldLabel:'E-mail',
-								        		allowBlank:true,
+								        		allowBlank:false,
 								        		msgTarget: 'under',
 								        		id:'idEmail',
 								        		layout:'form',
@@ -822,6 +822,7 @@ Ext.onReady(function(){
 								        		xtype:'textfield',
 								        		fieldLabel:'Cargo Representante',
 								        		id:'idCargorep',
+								        		allowBlank:false,
 								        		layout:'form',
 								        		name:'cargoRep'
 								        	},{
