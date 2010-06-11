@@ -39,7 +39,7 @@
 			<staticText>
 				<reportElement x="390" y="2" width="56" height="15"/>
 				<textElement>
-					<font fontName="Arial" size="11" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SubTotal:]]></text>
 			</staticText>

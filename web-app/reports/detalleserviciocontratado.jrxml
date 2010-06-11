@@ -18,21 +18,21 @@
 			<staticText>
 				<reportElement x="446" y="5" width="9" height="13"/>
 				<textElement>
-					<font fontName="Arial" size="11" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="14" y="4" width="38" height="13"/>
 				<textElement>
-					<font fontName="Arial" size="11" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Sector:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="268" y="4" width="50" height="13"/>
 				<textElement>
-					<font fontName="Arial" size="11" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Lote Nº:]]></text>
 			</staticText>
@@ -64,7 +64,7 @@
 			<staticText>
 				<reportElement x="392" y="2" width="54" height="15"/>
 				<textElement>
-					<font fontName="Arial" size="11" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SubTotal:]]></text>
 			</staticText>
