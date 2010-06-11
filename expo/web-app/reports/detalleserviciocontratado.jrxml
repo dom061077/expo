@@ -18,42 +18,42 @@
 			<staticText>
 				<reportElement x="446" y="5" width="9" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="14" y="4" width="38" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Sector:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="268" y="4" width="38" height="13"/>
+				<reportElement x="268" y="4" width="50" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="10" isBold="false"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Lote Nº:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="56" y="4" width="185" height="14"/>
+				<reportElement x="66" y="4" width="185" height="14"/>
 				<textElement>
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{lote.sector.nombre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="308" y="4" width="114" height="14"/>
+				<reportElement x="318" y="4" width="114" height="14"/>
 				<textElement>
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{lote.nombre}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="465" y="5" width="61" height="13"/>
+				<reportElement x="475" y="5" width="61" height="13"/>
 				<textElement textAlignment="Right">
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotal}]]></textFieldExpression>
 			</textField>
@@ -64,14 +64,14 @@
 			<staticText>
 				<reportElement x="392" y="2" width="54" height="15"/>
 				<textElement>
-					<font fontName="Tahoma" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SubTotal:]]></text>
 			</staticText>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="465" y="2" width="61" height="13"/>
+				<reportElement x="475" y="2" width="61" height="13"/>
 				<textElement textAlignment="Right">
-					<font fontName="Tahoma"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$V{subTotalDetalle}]]></textFieldExpression>
 			</textField>
