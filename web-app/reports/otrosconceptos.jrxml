@@ -22,7 +22,9 @@
 			</textField>
 			<staticText>
 				<reportElement x="446" y="4" width="7" height="14"/>
-				<textElement/>
+				<textElement>
+					<font fontName="Bookman Old Style"/>
+				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<textField pattern="#,##0.00;-#,##0.00">
@@ -37,11 +39,11 @@
 	<summary>
 		<band height="18">
 			<staticText>
-				<reportElement x="390" y="2" width="56" height="15"/>
+				<reportElement x="385" y="2" width="78" height="15"/>
 				<textElement>
 					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
-				<text><![CDATA[SubTotal:]]></text>
+				<text><![CDATA[SUBTOTAL  $]]></text>
 			</staticText>
 			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="465" y="2" width="62" height="15"/>
