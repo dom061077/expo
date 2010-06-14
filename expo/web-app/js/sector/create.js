@@ -2,7 +2,7 @@ Ext.onReady(function(){
 	Ext.QuickTips.init();
 	
 	var exposicionStore = new Ext.data.JsonStore({
-		autoLoad:true,
+		//autoLoad:true,
 		totalProperty:'total',
 		root:'rows',
 		url:'../exposicion/listjson',
@@ -94,10 +94,11 @@ Ext.onReady(function(){
 				displayField:'nombre',
 				valueField:'id',
 				allowBlank:false,
+				msgTarget:'under',
 				mode:'local',
 				fieldLabel:'Exposición',
 				name:'exposicion',
-				hiddenField:'expo.id'
+				hiddenName:'expo.id'
 			},{
 				xtype:'textfield',
 				name:'nombre',
@@ -116,17 +117,60 @@ Ext.onReady(function(){
 			{
 				text:'Guardar',
 				handler:function(){
-					formSector.getForm().submit({
-						success:function(f,a){
-							
-						},
-						failure:function(f,a){
-							
+					var lotesjsonArr=[];
+					var lotesjsonStr='';
+					var flagerrorlotes=false;
+					store.data.each(
+						function(rec){
+							if(rec.data.nombre.trim()==''){
+								flagerrorlotes=true;
+								return false;
+							}
+							lotesjsonArr.push(rec.data);
 						}
-					});
+					);
+					lotesjsonStr=Ext.encode(lotesjsonArr)
+					Ext.getCmp('lotesjsonId').setValue(lotesjsonStr);
+					if(!flagerrorlotes){
+						formSector.getForm().submit({
+							success:function(f,a){
+								if(a.result.success){
+									Ext.MessageBox.show({
+										title:'Mensaje',
+										msg:'El sector y sus lotes se registraron correctamente',
+										icon:Ext.MessageBox.INFO,
+										buttons:Ext.MessageBox.OK,
+										fn: function(btn){
+											window.location='list';
+										}
+									});
+								}else{
+			 						Ext.MessageBox.show({
+			 							title:'Error',
+			 							msg:'Ocurrió un error al tratar de registra el sector con sus lotes',
+			 							icon:Ext.MessageBox.ERROR,
+			 							buttons:Ext.MessageBox.OK
+			 						});
+								}
+							},
+							failure:function(f,a){
+								
+							}
+						});
+					}else{
+						Ext.MessageBox.show({
+							title:'Error',
+							msg:'Verifique que la grilla de lotes esté completa',
+							icon:Ext.MessageBox.ERROR,
+							buttons:Ext.MessageBox.OK
+						});
+					}
 				}
 			},{
-				text:'Cancelar'
+				text:'Cancelar',
+				handler:function(){
+					window.location='list';
+				}
 			}
 		]
 	});

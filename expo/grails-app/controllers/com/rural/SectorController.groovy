@@ -85,7 +85,7 @@ class SectorController {
     }
 
     def edit = {
-        def sectorInstance = Sector.get( params.id )
+        /*def sectorInstance = Sector.get( params.id )
 
         if(!sectorInstance) {
             flash.message = "Sector not found with id ${params.id}"
@@ -93,7 +93,8 @@ class SectorController {
         }
         else {
             return [ sectorInstance : sectorInstance ]
-        }
+        }*/
+        return[id:params.id]
     }
 
     def update = {
@@ -140,16 +141,47 @@ class SectorController {
         }
     }
     
+    def showjson = {
+    	log.info("INGRESANDO AL METODO showjson DEL CONTROLLER SectorController")
+    	log.debug("PARAMETROS $params")
+    	def sectorInstance = Sector.get(params.id)
+    	render(contentType:"text/json"){
+    		success true
+    		data(id: sectorInstance.id,
+    		nombre: sectorInstance.nombre,
+    		exposicionId: sectorInstance.expo.id)
+    	}
+    	
+    }
+    
     def savejson = {
     	log.info("INGRESANDO AL METODO savejson DEL CONTROLLER LoteController")
     	log.debug("PARAMETROS $params")
     	def lotesjson = grails.converters.JSON.parse(params.lotesjson)
-    	def lotes = []
+    	def exposicionInstance=Exposicion.get(params.expo.id)
+    	def sectorInstance = new Sector(nombre:params.nombre,expo:exposicionInstance)
     	lotesjson.each{
-    		lotes.add(new Lote(nombre:it.nombre))
+    		sectorInstance.addToLotes(new Lote(nombre:it.nombre))
     	}
-    	def sectorInstance = new Sector(nombre:params.nombre)
-    	sectorInstance.lotes=lotes
+    	
+    	if(!sectorInstance.hasErrors() && sectorInstance.save()){
+    		render(contentType:"text/json"){
+    			success true
+    		}
+    	}else{
+    		log.debug("NO SE GUARDARON LOS DATOS VERIFIQUE ESTOS ERRORES: "
+    			+sectorInstance.errors.allErrors)
+    		render(contentType:"text/json"){
+    			success false
+    		}
+    	}
+    }
+    
+    def updatejson = {
+    	log.info("INGRESANDO AL METODO updatejson DEL CONTROLLER SectorController")
+    	log.debug("PARAMETROS $params")
+    	def sectorInstance=Sector.get(params.id)
+    	sectorInstance.properties=params
     	if(!sectorInstance.hasErrors() && sectorInstance.save()){
     		render(contentType:"text/json"){
     			success true
@@ -160,5 +192,4 @@ class SectorController {
     		}
     	}
     }
-    
 }
