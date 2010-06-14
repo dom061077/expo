@@ -18,6 +18,21 @@ class OrdenReservaController {
         [ ordenReservaInstanceList: OrdenReserva.list( params ), ordenReservaInstanceTotal: OrdenReserva.count() ]
     }
 
+    def showtorecibo = {
+    	log.info("INGRESANDO AL METODO showtorecbo DEL CONTROLADOR OrdenReservaController")
+    	log.debug("PARAMETROS $params")
+    	def ordenReserva = OrdenReserva.get(params.id)
+    	def saldo = ordenReserva.total
+    	ordenReserva.recibos.each{
+    		saldo = saldo - it.total
+    	}
+    	render(contentType : "text/json"){
+    		success true
+    		data(nombreempresa:ordenReserva.empresa.nombre,numero 	:		ordenReserva.numero,
+    		saldoorden 	:	saldo)
+    	}
+    }
+    
     def show = {
         def ordenReservaInstance = OrdenReserva.get( params.id )
 
@@ -217,23 +232,47 @@ class OrdenReservaController {
     		max: params.limit as Integer ?:10,
     		offset: params.start as Integer ?:0
     	]
+    	def totalOrdenes=0
+    	def ordenes=null
+    	if(params.fieldSearch=="numero"){
+	    	totalOrdenes = OrdenReserva.createCriteria().count{
+    			eq('numero',new Long(params?.searchCriteria))
+    			//eq('numero',null)
+	    	}
+	    	ordenes = OrdenReserva.createCriteria().list(pagingconfig){
+	    		eq('numero',new Long(params?.searchCriteria))
+	    		//eq('numero',null)
+	    	}
+    	}
+
+    	if(params.fieldSearch=="empresa.nombre"){
+	    	totalOrdenes = OrdenReserva.createCriteria().count{
+	    		empresa{
+	    			like('nombre','%'+params?.searchCriteria+'%')
+	   			}
+	    	}
+	    	ordenes = OrdenReserva.createCriteria().list(pagingconfig){
+	    		empresa{
+	   				like('nombre','%'+params?.searchCriteria+'%')
+	    		}
+	    	}
+    	}
     	
-    	def totalOrdenes = OrdenReserva.createCriteria().count{
-    		empresa{
-    			like('nombre','%'+params?.searchCriteria+'%')
-   			}
-    	}
-    	def ordenes = OrdenReserva.createCriteria().list(pagingconfig){
-    		empresa{
-   				like('nombre','%'+params?.searchCriteria+'%')
-    		}
-    	}
-    	log.debug("Cantidad de Ordenes Consultadas: "+ordenes.size()+" - total count() $totalOrdenes")
+    	
+    	log.debug("Cantidad de Ordenes Consultadas: "+ordenes?.size()+" - total count() $totalOrdenes")
+    	def totalCancelado=0
+    	def saldo=0
     	render(contentType:"text/json"){
     		total totalOrdenes
     		rows{
     			ordenes.each{
-    				row(id:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre,empresaNombre:it.empresa.nombre)
+    				totalCancelado=0
+    				saldo=0
+    				it.recibos.each{
+    					totalCancelado=totalCancelado+it.total
+    				}
+    				saldo=it.total-totalCancelado
+    				row(id:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre,empresaNombre:it.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
     			}
     		}
     	}

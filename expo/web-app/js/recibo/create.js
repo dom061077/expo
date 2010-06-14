@@ -26,7 +26,7 @@ Ext.onReady(function (){
 				header: 'Importe',
 				dataIndex:'importe',
 				width:90,
-				editor: new Ext.form.TextField({
+				editor: new Ext.form.NumberField({
 					allowBlank:false,
 					allowNegative:false,
 					maxValue:1000000
@@ -117,6 +117,25 @@ Ext.onReady(function (){
 				name:'ordenreservaid',
 				value:ordenreservaId
 			},{
+				xtype:'textfield',
+				id:'nombreempresaId',
+				name:'nombreempresaId',
+				width:200,
+				disabled:true,
+				fieldLabel:'Empresa'
+			},{
+				xtype:'textfield',
+				id:'numeroordenId',
+				name:'numeroorden',
+				disabled:true,
+				fieldLabel:'Orden Nro.'
+			},{
+				xtype:'numberfield',
+				id:'saldoordenId',
+				disabled:true,
+				name:'saldoorden',
+				fieldLabel:'Saldo Orden'
+			},{
 				xtype: 'textarea',
 				id:'conceptoId',
 				name:'concepto',
@@ -144,10 +163,12 @@ Ext.onReady(function (){
 		buttons: [
 			{
 				text:'Guardar',
+				id:'guardarId',
 			 	handler: function(){
 			 		var chequesjsonArr=[];
 			 		var chequesjsonStr = '';
 			 		var flagerrorcheques=false;
+			 		var saldo=Ext.getCmp('saldoordenId').getValue()-Ext.getCmp('efectivoId').getValue();
 			 		store.data.each(
 			 			function(rec){
 			 				if(rec.data.numero.trim()=='' ||
@@ -157,6 +178,7 @@ Ext.onReady(function (){
 			 				   		return false;
 			 				   }
 		 					chequesjsonArr.push(rec.data);	
+		 					saldo=saldo-rec.data.importe
 			 			}
 			 		);
 	 				chequesjsonStr=Ext.encode(chequesjsonArr);
@@ -169,20 +191,42 @@ Ext.onReady(function (){
 			 				buttons: Ext.MessageBox.OK
 			 			});
 			 			return false;
-			 		}else{
-			 			formRecibo.getForm().submit({
+			 		}
+			 		else{
+			 			if(saldo<0){
+			 				Ext.MessageBox.show({
+			 					title:'Error',
+			 					msg:'El efectivo mís la suma de importes de los cheques es mayor que el saldo de la orden',
+			 					icon: Ext.MessageBox.ERROR,
+			 					button: Ext.MessageBox.OK
+			 				});	
+			 			
+			 			}else{
+			 				formRecibo.getForm().submit({
 			 				success: function(f,a){
 			 					if(a.result.success){
-			 						Ext.MessageBox.show({
+			 						/*Ext.MessageBox.show({
 			 							title:'Datos de retorno json',
 			 							msg:'Numero de recibo: '+a.result.numero+', total: '+a.result.total
 			 								+', total en letras: '+a.result.totalletras,
 			 							buttons:Ext.MessageBox.OK	
+			 						});*/
+			 						Ext.getCmp('guardarId').disable();
+			 						Ext.getCmp('cancelarId').setText('Salir');
+			 						Ext.MessageBox.show({
+			 							title:'Mensaje',
+			 							msg:'El recibo se generó correctamente',
+			 							buttons:Ext.MessageBox.OK,
+			 							icon:Ext.MessageBox.INFO,
+			 							fn:function(btn){
+			 								window.location='../ordenReserva/list';
+			 							}
 			 						});
+			 						window.location='reporte?target=_blank&_format=PDF&_name=recibo&_file=recibo&id='+a.result.id+"&totalletras="+a.result.totalletras;			 				
 			 					}else
 			 						Ext.MessageBox.show({
 			 							title:'Error',
-			 							msg:'Ocurri�n un error al tratar de genera el recibo',
+			 							msg:'Ocurrió un error al tratar de genera el recibo',
 			 							icon:Ext.MessageBox.ERROR,
 			 							buttons:Ext.MessageBox.OK
 			 						});
@@ -191,17 +235,33 @@ Ext.onReady(function (){
 			 					
 			 				}
 			 			});
+			 			}
 			 		}
 			 		
 			 	}
 			 
 			},{
 			 	text:'Cancelar',
+			 	id:'cancelarId',
 			 	handler: function(){
 			 		window.location='../ordenReserva/list';
 			 	}
 			}
 		]
+	});
+	formRecibo.load({
+		url:'../ordenReserva/showtorecibo',
+		params:{
+			'id':ordenreservaId
+		},
+		success: function(f,a){
+			Ext.getCmp('nombreempresaId').setValue(a.result.data.nombreempresa);
+			Ext.getCmp('numeroordenId').setValue(a.result.data.numero);
+			Ext.getCmp('saldoordenId').setValue(a.result.data.saldoorden);
+		},
+		failure: function (thisform,action){
+   				alert(action);
+		}
 	});
 	Ext.getCmp('conceptoId').focus('',10);	
 });

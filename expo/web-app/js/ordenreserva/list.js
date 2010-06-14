@@ -5,7 +5,7 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		root: 'rows',
 		url:'listjson',
-		fields:['id','numero','fechaAlta','total','anio','expoNombre','empresaNombre'],
+		fields:['id','numero','fechaAlta','total','totalCancelado','saldo','anio','expoNombre','empresaNombre'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -34,6 +34,8 @@ Ext.onReady(function(){
 					{header:"Número",dataIndex:"numero",width:80},
 					{header:"Fecha",dataIndex:'fechaAlta',width:80,renderer: Ext.util.Format.dateRenderer('d/m/y')},
 					{header:"Total",dataIndex:'total',width:80},
+					{header:"Total Cancelado",dataIndex:'totalCancelado',width:100},
+					{header:"Saldo",dataIndex:'saldo',width:80},					
 					{header:"Año",dataIndex:'anio',width:80},					
 					{header:"Exposición",dataIndex:'expoNombre',width:200},					
 					{header:"Empresa",dataIndex:'empresaNombre',width:200}
@@ -63,9 +65,16 @@ Ext.onReady(function(){
         		,handler: function(){
         			var sm = grid.getSelectionModel();
         			var sel = sm.getSelected();
-        			if (sm.hasSelection())
-        				window.location='../recibo/create?ordenreservaId='+sel.data.id;	
-        			else{
+        			if (sm.hasSelection()){
+        				if(sel.data.saldo==0)
+        					Ext.MessageBox.show({
+        						title:'Mensaje',
+        						msg:'No puede generar un recibo de una Orden de Reserva con saldo Cero',
+        						buttons:Ext.MessageBox.OK
+        					});
+        				else 
+        					window.location='../recibo/create?ordenreservaId='+sel.data.id;	
+        			}else{
         				Ext.MessageBox.show({
         					title:'Advertencia',
         					msg:'Seleccione una fila de la grilla para generar el recibo',
@@ -92,22 +101,38 @@ Ext.onReady(function(){
 		title:'Ordenes de Reserva',
 		width:470,
 		frame:true,
-		items:[
+		items:[	
+					new Ext.form.ComboBox({
+										mode:'local',
+										valueField:'myId',
+										displayField:'displayText',
+										store: new Ext.data.SimpleStore({
+											id: 0,
+											fields:['myId','displayText'],
+											data:[['empresa.nombre','Nombre Empresa'],['numero','Por Num.Orden']]
+										}),
+										id:'combocriteriosId',
+										name:'criterios',
+										boxMaxWidth:100,
+										value:'empresa.nombre',
+										fieldLabel:'Criterios',
+										forceSelection:true
+										}),		
 				{
 					layout:'column',
-					anchor: '0',
+					
 					items:[
-						{	columnWidth: .5,
-							layout:'form',
-							items: {
-										xtype: 'textfield',
-										id:'searchCriteriaId',
-										name:'searchCriteria',
-										fieldLabel:'Texto a Buscar',
-										anchor:'0'
-								}
-						},{
+						{
 							columnWidth: .5,
+							layout:'form',
+							items:{
+								xtype:'textfield',
+								name:'searchCriteria',
+								id:'searchCriteriaId',
+								fieldLabel:'Valor Criterio'
+							}
+						},{
+							columnWidth: .4,
 							layout:'form',
 							items:{
 										xtype:'button',
@@ -115,7 +140,7 @@ Ext.onReady(function(){
 										listeners:{
 											click: function(){
 												ordenStore.load({
-														params:{'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()}
+														params:{'fieldSearch':Ext.getCmp('combocriteriosId').getValue(),'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()}
 													});
 											}
 										}

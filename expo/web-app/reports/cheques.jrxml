@@ -5,65 +5,66 @@
 	<property name="ireport.y" value="0"/>
 	<field name="numero" class="java.lang.String"/>
 	<field name="banco" class="java.lang.String"/>
-	<field name="importe" class="java.lang.String"/>
+	<field name="importe" class="java.lang.Double"/>
+	<field name="vencimiento" class="java.util.Date"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
 		<band height="18" splitType="Stretch">
 			<staticText>
-				<reportElement x="17" y="4" width="31" height="11"/>
+				<reportElement x="4" y="4" width="34" height="12"/>
 				<textElement>
-					<font fontName="Tahoma" size="9"/>
+					<font fontName="Bookman Old Style" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Ch. Nº]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="137" y="4" width="20" height="11"/>
+				<reportElement x="97" y="4" width="29" height="12"/>
 				<textElement>
-					<font fontName="Tahoma" size="9"/>
+					<font fontName="Bookman Old Style" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Bco.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="357" y="4" width="20" height="11"/>
+				<reportElement x="245" y="4" width="20" height="12"/>
 				<textElement>
-					<font fontName="Tahoma" size="9"/>
+					<font fontName="Bookman Old Style" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Vto.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="447" y="4" width="20" height="11"/>
+				<reportElement x="335" y="4" width="10" height="12"/>
 				<textElement>
-					<font fontName="Tahoma" size="9"/>
+					<font fontName="Bookman Old Style" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="50" y="4" width="73" height="11"/>
+				<reportElement x="38" y="4" width="58" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="9"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{numero}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="160" y="4" width="184" height="11"/>
+				<reportElement x="125" y="4" width="116" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="9"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{banco}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="380" y="4" width="56" height="11"/>
+				<reportElement x="268" y="4" width="56" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="9"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{vencimiento}]]></textFieldExpression>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{vencimiento}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="470" y="4" width="56" height="11"/>
+				<reportElement x="349" y="4" width="56" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="9"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{importe}]]></textFieldExpression>
 			</textField>

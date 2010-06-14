@@ -18,26 +18,26 @@
 			<staticText>
 				<reportElement x="446" y="5" width="9" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="14" y="4" width="38" height="13"/>
+				<reportElement x="1" y="4" width="50" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Sector:]]></text>
+				<text><![CDATA[SECTOR:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="268" y="4" width="50" height="13"/>
+				<reportElement x="258" y="4" width="47" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Lote Nº:]]></text>
+				<text><![CDATA[LOTE Nº:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="66" y="4" width="185" height="14"/>
+				<reportElement x="51" y="4" width="180" height="14"/>
 				<textElement>
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
@@ -64,7 +64,7 @@
 			<staticText>
 				<reportElement x="392" y="2" width="54" height="15"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[SubTotal:]]></text>
 			</staticText>

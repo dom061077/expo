@@ -1,41 +1,39 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
-	
-	var usuariosStore = new Ext.data.JsonStore({
+	var exposicionStore = new Ext.data.JsonStore({
 		autoLoad:true,
 		totalProperty:'total',
 		root:'rows',
 		url:'listjson',
 		root:'rows',
-		fields:['id','username','userRealName']
+		fields:['id','nombre']
 	});
 	
-	var gridusuarios = new Ext.grid.GridPanel({
-		store:usuariosStore,
+	var gridexposiciones = new Ext.grid.GridPanel({
+		store:exposicionStore,
 		columns:[
 			{header:"id",dataIndex:'id',hidden:true},
-			{header:"Nombre de Usuario",width:200,dataIndex:"username"},
-			{header:"Nombre Real del Usuario",width:200,dataIndex:"userRealName"}
+			{header:"Nombre de Exposición",width:200,dataIndex:"nombre"}
 		],
 		stripRows:true,
 		height:250,
 		width:460,
-		title:"Usuarios",
+		title:"Exposiciones",
 		bbar: new Ext.PagingToolbar({
 				pageSize:10,
-				store:usuariosStore,
+				store:exposicionStore,
 				displayInfo:true,
-				displayMsg:'Visualizando usuarios {0} - {1} de {2}',
+				displayMsg:'Visualizando exposiciones {0} - {1} de {2}',
 				emptyMsg:'No hay exposiciones para visualizar'
 		})
 	});
 	
 	var formSearch = new Ext.form.FormPanel({
 		url:'search',
-		renderTo:'usuarios-grid',
+		renderTo:'formulario_extjs',
 		width:470,
 		frame:true,
-		title:'Búsqueda de Usuarios',
+		title:'Búsqueda de Exposición',
 		items:[{
 				layout:'column',
 				anchor:'0',
@@ -56,25 +54,26 @@ Ext.onReady(function(){
 							text:'Buscar',
 							listeners:{
 								click:function(){
-									usuariosStore.load({
-										params:{'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').value}
+									
+									exposicionStore.load({
+										params:{'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()}
 									});									
 								}
 							}
 						}
 					}]
-			},gridusuarios
+			},gridexposiciones
 		
 		]
 	});
 	
-	gridusuarios.on('rowdblclick',function(grid,rowIndex,e){
+	gridexposiciones.on('rowdblclick',function(grid,rowIndex,e){
 		                  var r = grid.getStore().getAt(rowIndex);
 		                  var selectedId = r.get('id');
-		                  usuariosStore.reload({params: {id_ft: selectedId}});
+		                  exposicionStore.reload({params: {id_ft: selectedId}});
 		                  window.location = 'edit?id='+selectedId;
 
 		}
 	);
-	
+		
 });

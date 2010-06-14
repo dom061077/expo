@@ -7,11 +7,11 @@ class Exposicion {
 	static hasMany = [empresas:Empresa,sectores:Sector]
 
     static constraints = {
-		image(blank:true,nullable:true)
+		image(blank:true,nullable:true,maxSize:1024*30)
+		
     }
 	
 	static belongsTo = [Empresa]
-
 	
 /*	def beforeDelete = {
 		empresaParent.exposaparticipar.remove(this)
