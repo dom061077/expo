@@ -665,7 +665,7 @@ Ext.onReady(function(){
 							xtype:'textfield',
 							id:'telefono2Id',
 							fieldLabel:'Teléfono 2',
-							allowBlank: false,
+							allowBlank: true,
 							width:260,
 							msgTarget:'under',
 							name:'telefono2'
@@ -772,7 +772,7 @@ Ext.onReady(function(){
 								        	},{
 								        		xtype: 'textfield',
 								        		fieldLabel:'Teléfono 1',
-								        		allowBlank: true,
+								        		allowBlank: false,
 								        		id:'idTelefonoRepresentante1',
 								        		msgTarget:'under',
 								        		layout: 'form',
@@ -810,7 +810,7 @@ Ext.onReady(function(){
 								        		id:'idSitioweb',
 								        		name:'sitioWeb'
 								        	},{
-								        		xtype:'numberfield',
+								        		xtype:'textfield',
 								        		fieldLabel:'D.N.I',
 								        		allowBlank:false,
 								        		msgTarget:'under',
