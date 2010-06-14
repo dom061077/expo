@@ -2,18 +2,19 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" language="groovy" pageWidth="595" pageHeight="842" columnWidth="567" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="14">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="341"/>
+	<property name="ireport.y" value="270"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="totalletras" class="java.lang.String"/>
 	<parameter name="reportsDirPath" class="java.lang.String"/>
-	<field name="numero" class="java.lang.String"/>
-	<field name="fechaAlta" class="java.lang.String"/>
-	<field name="total" class="java.lang.String"/>
-	<field name="efectivo" class="java.lang.String"/>
+	<field name="numero" class="java.lang.Long"/>
+	<field name="fechaAlta" class="java.util.Date"/>
+	<field name="total" class="java.lang.Double"/>
+	<field name="efectivo" class="java.lang.Double"/>
 	<field name="concepto" class="java.lang.String"/>
 	<field name="ordenReserva.empresa.razonSocial" class="java.lang.String"/>
+	<field name="cheques" class="java.util.Collection"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -110,7 +111,7 @@ Inicio Act. 05/11/1980]]></text>
 			</staticText>
 			<subreport>
 				<reportElement x="198" y="150" width="351" height="13"/>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{cheques})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"cheques.jasper")]]></subreportExpression>
 			</subreport>
 			<rectangle>
@@ -146,7 +147,7 @@ Inicio Act. 05/11/1980]]></text>
 			</staticText>
 			<subreport>
 				<reportElement x="198" y="690" width="351" height="13"/>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{cheques})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"cheques.jasper")]]></subreportExpression>
 			</subreport>
 			<staticText>
@@ -170,12 +171,8 @@ Inicio Act. 05/11/1980]]></text>
 				<text><![CDATA[Firma]]></text>
 			</staticText>
 			<image>
-				<reportElement x="133" y="189" width="887" height="0"/>
-				<imageExpression class="java.lang.String"><![CDATA["C:\\exporural\\expo\\web-app\\reports\\rural.jpg"]]></imageExpression>
-			</image>
-			<image>
 				<reportElement x="499" y="208" width="50" height="50"/>
-				<imageExpression class="java.lang.String"><![CDATA["C:\\exporural\\expo\\web-app\\reports\\rural.jpg"]]></imageExpression>
+				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="198" y="133" width="47" height="15"/>
@@ -289,7 +286,7 @@ Inicio Act. 05/11/1980]]></text>
 			</staticText>
 			<subreport>
 				<reportElement x="198" y="420" width="351" height="13"/>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{cheques})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"cheques.jasper")]]></subreportExpression>
 			</subreport>
 			<staticText>
@@ -357,7 +354,7 @@ Inicio Act. 05/11/1980]]></text>
 			</staticText>
 			<image>
 				<reportElement x="499" y="478" width="50" height="50"/>
-				<imageExpression class="java.lang.String"><![CDATA["C:\\exporural\\expo\\web-app\\reports\\rural.jpg"]]></imageExpression>
+				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="207" y="312" width="120" height="11"/>
@@ -389,7 +386,7 @@ Inicio Act. 05/11/1980]]></text>
 			</staticText>
 			<image>
 				<reportElement x="499" y="748" width="50" height="50"/>
-				<imageExpression class="java.lang.String"><![CDATA["C:\\exporural\\expo\\web-app\\reports\\rural.jpg"]]></imageExpression>
+				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="163" y="571" width="204" height="11"/>
@@ -523,7 +520,7 @@ Inicio Act. 05/11/1980]]></text>
 				<text><![CDATA[Firma]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="83" y="438" width="42" height="13"/>
+				<reportElement x="76" y="441" width="42" height="13"/>
 				<textElement>
 					<font fontName="Tahoma" isBold="true"/>
 				</textElement>
@@ -550,12 +547,12 @@ Inicio Act. 05/11/1980]]></text>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.empresa.razonSocial}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="244" y="133" width="100" height="11"/>
 				<textElement>
 					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{efectivo}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{efectivo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="490" y="185" width="66" height="11"/>
@@ -599,12 +596,12 @@ Inicio Act. 05/11/1980]]></text>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{totalletras}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="244" y="403" width="100" height="11"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="490" y="403" width="66" height="11"/>
 				<textElement>
 					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{efectivo}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{efectivo}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="7" y="394" width="115" height="46"/>
@@ -614,8 +611,8 @@ Inicio Act. 05/11/1980]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)">
-				<reportElement x="122" y="393" width="60" height="11"/>
-				<textElement>
+				<reportElement x="125" y="393" width="60" height="11"/>
+				<textElement textAlignment="Right">
 					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
@@ -697,12 +694,12 @@ Inicio Act. 05/11/1980]]></text>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{totalletras}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="244" y="673" width="100" height="11"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="490" y="673" width="66" height="11"/>
 				<textElement>
 					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{efectivo}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{efectivo}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="425" y="22" width="35" height="11"/>
@@ -725,6 +722,13 @@ Inicio Act. 05/11/1980]]></text>
 				</textElement>
 				<text><![CDATA[0002-]]></text>
 			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="125" y="441" width="60" height="11"/>
+				<textElement textAlignment="Right">
+					<font fontName="Tahoma" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

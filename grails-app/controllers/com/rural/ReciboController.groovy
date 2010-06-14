@@ -87,9 +87,28 @@ class ReciboController {
         reciboInstance.properties = params
         return ['reciboInstance':reciboInstance,ordenreservaId:params.ordenreservaId]
     }
-    
+
+	def reporte = {
+		log.info("INGREANDO AL METODO reporte DEL CONTROLADOR ReciboController")
+		log.debug("PARAMETROS: $params")
+		def recibo = Recibo.get(new Long(params.id))
+		recibo.cheques.each{
+			log.debug(it.numero)
+		}
+		
+		log.debug(recibo.ordenReserva.empresa.nombre)
+		List reciboList = new ArrayList()
+		reciboList.add(recibo)
+		String reportsDirPath = servletContext.getRealPath("/reports/");
+		params.put("reportsDirPath", reportsDirPath);
+		log.debug("Parametros: $params")
+		chain(controller:'jasper',action:'index',model:[data:reciboList],params:params)
+		
+	}
+	
+	
     def createjson = {
-		log.info("INGRESANDO LA METODO createjson DEL CONTROLADOR ReciboController")
+		log.info("INGRESANDO AL METODO createjson DEL CONTROLADOR ReciboController")
 		log.debug("PARAMETROS: $params")
 		def chequesjson = grails.converters.JSON.parse(params.chequesjson)
 		def cheques = []  

@@ -52,46 +52,46 @@
 	<columnHeader>
 		<band height="239" splitType="Stretch">
 			<line>
-				<reportElement x="2" y="76" width="549" height="5"/>
+				<reportElement x="2" y="76" width="549" height="1"/>
 			</line>
 			<staticText>
 				<reportElement x="358" y="189" width="32" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[MAIL:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="8" y="203" width="101" height="13"/>
+				<reportElement x="7" y="203" width="101" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[REPRESENTANTE:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="8" y="218" width="42" height="13"/>
+				<reportElement x="7" y="218" width="42" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[CARGO:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="175" y="219" width="25" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[TEL.:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="329" y="219" width="121" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[DOC. DE IDENTIDAD:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="139" y="174" width="384" height="13"/>
-				<textElement>
+				<reportElement x="129" y="175" width="384" height="13"/>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.nombre}]]></textFieldExpression>
@@ -104,8 +104,8 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.direccion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="398" y="188" width="154" height="13"/>
-				<textElement>
+				<reportElement x="398" y="189" width="154" height="13"/>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.email}]]></textFieldExpression>
@@ -139,47 +139,47 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.dniRep}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="9" y="156" width="226" height="13"/>
+				<reportElement x="7" y="156" width="226" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="11" isBold="true" isUnderline="true"/>
+					<font fontName="Bookman Old Style" size="11" isBold="false" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[DATOS CATALOGO EXPOSITORES]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="381" y="53" width="22" height="15"/>
+				<reportElement x="430" y="53" width="22" height="15"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="11" isBold="true"/>
+					<font fontName="Bookman Old Style" size="11" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Nº:]]></text>
 			</staticText>
 			<image>
-				<reportElement x="444" y="108" width="16" height="13"/>
+				<reportElement x="460" y="108" width="16" height="13"/>
 				<imageExpression class="java.io.File"><![CDATA[$F{consFinalCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
 			</image>
 			<image>
-				<reportElement x="525" y="108" width="16" height="13"/>
+				<reportElement x="536" y="108" width="16" height="13"/>
 				<imageExpression class="java.io.File"><![CDATA[$F{monotributoCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="463" y="108" width="61" height="13"/>
+				<reportElement x="486" y="108" width="50" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Monotributo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="381" y="36" width="45" height="13"/>
+				<reportElement x="430" y="36" width="45" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="11" isBold="true"/>
+					<font fontName="Bookman Old Style" size="11" isBold="false"/>
 				</textElement>
 				<text><![CDATA[FECHA:]]></text>
 			</staticText>
 			<image>
-				<reportElement x="374" y="108" width="16" height="13"/>
+				<reportElement x="391" y="108" width="16" height="13"/>
 				<imageExpression class="java.io.File"><![CDATA[$F{exentoCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="164" y="39" width="208" height="34"/>
+				<reportElement x="139" y="39" width="235" height="34"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="7" isBold="true"/>
 				</textElement>
@@ -188,29 +188,29 @@ Tel./ Fax: (0381) - 4347777/6146/6258
 www.srt.org.ar - informes@srt.org.ar]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="445" y="53" width="91" height="14" isRemoveLineWhenBlank="true"/>
-				<textElement>
+				<reportElement x="487" y="53" width="60" height="14" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Right">
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[($F{numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="176" y="23" width="172" height="19"/>
-				<textElement>
+				<reportElement x="139" y="23" width="235" height="19"/>
+				<textElement textAlignment="Center">
 					<font fontName="Bookman Old Style" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Sociedad Rural de Tucumán]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="409" y="53" width="35" height="14"/>
-				<textElement>
+				<reportElement x="452" y="53" width="35" height="14"/>
+				<textElement textAlignment="Right">
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[0002-]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="429" y="36" width="100" height="15"/>
-				<textElement>
+				<reportElement x="472" y="36" width="75" height="15"/>
+				<textElement textAlignment="Right">
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{fechaAlta})]]></textFieldExpression>
@@ -218,39 +218,39 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 			<staticText>
 				<reportElement x="7" y="81" width="228" height="15"/>
 				<textElement>
-					<font fontName="Arial" size="11" isBold="true" isUnderline="true" isPdfEmbedded="true"/>
+					<font fontName="Arial" size="11" isBold="false" isUnderline="true" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[DATOS DE FACTURACION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="382" y="14" width="164" height="20"/>
+				<reportElement x="383" y="14" width="164" height="20"/>
 				<textElement>
 					<font fontName="Bookman Old Style" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ORDEN DE CONTRATACION]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="137" y="3" width="245" height="20"/>
+				<reportElement x="139" y="3" width="235" height="20"/>
 				<textElement textAlignment="Center">
 					<font fontName="Bookman Old Style" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$V{tipo}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="237" y="108" width="16" height="13"/>
+				<reportElement x="275" y="108" width="16" height="13"/>
 				<imageExpression class="java.io.File"><![CDATA[$F{ivaGralCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="392" y="108" width="55" height="13"/>
+				<reportElement x="415" y="108" width="45" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Cons.Final]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="265" y="108" width="50" height="13"/>
+				<reportElement x="298" y="108" width="41" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[No Resp.]]></text>
 			</staticText>
@@ -259,7 +259,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement>
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.telefonoFiscal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.telefono1}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="76" y="108" width="100" height="13"/>
@@ -276,23 +276,23 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.direccionFiscal}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="295" y="96" width="253" height="13"/>
-				<textElement>
+				<reportElement x="279" y="96" width="253" height="13"/>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.razonSocial}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="6" y="96" width="288" height="13"/>
+				<reportElement x="7" y="96" width="274" height="13"/>
 				<textElement markup="styled">
-					<font fontName="Bookman Old Style" size="10" isBold="true" isPdfEmbedded="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[EXPOSITOR-NOMBRE Y APELLIDO O RAZON SOCIAL:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="339" y="108" width="37" height="13"/>
+				<reportElement x="362" y="108" width="29" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Exento]]></text>
 			</staticText>
@@ -311,35 +311,35 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{anio}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="6" y="108" width="43" height="13"/>
+				<reportElement x="7" y="108" width="43" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[C.U.I.T:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="6" y="123" width="74" height="13"/>
+				<reportElement x="7" y="123" width="74" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[DIRECCION:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="6" y="137" width="64" height="13"/>
+				<reportElement x="7" y="137" width="64" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[PROVINCIA:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="336" y="123" width="66" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[LOCALIDAD:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="406" y="123" width="142" height="13"/>
+				<reportElement x="404" y="123" width="142" height="13"/>
 				<textElement>
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
@@ -355,7 +355,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 			<staticText>
 				<reportElement x="275" y="137" width="23" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[C.P:]]></text>
 			</staticText>
@@ -369,127 +369,134 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 			<staticText>
 				<reportElement x="415" y="137" width="29" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[TEL.:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="8" y="175" width="120" height="13"/>
+				<reportElement x="7" y="175" width="120" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[NOMBRE COMERCIAL:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="8" y="189" width="68" height="13"/>
+				<reportElement x="7" y="189" width="68" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[DOMICILIO:]]></text>
 			</staticText>
 			<line>
-				<reportElement x="2" y="78" width="549" height="5"/>
+				<reportElement x="2" y="79" width="549" height="1"/>
 			</line>
 			<line>
-				<reportElement x="2" y="231" width="549" height="5"/>
+				<reportElement x="2" y="233" width="549" height="1"/>
 			</line>
 			<line>
-				<reportElement x="2" y="234" width="549" height="5"/>
+				<reportElement x="2" y="236" width="549" height="1"/>
 			</line>
 			<line>
-				<reportElement x="2" y="151" width="549" height="5"/>
+				<reportElement x="2" y="151" width="549" height="1"/>
 			</line>
 			<line>
-				<reportElement x="2" y="153" width="549" height="5"/>
+				<reportElement x="2" y="154" width="549" height="1"/>
 			</line>
 			<staticText>
-				<reportElement x="195" y="108" width="42" height="13"/>
+				<reportElement x="238" y="108" width="42" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
-				<text><![CDATA[No Resp.]]></text>
+				<text><![CDATA[Resp.Ins.]]></text>
 			</staticText>
 			<image>
-				<reportElement x="311" y="108" width="16" height="13"/>
+				<reportElement x="336" y="108" width="16" height="13"/>
 				<imageExpression class="java.io.File"><![CDATA[$F{ivaRniCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="209" y="108" width="28" height="13"/>
+				<textElement>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[I.V.A:]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="414" splitType="Stretch">
+		<band height="426" splitType="Stretch">
 			<subreport>
-				<reportElement x="9" y="120" width="531" height="14" isRemoveLineWhenBlank="true"/>
+				<reportElement x="7" y="120" width="531" height="14" isRemoveLineWhenBlank="true"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{otrosconceptos})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"otrosconceptos.jasper")]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="9" y="4" width="226" height="13"/>
+				<reportElement x="7" y="4" width="226" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="11" isBold="true" isUnderline="true"/>
+					<font fontName="Bookman Old Style" size="11" isBold="false" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[DATOS DEL SERVICIO CONTRATADO]]></text>
 			</staticText>
 			<subreport isUsingCache="false" runToBottom="false">
-				<reportElement x="9" y="21" width="533" height="14"/>
+				<reportElement x="7" y="21" width="533" height="14"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalle})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"detalleserviciocontratado.jasper")]]></subreportExpression>
 			</subreport>
 			<line>
-				<reportElement x="2" y="96" width="549" height="5"/>
+				<reportElement x="2" y="97" width="549" height="1"/>
 			</line>
 			<line>
-				<reportElement x="2" y="94" width="549" height="5"/>
+				<reportElement x="2" y="94" width="549" height="1"/>
 			</line>
 			<staticText>
-				<reportElement x="9" y="191" width="212" height="13"/>
+				<reportElement x="7" y="191" width="212" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="11" isBold="true" isUnderline="true"/>
+					<font fontName="Bookman Old Style" size="11" isBold="false" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[PRODUCTOS QUE SE EXPONEN]]></text>
 			</staticText>
 			<line>
-				<reportElement x="2" y="184" width="549" height="5"/>
+				<reportElement x="2" y="185" width="549" height="1"/>
 			</line>
 			<line>
-				<reportElement x="2" y="182" width="549" height="5"/>
+				<reportElement x="2" y="182" width="549" height="1"/>
 			</line>
 			<staticText>
 				<reportElement x="350" y="205" width="110" height="13"/>
 				<textElement textAlignment="Right">
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[SubTotal:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="350" y="223" width="110" height="13"/>
 				<textElement textAlignment="Right">
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[I.V.A Tasa General:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="350" y="240" width="110" height="13"/>
 				<textElement textAlignment="Right">
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[I.V.A R.N.I:]]></text>
 			</staticText>
 			<subreport isUsingCache="true">
-				<reportElement x="9" y="208" width="200" height="14"/>
+				<reportElement x="7" y="208" width="200" height="14"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{productos})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"productos.jasper")]]></subreportExpression>
 			</subreport>
 			<staticText>
 				<reportElement x="350" y="257" width="110" height="13"/>
 				<textElement textAlignment="Right">
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[I.V.A Suj. No Categ.:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="350" y="276" width="112" height="15"/>
 				<textElement textAlignment="Right">
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[A PAGAR:]]></text>
 			</staticText>
@@ -529,14 +536,14 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="55" y="379" width="49" height="14"/>
+				<reportElement x="55" y="391" width="49" height="14"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Intervino]]></text>
 			</staticText>
 			<line>
-				<reportElement x="344" y="376" width="121" height="1"/>
+				<reportElement x="344" y="388" width="121" height="1"/>
 				<graphicElement>
 					<pen lineStyle="Dashed"/>
 				</graphicElement>
@@ -549,14 +556,14 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[Nota:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="30" y="397" width="100" height="13"/>
+				<reportElement x="30" y="409" width="100" height="13"/>
 				<textElement textAlignment="Center">
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.vendedor.nombre}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="23" y="376" width="121" height="1"/>
+				<reportElement x="23" y="388" width="121" height="1"/>
 				<graphicElement>
 					<pen lineStyle="Dashed"/>
 				</graphicElement>
@@ -569,24 +576,24 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[Expresamos nuestro total consentimiento y conformidad con las disposiciones del Reglamento General de Exposición de la Sociedad Rural de Tucumán.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="378" y="379" width="49" height="14"/>
+				<reportElement x="378" y="391" width="49" height="14"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Expositor]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="9" y="102" width="167" height="13"/>
+				<reportElement x="7" y="102" width="167" height="13"/>
 				<textElement>
-					<font fontName="Bookman Old Style" size="11" isBold="true" isUnderline="true"/>
+					<font fontName="Bookman Old Style" size="11" isBold="false" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[OTROS CONCEPTOS]]></text>
 			</staticText>
 			<line>
-				<reportElement x="2" y="302" width="549" height="5"/>
+				<reportElement x="2" y="302" width="549" height="1"/>
 			</line>
 			<line>
-				<reportElement x="2" y="305" width="549" height="5"/>
+				<reportElement x="2" y="305" width="549" height="1"/>
 			</line>
 		</band>
 	</detail>
@@ -623,7 +630,7 @@ Obligatoriamente deberá ser presentada la constancia que acredite la condición
 			</staticText>
 			<image>
 				<reportElement x="472" y="5" width="80" height="73"/>
-				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.jpg")]]></imageExpression>
+				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
 			</image>
 		</band>
 	</pageFooter>

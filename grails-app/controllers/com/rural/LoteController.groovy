@@ -117,4 +117,5 @@ class LoteController {
             render(view:'create',model:[loteInstance:loteInstance])
         }
     }
+    
 }

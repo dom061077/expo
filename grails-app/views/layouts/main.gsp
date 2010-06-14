@@ -50,12 +50,16 @@
 					<li class='controller'><g:link controller="empresa">Empresas </g:link></li>
 					<li class='controller'><g:link controller="empresa" action="empresassimilares">Empresas Similares</g:link></li>
 					<li class='controller'><g:link controller="ordenReserva" action="create">Orden de Reserva </g:link></li>
+					<g:ifAllGranted role="ROLE_ADMIN">					
+						<li class='controller'><g:link controller="empresa" action="uploadFile">Subir Archivos Excel</g:link></li>
+					</g:ifAllGranted>
 					<g:ifAllGranted role="ROLE_ADMIN">
+						<li class='controller'><g:link controller="sector">Sectores</g:link> </li>
 						<li class='controller'><g:link controller="vendedor">Vendedores </g:link> </li>
 						<li class='controller'><g:link controller="rubro">Rubro </g:link> </li>
 						<li class='controller'><g:link controller="subRubro">SubRubro </g:link> </li>
+						<li class='controller'><g:link controller="exposicion">Exposición </g:link> </li>						
 						<li class='controller'><g:link controller="person">Usuario</g:link> </li>												
-						<li class='controller'><g:link controller="empresa" action="uploadFile">Subir Archivos Excel</g:link></li>
 					</g:ifAllGranted>
 				</ul>
 				

@@ -9,6 +9,28 @@ class SectorController {
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
     
+    def listtodosjson = {
+    	log.info("INGRESANDO AL METODO listtodosjson DEL CONTROLLER SectorController")
+    	log.debug("PARAMETROS INGRESADOS: $params")
+    	def c = Sector.createCriteria()
+    	def sectores = c.list{
+    		or{
+    			expo{
+    				like('nombre','%'+params.searchCriteria+'%')
+    			}
+    			like('nombre','%'+params.searchCriteria+'%')
+    		}
+    	}
+    	render(contentType:"text/json"){
+    		total sectores.size()
+    		rows{
+    			sectores.each{
+    				row(id:it.id,nombre:it.nombre,exposicion:it.expo.nombre)
+    			}
+    		}
+    	}
+    }
+    
     def listjson = {
     	log.info("INGRESANDO AL METODO listjson DEL CONTROLLER SectorController")
     	log.debug("PARAMETROS INGRESADOS: $params")
@@ -117,4 +139,26 @@ class SectorController {
             render(view:'create',model:[sectorInstance:sectorInstance])
         }
     }
+    
+    def savejson = {
+    	log.info("INGRESANDO AL METODO savejson DEL CONTROLLER LoteController")
+    	log.debug("PARAMETROS $params")
+    	def lotesjson = grails.converters.JSON.parse(params.lotesjson)
+    	def lotes = []
+    	lotesjson.each{
+    		lotes.add(new Lote(nombre:it.nombre))
+    	}
+    	def sectorInstance = new Sector(nombre:params.nombre)
+    	sectorInstance.lotes=lotes
+    	if(!sectorInstance.hasErrors() && sectorInstance.save()){
+    		render(contentType:"text/json"){
+    			success true
+    		}
+    	}else{
+    		render(contentType:"text/json"){
+    			success false
+    		}
+    	}
+    }
+    
 }
