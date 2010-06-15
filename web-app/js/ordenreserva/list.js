@@ -47,7 +47,7 @@ Ext.onReady(function(){
         tbar:[{
         		icon: imagePath+'/pdf.gif'
         		,cls:'x-btn-text-icon'
-        		,text:'Reporte'
+        		,text:'Reimprimir'
         		,handler: function(){
         				var sm = grid.getSelectionModel();
         				var sel = sm.getSelected();
@@ -123,7 +123,7 @@ Ext.onReady(function(){
 					
 					items:[
 						{
-							columnWidth: .5,
+							columnWidth: .4,
 							layout:'form',
 							items:{
 								xtype:'textfield',

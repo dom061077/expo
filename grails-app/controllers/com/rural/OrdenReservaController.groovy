@@ -204,6 +204,7 @@ class OrdenReservaController {
     	log.debug("Orden Reserva: $ordenReservaInstance")
 		String reportsDirPath = servletContext.getRealPath("/reports/");
 		params.put("reportsDirPath", reportsDirPath);
+		params.put("logo",ordenReservaInstance.expo.nombre.trim()+".jpg")
 		log.debug("Parametros: $params")
 		chain(controller:'jasper',action:'index',model:[data:ordenList],params:params)
     }
