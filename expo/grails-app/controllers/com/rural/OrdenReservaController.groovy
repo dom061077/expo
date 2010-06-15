@@ -171,10 +171,17 @@ class OrdenReservaController {
    		iterarConceptos(ordenReservaInstance,otrosconceptosjson)
    		log.debug("PORCENTAJE IVA RESINS: "+ordenReservaInstance.porcentajeResIns)
    		log.debug("PORCENTAJE IVA RESNOINS: "+ordenReservaInstance.porcentajeResNoIns)
-		ordenReservaInstance=ordenReservaService.generarOrdenReserva(ordenReservaInstance,empresaInstance)
-		render(contentType: "text/json"){
-			success true
-			ordenid ordenReservaInstance.id
+   		try{
+			ordenReservaInstance=ordenReservaService.generarOrdenReserva(ordenReservaInstance,empresaInstance)
+			render(contentType: "text/json"){
+				success true
+				ordenid ordenReservaInstance.id
+			}
+		}catch(OrdenReservaException e){
+			render(contentType: "text/json"){			
+				success false
+				msg e.message
+			}
 		}   	
     }
     
@@ -213,7 +220,7 @@ class OrdenReservaController {
     	log.info("INGRESANDO AL METODO anularordenreserva DEL CONTROLADOR OrdenReservaController")
     	log.debug("PARAMETROS "+params)
     	try{
-    		ordenReservaService.anularOrdenReserva(params.id)
+    		ordenReservaService.anularOrdenReserva(new Long(params.id))
     		render(contentType: "text/json"){
     			success true
     			
@@ -237,24 +244,36 @@ class OrdenReservaController {
     	def ordenes=null
     	if(params.fieldSearch=="numero"){
 	    	totalOrdenes = OrdenReserva.createCriteria().count{
-    			eq('numero',new Long(params?.searchCriteria))
-    			//eq('numero',null)
+	    		and{
+	    			eq('numero',new Long(params?.searchCriteria))
+	    			//eq('numero',null)
+	    			eq('anulada',false)
+    			}
 	    	}
 	    	ordenes = OrdenReserva.createCriteria().list(pagingconfig){
-	    		eq('numero',new Long(params?.searchCriteria))
-	    		//eq('numero',null)
+	    		and{
+		    		eq('numero',new Long(params?.searchCriteria))
+		    		//eq('numero',null)
+		    		eq('anulada',false)
+	    		}
 	    	}
     	}
 
     	if(params.fieldSearch=="empresa.nombre"){
 	    	totalOrdenes = OrdenReserva.createCriteria().count{
-	    		empresa{
-	    			like('nombre','%'+params?.searchCriteria+'%')
+				and{	    		
+		    		empresa{
+		    			like('nombre','%'+params?.searchCriteria+'%')
+		   			}
+		   			eq('anulada',false)
 	   			}
 	    	}
 	    	ordenes = OrdenReserva.createCriteria().list(pagingconfig){
-	    		empresa{
-	   				like('nombre','%'+params?.searchCriteria+'%')
+	    		and{
+		    		empresa{
+		   				like('nombre','%'+params?.searchCriteria+'%')
+		    		}
+		    		eq('anulada',false)
 	    		}
 	    	}
     	}
