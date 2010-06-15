@@ -1183,8 +1183,17 @@ Ext.onReady(function(){
 								window.location='../logout/index';
 							}
 						});
-				}else				
-					window.location='ordenreservareporte?target=_blank&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+respuesta.ordenid; 
+				}else{
+					if(respuesta.success)
+						window.location='ordenreservareporte?target=_blank&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+respuesta.ordenid;
+					else
+						Ext.MessageBox.show({
+							title:'error',
+							msg:respuesta.msg,
+							icon:Ext.MessageBox.ERROR,
+							buttons:Ext.MessageBox.OK
+						});
+				}
 			},
 			failure: function(resp,opt){
 				var respuesta = Ext.decode(resp.responseText);

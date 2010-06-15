@@ -44,9 +44,18 @@ class OrdenReservaService {
     		return ord
     		
     	}else{
-    		def message=null
-    		ord.errors.allErrors.each{
+    	
+    		def message=''
+    		/*ord.errors.allErrors.each{
     			message+=it.toString()
+    		}*/
+    		
+    		ord.errors.allErrors.each{error->
+    			error.codes.each{
+    				if(g.message(code:it)!=it)
+    					//errorList.add(g.message(code:it))
+    					message+=g.message(code:it)		
+    			}
     		}
     		throw new OrdenReservaException(message,ord);
     	}
@@ -55,9 +64,10 @@ class OrdenReservaService {
     
     boolean anularOrdenReserva(Long id){
     	def ordenReservaInstance = OrdenReserva.get(id)
-    	if (ordenReservaInstance)
+    	if (ordenReservaInstance){
     		ordenReservaInstance.anulada = true
-    	else
+    		ordenReservaInstance.save()
+    	}else
     		throw new OrdenReservaException("No se pudo anular la orden de reserva. Orden inexistente, $id",ordenReservaInstance)
     	
     }

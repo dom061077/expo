@@ -58,6 +58,85 @@ Ext.onReady(function(){
         				}
 							
         		}
+			},{
+				text:'Anular'
+				,handler:function(){
+					var sm = grid.getSelectionModel();
+					var sel = sm.getSelected();
+					if(sm.hasSelection()){
+						if(sel.data.totalCancelado>0)
+							Ext.MessageBox.show({
+								title:"Error",
+								msg:"No se puede Anular una Orden que tiene recibos pagados",
+								icon:Ext.MessageBox.ERROR,
+								buttons:Ext.MessageBox.OK
+							});
+						else{
+							Ext.MessageBox.show({
+								title:'Mensaje',
+								msg:'Desea Anular la Orden de Reserva?',
+								icon: Ext.MessageBox.QUESTION,
+								buttons:Ext.MessageBox.YESNO,
+								fn: function(btn){
+									if(btn=='yes'){
+															var conn = new Ext.data.Connection();
+															conn.request({
+																url:'anularordenreserva',
+																method:'POST',
+																params:{
+																	id:sel.data.id
+																},
+																success: function(resp,opt){
+																	var respuesta = Ext.decode(resp.responseText);
+																	
+																	if(respuesta){
+																		if(respuesta.loginredirect)
+																			window.location='../logout/index';
+																		else {
+																			if (respuesta.success)
+																				Ext.MessageBox.show({
+																					title:'Mensaje'
+																					,msg:'El registro fue borrado'
+																					,icon:Ext.MessageBox.INFO
+																					,buttons:Ext.MessageBox.OK
+																					,fn:function(btn){
+																							window.location='list'
+																					}
+																				});
+																			else	
+																				Ext.Msg.show({
+																					title:"Error",
+																					msg:respuesta.msg,
+																					icon:Ext.MessageBox.ERROR,
+																					buttons:Ext.MessageBox.OK
+																				});
+																		}
+																	}
+																	
+																},
+																failure: function(resp,opt){
+																	Ext.Msg.show({
+																			title:'Error',
+																			msg:'Se produjo un error al intentar eliminar el registro',
+																			icon:Ext.MessageBox.INFO,
+																			buttons: Ext.MessageBox.OK
+																	});						
+																}
+															});
+										
+									}
+								}
+							});
+						}							
+					}else{
+        				Ext.MessageBox.show({
+        					title:'Advertencia',
+        					msg:'Seleccione una fila de la grilla para Anular la orden de reserva',
+        					icon:Ext.MessageBox.WARNING,
+        					buttons:Ext.MessageBox.OK
+        				});	
+					}
+				}
         	},{
         		icon: imagePath+'/'
         		,cls:'x-btn-text-icon'
@@ -114,6 +193,8 @@ Ext.onReady(function(){
 										id:'combocriteriosId',
 										name:'criterios',
 										boxMaxWidth:100,
+										allowBlank:false,
+										msgTarget:'under',
 										value:'empresa.nombre',
 										fieldLabel:'Criterios',
 										forceSelection:true
