@@ -70,17 +70,23 @@ class SectorController {
         if(sectorInstance) {
             try {
                 sectorInstance.delete(flush:true)
-                flash.message = "Sector ${params.id} deleted"
-                redirect(action:list)
+                render(contentType:"text/json"){
+                	success true
+                	msg "El registro se eliminó correctamente"
+                }
             }
             catch(org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "Sector ${params.id} could not be deleted"
-                redirect(action:show,id:params.id)
+    			render(contentType:"text/json"){
+    				success false
+    				msg "Error de integridad al eliminar el registro"
+    			}
             }
         }
         else {
-            flash.message = "Sector not found with id ${params.id}"
-            redirect(action:list)
+    		render(contentType:"text/json"){
+    			success false
+    			msg "Error. Exposicion no encontrada"
+    		}
         }
     }
 

@@ -153,10 +153,63 @@ Ext.onReady(function(){
 						});
 				}
 			},{
-				text:'Eliminar',
-				handler: function(){
-					
-				}
+				text:'Eliminar'
+				,handler:function(){
+						Ext.MessageBox.show({
+							title:'Mensaje'
+							,msg:'Está seguro/a de eliminar el registro?'
+							,buttons:{yes:true,no:true}
+							,icon:Ext.MessageBox.QUESTION
+							,fn:function(btn){
+								if(btn=='yes'){
+															var conn = new Ext.data.Connection();
+															conn.request({
+																url:'delete',
+																method:'POST',
+																params:{
+																	id:Ext.getCmp('sectorId').getValue()
+																},
+																success: function(resp,opt){
+																	var respuesta = Ext.decode(resp.responseText);
+																	
+																	if(respuesta){
+																		if(respuesta.loginredirect)
+																			window.location='../logout/index';
+																		else {
+																			if (respuesta.success)
+																				Ext.MessageBox.show({
+																					title:'Mensaje'
+																					,msg:'El registro fue borrado'
+																					,icon:Ext.MessageBox.INFO
+																					,buttons:Ext.MessageBox.OK
+																					,fn:function(btn){
+																							window.location='list'
+																					}
+																				});
+																			else	
+																				Ext.Msg.show({
+																					title:"Error",
+																					msg:respuesta.msg,
+																					icon:Ext.MessageBox.ERROR,
+																					buttons:Ext.MessageBox.OK
+																				});
+																		}
+																	}
+																	
+																},
+																failure: function(resp,opt){
+																	Ext.Msg.show({
+																			title:'Error',
+																			msg:'Se produjo un error al intentar eliminar el registro',
+																			icon:Ext.MessageBox.INFO,
+																			buttons: Ext.MessageBox.OK
+																	});						
+																}
+															});
+								}
+							}
+						});
+					}
 			},{
 				text:'Cancelar',
 				handler:function(){

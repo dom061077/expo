@@ -56,6 +56,7 @@ class ExposicionController {
     		foutput.write(exposicionInstance.image)
     		foutput.flush()
     	}
+    	log.debug("NOMBRE DE ARCHIVO DE LA IMAGEN: "+"/expo/reports/images/"+exposicionInstance.nombre.trim()+".jpg")
     	if (exposicionInstance){
 	    	render(contentType:"text/json"){
 	    		success true
