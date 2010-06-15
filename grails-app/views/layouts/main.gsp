@@ -49,7 +49,7 @@
 				<ul>
 					<li class='controller'><g:link controller="empresa">Empresas </g:link></li>
 					<li class='controller'><g:link controller="empresa" action="empresassimilares">Empresas Similares</g:link></li>
-					<li class='controller'><g:link controller="ordenReserva" action="create">Orden de Reserva </g:link></li>
+					<li class='controller'><g:link controller="ordenReserva" action="list">Orden de Reserva </g:link></li>
 					<g:ifAllGranted role="ROLE_ADMIN">					
 						<li class='controller'><g:link controller="empresa" action="uploadFile">Subir Archivos Excel</g:link></li>
 					</g:ifAllGranted>
