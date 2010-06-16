@@ -232,6 +232,7 @@ Ext.onReady(function(){
 		'id','nombre'
 	]);
 	
+	
 	var storeSector = new Ext.data.JsonStore({
 		//autoLoad:true,
 		root:'rows',
@@ -257,24 +258,30 @@ Ext.onReady(function(){
 		
 	}
 	
-	var detalleModel =  Ext.data.Record.create([
+
+	
+	/*var detalleModel =  Ext.data.Record.create([
 		'id',
 		'sector',
 		'lote_id',
 		{name:'subTotal',type:'float'}
-	]);	
+	]);	*/
+
+	
+	
 	var storeDetalle = new Ext.data.Store({
-		//fields:['id','nombre'],
-		data:[
-			/*[1,'sector1','lote1',2.5],
-			[2,'sector1','lote1',2.5],
-			[3,'sector1','lote1',2.5]*/			
-		],
-		reader: new Ext.data.ArrayReader(
-			{id:'id'},
-			detalleModel
-			)
-	});
+		autoDestroy:true,
+		//url:'bancos.xml',
+		data:[],
+		reader: new Ext.data.ArrayReader({
+			record:'detalleservicio',
+			fields:[
+				{name: 'sector',type:'string'},
+				{name: 'lote_id',type:'string'},
+				{name: 'importe', type: 'numeric'}
+			]
+		})
+	});	
 	
 	var comboboxLote = new Ext.form.ComboBox({
 		triggerAction: 'all',
@@ -307,6 +314,33 @@ Ext.onReady(function(){
 			}
 		}
 	});
+
+	var cmdetalle = new Ext.grid.ColumnModel({
+		columns:[
+			{
+				header:'Sector',
+				dataIndex: 'sector',
+				width:100,
+				editor: comboboxSector,
+				renderer:sector_nombre
+			},{
+				header:'Lote',
+				dataIndex:'lote_id',
+				width:100,
+				editor: comboboxLote,
+				renderer:lote_nombre
+			},{
+				header:'Importe',
+				dataIndex:'importe',
+				width:80,
+				editor: new Ext.form.TextField({
+					allowBlank:false
+				})
+			}
+		]
+		
+	});	
+	
 	
 	var sector_edit = new Ext.form.TextField({
 		allowBlank:false,
@@ -327,6 +361,7 @@ Ext.onReady(function(){
 	var gridDetalleServicioContratado = new Ext.grid.EditorGridPanel({
 			frame:false,
 			title:'Detalle Servicio Contratado',
+			cm:cmdetalle,
 			height:200,
 			width:400,
 			store:storeDetalle,
@@ -335,9 +370,15 @@ Ext.onReady(function(){
 				{text:'Agregar',
 				 handler: function (){
 				 	if(gridDetalleServicioContratado.getStore().getCount()<3){
+				 		var Detalle = grid.getStore().recordType;
+				 		var d = new Detalle({
+				 			sector:'',
+				 			lote_id:'',
+				 			importe:0
+				 		});
 						gridDetalleServicioContratado.getStore().insert(
 							(gridDetalleServicioContratado.getStore().getCount()-1>=0?gridDetalleServicioContratado.getStore().getCount():0)
-							,new detalleModel({id:0,sector:'',lote:'',subTotal:0}));
+							,d);
 						gridDetalleServicioContratado.startEditing(gridDetalleServicioContratado.getStore().getCount()-1,0);
 				 	}else{
 				 		Ext.MessageBox.show({
@@ -358,42 +399,58 @@ Ext.onReady(function(){
 				 	}
 				 }
 				}
-			],
+			]/*,
 			columns:[
-				/*{header:'id',dataIndex:'id'},*/
 				{header:'Sector',dataIndex:'sector',editor:comboboxSector, renderer:sector_nombre},
 				{header:'Lote',dataIndex:'lote_id',editor:comboboxLote,renderer:lote_nombre},
 				{header:'Importe',dataIndex:'subTotal',editor:subtotal_edit}
-			]
+			]*/
 	});
         			
 	
 //------------------------------------------------------------------------------------        			
 	
 //------------------Grid para Editar Otros Conceptos------------------
-	var otrosConceptosModel = Ext.data.Record.create([
+	/*var otrosConceptosModel = Ext.data.Record.create([
 		'id',
 		'descripcion',
 		{name:'subTotal',type:'float'}
-	]);
+	]);*/
+	cmotrosconceptos = new Ext.grid.ColumnModel({
+		columns:[
+			{
+				header:'Concepto',
+				dataIndex:'descripcion',
+				width:200,
+				editor:new Ext.form.TextField({
+					allowBlank:false
+				})
+			},{
+				header:'Importe',
+				dataIndex:'subTotal',
+				type:'float',
+				width:'100',
+				editor:new Ext.form.NumerField({
+					allowBlank:false
+				})
+			}
+		]
+	});
+	
 	var storeOtrosConceptos = new Ext.data.Store({
-		
+		autoDestroy:true,
 		data:[],
-		reader: new Ext.data.ArrayReader(
-			{id:'id'},	
-			otrosConceptosModel
+		cm:cmotrosconceptos,
+		reader: new Ext.data.ArrayReader({
+			record:'otrosconceptos',
+			fields:[
+				{name:'descripcion',type:'string'},
+				{name:'subTotal',type:'float'}
+			]}
 		)
 	});
 	
-	var descripcion_edit = new Ext.form.TextField({
-		allowBlank:false,
-		maxLenght:20
-	});
-	
-	var subTotal_edit = new Ext.form.NumberField({
-		allowBlank:false,
-		maxLenght:20
-	});
+
 	
 	var gridOtrosConceptos = new Ext.grid.EditorGridPanel({
 			frame:false,
@@ -408,7 +465,7 @@ Ext.onReady(function(){
 				 	if(gridOtrosConceptos.getStore().getCount()<3){
 						gridOtrosConceptos.getStore().insert(
 							gridOtrosConceptos.getStore().getCount()-1>=0?gridOtrosConceptos.getStore().getCount():0	
-							,new detalleModel({id:0,descripcion:'Ingrese Texto',subTotal:0}));
+							,new otrosConceptosModel({id:0,descripcion:'Ingrese Texto',subTotal:0}));
 						gridOtrosConceptos.startEditing(gridOtrosConceptos.getStore().getCount()-1,0);
 				 	}else{
 				 		Ext.MessageBox.show({
