@@ -342,7 +342,7 @@ Ext.onReady(function(){
 	});	
 	
 	
-	var sector_edit = new Ext.form.TextField({
+	/*var sector_edit = new Ext.form.TextField({
 		allowBlank:false,
 		maxLength:20
 	});
@@ -356,7 +356,7 @@ Ext.onReady(function(){
 		allowBlank:false,
 		maxLength:10,
 		minValue:1
-	});
+	});*/
 	
 	var gridDetalleServicioContratado = new Ext.grid.EditorGridPanel({
 			frame:false,
@@ -429,8 +429,8 @@ Ext.onReady(function(){
 				header:'Importe',
 				dataIndex:'subTotal',
 				type:'float',
-				width:'100',
-				editor:new Ext.form.NumerField({
+				width:100,
+				editor:new Ext.form.NumberField({
 					allowBlank:false
 				})
 			}
@@ -456,6 +456,7 @@ Ext.onReady(function(){
 			frame:false,
 			title:'Otros conceptos',
 			height:250,
+			cm:cmotrosconceptos,
 			width:250,
 			store:storeOtrosConceptos,
 			selModel: new Ext.grid.RowSelectionModel(),
@@ -463,9 +464,14 @@ Ext.onReady(function(){
 				{text:'Agregar',
 				 handler: function (){
 				 	if(gridOtrosConceptos.getStore().getCount()<3){
+				 		var OtrosConceptos = gridOtrosConceptos.getStore().recordType;
+				 		var oc = new OtrosConceptos({
+				 			descripcion:'',
+				 			subTotal:0
+				 		});
 						gridOtrosConceptos.getStore().insert(
 							gridOtrosConceptos.getStore().getCount()-1>=0?gridOtrosConceptos.getStore().getCount():0	
-							,new otrosConceptosModel({id:0,descripcion:'Ingrese Texto',subTotal:0}));
+							,oc);
 						gridOtrosConceptos.startEditing(gridOtrosConceptos.getStore().getCount()-1,0);
 				 	}else{
 				 		Ext.MessageBox.show({
@@ -486,11 +492,11 @@ Ext.onReady(function(){
 				 	}
 				 }
 				}
-			],
+			]/*,
 			columns:[
 				{header:'Descripción',dataIndex:'descripcion',editor:descripcion_edit},
 				{header:'Importe',dataIndex:'subTotal',editor:subTotal_edit}
-			]
+			]*/
 	});
 	
 //--------------------------------------------------------------------	

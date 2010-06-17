@@ -26,6 +26,7 @@
 										 fieldLabel:'Usuario',
 										 name:'username',
 										 width:200,
+										 disabled:true,
 										 allowBlank:true,
 										 readonly:true
             							},        	        					
@@ -34,18 +35,23 @@
 	        							fieldLabel:'Contraseña anterior',
 	        							name:'password',
 										inputType: 'password',
-										msgTarget:'side',
+										maxLength:'15',
+										minLength:'5',										 
+										msgTarget:'under',
 	        							width:200,
 	        							allowBlank:false,
 	        							readOnly:false},{
         								xtype: 'textfield',
         								id:  'newpasswordId',
         								fieldLabel:'Nueva Contraseña',
+        								msgTarget:'under',
+										maxLength:'15',
+										minLength:'5',										 
         								name:'newpassword',
         								allowBlank:false,
 										minLength:6,
 										maxLength:15,
-										msgTarget:'side',	        								
+										msgTarget:'under',	        								
 										inputType: 'password',
         								width:200},{
         								xtype: 'textfield',
@@ -56,21 +62,35 @@
         								allowBlank:false,
 										minLengthText:6,
 										maxLengthText:15,
-										msgTarget:'side',        								
+										msgTarget:'under',        								
         								width:200}
         							],
         					buttons:[{text: 'Cambiar',
         							  handler: function(){
         							  			formPssw.getForm().submit({
         							  				success: function(f,a){
-        							  						Ext.Msg.show({
-            							  						title:'Mensaje',
-            							  						msg:'Su contraseña fue modificada con �xito',
-            							  						buttons: Ext.MessageBox.OK,
-            							  						fn: function(btn){
-            							  							window.location='../';
-        							  							}
-        							  						});
+        							  						if(a.result.success){
+        							  							if(a.result.denegado)
+        							  								Ext.Msg.show({
+        							  									title:'Mensaje',
+        							  									msg:'Acceso DENEGADO, consulte con su Administrador',
+        							  									icon:Ext.MessageBox.INFO,
+        							  									buttons:Ext.MessageBox.OK,
+        							  									fn:function(btn){
+        							  										
+        							  									}
+        							  								});
+        							  							else	
+		        							  						Ext.Msg.show({
+		            							  						title:'Mensaje',
+		            							  						msg:'Su contraseña fue modificada con �xito',
+		            							  						buttons: Ext.MessageBox.OK,
+		            							  						fn: function(btn){
+		            							  							window.location='../';
+		        							  							}
+		        							  						});
+        							  						}
+        							  						
         							  					},
         							  				failure: function(f,a){
 					                    					var msg="";
@@ -118,9 +138,9 @@
         					'id': userId
     					},
     					success: function(f,a){
-    						var jsonstruct=a.response.responseText;
-    						var jsonresult=eval('('+jsonstruct+')');
-    						Ext.getCmp('usernameId').setValue(jsonresult.data[0].username);
+    						//var jsonstruct=a.response.responseText;
+    						//var jsonresult=eval('('+jsonstruct+')');
+    						Ext.getCmp('usernameId').setValue(a.result.data.username);
     					}
         			});
         			Ext.getCmp('passwordId').focus('',10);
