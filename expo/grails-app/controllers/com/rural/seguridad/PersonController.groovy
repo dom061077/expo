@@ -398,11 +398,11 @@ class PersonController {
 		log.debug("Usuario: "+person.username)
 		render(contentType:'text/json'){
 			success true
-			data{ username person.username
-							password person.passwd
-							newpassword ""
-							retypenewpassword ""
-			}
+			//data(id:exposicionInstance.id,nombre:exposicionInstance.nombre)
+			data( username : person.username,
+				  newpassword : "",
+   				  retypenewpassword : ""
+			)
 			
 		}
 	}
