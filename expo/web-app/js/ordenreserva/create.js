@@ -502,36 +502,49 @@ Ext.onReady(function(){
 //--------------------------------------------------------------------	
 
 //------------------------Grid Productos que se exponen--------------
-	var productosExpuestosModel = Ext.data.Record.create([
-		'id',
-		'descripcion'
-	]);
-	var productodesc_edit = new Ext.form.TextField({
 	
+	var cmproductos = new Ext.grid.ColumnModel({
+		columns : [
+			{
+				header:'Producto',
+				dataIndex:'descripcion',
+				width:200,
+				editor: new Ext.form.TextField({allowBlank:false})
+			},{
+				
+			}
+		]
 	});
 	
 	
+	
 	var storeProductosExpuestos = new Ext.data.Store({
+		autoDestroy:true,
 		data:[],
-		reader: new Ext.data.ArrayReader(
-			{id:'id'},
-			['id','descripcion']
-		)
+		reader: new Ext.data.ArrayReader({
+			record:'productosexpuestos',
+			fields:[
+				{name:'descripcion', type:'string'}		
+			]
+		})
 	});
 	var gridProductosExpuestos = new Ext.grid.EditorGridPanel({
 		frame:false,
 		title:'Productos que se Exponen',
 		height:250,
 		width:250,
+		cm:cmproductos,
 		store:storeProductosExpuestos,
 		selModel: new Ext.grid.RowSelectionModel(),
 		tbar:[
 				{text:'Agregar',
 				 handler: function (){
 				 	if(gridProductosExpuestos.getStore().getCount()<3){
+				 		var ProductosExpuestos = gridProductosExpuestos.getStore().recordType;
+				 		var prodex = new ProductosExpuestos({descripcion:'Ingrese Texto'});
 						gridProductosExpuestos.getStore().insert(
 							gridProductosExpuestos.getStore().getCount()-1>=0?gridProductosExpuestos.getStore().getCount():0
-							,new detalleModel({id:0,descripcion:'Ingrese texto'}));
+							,prodex);
 						gridProductosExpuestos.startEditing(gridProductosExpuestos.getStore().getCount()-1,0);
 				 	}else{
 				 		Ext.MessageBox.show({
@@ -925,6 +938,8 @@ Ext.onReady(function(){
 												 valueField:'id',
 												 mode:'local',
 												 forceSelection:true,
+												 allowBlank:false,
+												 msgTarget:'under',
 												 store: new Ext.data.SimpleStore({
 												 	fields:['id','descripcion'],
 												 	data : [['2010','2010'],['2011','2011'],['2012','2012']]
