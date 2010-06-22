@@ -10,13 +10,15 @@ class LocalidadController {
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
 	def listjson = {
-		def c = Localidad.createCriteria()
-		def localidades = c.list{
-			departamento{
-				eq('nombreDep',params.departamentonombre)
-			}
-			order("nombreLoc","asc")
-		}
+    	log.info("INGRESANDO AL METODO listjson de LocalidadController")
+    	log.debug("PARAMETROS:$params")
+    	def c = Localidad.createCriteria()
+    	def localidades = c.list(sort:"nombreLoc",order:"asc"){
+   			provincia{
+   				eq('id',new Long(params.provincia_id))
+   			}
+    	}
+    	log.debug("Cantidad de localidades: "+localidades.size())
     	render(contentType:'text/json'){
     		rows{
     			localidades.each{
@@ -25,6 +27,16 @@ class LocalidadController {
     		}
     	}		
 	}
+    
+    def getcp = {
+    	log.info("INGRESANDO AL METODO getcp DEL CONTROLLER LocalidadController")
+    	log.debug("PARAMETROS: $params")
+    	def localidad = Localidad.get(params.id)
+    	render(contentType:'text/json'){
+    		success true
+    		codigoPostal localidad.codigoPostal
+    	}
+    }
 
     def list = {
         params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)

@@ -48,7 +48,10 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
         exposicion.addToSectores(sector)
         exposicion.save()
         
-        tipoConcepto=new TipoConcepto(nombre:"descuento").save(flush:true)        
+        tipoConcepto=new TipoConcepto(nombre:"descuento").save(flush:true)
+        
+        new Iva(descripcion:"21 %",porcentaje:21).save()
+        
     }
 
     protected void tearDown() {
@@ -58,6 +61,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	void testGenerarOrdenAddEmpresa(){
     		assertNotNull(authenticateService.userDomain())
 	    	assertNotNull(empresa)
+
 			def ordenreservaController = new OrdenReservaController()
 			ordenreservaController.ordenReservaService=ordenReservaService
 			ordenreservaController.authenticateService=authenticateService
@@ -70,7 +74,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.params.detallejson="[{lote_id:$lote.id,subTotal:1900}]"
 	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"
 	    	ordenreservaController.params.observacion="OBSERVACION" 
-	    	ordenreservaController.params.porcentajeResIns=21
+	    	ordenreservaController.params.porcentajeResIns=1
 	    	ordenreservaController.params.porcentajeResNoIns=0
 	    	ordenreservaController.params.productosjson="[{descripcion:'QUESOS Y QUESILLOS'},{descripcion:'MEMBRILLO'}]"
 			
@@ -117,7 +121,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.params.detallejson="[{lote_id:$lote.id,subTotal:1900}]"
 	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"
 	    	ordenreservaController.params.observacion="OBSERVACION "
-	    	ordenreservaController.params.porcentajeResIns=21
+	    	ordenreservaController.params.porcentajeResIns=1
 	    	ordenreservaController.params.porcentajeResNoIns=0
 	    	ordenreservaController.params.observacion='NINGUNA'
 	    	ordenreservaController.params.productosjson="[{descripcion:'QUESOS Y QUESILLOS'},{descripcion:'MEMBRILLO'}]"

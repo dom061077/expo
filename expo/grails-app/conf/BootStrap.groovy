@@ -1,6 +1,5 @@
 import grails.util.Environment;
 import com.rural.Provincia;
-import com.rural.Departamento;
 import com.rural.Localidad;
 import com.rural.Exposicion;
 import com.rural.Lote
@@ -8,6 +7,7 @@ import com.rural.Sector
 import com.rural.Vendedor
 import com.rural.Rubro
 import com.rural.SubRubro
+import com.rural.Iva
 import com.rural.seguridad.Person
 import com.rural.seguridad.Authority
 import com.rural.seguridad.Requestmap
@@ -84,16 +84,13 @@ class BootStrap {
 				new Requestmap(url:"/authority/**",configAttribute:"ROLE_ADMIN").save()
 				new Requestmap(url:"/requestmap/**",configAttribute:"ROLE_ADMIN").save()
 				new Requestmap(url:"/vendedor/**",configAttribute:"ROLE_ADMIN").save()
-				Provincia provincia
-				Departamento departamento
+				/*Provincia provincia
 				
 				
 				provincia = new Provincia(nombre:"TUCUMAN").save()
 				//tucuman
-				departamento = new Departamento(nombreDep:"CAPITAL",provincia:provincia).save()
-				new Localidad(nombreLoc:"SEOC",departamento:departamento).save()
-				departamento = new Departamento(nombreDep:"LEALES",provincia:provincia).save()
-				new Localidad(nombreLoc:"ESQUINA - MANCOPA",departamento:departamento).save()
+				new Localidad(nombreLoc:"SEOC",provincia:provincia).save()
+				new Localidad(nombreLoc:"ESQUINA - MANCOPA",provincia:provincia).save()
 				
 				//
 				provincia = new Provincia(nombre:"SALTA").save()
@@ -102,7 +99,7 @@ class BootStrap {
 				
 				provincia = new Provincia(nombre:"CATAMARCA").save()
 				provincia = new Provincia(nombre:"BUENOS AIRES").save()
-				
+				*/
 				def expo = new Exposicion(nombre:"EXPO TUCUMAN")
 				def lote = new Lote(nombre:"EMPRENDIMIENTOS")
 				def sector = new Sector(nombre:"SECTOR Z")
@@ -120,13 +117,11 @@ class BootStrap {
 				
 				new Vendedor(nombre:'PRUEBA').save()
 				new Vendedor(nombre:"MARCELA").save()
-				
-				
-				
-				
+
 				Rubro rubro=new Rubro(nombreRubro:"CONSTRUCCION").save()
 				SubRubro srubro = new SubRubro(nombreSubrubro:"CONSTRUCCION DE ESCUELAS",rubro:rubro).save()
-				
+				new Iva(descripcion:"21 %",porcentaje:21).save()
+				new Iva(descripcion:"10,5",porcentaje:10.5).save()
 			} else {
 				println "Existing admin user, skipping creation"
 			}

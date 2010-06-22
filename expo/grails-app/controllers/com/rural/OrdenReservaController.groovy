@@ -120,6 +120,7 @@ class OrdenReservaController {
         }
     }
     
+    
     def generarordenreserva = {
     	log.info("INGRESANDO AL METODO generarordenreserva DEL CONTROLADOR OrdenReservaController")
     	log.debug("PARAMETROS DE INGRESO: "+params)
@@ -137,8 +138,8 @@ class OrdenReservaController {
     		def tipoConcepto
     		def total=0
     		conceptos.each{
-    			tipoConcepto = TipoConcepto.get(new Long(it.id))
-    			ord.addToOtrosconceptos(new OtrosConceptos(descripcion:it.descripcion,subTotal:it.subTotal,tipo:tipoConcepto))
+    			//tipoConcepto = TipoConcepto.get(new Long(it.id))
+    			ord.addToOtrosconceptos(new OtrosConceptos(descripcion:it.descripcion,subTotal:it.subTotal))
     			total=total+it.subTotal
     		}
     		ord.total=total
@@ -146,8 +147,8 @@ class OrdenReservaController {
     	
     	def ordenReservaInstance = new OrdenReserva(params)
     	log.debug("LOS DATOS DE EMPRESA ASIGNADOS POR LA ORDEN DE RESERVA SON: "+ordenReservaInstance.empresa.properties)
-    	ordenReservaInstance.porcentajeResIns=new Float(params.porcentajeResIns)
-    	ordenReservaInstance.porcentajeResNoIns=new Float(params.porcentajeResNoIns)
+    	ordenReservaInstance.porcentajeResIns=(Iva.get(params.porcentajeResIns)).porcentaje
+    	//ordenReservaInstance.porcentajeResNoIns=new Float(params.porcentajeResNoIns)
     	def detallejson = JSON.parse(params.detallejson)
     	def otrosconceptosjson = JSON.parse(params.otrosconceptosjson)
     	def productosjson = JSON.parse(params.productosjson)
@@ -230,6 +231,21 @@ class OrdenReservaController {
     			success false
     			msg e.message
     		}
+    	}
+    }
+    
+    def ivajson = {
+    	log.info("INGRESANDO AL METODO ivajson DEL CONTROLADOR OrdenReservaController")
+    	log.debug("PARAMETROS $params")
+    	def iva=Iva.list()
+    	render(contentType: "text/json"){
+    		success true
+    		rows{
+    			iva.each{
+    				row(id:it.id,descripcion:it.descripcion)
+    			}
+    		}
+    
     	}
     }
     

@@ -167,6 +167,11 @@ class ReciboController {
     	}
     }
 	
+	def listjson = {
+		log.info("INGRESANDO AL METODO listjson DEL CONTROLADOR ReciboController")
+		log.debug("PARAMETROS $params")
+		//def recibos = Recib
+	}
 	
 }
 

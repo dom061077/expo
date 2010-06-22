@@ -25,7 +25,7 @@ a:hover {
 
 #wrap {
 margin-left: 150px;
-width: 724px;
+width: 960px;
 background: #fff url('/expo/images/midbg.jpg');
 background-repeat: repeat-y;
 }
@@ -72,7 +72,7 @@ background: #85ACF7 url('/expo/images/hidr.jpg');
 }
 
 .right {
-	float: left;
+	float: right;
 	width: 15%;
 	margin: 0 10px;
 	padding: 1% 1%;
