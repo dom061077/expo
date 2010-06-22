@@ -236,7 +236,12 @@ this.showLoadMask(true, 'validating');
              * @event nextstep
              * Fires after next buttons is clicked
              */
-            'nextstep'
+            'nextstep',
+            /**
+             * @event previousstep
+             * Fires after previous buttons is clicked
+             */
+		    'previousstep'        
             
         );
 
@@ -535,6 +540,7 @@ this.showLoadMask(true, 'validating');
         if (this.currentCard > 0) {
             this.cardPanel.getLayout().setActiveItem(this.currentCard - 1);
         }
+        this.fireEvent('previousstep',this);
     },
 
     /**
