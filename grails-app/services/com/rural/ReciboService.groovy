@@ -44,4 +44,15 @@ class ReciboService {
     			throw new ReciboException('No se puede crear un recibo con una orden de reserva inexistente',recibo)
     		}
     }
+    
+    boolean anularRecibo(Long id){ 
+    	def reciboInstance = Recibo.get(id)
+    	if (reciboInstance){
+    		reciboInstance.anulado = true
+    		reciboInstance.save()
+    	}else
+    		throw new ReciboException("No se pudo anular el recibo. Recibo inexistente, $id",reciboInstance)
+    	
+    }    
+    
 }

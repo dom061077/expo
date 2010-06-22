@@ -11,60 +11,60 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="18" splitType="Stretch">
+		<band height="13" splitType="Stretch">
 			<staticText>
-				<reportElement x="4" y="4" width="34" height="12"/>
-				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+				<reportElement x="1" y="1" width="34" height="12"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Ch. Nº]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="97" y="4" width="29" height="12"/>
-				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+				<reportElement x="104" y="1" width="29" height="12"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Bco.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="245" y="4" width="20" height="12"/>
-				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+				<reportElement x="238" y="1" width="20" height="12"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Vto.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="335" y="4" width="10" height="12"/>
-				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+				<reportElement x="321" y="1" width="10" height="12"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="38" y="4" width="58" height="13"/>
-				<textElement>
-					<font fontName="Courier New" size="11" isBold="true"/>
+				<reportElement x="40" y="1" width="58" height="12"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{numero}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="125" y="4" width="116" height="13"/>
-				<textElement>
-					<font fontName="Courier New" size="11" isBold="true"/>
+				<reportElement x="125" y="1" width="110" height="12"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{banco}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="268" y="4" width="56" height="13"/>
-				<textElement>
-					<font fontName="Courier New" size="11" isBold="true"/>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="257" y="1" width="45" height="12"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{vencimiento}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="349" y="4" width="56" height="13"/>
-				<textElement>
-					<font fontName="Courier New" size="11" isBold="true"/>
+				<reportElement x="332" y="1" width="47" height="12"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{importe}]]></textFieldExpression>
 			</textField>

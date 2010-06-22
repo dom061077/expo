@@ -1,5 +1,5 @@
 package com.rural
-
+// http://www.grails.org/doc/1.0.x/guide/17.%20Deployment.html
 import java.util.Locale
 
 

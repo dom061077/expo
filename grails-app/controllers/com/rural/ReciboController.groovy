@@ -93,10 +93,11 @@ class ReciboController {
 		log.debug("PARAMETROS: $params")
 		def recibo = Recibo.get(new Long(params.id))
 		recibo.cheques.each{
-			log.debug(it.numero)
+			log.debug("Numero del cheque: "+it.numero)
+			log.debug("Vencimiento del cheque: "+it.vencimiento)
 		}
 		
-		log.debug(recibo.ordenReserva.empresa.nombre)
+		log.debug("Empresa del Recibo: "+recibo.ordenReserva.empresa.nombre)
 		List reciboList = new ArrayList()
 		reciboList.add(recibo)
 		String reportsDirPath = servletContext.getRealPath("/reports/");
@@ -114,9 +115,12 @@ class ReciboController {
 		def cheques = []  
 		
 		chequesjson.each{
-			cheques.add(new Cheque(numero:it.numero,banco:it.banco,importe:it.importe))
+			cheques.add(new Cheque(numero:it.numero,banco:it.banco,importe:it.importe,vencimiento:it.vecimiento))
 		}
-		def recibo = reciboService.generarRecibo(new Long(params.ordenreservaid),params.concepto,new Double(params.efectivo),cheques)
+		
+		Double efectivo = new Double((params.efectivo)) 
+		
+		def recibo = reciboService.generarRecibo(new Long(params.ordenreservaid),params.concepto,efectivo,cheques)
 		int entero = recibo.total.intValue()
 		Double totalaux = (recibo.total - entero)*100
 		int decimal = totalaux.intValue()
@@ -170,7 +174,76 @@ class ReciboController {
 	def listjson = {
 		log.info("INGRESANDO AL METODO listjson DEL CONTROLADOR ReciboController")
 		log.debug("PARAMETROS $params")
-		//def recibos = Recib
+		def totalRecibos=0
+		def recibos=null
+		def pagingconfig = [
+    		max: params.limit as Integer ?:10,
+    		offset: params.start as Integer ?:0
+    	]
+    	
+		Long numeroRecibo=null
+		
+		try{
+			numeroRecibo=new Long(params.searchCriteria)
+		}catch(java.lang.NumberFormatException e){
+			numeroRecibo = new Long(0)
+		}    	
+    	totalRecibos = Recibo.createCriteria().count{
+    		or{
+    			eq('numero',numeroRecibo)
+    			ordenReserva{
+    				empresa{
+    					like('nombre',"%"+params?.searchCriteria+"%")
+   					}
+   				}
+    		}
+    		and{
+    			eq('anulado',false)
+    		}
+    	}
+
+		recibos = Recibo.createCriteria().list(pagingconfig){
+    		or{
+    			eq("numero",numeroRecibo)
+    			ordenReserva{
+    				empresa{
+    					like("nombre","%"+params?.searchCriteria+"%")
+   					}
+   				}
+    		}
+    		and{
+    			eq('anulado',false)
+    		}
+    		
+		}
+		
+		log.debug("Cantidad de recibos consultados: $totalRecibos")
+		int entero
+		Double totalaux
+		int decimal
+		N2t num2letra = new N2t()
+		String totalenletras=""
+		
+		render(contentType:"text/json"){
+			total	totalRecibos
+			rows{
+				recibos.each{
+					entero = it.total.intValue()
+					totalaux = (it.total - entero)*100
+					decimal = totalaux.intValue()
+					
+					totalenletras="SON "+num2letra.convertirLetras(entero)+" PESOS CON "+((num2letra.convertirLetras(0)).trim()=="" ? "CERO" : num2letra.convertirLetras(decimal))+" CENTAVOS"
+					totalenletras = totalenletras.toUpperCase()
+					row(id:it.id,fechaAlta:it.fechaAlta,nombre:it.ordenReserva.empresa.nombre,numero:it.numero,total:it.total,numeroordenreserva:it.ordenReserva.numero,totalletras:totalenletras)
+				}
+			}
+		}
+	}
+	
+	def anularrecibo = {
+		log.info("INGRESANDO EL METODO anularrecibo DEL CONTROLLER ReciboController" )
+		log.debug("PARAMETROS: $params")
+		
 	}
 	
 }

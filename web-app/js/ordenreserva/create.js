@@ -681,7 +681,7 @@ Ext.onReady(function(){
 		title:'Orden de Reserva',
 		closable:true,
 		modal:true,
-		height:550,
+		height:520,
 		previousButtonText:'Anterior',
 		nextButtonText:'Siguiente',
 		cancelButtonText:'Cancelar',
@@ -778,7 +778,7 @@ Ext.onReady(function(){
 							fieldLabel:'C.U.I.T',
 							allowBlank:false,
 							msgTarget:'under',
-							width:90,
+							width:95,
 							vtype:'cuit',
 							name:'cuit'
 						},{
@@ -895,7 +895,7 @@ Ext.onReady(function(){
 							        			name:'codigoPostal',
 							        			id:'idCodigopostal',
 							        			msgTarget:'under',
-							        			width:90,
+							        			width:95,
 							        			allowBlank:false
 								        	},{
 								        		xtype:'textfield',
@@ -1163,12 +1163,23 @@ Ext.onReady(function(){
 			
 		]		
 	});
+	
+	wizard.on('previousstep',function(wizard){
+		wizard.headPanel.el.dom.firstChild.firstChild.data='';			
+	});
+	
+	
 	wizard.on('nextstep',function(wizard){
 	   var sel = grid.getSelectionModel().getSelected();
+	   if(this.currentCard==0)
+	   		wizard.headPanel.el.dom.firstChild.firstChild.data='';
+	   
 	   if(this.currentCard==1){
 			   if(sel){
 				  		loaddatosempresa(sel.data.id);
+				  		wizard.headPanel.el.dom.firstChild.firstChild.data='SE MODIFICARA LA EMPRESA EXISTENTE';
 			   }else{
+			   			wizard.headPanel.el.dom.firstChild.firstChild.data='SE DARA DE ALTA LA EMPRESA';
 						Ext.getCmp('empresaId').setValue(null);
 						Ext.getCmp('nombreId').setValue(null);
 						Ext.getCmp('razonsocialId').setValue(null);
