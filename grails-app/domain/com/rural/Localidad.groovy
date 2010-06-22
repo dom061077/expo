@@ -2,8 +2,9 @@ package com.rural
 
 class Localidad {
 	String nombreLoc
-	Departamento departamento
-	static belongs = [departamento:Departamento]
+	Integer codigoPostal
+	Provincia provincia
+	static belongsTo = [provincia:Provincia]
     static constraints = {
 		nombreLoc(blank:false)
     }

@@ -2,7 +2,7 @@ package com.rural
 
 class Provincia {
 	String nombre
-	static hasMany = [departamentos:Departamento]
+	static hasMany = [localidades:Localidad]
     static constraints = {
     }
 }

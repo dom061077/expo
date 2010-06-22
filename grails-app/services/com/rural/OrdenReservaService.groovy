@@ -1,8 +1,12 @@
 package com.rural
 
+import java.util.Locale
+
+
 class OrdenReservaException extends RuntimeException{
 	String message
 	OrdenReserva ordenReserva
+	
 	
 	public OrdenReservaException(String message,OrdenReserva ord){
 		super(message)
@@ -12,11 +16,15 @@ class OrdenReservaException extends RuntimeException{
 }
 
 class OrdenReservaService {
-	boolean transactional = true 
-
+	boolean transactional = true
+	
+	
+	def messageSource
+	
+	
 
     OrdenReserva generarOrdenReserva(OrdenReserva ord,Empresa empresa) {
-    	
+		
     	ord.otrosconceptos.each{
     		ord.subTotal+=it.subTotal
     	}
@@ -49,14 +57,14 @@ class OrdenReservaService {
     		/*ord.errors.allErrors.each{
     			message+=it.toString()
     		}*/
-    		
-    		ord.errors.allErrors.each{error->
+    		log.debug("Errores encontrados: "+ord.errors.allErrors)
+    		/*ord.errors.allErrors.each{error->
     			error.codes.each{
-    				if(g.message(code:it)!=it)
+    				if(messageSource.getMessage(it,new Locale("es"))!=it)
     					//errorList.add(g.message(code:it))
-    					message+=g.message(code:it)		
+    					message+=messageSource.getMessage(it,new Locale("es"))		
     			}
-    		}
+    		}*/
     		throw new OrdenReservaException(message,ord);
     	}
     		

@@ -1,11 +1,11 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
 	
-	var ordenStore = new Ext.data.JsonStore({
-		totalProperty: 'total',
-		root: 'rows',
+	var reciboStore = new Ext.data.JsonStore({
+		totalProperty:'total',
+		root:'rows',
 		url:'listjson',
-		fields:['id','numero','fechaAlta','total','totalCancelado','saldo','anio','expoNombre','empresaNombre'],
+		fields:['id','fechaAlta','numero','nombre','total','ordenreservanumero','numeroordenreserva'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -27,23 +27,19 @@ Ext.onReady(function(){
 	});
 	
 	
-	var grid = new Ext.grid.GridPanel({
-		store:ordenStore,
+	var grid=new Ext.grid.GridPanel({
+		store:reciboStore,
 		columns:[
-					{header:"Empresa",dataIndex:'empresaNombre',width:200},
-					{header:"Exposición",dataIndex:'expoNombre',width:200},
-					{header:"Año",dataIndex:'anio',width:80},					
-					{header:"id",dataIndex:"id",hidden:true},
-					{header:"Número",dataIndex:"numero",width:80},
-					{header:"Fecha",dataIndex:'fechaAlta',width:80,renderer: Ext.util.Format.dateRenderer('d/m/y')},
-					{header:"Total",dataIndex:'total',width:80},
-					{header:"Total Cancelado",dataIndex:'totalCancelado',width:100},
-					{header:"Saldo",dataIndex:'saldo',width:80}					
-			],
-		stripeRows: true,	
+			{header:"Empresa",dataIndex:'nombre',width:250},
+			{header:"Fecha Alta",dataIndex:'fechaAlta',width:90},
+			{header:"Nro.Recibo",dataIndex:'nombre',width:100},
+			{header:"Total",dataIndex:'total',width:90}			,
+			{header:"Nro.Orden de Reserva",dataIndex:'numeroordenreserva',width:100}			
+		],
+		stripeRows:true,
 		height:250,
 		width:600,
-		title:'Ordenes de Reserva',
+		title:"Recibos",
         tbar:[{
         		icon: imagePath+'/pdf.gif'
         		,cls:'x-btn-text-icon'
@@ -137,99 +133,54 @@ Ext.onReady(function(){
         				});	
 					}
 				}
-        	},{
-        		icon: imagePath+'/'
-        		,cls:'x-btn-text-icon'
-        		,text:'Recibo'
-        		,handler: function(){
-        			var sm = grid.getSelectionModel();
-        			var sel = sm.getSelected();
-        			if (sm.hasSelection()){
-        				if(sel.data.saldo==0)
-        					Ext.MessageBox.show({
-        						title:'Mensaje',
-        						msg:'No puede generar un recibo de una Orden de Reserva con saldo Cero',
-        						buttons:Ext.MessageBox.OK
-        					});
-        				else 
-        					window.location='../recibo/create?ordenreservaId='+sel.data.id;	
-        			}else{
-        				Ext.MessageBox.show({
-        					title:'Advertencia',
-        					msg:'Seleccione una fila de la grilla para generar el recibo',
-        					icon:Ext.MessageBox.WARNING,
-        					buttons:Ext.MessageBox.OK
-        				});	
-        			}
-        		}
-        }],
+        	}
+		],
         bbar: new Ext.PagingToolbar({
             	pageSize: 10,
             	store: ordenStore,
             	displayInfo:true,
-            	displayMsg: 'Visualizando ordenes {0} - {1} de {2}',
-            	emptyMsg: 'No hay ordenes para visualizar'
+            	displayMsg: 'Visualizando recibos {0} - {1} de {2}',
+            	emptyMsg: 'No hay recibos para visualizar'
 			})
 		
 	});
 	
-	var formSearch = new  Ext.form.FormPanel({
+	var formSearch = new Ext.form.FormPanel({
 		url:'search',
-		renderTo:'ordenreserva_form',
+		renderTo:'formulario_extjs',
 		id:'formSearchId',
-		title:'Ordenes de Reserva',
+		title:'Recibos',
 		width:650,
 		frame:true,
-		items:[	
-					new Ext.form.ComboBox({
-										mode:'local',
-										valueField:'myId',
-										displayField:'displayText',
-										store: new Ext.data.SimpleStore({
-											id: 0,
-											fields:['myId','displayText'],
-											data:[['empresa.nombre','Nombre Empresa'],['numero','Por Num.Orden']]
-										}),
-										id:'combocriteriosId',
-										name:'criterios',
-										boxMaxWidth:100,
-										allowBlank:false,
-										msgTarget:'under',
-										value:'empresa.nombre',
-										fieldLabel:'Criterios',
-										forceSelection:true
-										}),		
-				{
-					layout:'column',
-					
-					items:[
-						{
-							columnWidth: .4,
-							layout:'form',
-							items:{
-								xtype:'textfield',
-								name:'searchCriteria',
-								id:'searchCriteriaId',
-								fieldLabel:'Valor Criterio'
-							}
-						},{
-							columnWidth: .4,
-							layout:'form',
-							items:{
-										xtype:'button',
-										text:'Buscar',
-										listeners:{
-											click: function(){
-												ordenStore.load({
-														params:{'fieldSearch':Ext.getCmp('combocriteriosId').getValue(),'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()}
-													});
-											}
-										}
+		items:[
+			{
+				layout:'column',
+				items:[
+					{	columnWidth: .42,
+						layout:'form',
+						items:{
+							xtype:'textfield',
+							name:'searchCriteria',
+							id:'searchCriteriaId',
+							width:160,
+							fieldLabel:'Empresa o Nro de Recibo'
+						}
+					},{
+						layout:'form',
+						items:{
+							xtype:'button',
+							text:'Buscar',
+							listeners:{
+								click:function(){
+									reciboStore.load({
+										params:{'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()}
+									});		
+								}
 							}
 						}
-					]
-				},grid
-		
+					}
+				]
+			},grid
 		]
 	});
 	
