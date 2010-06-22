@@ -407,7 +407,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				</textElement>
 				<text><![CDATA[I.V.A:]]></text>
 			</staticText>
-			<image>
+			<image onErrorType="Icon">
 				<reportElement x="4" y="7" width="131" height="64"/>
 				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath}+"/images/",$P{logo})]]></imageExpression>
 			</image>

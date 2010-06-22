@@ -5,7 +5,7 @@ Ext.onReady(function(){
 		totalProperty:'total',
 		root:'rows',
 		url:'listjson',
-		fields:['id','fechaAlta','numero','nombre','total','ordenreservanumero','numeroordenreserva'],
+		fields:['id','fechaAlta','numero','nombre','total','numeroordenreserva','totalletras'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -30,11 +30,13 @@ Ext.onReady(function(){
 	var grid=new Ext.grid.GridPanel({
 		store:reciboStore,
 		columns:[
+			{header:"Id",dataIndex:'id',hidden:true},
 			{header:"Empresa",dataIndex:'nombre',width:250},
-			{header:"Fecha Alta",dataIndex:'fechaAlta',width:90},
-			{header:"Nro.Recibo",dataIndex:'nombre',width:100},
-			{header:"Total",dataIndex:'total',width:90}			,
-			{header:"Nro.Orden de Reserva",dataIndex:'numeroordenreserva',width:100}			
+			{header:"Fecha Alta",dataIndex:'fechaAlta',width:90,renderer: Ext.util.Format.dateRenderer('d/m/y')},
+			{header:"Nro.Recibo",dataIndex:'numero',width:100},
+			{header:"Total",dataIndex:'total',width:90},
+			{header:"Nro.Orden de Reserva",dataIndex:'numeroordenreserva',width:100},			
+			{header:"Total Letras",dataIndex:'totalletras',width:100,hidden:true}
 		],
 		stripeRows:true,
 		height:250,
@@ -48,8 +50,9 @@ Ext.onReady(function(){
         				var sm = grid.getSelectionModel();
         				var sel = sm.getSelected();
         				if (sm.hasSelection()){
-        					
-							open('ordenreservareporte?tipo=ORIGINAL&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.id
+
+							//window.location='reporte?target=_blank&_format=PDF&_name=recibo&_file=recibo&id='+a.result.id+"&totalletras="+a.result.totalletras;        					
+							open('reporte?target=_blank&_format=PDF&_name=recibo&_file=recibo&id='+sel.data.id+"&totalletras="+sel.data.totalletras
 							,'_blank')
         				}
 							
@@ -137,7 +140,7 @@ Ext.onReady(function(){
 		],
         bbar: new Ext.PagingToolbar({
             	pageSize: 10,
-            	store: ordenStore,
+            	store: reciboStore,
             	displayInfo:true,
             	displayMsg: 'Visualizando recibos {0} - {1} de {2}',
             	emptyMsg: 'No hay recibos para visualizar'
@@ -173,7 +176,7 @@ Ext.onReady(function(){
 							listeners:{
 								click:function(){
 									reciboStore.load({
-										params:{'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()}
+										params:{'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()}
 									});		
 								}
 							}

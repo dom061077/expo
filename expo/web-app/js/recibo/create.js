@@ -63,9 +63,9 @@ Ext.onReady(function (){
 	var grid = new Ext.grid.EditorGridPanel({
 		store:store,
 		cm:cm,
-		width:450,
+		width:500,
 		height:280,
-		title:'Cheques',
+		title:'Pago Cheques',
 		selModel: new Ext.grid.RowSelectionModel(),
 		tbar:[
 			{
@@ -78,8 +78,12 @@ Ext.onReady(function (){
 						importe:0
 					});
 					grid.stopEditing();
-					store.insert(0,b);
-					grid.startEditing(0,0);
+					store.insert(
+						grid.getStore().getCount()-1>=0?grid.getStore().getCount():0
+					,b);
+					grid.startEditing(
+					grid.getStore().getCount()-1>=0?grid.getStore().getCount()-1:0
+					,0);
 				}
 			},{
 				text: 'Borrar',
@@ -107,7 +111,7 @@ Ext.onReady(function (){
 		url:'createjson',
 		renderTo:'recibo_form',
 		title:'Alta de Recibo',
-		width:470,
+		width:520,
 		height:470,
 		frame:true,
 		items:[
@@ -150,7 +154,7 @@ Ext.onReady(function (){
 				msgTarget:'under',
 				name:'efectivo',
 				width:100,
-				fieldLabel:'Efectivo',
+				fieldLabel:'Pago Efectivo',
 				allosBlank:true,
 				maxLength: 10
 			},{
@@ -168,7 +172,13 @@ Ext.onReady(function (){
 			 		var chequesjsonArr=[];
 			 		var chequesjsonStr = '';
 			 		var flagerrorcheques=false;
-			 		var saldo=Ext.getCmp('saldoordenId').getValue()-Ext.getCmp('efectivoId').getValue();
+			 		var saldo=0;
+			 		//var saldo=Ext.getCmp('saldoordenId').getValue()-Ext.getCmp('efectivoId').getValue();
+			 		var totalpagado=0;
+			 		if(Ext.getCmp('efectivoId').getValue()!=null)
+			 			Ext.getCmp('efectivoId').setValue(0);
+			 			
+			 		totalpagado=Ext.getCmp('efectivoId').getValue();	
 			 		store.data.each(
 			 			function(rec){
 			 				if(rec.data.numero.trim()=='' ||
@@ -178,11 +188,22 @@ Ext.onReady(function (){
 			 				   		return false;
 			 				   }
 		 					chequesjsonArr.push(rec.data);	
-		 					saldo=saldo-rec.data.importe
+		 					totalpagado=totalpagado+rec.data.importe
 			 			}
 			 		);
+			 		saldo = Ext.getCmp('saldoordenId').getValue()-totalpagado;
 	 				chequesjsonStr=Ext.encode(chequesjsonArr);
-					Ext.getCmp('chequesjsonId').setValue(chequesjsonStr);			 		
+					Ext.getCmp('chequesjsonId').setValue(chequesjsonStr);	
+					if (totalpagado<=0){
+						Ext.MessageBox.show({
+							title:'Error',
+							msg:'No hay pago en efectivo ni cheques ingresados',
+							icon:Ext.MessageBox.ERROR,
+							buttons:Ext.MessageBox.OK
+						})
+						return false;
+					}
+						
 			 		if (flagerrorcheques){
 			 			Ext.MessageBox.show({
 			 				title:'Error',
@@ -219,7 +240,7 @@ Ext.onReady(function (){
 			 							buttons:Ext.MessageBox.OK,
 			 							icon:Ext.MessageBox.INFO,
 			 							fn:function(btn){
-			 								window.location='../ordenReserva/list';
+			 								//window.location='../ordenReserva/list';
 			 							}
 			 						});
 			 						window.location='reporte?target=_blank&_format=PDF&_name=recibo&_file=recibo&id='+a.result.id+"&totalletras="+a.result.totalletras;			 				
