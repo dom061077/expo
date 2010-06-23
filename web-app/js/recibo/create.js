@@ -33,7 +33,7 @@ Ext.onReady(function (){
 				})
 			},{
 				header:'Fecha Venc.',
-				dataIndex:'fechavencimiento',
+				dataIndex:'vencimiento',
 				width:95,
 				renderer:formatDate,
 				editor: new Ext.form.DateField({
@@ -55,7 +55,7 @@ Ext.onReady(function (){
 				{name: 'numero',type:'string'},
 				{name: 'banco',type:'string'},
 				{name: 'importe', type: 'string'},
-				{name: 'vencimiento', type: 'date'}
+				{name: 'vencimiento', type: 'date',dateFormat:'d/m/y'}
 			]
 		})
 	});
@@ -152,6 +152,8 @@ Ext.onReady(function (){
 				xtype: 'numberfield',
 				id:'efectivoId',
 				msgTarget:'under',
+				
+				emptyText:'0',
 				name:'efectivo',
 				width:100,
 				fieldLabel:'Pago Efectivo',
@@ -175,7 +177,8 @@ Ext.onReady(function (){
 			 		var saldo=0;
 			 		//var saldo=Ext.getCmp('saldoordenId').getValue()-Ext.getCmp('efectivoId').getValue();
 			 		var totalpagado=0;
-			 		if(Ext.getCmp('efectivoId').getValue()==null)
+			 		if(Ext.getCmp('efectivoId').getValue()==null ||
+			 			Ext.getCmp('efectivoId').getValue().trim()=="")
 			 			Ext.getCmp('efectivoId').setValue(0);
 			 			
 			 		totalpagado=Ext.getCmp('efectivoId').getValue();	

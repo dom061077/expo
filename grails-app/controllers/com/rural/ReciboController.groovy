@@ -2,6 +2,9 @@ package com.rural
 
 import com.rural.utils.N2t
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.text.ParseException
+import java.util.Date
 
 class ReciboController {
 	def reciboService
@@ -120,10 +123,21 @@ class ReciboController {
 		log.info("INGRESANDO AL METODO createjson DEL CONTROLADOR ReciboController")
 		log.debug("PARAMETROS: $params")
 		def chequesjson = grails.converters.JSON.parse(params.chequesjson)
-		def cheques = []  
-		
+		def cheques = [] 
+		Date fechaVence 
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 		chequesjson.each{
-			cheques.add(new Cheque(numero:it.numero,banco:it.banco,importe:it.importe,vencimiento:it.vecimiento))
+			log.debug(it)
+			log.debug("Vencimiento: "+it.vencimiento)
+			try{
+				fechaVence = df.parse(it.vencimiento.substring(0,10))
+				log.debug("Fecha convertida correctamente "+it.vencimiento.substring(0,10))
+			}catch(ParseException e){
+				log.debug("Error al convertir la fecha")
+			} 
+			
+			log.debug("Vence convertido: "+fechaVence.toString())
+			cheques.add(new Cheque(numero:it.numero,banco:it.banco,importe:it.importe,vencimiento:fechaVence))
 		}
 		
 		Double efectivo = new Double((params.efectivo)) 

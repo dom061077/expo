@@ -203,7 +203,9 @@ class OrdenReservaController {
     		log.debug(it)
     	}
     	log.debug(ordenReservaInstance.expo.nombre)
-    	
+    	log.debug(ordenReservaInstance.usuario.userRealName)
+    	log.debug(ordenReservaInstance.empresa.localidad.nombreLoc)
+    	log.debug(ordenReservaInstance.empresa.localidad.provincia.nombre)
     	List ordenList = new ArrayList()
     	ordenList.add(ordenReservaInstance)
     	ordenList.add(ordenReservaInstance)    	

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrdenReserva" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="5">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="220"/>
+	<property name="ireport.y" value="66"/>
 	<subDataset name="dataset1"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
@@ -12,8 +12,6 @@
 	<field name="empresa.razonSocial" class="java.lang.String"/>
 	<field name="empresa.cuit" class="java.lang.String"/>
 	<field name="empresa.direccionFiscal" class="java.lang.String"/>
-	<field name="empresa.provinciaFiscal" class="java.lang.String"/>
-	<field name="empresa.codigoPostal" class="java.lang.String"/>
 	<field name="empresa.telefonoFiscal" class="java.lang.String"/>
 	<field name="empresa.nombre" class="java.lang.String"/>
 	<field name="empresa.direccion" class="java.lang.String"/>
@@ -42,8 +40,11 @@
 	<field name="monotributoCheck" class="java.lang.Boolean"/>
 	<field name="empresa.vendedor.nombre" class="java.lang.String"/>
 	<field name="empresa.localidadFiscal" class="java.lang.String"/>
-	<field name="observaciones" class="java.lang.String"/>
+	<field name="observacion" class="java.lang.String"/>
 	<field name="usuario.userRealName" class="java.lang.String"/>
+	<field name="empresa.localidad.nombreLoc" class="java.lang.String"/>
+	<field name="empresa.localidad.provincia.nombre" class="java.lang.String"/>
+	<field name="empresa.localidad.codigoPostal" class="java.lang.String"/>
 	<variable name="subtotal" class="java.lang.Double"/>
 	<variable name="tipo" class="java.lang.String">
 		<variableExpression><![CDATA[($V{PAGE_NUMBER}==0 ? "ORIGINAL - CLIENTE " : ($V{PAGE_NUMBER} == 1 ? "DUPLICADO - CONTADURIA" : "TRIPLICADO - DEPTO. EXPOSICIONES"))]]></variableExpression>
@@ -332,14 +333,14 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement>
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.localidadFiscal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.localidad.nombreLoc}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="76" y="147" width="195" height="13"/>
 				<textElement>
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.provinciaFiscal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.localidad.provincia.nombre}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="209" y="146" width="23" height="13"/>
@@ -353,7 +354,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement>
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.codigoPostal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.localidad.codigoPostal}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="411" y="146" width="29" height="13"/>
@@ -546,7 +547,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement textAlignment="Center">
 					<font fontName="Courier New" size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Por"+$F{usuario.userRealName}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["Por "+$F{usuario.userRealName}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="8" y="399" width="181" height="1"/>
@@ -592,7 +593,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement>
 					<font fontName="Courier New" size="13" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{observaciones}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{observacion}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="8" y="414" width="181" height="17"/>
