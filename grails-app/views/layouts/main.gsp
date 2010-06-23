@@ -39,7 +39,8 @@
 
 		<div class="middle">
 			
-			<g:layoutBody/>			 		
+			<g:layoutBody/>
+						 		
 		</div>
 		
 		<div class="right">
@@ -76,7 +77,7 @@
 	</div>
 
 	<div id="bottom"></div>
-
+	
 </div>
 
 <div id="footer">

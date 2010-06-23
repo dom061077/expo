@@ -80,7 +80,7 @@ Ext.onReady(function(){
 									if(btn=='yes'){
 															var conn = new Ext.data.Connection();
 															conn.request({
-																url:'anularordenreserva',
+																url:'anularrecibo',
 																method:'POST',
 																params:{
 																	id:sel.data.id
@@ -95,7 +95,7 @@ Ext.onReady(function(){
 																			if (respuesta.success)
 																				Ext.MessageBox.show({
 																					title:'Mensaje'
-																					,msg:'El registro fue borrado'
+																					,msg:'El Recibo fue Anulado correctamente'
 																					,icon:Ext.MessageBox.INFO
 																					,buttons:Ext.MessageBox.OK
 																					,fn:function(btn){
