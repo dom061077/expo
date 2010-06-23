@@ -208,6 +208,14 @@ class OrdenReservaController {
     	ordenList.add(ordenReservaInstance)
     	ordenList.add(ordenReservaInstance)    	
     	ordenList.add(ordenReservaInstance)    	
+
+		String pathtofile = servletContext.getRealPath("/reports/images")+"/"+ordenReservaInstance.expo.nombre.trim()+".jpg"
+		if(ordenReservaInstance.expo.image){
+			FileOutputStream foutput = new FileOutputStream(new File(pathtofile))
+			foutput.write(ordenReservaInstance.expo.image)
+			foutput.flush()
+		}
+    	
     	
     	log.debug("Orden Reserva: $ordenReservaInstance")
 		String reportsDirPath = servletContext.getRealPath("/reports/");
@@ -305,7 +313,8 @@ class OrdenReservaController {
     				totalCancelado=0
     				saldo=0
     				it.recibos.each{
-    					totalCancelado=totalCancelado+it.total
+    					if(!it.anulado)
+    						totalCancelado=totalCancelado+it.total
     				}
     				saldo=it.total-totalCancelado
     				row(id:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre,empresaNombre:it.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)

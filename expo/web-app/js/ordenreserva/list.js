@@ -96,7 +96,7 @@ Ext.onReady(function(){
 																			if (respuesta.success)
 																				Ext.MessageBox.show({
 																					title:'Mensaje'
-																					,msg:'El registro fue borrado'
+																					,msg:'La Orden de Reserva fue Anulada correctamente'
 																					,icon:Ext.MessageBox.INFO
 																					,buttons:Ext.MessageBox.OK
 																					,fn:function(btn){

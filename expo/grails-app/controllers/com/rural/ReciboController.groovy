@@ -1,6 +1,7 @@
 package com.rural
 
 import com.rural.utils.N2t
+import java.io.FileOutputStream
 
 class ReciboController {
 	def reciboService
@@ -96,12 +97,19 @@ class ReciboController {
 			log.debug("Numero del cheque: "+it.numero)
 			log.debug("Vencimiento del cheque: "+it.vencimiento)
 		}
+		String pathtofile = servletContext.getRealPath("/reports/images")+"/"+recibo.ordenReserva.expo.nombre.trim()+".jpg"
+		if(recibo.ordenReserva.expo.image){
+			FileOutputStream foutput = new FileOutputStream(new File(pathtofile))
+			foutput.write(recibo.ordenReserva.expo.image)
+			foutput.flush()
+		}
 		
 		log.debug("Empresa del Recibo: "+recibo.ordenReserva.empresa.nombre)
 		List reciboList = new ArrayList()
 		reciboList.add(recibo)
 		String reportsDirPath = servletContext.getRealPath("/reports/");
 		params.put("reportsDirPath", reportsDirPath);
+		params.put("logo",recibo.ordenReserva.expo.nombre.trim()+".jpg")
 		log.debug("Parametros: $params")
 		chain(controller:'jasper',action:'index',model:[data:reciboList],params:params)
 		
@@ -243,6 +251,19 @@ class ReciboController {
 	def anularrecibo = {
 		log.info("INGRESANDO EL METODO anularrecibo DEL CONTROLLER ReciboController" )
 		log.debug("PARAMETROS: $params")
+		try{
+			reciboService.anularRecibo(new Long(params.id))
+			render(contentType:"text/json"){
+				success true
+				
+			}
+			
+		}catch(ReciboException e){
+			render(contentType:"text/json"){
+				success false
+				msg e.message
+			}
+		}
 		
 	}
 	
