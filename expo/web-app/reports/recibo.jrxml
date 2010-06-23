@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" language="groovy" pageWidth="595" pageHeight="842" columnWidth="567" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="14">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="475"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
 	</parameter>
@@ -20,7 +20,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="802" splitType="Stretch">
+		<band height="794" splitType="Stretch">
 			<rectangle>
 				<reportElement x="4" y="624" width="178" height="98"/>
 			</rectangle>
@@ -97,7 +97,7 @@ Inicio Act.:]]></text>
 				<text><![CDATA[que se aplica a los conceptos enunciados al margen, según el siguiente detalle:]]></text>
 			</staticText>
 			<subreport runToBottom="true">
-				<reportElement stretchType="RelativeToBandHeight" x="188" y="139" width="351" height="13"/>
+				<reportElement x="188" y="139" width="365" height="13"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{cheques})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"cheques.jasper")]]></subreportExpression>
 			</subreport>
@@ -112,7 +112,7 @@ Inicio Act.:]]></text>
 				<text><![CDATA[DETALLE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="440" y="183" width="52" height="13"/>
+				<reportElement x="449" y="184" width="52" height="13"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Bookman Old Style" isBold="false"/>
 				</textElement>
@@ -157,11 +157,11 @@ Inicio Act.:]]></text>
 				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="188" y="126" width="47" height="11"/>
+				<reportElement x="449" y="126" width="47" height="11"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Bookman Old Style" size="9"/>
 				</textElement>
-				<text><![CDATA[Efectivo:]]></text>
+				<text><![CDATA[Efectivo $:]]></text>
 			</staticText>
 			<line>
 				<reportElement x="3" y="262" width="560" height="1"/>
@@ -205,11 +205,11 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[Firma]]></text>
 			</staticText>
 			<image>
-				<reportElement x="499" y="478" width="50" height="50"/>
+				<reportElement x="514" y="478" width="50" height="50"/>
 				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
 			</image>
 			<image>
-				<reportElement x="499" y="748" width="50" height="50"/>
+				<reportElement x="514" y="740" width="50" height="50"/>
 				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
 			</image>
 			<textField>
@@ -227,14 +227,14 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.empresa.razonSocial}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="500" y="124" width="66" height="13"/>
+				<reportElement x="506" y="124" width="47" height="13"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font fontName="Tahoma" size="10" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{efectivo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="500" y="185" width="66" height="11"/>
+				<reportElement x="506" y="185" width="47" height="11"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
@@ -243,7 +243,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 			<textField>
 				<reportElement x="7" y="117" width="108" height="46"/>
 				<textElement>
-					<font fontName="Courier New" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
@@ -497,11 +497,11 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.empresa.razonSocial}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="188" y="388" width="47" height="11"/>
+				<reportElement x="449" y="388" width="47" height="11"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Bookman Old Style" size="9"/>
 				</textElement>
-				<text><![CDATA[Efectivo:]]></text>
+				<text><![CDATA[Efectivo $:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="188" y="378" width="351" height="12"/>
@@ -518,16 +518,16 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[la suma de pesos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="440" y="445" width="52" height="13"/>
+				<reportElement x="449" y="446" width="52" height="13"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Bookman Old Style" isBold="false"/>
 				</textElement>
 				<text><![CDATA[TOTAL $]]></text>
 			</staticText>
 			<textField pattern="#,##0.00">
-				<reportElement x="500" y="386" width="66" height="13"/>
+				<reportElement x="506" y="386" width="47" height="13"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font fontName="Tahoma" size="10" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{efectivo}]]></textFieldExpression>
 			</textField>
@@ -548,12 +548,12 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 			<textField>
 				<reportElement x="7" y="379" width="108" height="46"/>
 				<textElement>
-					<font fontName="Courier New" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="500" y="447" width="66" height="11"/>
+				<reportElement x="506" y="447" width="47" height="11"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
@@ -581,7 +581,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[DETALLE]]></text>
 			</staticText>
 			<subreport runToBottom="true">
-				<reportElement stretchType="RelativeToBandHeight" x="188" y="401" width="351" height="13"/>
+				<reportElement x="188" y="401" width="351" height="13"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{cheques})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"cheques.jasper")]]></subreportExpression>
 			</subreport>
@@ -607,11 +607,11 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[Recibimos de]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="188" y="659" width="47" height="11"/>
+				<reportElement x="449" y="659" width="47" height="11"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Bookman Old Style" size="9"/>
 				</textElement>
-				<text><![CDATA[Efectivo:]]></text>
+				<text><![CDATA[Efectivo $:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="133" y="637" width="40" height="13"/>
@@ -636,12 +636,12 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 			<textField>
 				<reportElement x="7" y="650" width="108" height="46"/>
 				<textElement>
-					<font fontName="Courier New" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="500" y="718" width="66" height="11"/>
+				<reportElement x="506" y="718" width="47" height="11"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
@@ -669,7 +669,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="440" y="716" width="52" height="13"/>
+				<reportElement x="449" y="717" width="52" height="13"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Bookman Old Style" isBold="false"/>
 				</textElement>
@@ -683,9 +683,9 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[TOTAL $]]></text>
 			</staticText>
 			<textField pattern="#,##0.00">
-				<reportElement x="500" y="657" width="66" height="13"/>
+				<reportElement x="506" y="657" width="47" height="13"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font fontName="Tahoma" size="10" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{efectivo}]]></textFieldExpression>
 			</textField>
@@ -711,7 +711,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[que se aplica a los conceptos enunciados al margen, según el siguiente detalle:]]></text>
 			</staticText>
 			<subreport runToBottom="true">
-				<reportElement stretchType="RelativeToBandHeight" x="188" y="672" width="351" height="13"/>
+				<reportElement x="188" y="672" width="351" height="13"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{cheques})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"cheques.jasper")]]></subreportExpression>
 			</subreport>

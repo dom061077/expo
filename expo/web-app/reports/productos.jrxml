@@ -13,12 +13,6 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement x="15" y="14" width="244" height="1"/>
-				<graphicElement>
-					<pen lineStyle="Dashed"/>
-				</graphicElement>
-			</line>
 		</band>
 	</detail>
 </jasperReport>
