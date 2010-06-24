@@ -1,3 +1,4 @@
+<%@ page import="com.rural.seguridad.Requestmap" %>
 <head>
 	<meta name="layout" content="main" />
 	<title>Requestmap List</title>
