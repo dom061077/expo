@@ -1,27 +1,77 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
 	
-	var loteStore = new Ext.data.Store({
-			url: 'movies.php',
-			reader: new Ext.data.JsonReader({
-				root:'rows',
-				totalProperty: 'results',
-				id:'id'
-			}, ds_model)
-	});
-	
-	loteStore.load();
-	
-	var gridLote = new Ext.form.FormPanel({
-		title:'Modificacion de Lotes',
-		frame:true
-	});
-	
-	var dsmodel= Ext.data.Record.create([
+	var dslotemodel= Ext.data.Record.create([
 		'id',
 		'nombre'
 	]);
 	
+	var loteStore = new Ext.data.Store({
+			url: '../lote/listjson',
+			reader: new Ext.data.JsonReader({
+				root:'rows',
+				totalProperty: 'total',
+				id:'id'
+			}, dslotemodel)
+	});
+	
+	var gridlote = new Ext.grid.GridPanel({
+		frame:true,
+		store:loteStore,
+		width:400,
+		height:250,
+		sm: new Ext.grid.RowSelectionModel({
+				singleSelect: true
+			}),
+		tbar:[
+			{
+				text:'Agregar',
+				handler: function(){
+					var conn = new Ext.data.Connection();
+					conn.request({
+						url:'../lote/savejson',
+						params:{
+							nombre:'Lote Nuevo'
+						},
+						success:function(resp,opt){
+							var loteid=Ext.util.JSON.decode(resp.responseText).loteid;
+							gridlote.getStore().insert(0,new dslotemodel({id:loteid,nombre:'Lote Nuevo'}))
+							gridlote.startEditing(0,0);
+						},
+						failure:function(resp,opt){
+							Ext.MessageBox.show({
+								title:'Error',
+								msg:'No se puedo insertar el lote',
+								buttons:Ext.MessageBox.OK,
+								icon:Ext.MessageBox.ERROR,
+								buttons:Ext.MessageBox.OK
+							});
+						}
+					});
+				}
+			},{
+				text:'Eliminar'
+			}
+		],
+		columns:[
+			{header:'Id de Lote',dataIndex:'id',hidden:true},
+			{header:'Nro. de Lote',dataIndex:'nombre',width:150}
+		]
+	});
+	 
+	var lotewin = new Ext.Window({
+		applyTo:'lotewin_extjs',
+		title:'Modificando Lotes',
+		resizable:true,
+		closeAction:'hide',
+		modal:true,
+		formPanel:null,
+		resizable:false,
+		width:450,
+		height:260,
+		items:[gridlote]
+	});
+
 	var sectorStore = new Ext.data.JsonStore({
 		autoLoad:true,
 		totalProperty:'total',
@@ -47,15 +97,6 @@ Ext.onReady(function(){
 			{
 				text:'Modificar Lotes'
 				,handler:function(){
-					var lotewin = new Ext.Window({
-						//applyTo:''
-						title:'Modificando Lotes',
-						resizable:true,
-						modal:true,
-						formPanel:null,
-						width:400,
-						height:400
-					});
 					lotewin.show();	
 				}
 			}

@@ -118,4 +118,9 @@ class LoteController {
         }
     }
     
+    def savejson = {
+    	log.info("INGRESANDO AL METODO savejson DEL CONTROLLER LoteController")
+    	log.debug("PARAMETROS: $params")
+    	
+    }
 }
