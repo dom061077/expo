@@ -1,19 +1,26 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
 	
-	var loteStore = new Ext.data.JsonStore({
-		autoLoad:true,
-		root:'rows',
-		url:'../lote/listjson',
-		fields:['id','nombre']
+	var loteStore = new Ext.data.Store({
+			url: 'movies.php',
+			reader: new Ext.data.JsonReader({
+				root:'rows',
+				totalProperty: 'results',
+				id:'id'
+			}, ds_model)
 	});
+	
+	loteStore.load();
 	
 	var gridLote = new Ext.form.FormPanel({
 		title:'Modificacion de Lotes',
 		frame:true
-		
-	
 	});
+	
+	var dsmodel= Ext.data.Record.create([
+		'id',
+		'nombre'
+	]);
 	
 	var sectorStore = new Ext.data.JsonStore({
 		autoLoad:true,
