@@ -15,5 +15,7 @@
         	<div id="formulario_extjs">
         	</div>
         </div>
+		<div id="lotewin_extjs">
+        </div        
     </body>
 </html>
