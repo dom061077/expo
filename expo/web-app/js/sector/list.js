@@ -1,5 +1,20 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
+	
+	var loteStore = new Ext.data.JsonStore({
+		autoLoad:true,
+		root:'rows',
+		url:'../lote/listjson',
+		fields:['id','nombre']
+	});
+	
+	var gridLote = new Ext.form.FormPanel({
+		title:'Modificacion de Lotes',
+		frame:true
+		
+	
+	});
+	
 	var sectorStore = new Ext.data.JsonStore({
 		autoLoad:true,
 		totalProperty:'total',
@@ -8,12 +23,7 @@ Ext.onReady(function(){
 		fields:['id','nombre','exposicion']
 	});
 	
-	var lotewin = new Ext.Window({
-		//applyTo:''
-		title:'Modificando Lotes',
-		resizable:true,
-		modal:true
-	});
+	
 	
 	var gridsectores = new Ext.grid.GridPanel({
 		store:sectorStore,
@@ -30,7 +40,16 @@ Ext.onReady(function(){
 			{
 				text:'Modificar Lotes'
 				,handler:function(){
-					
+					var lotewin = new Ext.Window({
+						//applyTo:''
+						title:'Modificando Lotes',
+						resizable:true,
+						modal:true,
+						formPanel:null,
+						width:400,
+						height:400
+					});
+					lotewin.show();	
 				}
 			}
 		],
@@ -80,5 +99,13 @@ Ext.onReady(function(){
 			},gridsectores
 			]
 	});
+	gridsectores.on('rowdblclick',function(grid,rowIndex,e){
+		                  var r = grid.getStore().getAt(rowIndex);
+		                  var selectedId = r.get('id');
+		                  sectorStore.reload({params: {id_ft: selectedId}});
+		                  window.location = 'edit?id='+selectedId;
+
+		}
+	);
 	
 });
