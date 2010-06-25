@@ -8,6 +8,13 @@ Ext.onReady(function(){
 		fields:['id','nombre','exposicion']
 	});
 	
+	var lotewin = new Ext.Window({
+		//applyTo:''
+		title:'Modificando Lotes',
+		resizable:true,
+		modal:true
+	});
+	
 	var gridsectores = new Ext.grid.GridPanel({
 		store:sectorStore,
 		columns:[
@@ -19,6 +26,14 @@ Ext.onReady(function(){
 		height:250,
 		width:460,
 		title:"Sectores",
+		tbar:[
+			{
+				text:'Modificar Lotes'
+				,handler:function(){
+					
+				}
+			}
+		],
 		bbar: new Ext.PagingToolbar({
 				pageSize:10,
 				store:sectorStore,
@@ -65,13 +80,5 @@ Ext.onReady(function(){
 			},gridsectores
 			]
 	});
-	gridsectores.on('rowdblclick',function(grid,rowIndex,e){
-		                  var r = grid.getStore().getAt(rowIndex);
-		                  var selectedId = r.get('id');
-		                  sectorStore.reload({params: {id_ft: selectedId}});
-		                  window.location = 'edit?id='+selectedId;
-
-		}
-	);
 	
 });
