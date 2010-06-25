@@ -79,14 +79,7 @@ Ext.onReady(function(){
 		]*/
 	});
 	
-	grid.on('rowdblclick',function(grid,rowIndex,e){
-		                  var r = grid.getStore().getAt(rowIndex);
-		                  var selectedId = r.get('id');
-		                  storeLote.reload({params: {id_ft: selectedId}});
-		                  window.location = '../lote/edit?id='+selectedId;
 
-		}
-	);	
 
 	var formSector = new Ext.form.FormPanel({
 		url:'updatejson',
