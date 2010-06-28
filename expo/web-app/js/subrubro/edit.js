@@ -1,25 +1,49 @@
 Ext.onReady(function (){
 	Ext.QuickTips.init();
-	var rubroForm = new Ext.FormPanel({
+	
+	var rubroStore = new Ext.data.JsonStore({
+		url:'../rubro/listrubrojson'
+		,fields:['id','nombreRubro']
+		,root:'rows'
+		,totalProperty:'total'
+	});
+	
+	rubroStore.load();	
+	var subrubroForm = new Ext.FormPanel({
 		url:'updatejson'
-		,id:'rubroFormId'
+		,id:'subrubroFormId'
 		,border:false
 		,renderTo:'formulario_extjs'
 		,frame:true
-		,title:'Modificar Rubro'
+		,title:'Modificar Sub Rubro'
 		,height:200
 		,width:450
 		,items:[
 				{
 					xtype:'textfield'
 					,hideLabel:true
-					,id:'rubroId'
+					,id:'subrubroId'
 					,name:'id'
 					,hidden:true
 				},{
+					xtype:'combo'
+					,fieldLabel:'Rubro'
+					,disabled:true
+					,name:'rubro'
+					,id:'rubroId'
+					,allowBlank:false
+					,forceSelection:true
+					,width:260
+					,mode:'local'
+					,store:rubroStore
+					,displayField:'nombreRubro'
+					,valueField:'id'
+					,hiddenName:'rubro.id'
+					,msgTarget:'under'
+				},{
 					xtype:'textfield' 
-					,id:'nombrerubroid'
-					,name:'nombreRubro'
+					,id:'nombresubrubroid'
+					,name:'nombreSubrubro'
 					,allowBlank:false
 					,fieldLabel:'Nombre'
 					,msgTarget:'under'
@@ -28,7 +52,7 @@ Ext.onReady(function (){
 		]			,buttons:[
 				{	text:'Guardar'
 					,handler:function(){
-						rubroForm.getForm().submit({
+						subrubroForm.getForm().submit({
 							success: function(f,a){
 					        	          					Ext.Msg.alert('Mensaje','Los datos se guardaron correctamente',
 																	function(btn,text){
@@ -76,7 +100,7 @@ Ext.onReady(function (){
 																url:'deletejson',
 																method:'POST',
 																params:{
-																	id:Ext.getCmp('rubroId').getValue()
+																	id:Ext.getCmp('subrubroId').getValue()
 																},
 																success: function(resp,opt){
 																	var respuesta = Ext.decode(resp.responseText);
@@ -130,11 +154,11 @@ Ext.onReady(function (){
 			
 	});
 	
-	Ext.getCmp('nombrerubroid').focus();
-	rubroForm.load({
+	Ext.getCmp('nombresubrubroid').focus();
+	subrubroForm.load({
 		url:'showjson'
 		,params:{
-			'id':rubroId
+			'id':subrubroId
 		},
 		success:function(f,a){
 			//Ext.getCmp('nombrerubroid').setValue(a.result.data.nombreRubro);

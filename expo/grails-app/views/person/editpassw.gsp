@@ -21,49 +21,60 @@
         					frame:true,
         					width:400,
         					height:250,
-        					items:  [   {xtype: 'textfield',
-										 id:'usernameId',
-										 fieldLabel:'Usuario',
-										 name:'username',
-										 width:200,
-										 disabled:true,
-										 allowBlank:true,
-										 readonly:true
-            							},        	        					
-        	        					{xtype: 'textfield',
-	        							id:  'passwordId',
-	        							fieldLabel:'Contraseña anterior',
-	        							name:'password',
-										inputType: 'password',
-										maxLength:'15',
-										minLength:'5',										 
-										msgTarget:'under',
-	        							width:200,
-	        							allowBlank:false,
-	        							readOnly:false},{
-        								xtype: 'textfield',
-        								id:  'newpasswordId',
-        								fieldLabel:'Nueva Contraseña',
-        								msgTarget:'under',
-										maxLength:'15',
-										minLength:'5',										 
-        								name:'newpassword',
-        								allowBlank:false,
-										minLength:6,
-										maxLength:15,
-										msgTarget:'under',	        								
-										inputType: 'password',
-        								width:200},{
-        								xtype: 'textfield',
-        								fieldLabel:'Repita Contraseña',
-        								inputType:'password',
-        								id: 'newpasswordrepeatId',
-        								name: 'newpasswordrepeat',
-        								allowBlank:false,
-										minLengthText:6,
-										maxLengthText:15,
-										msgTarget:'under',        								
-        								width:200}
+        					items:  [   {
+				   							 xtype: 'textfield',
+											 id:'usernamedisabledId',
+											 fieldLabel:'Usuario',
+											 name:'usernamedisabled',
+											 disabled:true,
+											 width:200
+											
+        								},{
+	           								 xtype:'hidden',
+	        								 id:'usernameId',
+	        								 name:'username',
+											 hideLabel:true
+											 	
+            							},{
+                							xtype: 'textfield',
+		        							id:  'passwordId',
+		        							fieldLabel:'Contraseña anterior',
+		        							name:'password',
+											inputType: 'password',
+											maxLength:15,
+											minLength:6,										 
+											msgTarget:'under',
+		        							width:200,
+		        							msgTarget:'under',
+		        							allowBlank:false,
+		        							readOnly:false
+		        						},{
+	        								xtype: 'textfield',
+	        								id:  'newpasswordId',
+	        								fieldLabel:'Nueva Contraseña',
+	        								name:'newpassword',
+	        								allowBlank:false,
+	        								msgTarget:'under',
+											minLength:6,
+											maxLength:15,
+											msgTarget:'under',	        								
+											inputType: 'password',
+	        								width:200
+        								},{
+	        								xtype: 'textfield',
+	        								fieldLabel:'Repita Contraseña',
+	        								inputType:'password',
+	        								id: 'newpasswordrepeatId',
+	        								name: 'newpasswordrepeat',
+	        								allowBlank:false,
+											minLength:6,
+											maxLength:15,
+											msgTarget:'under',	 
+											minLength:6,
+											maxLength:15,
+											msgTarget:'under',        								
+	        								width:200
+        								}
         							],
         					buttons:[{text: 'Cambiar',
         							  handler: function(){
@@ -83,7 +94,7 @@
         							  							else	
 		        							  						Ext.Msg.show({
 		            							  						title:'Mensaje',
-		            							  						msg:'Su contraseña fue modificada con �xito',
+		            							  						msg:'Su contraseña fue modificada con éxito',
 		            							  						buttons: Ext.MessageBox.OK,
 		            							  						fn: function(btn){
 		            							  							window.location='../';
@@ -141,6 +152,7 @@
     						//var jsonstruct=a.response.responseText;
     						//var jsonresult=eval('('+jsonstruct+')');
     						Ext.getCmp('usernameId').setValue(a.result.data.username);
+    						Ext.getCmp('usernamedisabledId').setValue(a.result.data.username);
     					}
         			});
         			Ext.getCmp('passwordId').focus('',10);

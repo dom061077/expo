@@ -6,6 +6,11 @@ Ext.onReady(function(){
 		'nombre'
 	]);
 	
+	var descEdit = new Ext.form.TextField({
+		allowBlank:false,
+		maxLength:20
+	});
+	
 	var loteStore = new Ext.data.Store({
 			url: '../lote/listjson',
 			reader: new Ext.data.JsonReader({
@@ -14,48 +19,143 @@ Ext.onReady(function(){
 				id:'id'
 			}, dslotemodel)
 	});
-	
-	var gridlote = new Ext.grid.GridPanel({
+	var gridlote = new Ext.grid.EditorGridPanel({
 		frame:true,
 		store:loteStore,
 		width:400,
+		clicksToEdit: 2,
 		height:250,
 		sm: new Ext.grid.RowSelectionModel({
 				singleSelect: true
 			}),
-		tbar:[
-			{
-				text:'Agregar',
-				handler: function(){
+			listeners: {
+				afteredit: function(e){
 					var conn = new Ext.data.Connection();
 					conn.request({
-						url:'../lote/savejson',
-						params:{
-							nombre:'Lote Nuevo'
+						url: '../lote/updatejson',
+						params: {
+							id: e.record.data.id,
+							nombre: e.record.data.nombre
 						},
-						success:function(resp,opt){
-							var loteid=Ext.util.JSON.decode(resp.responseText).loteid;
-							gridlote.getStore().insert(0,new dslotemodel({id:loteid,nombre:'Lote Nuevo'}))
-							gridlote.startEditing(0,0);
+						success: function(resp,opt) {
+							//e.commit();
 						},
-						failure:function(resp,opt){
+						failure: function(resp,opt) {
+							//e.reject();
 							Ext.MessageBox.show({
 								title:'Error',
-								msg:'No se puedo insertar el lote',
-								buttons:Ext.MessageBox.OK,
+								msg:'Error al modificar los datos',
 								icon:Ext.MessageBox.ERROR,
 								buttons:Ext.MessageBox.OK
 							});
 						}
 					});
 				}
+			},
+		tbar:[
+			{
+				text:'Agregar',
+				handler: function(){
+					var sm = gridsectores.getSelectionModel();
+					var sel = sm.getSelected();
+					var conn = new Ext.data.Connection();
+					var sector_id
+					if(sm.hasSelection()){
+							sector_id=sel.data.id;
+							conn.request({
+								url:'../lote/savejson',
+								params:{
+									nombre:'Lote Nuevo',
+									'sector.id':sector_id
+								},
+								success:function(response,opt){
+									var loteid=Ext.util.JSON.decode(resp.responseText).loteid;
+									gridlote.getStore().insert(0,new dslotemodel({id:loteid,nombre:'Lote Nuevo'}))
+									gridlote.startEditing(0,0);
+								},
+								failure:function(response,opt){
+									
+		                                var jsonObject = Ext.util.JSON.decode(response.responseText);
+					                    if (response.status==0)
+						                    	Ext.MessageBox.show({
+							                    		title:'Error',
+							                    		msg:'Error de comunicación con el servidor',
+							                    		icon:Ext.MessageBox.ERROR,
+							                    		buttons:Ext.MessageBox.OK
+						                    	});
+						                else{    	
+							                    if (jsonObject.loginredirect == true)
+						                    		window.location='../logout/index';
+						                    	else
+													Ext.MessageBox.show({
+														title:'Error',
+														msg:'No se pudo insertar el lote',
+														buttons:Ext.MessageBox.OK,
+														icon:Ext.MessageBox.ERROR,
+														buttons:Ext.MessageBox.OK
+													});
+							               }                                    
+								}
+							});
+					}
+				}
 			},{
-				text:'Eliminar'
+
+				text:'Eliminar',
+				handler:function(){
+					var sm = gridlote.getSelectionModel();
+					var sel = sm.getSelected();
+					if(sm.hasSelection()){
+						Ext.MessageBox.show({
+							title:'Mensaje',
+							msg:'Está seguro de eliminar este lote?',
+							icon:Ext.MessageBox.QUESTION,
+							buttons:Ext.MessageBox.YESNO,
+							fn:function(btn){
+								if(btn=='yes'){
+									var conn = new Ext.data.Connection();
+									conn.request({
+										url:'../lote/deletejson',
+										params:{
+											id:sel.data.id
+										},
+										success:function(resp,opt){
+											gridlote.getStore().remove(sel);
+										},
+										failure:function(response,opt){
+		                                var jsonObject = Ext.util.JSON.decode(response.responseText);
+							                    if (response.status==0)
+								                    	Ext.MessageBox.show({
+									                    		title:'Error',
+									                    		msg:'Error de comunicación con el servidor',
+									                    		icon:Ext.MessageBox.ERROR,
+									                    		buttons:Ext.MessageBox.OK
+								                    	});
+								                else{    	
+									                    if (jsonObject.loginredirect == true)
+								                    		window.location='../logout/index';
+								                    	else
+															Ext.MessageBox.show({
+																title:'Error',
+																msg:'No se pudo eliminar el lote',
+																buttons:Ext.MessageBox.OK,
+																icon:Ext.MessageBox.ERROR,
+																buttons:Ext.MessageBox.OK
+															});
+									           }                                    
+											
+										}
+									});
+								}
+							}
+						});
+					}
+				}
 			}
 		],
 		columns:[
 			{header:'Id de Lote',dataIndex:'id',hidden:true},
-			{header:'Nro. de Lote',dataIndex:'nombre',width:150}
+			{header:'Nro. de Lote',dataIndex:'nombre',width:150,editor:descEdit}
 		]
 	});
 	 
@@ -68,7 +168,7 @@ Ext.onReady(function(){
 		formPanel:null,
 		resizable:false,
 		width:450,
-		height:260,
+		height:280,
 		items:[gridlote]
 	});
 
@@ -77,7 +177,25 @@ Ext.onReady(function(){
 		totalProperty:'total',
 		root:'rows',
 		url:'listtodosjson',
-		fields:['id','nombre','exposicion']
+		fields:['id','nombre','exposicion'],
+		listeners: {
+            loadexception: function(proxy, store, response, e) {
+	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
+	                    if (response.status==0)
+	                    	Ext.MessageBox.show({
+	                    		title:'Error',
+	                    		msg:'Error de comunicación con el servidor',
+	                    		icon:Ext.MessageBox.ERROR,
+	                    		buttons:Ext.MessageBox.OK
+	                    	});
+	                    else{
+		                    if (jsonObject.loginredirect == true)
+		                    		window.location='../logout/index';
+	                    }
+	                   }
+				
+			}							
+		
 	});
 	
 	
@@ -97,7 +215,21 @@ Ext.onReady(function(){
 			{
 				text:'Modificar Lotes'
 				,handler:function(){
-					lotewin.show();	
+					var sm = gridsectores.getSelectionModel();
+					var sel = sm.getSelected();
+					if(sm.hasSelection()){
+						loteStore.load({
+							params:{'sector_id':sel.data.id}
+						});
+						lotewin.show();
+					}else{
+						Ext.MessageBox.show({
+							title:'Mensaje',
+							msg:'Seleccione un sector para modificar los lotes',
+							icon:Ext.MessageBox.INFO,
+							buttons:Ext.MessageBox.OK
+						});
+					}
 				}
 			}
 		],
@@ -150,7 +282,7 @@ Ext.onReady(function(){
 	gridsectores.on('rowdblclick',function(grid,rowIndex,e){
 		                  var r = grid.getStore().getAt(rowIndex);
 		                  var selectedId = r.get('id');
-		                  sectorStore.reload({params: {id_ft: selectedId}});
+		                  //sectorStore.reload({params: {id_ft: selectedId}});
 		                  window.location = 'edit?id='+selectedId;
 
 		}

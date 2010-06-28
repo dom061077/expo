@@ -80,8 +80,13 @@ class BootStrap {
 				new Requestmap(url:"/images/**",configAttribute:"IS_AUTHENTICATED_ANONYMOUSLY").save()
 				new Requestmap(url:"/plugins/**",configAttribute:"IS_AUTHENTICATED_ANONYMOUSLY").save()
 				new Requestmap(url:"/**",configAttribute:"IS_AUTHENTICATED_REMEMBERED").save()
+				new Requestmap(url:"/person/editpassw",configAttribute:"IS_AUTHENTICATED_REMEMBERED").save()
+				new Requestmap(url:"/person/editpasswJson",configAttribute:"IS_AUTHENTICATED_REMEMBERED").save()
+				
+				new Requestmap(url:"/person/updatepsswJson",configAttribute:"IS_AUTHENTICATED_REMEMBERED").save()
+				
 				new Requestmap(url:"/person/**",configAttribute:"ROLE_ADMIN").save()
-				new Requestmap(url:"/authority/**",configAttribute:"ROLE_ADMIN").save()
+				new Requestmap(url:"/authority/**",configAttribute:"ROLE_A DMIN").save()
 				new Requestmap(url:"/requestmap/**",configAttribute:"ROLE_ADMIN").save()
 				new Requestmap(url:"/vendedor/**",configAttribute:"IS_AUTHENTICATED_REMEMBERED").save()
 				new Requestmap(url:"/vendedor/create",configAttribute:"ROLE_ADMIN").save()

@@ -12,7 +12,7 @@ Ext.onReady(function(){
 	
 	exposicionStore.load();
 	
-	var cm = new Ext.grid.ColumnModel({
+	/*var cm = new Ext.grid.ColumnModel({
 		columns:[
 			{
 				id:'nombre',
@@ -45,39 +45,7 @@ Ext.onReady(function(){
 			{header:"id",dataIndex:"id",hidden:true},
 			{header:"Nro.",dataIndex:"nombre",width:200}
 		]
-		/*,
-		tbar:[
-			{
-				text: 'Agregar',
-				handler :  function(){
-					var Banco = grid.getStore().recordType;
-					var b = new Banco({
-						nombre:''
-					});
-					grid.stopEditing();
-					store.insert(0,b);
-					grid.startEditing(0,0);
-				}
-			},{
-				text: 'Borrar',
-				handler: function(){
-					var sm = grid.getSelectionModel();
-					var sel = sm.getSelected();
-					if(sm.hasSelection()){
-						grid.getStore().remove(sel);
-					}else{
-						Ext.MessageBox.show({
-							title:'Mensaje',
-							msg:'Seleccione una fila para de la grilla para poder borrar',
-							icon: Ext.MessageBox.WARNING,
-							buttons: Ext.MessageBox.OK
-						});
-						
-					}
-				}
-			}
-		]*/
-	});
+	});*/
 	
 
 
@@ -120,7 +88,7 @@ Ext.onReady(function(){
 				allowBlank:true,
 				name:'lotesjson',
 				id:'lotesjsonId'
-			},grid
+			}
 		],
 		buttons:[
 			{

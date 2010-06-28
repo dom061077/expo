@@ -6,7 +6,6 @@ Ext.onReady(function(){
 		totalProperty:'total',
 		root:'rows',
 		url:'../exposicion/listjson',
-		root:'rows',
 		fields:['id','nombre']
 	});
 	

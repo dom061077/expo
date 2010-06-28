@@ -4,7 +4,7 @@ Ext.onReady(function(){
 	var store = new Ext.data.JsonStore({
 		url:'listjson',
 		root:'rows',
-		fields:['id','nombreRubro'],
+		fields:['id','nombreSubrubro'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -26,11 +26,11 @@ Ext.onReady(function(){
 	});
 	
 	var grid = new Ext.grid.GridPanel({
-		title:'Rubros',
+		title:'Sub Rubros',
 		store:store,
 		columns:[
 			{header:'id',dataIndex:'id',hidden:true},
-			{header:'Nombre',dataIndex:'nombreRubro',width:200}
+			{header:'Nombre',dataIndex:'nombreSubrubro',width:200}
 		],
 		stripeRows:true,
 		height:300,
@@ -39,14 +39,14 @@ Ext.onReady(function(){
 			pageSize:10,
 			store:store,
 			displayInfo:true,
-			displayMsg:'Visualizando Rubros {0} - {1} de {2}',
-			emptyMsg:'No hay Rubros para visualizar'
+			displayMsg:'Visualizando Sub Rubros {0} - {1} de {2}',
+			emptyMsg:'No hay Sub Rubros para visualizar'
 		})
 	});
 	
 	var formSearch = new Ext.form.FormPanel({
 		url:'search',
-		title:'Listado de Rubros',
+		title:'Listado de Sub Rubros',
 		renderTo:'formulario_extjs',
 		frame:true,
 		width:500,

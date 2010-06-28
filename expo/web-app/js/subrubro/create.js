@@ -1,29 +1,53 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
-	var rubroForm = new Ext.FormPanel({
+	var rubroStore = new Ext.data.JsonStore({
+		url:'../rubro/listrubrojson'
+		,fields:['id','nombreRubro']
+		,root:'rows'
+		,totalProperty:'total'
+	});
+	
+	rubroStore.load();
+	
+	var subrubroForm = new Ext.FormPanel({
 		url:'savejson',
-		id:'rubroFormId',
+		id:'subrubroFormId',
 		border:false,
 		renderTo:'formulario_extjs',
 		frame:true,
-		title:'Alta de Rubro',
+		title:'Alta de Sub Rubro',
 		height:200,
 		width:400,
 		items:[
-				{xtype:'textfield'
-				 ,fieldLabel:'Nombre'
-				 ,id:'nombrerubroid'
-				 ,name:'nombreRubro'
-				 ,allowBlank:false
-				 ,msgTarget:'under'
-				 ,width:260
+				{
+					xtype:'combo'
+					,fieldLabel:'Rubro'
+					,name:'rubro'
+					,id:'rubroId'
+					,allowBlank:false
+					,forceSelection:true
+					,width:260
+					,mode:'local'
+					,store:rubroStore
+					,displayField:'nombreRubro'
+					,valueField:'id'
+					,hiddenName:'rubro.id'
+					,msgTarget:'under'
+				},{
+					 xtype:'textfield'
+					 ,fieldLabel:'Nombre'
+					 ,id:'nombresubrubroid'
+					 ,name:'nombreSubrubro'
+					 ,allowBlank:false
+					 ,msgTarget:'under'
+					 ,width:260
 				}
 		],
 		buttons:[
 				{
 					text:'Guardar'
 					,handler:function(){
-						rubroForm.getForm().submit({
+						subrubroForm.getForm().submit({
 								success: function(f,a){
 									Ext.MessageBox.show({
 										title:'Mensaje'
