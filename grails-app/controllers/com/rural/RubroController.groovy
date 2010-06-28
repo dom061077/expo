@@ -44,7 +44,7 @@ class RubroController {
     }
 
     def edit = {
-        def rubroInstance = Rubro.get( params.id )
+        /*def rubroInstance = Rubro.get( params.id )
 
         if(!rubroInstance) {
             flash.message = "Rubro not found with id ${params.id}"
@@ -52,7 +52,10 @@ class RubroController {
         }
         else {
             return [ rubroInstance : rubroInstance ]
-        }
+        }*/
+        log.info("INGRESANDO EL METODO edit DEL CONTROLLER RubroController")
+        log.info("PARAMETROS: $params")
+        return [id:params.id]
     }
 
     def update = {
@@ -99,6 +102,29 @@ class RubroController {
         }
     }
     //procedures que trabajan con json
+    
+    def listjson = {
+    	log.info("INGRESANDO AL METODO listjson DEL CONTROLLER RubroController")
+    	log.debug("PARAMETROS: $params")
+    	def c = Rubro.createCriteria()
+    	def rubros = c.list{
+    		like('nombreRubro','%'+params.searchCriteria+'%')
+    	}
+    	
+    	def totalrubros = Rubro.createCriteria().count{
+    		like('nombreRubro','%'+params.searchCriteria+'%')
+    	}
+    	
+    	render(contentType:'text/json'){
+    		total totalrubros
+    		rows{
+    			rubros.each{
+    				row(id:it.id,nombreRubro:it.nombreRubro)
+    			}
+    		}
+    	}
+    	
+    }
     
     def listrubrojson = {
     	log.info("INGRESANDO AL METODO listrubrojson DEL CONTROLLER RubroController")

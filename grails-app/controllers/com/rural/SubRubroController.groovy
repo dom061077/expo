@@ -44,7 +44,7 @@ class SubRubroController {
     }
 
     def edit = {
-        def subRubroInstance = SubRubro.get( params.id )
+        /*def subRubroInstance = SubRubro.get( params.id )
 
         if(!subRubroInstance) {
             flash.message = "SubRubro not found with id ${params.id}"
@@ -52,7 +52,10 @@ class SubRubroController {
         }
         else {
             return [ subRubroInstance : subRubroInstance ]
-        }
+        }*/
+        log.info("INGRESANDO AL METODO edit DEL CONTROLLER SubRubroController")
+        log.info("PARAMETROS $params")
+        return[id:params.id]
     }
 
     def update = {
@@ -186,7 +189,7 @@ class SubRubroController {
     		log.debug("Instancia de subrubro encontrada, renderizando json")
     		render(contentType:"text/json"){
     			success true	
-    			data(id :subrubroInstance.id,nombreSubrubro: subrubroInstance.nombreSubrubro,rubroId:subrubroInstance.rubro.id)
+    			data(id :subrubroInstance.id,nombreSubrubro: subrubroInstance.nombreSubrubro,'rubro.id':subrubroInstance.rubro.id)
     		}
     	}else{
     		log.debug("Instancia de subrubro no encontrada, renderizando json")
@@ -223,6 +226,27 @@ class SubRubroController {
     		}
     	}
     }
- 
+
+    def listjson={
+    	log.info("INGRESANDO AL METODO listjson DEL CONTROLLER SubRubroController")
+    	log.debug("PARAMETROS: $params")
+    	def c = SubRubro.createCriteria()
+    	def rubros = c.list{
+    		like('nombreSubrubro','%'+params.searchCriteria+'%')
+    	}
+    	
+    	def totalsubrubros = SubRubro.createCriteria().count{
+    		like('nombreSubrubro','%'+params.searchCriteria+'%')
+    	}
+    	
+    	render(contentType:'text/json'){
+    		total totalsubrubros
+    		rows{
+    			rubros.each{
+    				row(id:it.id,nombreSubrubro:it.nombreSubrubro)
+    			}
+    		}
+    	}    	
+    }
     
 }

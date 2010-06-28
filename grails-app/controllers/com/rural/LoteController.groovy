@@ -121,6 +121,64 @@ class LoteController {
     def savejson = {
     	log.info("INGRESANDO AL METODO savejson DEL CONTROLLER LoteController")
     	log.debug("PARAMETROS: $params")
-    	
+    	def loteInstance = new Lote(params)
+    	if(!loteInstance.hasErrors() && loteInstance.save()){
+    		render(contentType:"text/json"){
+    			success true
+    			loteid loteInstance.id
+    		}
+    	}else{
+    		log.info("Errores de validacion en lote: ")
+    		empresaInstance.errors.allErrors.each{
+    			log.info("Mensaje: "+it.defaultMessage)
+    		}
+    	}
+    }
+    
+    def updatejson = {
+    	log.info("INGRESANDO AL METODO updatejson DEL CONTROLLER LoteController")
+    	log.debug("PARAMETROS: $params")
+    	def loteInstance = Lote.get(params.id)
+    	loteInstance.properties=params
+    	if(!loteInstance.hasErrors()&& loteInstance.save()){
+    		log.debug("Lote modificado con exito")
+    		render(contentType:"text/json"){
+    			success true
+    		}
+    	}else{
+    		log.info("ERROR DE VALIDACION EN LA MODIFICACION DEL LOTE ")
+    		log.info(loteInstance.errors.allErrors)
+    		render(contentType:"text/json"){
+    			success false
+    		}
+    	}
+    }
+    
+    def deletejson={
+    	log.info("INGRESANDO AL METODO deletejson DEL CONTROLLER LoteController")
+    	log.debug("PARAMETROS: $params")
+    	def loteInstance = Lote.get(params.id)
+    	if(loteInstance){
+    		loteInstance.delete(flush:true)
+    		render(contentType:"text/json"){
+    			try{
+    				
+    				render(contentType:"text/json"){
+    					success true
+    					msg "El registro se eliminó correctamente"
+    				}
+    			}catch(org.springframework.dao.DataIntegrityViolationException e) {s
+    				render(contentType:"text/json"){
+    					success false
+    					msg "No se pudo eliminar el Lote porque está siendo referenciado en otro registro"
+    				}
+    			}
+    		}
+    	}else{
+    		render(contentType:"text/json"){
+    			success false
+    			msg "Error. Lote no encontrado"
+    		}
+    	}
     }
 }
