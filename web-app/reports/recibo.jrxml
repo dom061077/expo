@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" language="groovy" pageWidth="595" pageHeight="842" columnWidth="567" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="14">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="475"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
 	</parameter>
@@ -112,11 +112,11 @@ Inicio Act.:]]></text>
 				<text><![CDATA[DETALLE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="449" y="184" width="52" height="13"/>
+				<reportElement x="447" y="184" width="40" height="13"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Bookman Old Style" isBold="false"/>
 				</textElement>
-				<text><![CDATA[TOTAL $]]></text>
+				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="163" y="1" width="184" height="19"/>
@@ -157,11 +157,11 @@ Inicio Act.:]]></text>
 				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="449" y="126" width="47" height="11"/>
+				<reportElement x="447" y="126" width="38" height="11"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Bookman Old Style" size="9"/>
 				</textElement>
-				<text><![CDATA[Efectivo $:]]></text>
+				<text><![CDATA[Efectivo]]></text>
 			</staticText>
 			<line>
 				<reportElement x="3" y="262" width="560" height="1"/>
@@ -497,11 +497,11 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.empresa.razonSocial}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="449" y="388" width="47" height="11"/>
+				<reportElement x="447" y="388" width="38" height="11"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Bookman Old Style" size="9"/>
 				</textElement>
-				<text><![CDATA[Efectivo $:]]></text>
+				<text><![CDATA[Efectivo]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="188" y="378" width="351" height="12"/>
@@ -518,11 +518,11 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[la suma de pesos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="449" y="446" width="52" height="13"/>
+				<reportElement x="447" y="446" width="40" height="13"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Bookman Old Style" isBold="false"/>
 				</textElement>
-				<text><![CDATA[TOTAL $]]></text>
+				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<textField pattern="#,##0.00">
 				<reportElement x="506" y="386" width="47" height="13"/>
@@ -607,11 +607,11 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[Recibimos de]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="449" y="659" width="47" height="11"/>
+				<reportElement x="447" y="659" width="37" height="11"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Bookman Old Style" size="9"/>
 				</textElement>
-				<text><![CDATA[Efectivo $:]]></text>
+				<text><![CDATA[Efectivo]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="133" y="637" width="40" height="13"/>
@@ -669,11 +669,11 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="449" y="717" width="52" height="13"/>
+				<reportElement x="447" y="717" width="40" height="13"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Bookman Old Style" isBold="false"/>
 				</textElement>
-				<text><![CDATA[TOTAL $]]></text>
+				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="69" y="698" width="46" height="13"/>
@@ -776,6 +776,48 @@ Exento
 				<text><![CDATA[C.U.I.T.:
 Ing. Brutos:
 Inicio Act.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="494" y="126" width="7" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="9"/>
+				</textElement>
+				<text><![CDATA[$:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="494" y="184" width="40" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" isBold="false"/>
+				</textElement>
+				<text><![CDATA[$:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="494" y="717" width="2" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" isBold="false"/>
+				</textElement>
+				<text><![CDATA[$:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="494" y="659" width="8" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="9"/>
+				</textElement>
+				<text><![CDATA[$:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="494" y="388" width="9" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="9"/>
+				</textElement>
+				<text><![CDATA[$:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="494" y="446" width="1" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" isBold="false"/>
+				</textElement>
+				<text><![CDATA[$:]]></text>
 			</staticText>
 		</band>
 	</detail>

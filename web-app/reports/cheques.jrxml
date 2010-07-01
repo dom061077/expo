@@ -34,7 +34,7 @@
 				<text><![CDATA[Vto.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="306" y="1" width="10" height="12"/>
+				<reportElement x="304" y="1" width="10" height="12"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>

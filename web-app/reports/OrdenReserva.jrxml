@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrdenReserva" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="5">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="48"/>
+	<property name="ireport.y" value="465"/>
 	<subDataset name="dataset1"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
@@ -418,7 +418,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="477">
+		<band height="462">
 			<subreport>
 				<reportElement x="7" y="117" width="531" height="14" isRemoveLineWhenBlank="true"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{otrosconceptos})]]></dataSourceExpression>
@@ -531,33 +531,33 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="8" y="441" width="181" height="14"/>
+				<reportElement x="8" y="426" width="181" height="14"/>
 				<textElement textAlignment="Center">
 					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Intervino]]></text>
 			</staticText>
 			<line>
-				<reportElement x="361" y="439" width="181" height="1"/>
+				<reportElement x="361" y="424" width="181" height="1"/>
 				<graphicElement>
 					<pen lineStyle="Dashed"/>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="8" y="465" width="181" height="11"/>
+				<reportElement x="8" y="450" width="181" height="11"/>
 				<textElement textAlignment="Center">
 					<font fontName="Courier New" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Por "+$F{usuario.userRealName}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="8" y="439" width="181" height="1"/>
+				<reportElement x="8" y="424" width="181" height="1"/>
 				<graphicElement>
 					<pen lineStyle="Dashed"/>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="362" y="441" width="181" height="14"/>
+				<reportElement x="362" y="426" width="181" height="14"/>
 				<textElement textAlignment="Center">
 					<font fontName="Bookman Old Style" size="10" isBold="false"/>
 				</textElement>
@@ -597,7 +597,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{observacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="10" y="454" width="181" height="17"/>
+				<reportElement x="10" y="439" width="181" height="17"/>
 				<textElement textAlignment="Center">
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
