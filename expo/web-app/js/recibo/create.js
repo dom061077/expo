@@ -177,8 +177,7 @@ Ext.onReady(function (){
 			 		var saldo=0;
 			 		//var saldo=Ext.getCmp('saldoordenId').getValue()-Ext.getCmp('efectivoId').getValue();
 			 		var totalpagado=0;
-			 		if(Ext.getCmp('efectivoId').getValue()==null ||
-			 			Ext.getCmp('efectivoId').getValue().trim()=="")
+			 		if(Ext.getCmp('efectivoId').getValue()==null)
 			 			Ext.getCmp('efectivoId').setValue(0);
 			 			
 			 		totalpagado=Ext.getCmp('efectivoId').getValue();	
