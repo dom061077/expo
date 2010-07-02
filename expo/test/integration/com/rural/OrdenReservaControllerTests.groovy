@@ -170,4 +170,13 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	   def respuestaJson = grails.converters.JSON.parse(respuesta)
 	   assertFalse(respuestaJson.success)
    }
+   
+   void testConsultaAvanzada(){
+   		def ordenReservaController = new OrdenReservaController()
+   		ordenReservaController.params.propiedad = 'empresa.nombre'
+   		ordenReservaController.avancedlist()
+   		def respuesta = ordenReservaController.response.contentAsString
+   		def respuestaJson = grails.converters.JSON.parse(respuesta)
+   		assertTrue(respuestaJson.success)
+   }
 }
