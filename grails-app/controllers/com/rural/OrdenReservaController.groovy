@@ -2,6 +2,7 @@ package com.rural
 
 import com.rural.seguridad.*
 import grails.converters.JSON
+import java.util.StringTokenizer
 
 class OrdenReservaController {
     def ordenReservaService
@@ -322,6 +323,16 @@ class OrdenReservaController {
     				row(id:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre,empresaNombre:it.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
     			}
     		}
+    	}
+    }
+    
+    def avancedlist = {
+    	log.info("INGRESANDO AL METODO avancedlist DEL CONTROLLER OrdenReservaController")
+    	log.debug("PARAMETROS: $params")
+    	token = StringTokenizer(params.propiedad,'.')
+    	def ordenes = OrdenReserva.
+    	while(token.hasMoreElements()){
+    		
     	}
     }
     

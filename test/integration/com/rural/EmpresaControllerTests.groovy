@@ -2,6 +2,7 @@ package com.rural
 
 import grails.test.*
 
+
 class EmpresaControllerTests extends GrailsUnitTestCase {
  	def expo = null
  	def expoaparticipar = null
@@ -22,6 +23,7 @@ class EmpresaControllerTests extends GrailsUnitTestCase {
         
     }
     
+/*
     void generarOrdenReserva(){
     	assertNotNull(usuario)
     	def empresa = new Empresa(nombre:"empresa de prueba",usuario:usuario).save(flush:true)
@@ -34,7 +36,7 @@ class EmpresaControllerTests extends GrailsUnitTestCase {
     	empresaController.params.conceptosjson="[{id:tipoConcepto.id}]"			
     }
     
-    /*
+    
     void testSaveJson(){
     	assertNotNull(usuario)
     	def empresaController = new EmpresaController()
@@ -153,7 +155,9 @@ class EmpresaControllerTests extends GrailsUnitTestCase {
     	def respuestaJson = grails.converters.JSON.parse(respuesta)
     	assertTrue(respuestaJson.total==empresa.exposaparticipar.size())
     	assertTrue(respuestaJson.rows.size()==empresa.exposaparticipar.size())
-    }*/
+    }
     
-    
+  */  
+ 	
+  
 }
