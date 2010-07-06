@@ -16,6 +16,6 @@
         	</div>
         </div>
 		<div id="lotewin_extjs">
-        </div        
+        </div>        
     </body>
 </html>

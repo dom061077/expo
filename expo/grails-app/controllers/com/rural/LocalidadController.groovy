@@ -2,7 +2,7 @@
 
 package com.rural
 
-class LocalidadController {
+class LocalidadController { 
     
     def index = { redirect(action:list,params:params) }
 
