@@ -92,7 +92,7 @@ class EmpresaController {
             	empresaInstance.exposaparticipar.each{
             		it.delete()
             	}
-                empresaInstance.delete()
+                empresaInstance.delete(flush:true)
 
                 log.info("EMPRESA CON ID: "+params.id+" ELIMINADA")
                 //flash.message = "Empresa ${params.id} deleted"
