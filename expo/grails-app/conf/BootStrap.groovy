@@ -11,6 +11,8 @@ import com.rural.Iva
 import com.rural.seguridad.Person
 import com.rural.seguridad.Authority
 import com.rural.seguridad.Requestmap
+import groovy.sql.Sql
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 /*   class BootStrap {
 esto es para fixear el error:
@@ -59,6 +61,15 @@ class BootStrap {
      			authority.save()	
      		}
      }
+	 
+	 void inicializaTablas(){
+
+		 
+		 String sqlFilePath = 'path/to/your/script.sql'
+		 String sqlString = new File(sqlFilePath).text
+		 def sql = Sql.newInstance(ConfigurationHolder.config.dataSource.url, ConfigurationHolder.config.dataSource.username, ConfigurationHolder.config.dataSource.password, ConfigurationHolder.config.dataSource.driverClassName)
+		 sql.execute(sqlString)
+	 }
 	 
 	 void createAdminUserIfRequired(){
 			if (!Person.findByUsername("admin")) {
