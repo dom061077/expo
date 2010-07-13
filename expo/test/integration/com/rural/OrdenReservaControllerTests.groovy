@@ -21,6 +21,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	def exposicion = null
 	def sector = null
 	def lote = null
+	def iva = null
 	boolean transactional = true	
 	
     protected void setUp() {
@@ -50,7 +51,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
         
         tipoConcepto=new TipoConcepto(nombre:"descuento").save(flush:true)
         
-        new Iva(descripcion:"21 %",porcentaje:21).save()
+        iva = new Iva(descripcion:"21 %",porcentaje:21).save(flush:true)
         
     }
 
@@ -61,6 +62,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	void testGenerarOrdenAddEmpresa(){
     		assertNotNull(authenticateService.userDomain())
 	    	assertNotNull(empresa)
+	    	assertNotNull(iva)
 
 			def ordenreservaController = new OrdenReservaController()
 			ordenreservaController.ordenReservaService=ordenReservaService
@@ -74,7 +76,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.params.detallejson="[{lote_id:$lote.id,subTotal:1900}]"
 	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"
 	    	ordenreservaController.params.observacion="OBSERVACION" 
-	    	ordenreservaController.params.porcentajeResIns=1
+	    	ordenreservaController.params.porcentajeResIns=iva.id
 	    	ordenreservaController.params.porcentajeResNoIns=0
 	    	ordenreservaController.params.productosjson="[{descripcion:'QUESOS Y QUESILLOS'},{descripcion:'MEMBRILLO'}]"
 			
@@ -121,7 +123,8 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.params.detallejson="[{lote_id:$lote.id,subTotal:1900}]"
 	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"
 	    	ordenreservaController.params.observacion="OBSERVACION "
-	    	ordenreservaController.params.porcentajeResIns=1
+	    	ordenreservaController.params.porcentajeResIns=iva.id
+	    	
 	    	ordenreservaController.params.porcentajeResNoIns=0
 	    	ordenreservaController.params.observacion='NINGUNA'
 	    	ordenreservaController.params.productosjson="[{descripcion:'QUESOS Y QUESILLOS'},{descripcion:'MEMBRILLO'}]"
@@ -172,11 +175,21 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
    }
    
    void testConsultaAvanzada(){
+    	def ordenReservaInstance = new OrdenReserva(usuario:usuario,empresa:empresa,expo:exposicion,fechaAlta:new Date(),anio:2010,observacion:"OBSERVANDO")
+    	if (ordenReservaInstance.validate())
+    		ordenReservaInstance.save(flush:true)
+    	else
+    		fail("Error de validacion: "+ordenReservaInstance.errors.allErrors)
+    	assertNotNull(ordenReservaInstance)
+   
    		def ordenReservaController = new OrdenReservaController()
-   		ordenReservaController.params.propiedad = 'empresa.nombre'
+   		ordenReservaController.params.filtroempresa=true
+   		ordenReservaController.params.empresa=new Empresa()
+   		ordenReservaController.params.empresa.nombre="prueba"
    		ordenReservaController.avancedlist()
    		def respuesta = ordenReservaController.response.contentAsString
    		def respuestaJson = grails.converters.JSON.parse(respuesta)
    		assertTrue(respuestaJson.success)
+   		assertTrue(respuestaJson.rows.size()>0)
    }
 }
