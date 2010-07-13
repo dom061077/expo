@@ -331,15 +331,43 @@ class OrdenReservaController {
     def avancedlist = {
     	log.info("INGRESANDO AL METODO avancedlist DEL CONTROLLER OrdenReservaController")
     	log.debug("PARAMETROS: $params")
-
-		token = StringTokenizer(params.propiedad,'.')
+    	
+    	def ordenProps = OrdenReserva.metaClass.properties*.name
+    	def pagingconfig = [
+    		max: params.limit as Integer?:10,
+    		offset: params.start as Integer?:0
+    	]
+    	def ordenes = OrdenReserva.createCriteria().list(pagingconfig){
+    		and{
+    			if(params.filtroempresa){
+    				empresa{
+		    			params.each{field,value->
+		    				if(ordenProps.grep('empresa.'+field) && value){
+		    					like(field,value)
+		    				}	
+		    			}
+	    			}
+    			}
+    			eq('anulada',false)
+    		}
+    	} 
+		render(contentType:"text/json"){
+			success true
+			rows{
+				ordenes.each{
+					row(id:it.id,fechaalta:it.fechaAlta,nombreempresa:it.empresa.nombre)
+				}
+			}
+		}
+		
+		/*StringTokenizer token = StringTokenizer(params.propiedad,'.')
 		
     	def ordenes = com.rural.OrdenReserva.withCriteria{
 			
 	    	while(token.hasMoreElements()){
 	    			
 	    	}
-    	}
+    	}*/
     }
 		
     
