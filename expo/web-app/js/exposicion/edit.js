@@ -42,8 +42,8 @@ Ext.onReady(function(){
 					 ,src:''
 					 },{
 					 tag:'div'
-					 ,style:'margin:0 0 4px 0'
-					 ,html:'Logo actual de la expo'
+					 ,style:'margin:0px 0px 0px 0px; position: fixed;'
+					 //,html:'Logo actual de la expo'
 					 }]					
 				}
 			},{
