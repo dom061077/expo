@@ -142,6 +142,8 @@ class EmpresaController {
 		    			 ,razonSocial:empresaInstance.razonSocial
 		    			 ,codigoPostal:empresaInstance.codigoPostal
 		    			 ,localidadFiscal:empresaInstance.localidadFiscal
+		    			 ,provinciaId:empresaInstance.localidad.provincia.id
+		    			 ,localidadId:empresaInstance.localidad.id
 		    			 ,provinciaFiscal:empresaInstance.provinciaFiscal
 		    			 ,direccion:empresaInstance.direccion
 		    			 ,direccionFiscal:empresaInstance.direccionFiscal
