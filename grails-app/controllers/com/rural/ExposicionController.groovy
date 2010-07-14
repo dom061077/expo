@@ -96,14 +96,25 @@ class ExposicionController {
     def updatejson = {
     	log.info("INGRESANDO AL METODO updatejson DEL CONTROLADOR ExposicionController")
     	log.debug("PARAMETROS $params")
+    	def exposicionInstance = Exposicion.get(params.id)
     	def image = request.getFile('image')
-    	if (image?.empty || image.size>1024*30){
-    		render """{success:false,msg:'El tamaño máximo de la imagen es de 30 KB'}"""
-    		return
+    	def imagesaved = exposicionInstance.image
+    	exposicionInstance.properties = params
+    	if (!image?.empty ){
+    		if(image.size>1024*30){
+    			log.debug("Error de tama�o de archivo")
+	    		render """{success:false,msg:'El tamaño máximo de la imagen es de 30 KB'}"""
+	    		return
+    		}else{
+    			log.debug("Imagen de Exposicion Asignada desde el upload")
+    			//exposicionInstance.image=image
+   			}
+    	}else{
+    		log.debug("Imagen de Exposicion recuperada")
+			exposicionInstance.image=imagesaved			    		
     	}
     	
-    	def exposicionInstance = Exposicion.get(params.id)
-    	exposicionInstance.properties = params
+    	
     	if(!exposicionInstance.hasErrors() && exposicionInstance.save()){
     		log.debug("LOS CAMBIOS SE GUARDARON CORRECTAMENTE")
     		render """{success:true}"""

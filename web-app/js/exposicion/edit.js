@@ -50,7 +50,7 @@ Ext.onReady(function(){
 				xtype:'textfield',
 				name:'image',
 				inputType:'file',
-				allowBlank:false,
+				//allowBlank:false,
 				msgTarget:'under',
 				fieldLabel:'Logo de Expo'
 			}
