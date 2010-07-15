@@ -13,7 +13,7 @@ class LoteController {
 		log.info("INGRESANDO AL METODO listjson DEL CONTROLLER LoteController")
 		log.debug("PARAMETROS $params")
 		def c = Lote.createCriteria()
-		def lotes = c.list{
+		def lotes = c.list(sort:'nombre',order:'asc'){
 			sector{
 				eq('id', new Long(params.sector_id))
 			}

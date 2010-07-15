@@ -301,8 +301,14 @@ class OrdenReservaController {
 	    		and{
 		    		empresa{
 		   				like('nombre','%'+params?.searchCriteria+'%')
+		   				if(params.sort=="nombre")
+				   			order('nombre',params.dir.toLowerCase())
 		    		}
 		    		eq('anulada',false)
+		    		if(params.sort=="total")
+		    			order('total',params.dir.toLowerCase())
+		    		if(params.sort=="fechaAlta")
+		    			order('fechaAlta',params.dir.toLowerCase())	
 	    		}
 	    	}
     	}
@@ -317,12 +323,18 @@ class OrdenReservaController {
     			ordenes.each{
     				totalCancelado=0
     				saldo=0
-    				it.recibos.each{
+    				it.recibos.each{ 
     					if(!it.anulado)
     						totalCancelado=totalCancelado+it.total
     				}
     				saldo=it.total-totalCancelado
-    				row(id:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre,empresaNombre:it.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
+    				def orden=it	
+    				it.detalle.each{
+    					row(id:orden.id,numero:orden.numero,fechaAlta:orden.fechaAlta,total:orden.total,anio:orden.anio,expoNombre:orden.expo.nombre
+    						,sector:it.lote.sector.nombre
+    						,lote:it.lote.nombre
+    						,nombre:orden.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
+   					}
     			}
     		}
     	}

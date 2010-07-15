@@ -13,7 +13,7 @@ class SectorController {
     	log.info("INGRESANDO AL METODO listtodosjson DEL CONTROLLER SectorController")
     	log.debug("PARAMETROS INGRESADOS: $params")
     	def c = Sector.createCriteria()
-    	def sectores = c.list{
+    	def sectores = c.list(sort:'nombre',order:'asc'){
     		or{
     			expo{
     				like('nombre','%'+params.searchCriteria+'%')
@@ -35,7 +35,7 @@ class SectorController {
     	log.info("INGRESANDO AL METODO listjson DEL CONTROLLER SectorController")
     	log.debug("PARAMETROS INGRESADOS: $params")
     	def c = Sector.createCriteria()
-    	def sectores = c.list{
+    	def sectores = c.list(sort:'nombre',order:'asc'){
     		expo{
     			eq('id',new Long(params.exposicion_id))
     		}
