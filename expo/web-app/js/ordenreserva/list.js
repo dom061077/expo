@@ -3,9 +3,10 @@ Ext.onReady(function(){
 	
 	var ordenStore = new Ext.data.JsonStore({
 		totalProperty: 'total',
+		remoteSort:true,
 		root: 'rows',
 		url:'listjson',
-		fields:['id','numero','fechaAlta','total','totalCancelado','saldo','anio','expoNombre','empresaNombre'],
+		fields:['id','numero','fechaAlta','total','totalCancelado','saldo','anio','expoNombre','nombre','sector','lote'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -26,19 +27,43 @@ Ext.onReady(function(){
 		
 	});
 	
+
+	
+	function currencyRender(v,params,data){
+		/*num = num.toString().replace(/\$|\,/g, '');
+		if (isNaN(num)) num = "0";
+		sign = (num == (num = Math.abs(num)));
+		num = Math.floor(num * 100 + 0.50000000001);
+		cents = num % 100;
+		num = Math.floor(num / 100).toString();
+		if (cents < 10) cents = "0" + cents;
+		for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
+		num = num.substring(0, num.length - (4 * i + 3)) + '.' + num.substring(num.length - (4 * i + 3));
+		return (((sign) ? '' : '-') + '$' + num + ',' + cents);	*/
+		return Ext.util.Format.usMoney(v);
+		//Ext.util.Format.number( v,'0,000.00');
+	}
+	
+	function ordenRender(v,params,data){
+		var numero = 100000000+v;
+		return numero.toString().substring(1,9);
+		//00000011
+	}
 	
 	var grid = new Ext.grid.GridPanel({
 		store:ordenStore,
 		columns:[
-					{header:"Empresa",dataIndex:'empresaNombre',width:200},
+					{header:"Empresa",dataIndex:'nombre',width:200,sortable:true},
+					{header:"Sector",dataIndex:'sector',width:200},
+					{header:"Lote",dataIndex:'lote',width:100,hidden:true},					
+					{header:"Total",dataIndex:'total',width:80,renderer:currencyRender,sortable:true},
+					{header:"Total Cancelado",dataIndex:'totalCancelado',width:100,renderer:currencyRender},
+					{header:"Saldo",dataIndex:'saldo',width:80,renderer:currencyRender},					
 					{header:"Exposición",dataIndex:'expoNombre',width:200},
 					{header:"Año",dataIndex:'anio',width:80},					
 					{header:"id",dataIndex:"id",hidden:true},
-					{header:"Número",dataIndex:"numero",width:80},
-					{header:"Fecha",dataIndex:'fechaAlta',width:80,renderer: Ext.util.Format.dateRenderer('d/m/y')},
-					{header:"Total",dataIndex:'total',width:80},
-					{header:"Total Cancelado",dataIndex:'totalCancelado',width:100},
-					{header:"Saldo",dataIndex:'saldo',width:80}					
+					{header:"Número Orden",dataIndex:"numero",width:80,renderer:ordenRender},
+					{header:"Fecha",dataIndex:'fechaAlta',width:80,renderer: Ext.util.Format.dateRenderer('d/m/y'),sortable:true}
 			],
 		stripeRows: true,	
 		height:250,
