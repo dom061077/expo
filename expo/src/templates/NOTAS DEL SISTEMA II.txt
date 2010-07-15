@@ -1,6 +1,6 @@
 ---modificar rubro y subrubro, que se de alta automaticamente cuando no exista
 
----modificar impresion de recibo
+---modificar impresion de recibo (MAS TARDE)
 
 ---ORDENAMIENTO DE LAS GRILLAS EN GRAL
 
