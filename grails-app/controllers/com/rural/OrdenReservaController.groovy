@@ -155,6 +155,7 @@ class OrdenReservaController {
     	def detallejson = JSON.parse(params.detallejson)
     	def otrosconceptosjson = JSON.parse(params.otrosconceptosjson)
     	def productosjson = JSON.parse(params.productosjson)
+		    	
     	productosjson.each{
     		ordenReservaInstance.addToProductos(new ProductoExpuesto(descripcion:it.descripcion))
     		
@@ -169,7 +170,8 @@ class OrdenReservaController {
 			empresaInstance.usuario=authenticateService.userDomain()
 			log.debug("PROPIEDADES DE EMPRESA: $params.empresa.nombre, $params.empresa.cuit")
 			log.debug("PROPIEDADES DE ORDEN DE RESERVA: "+ordenReservaInstance.properties)
-		}    	
+		}    
+					
    		ordenReservaInstance.usuario=authenticateService.userDomain()
    		iterarDetalleJson(ordenReservaInstance,detallejson)
    		iterarConceptos(ordenReservaInstance,otrosconceptosjson)
