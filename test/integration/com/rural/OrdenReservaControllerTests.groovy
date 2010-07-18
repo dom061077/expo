@@ -23,6 +23,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	def lote = null
 	def iva = null
 	def rubro = null
+	def subrubro = null
 	boolean transactional = true	
 	
     protected void setUp() {
@@ -54,6 +55,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
         
         iva = new Iva(descripcion:"21 %",porcentaje:21).save(flush:true)
         rubro = new Rubro(nombreRubro:"RUBRO PRUEBA").save(flush:true)
+        subrubro = new SubRubro(nombreSubrubro:"SUBRUBRO NUEVO",rubro:rubro).save()
     }
 
     protected void tearDown() {
@@ -71,7 +73,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			ordenreservaController.params.expo=exposicion
 			ordenreservaController.params.anio=2010
 			//ordenreservaController.params.usuario=usuario
-			ordenreservaController.params.empresa=new Empresa()
+			ordenreservaController.params.empresa=new Empresa(subrubro:subrubro)
 	    	ordenreservaController.params.empresa.nombre="empresa nueva"
 	    	ordenreservaController.params.empresa.razonSocial="empresa nueva razon social"
 	    	ordenreservaController.params.detallejson="[{lote_id:$lote.id,subTotal:1900}]"
@@ -118,6 +120,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			ordenreservaController.params.expo=exposicion
 			ordenreservaController.params.anio=2010
 			//ordenreservaController.params.usuario=usuario
+			empresa.subrubro=subrubro
 	    	ordenreservaController.params.empresa=empresa
 	    	ordenreservaController.params.empresa.nombre="empresa modificada"
 	    	ordenreservaController.params.empresa.razonSocial="empresa modificada razon social"
@@ -160,13 +163,14 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.params.empresa=empresa
 	    	ordenreservaController.params.empresa.nombre="empresa modificada"
 	    	ordenreservaController.params.empresa.razonSocial="empresa modificada razon social"
+	    	ordenreservaController.params.empresa.subrubro = new SubRubro(nombreSubrubro:"NUEVO SUBRUBRO",rubro:rubro)
+	    	
 	    	ordenreservaController.params.put("detallejson","[{lote_id:$lote.id,subTotal:1900}]")
 	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"
 	    	ordenreservaController.params.observacion="OBSERVACION "
 	    	ordenreservaController.params.porcentajeResIns=iva.id
-	    	ordenreservaController.params.subrubro = new SubRubro(nombreSubrubro:"NUEVO SUBRUBRO",rubro:rubro)
 	    	
-	    	ordenreservaController.params.porcentajeResNoIns=0
+    		ordenreservaController.params.porcentajeResNoIns=0
 	    	ordenreservaController.params.observacion='NINGUNA'
 	    	ordenreservaController.params.productosjson="[{descripcion:'QUESOS Y QUESILLOS'},{descripcion:'MEMBRILLO'}]"
 	    	ordenreservaController.request.getAttribute("org.codehaus.groovy.grails.WEB_REQUEST").informParameterCreationListeners()
