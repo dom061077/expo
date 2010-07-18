@@ -55,7 +55,7 @@ Ext.onReady(function(){
 		columns:[
 					{header:"Empresa",dataIndex:'nombre',width:200,sortable:true},
 					{header:"Sector",dataIndex:'sector',width:200},
-					{header:"Lote",dataIndex:'lote',width:100,hidden:true},					
+					{header:"Lote",dataIndex:'lote',width:100,hidden:false},					
 					{header:"Total",dataIndex:'total',width:80,renderer:currencyRender,sortable:true},
 					{header:"Total Cancelado",dataIndex:'totalCancelado',width:100,renderer:currencyRender},
 					{header:"Saldo",dataIndex:'saldo',width:80,renderer:currencyRender},					

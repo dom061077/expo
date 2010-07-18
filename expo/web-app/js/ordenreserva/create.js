@@ -942,22 +942,36 @@ Ext.onReady(function(){
 								        			}
 								        		}
 								        	},{
-								        		xtype: 'combo',
-								        		fieldLabel:'Sub-Rubro de Empresa',
-								        		id:'idSubrubro',
-								        		store:subrubroStore,
-								        		allowBlank:false,
-								        		hideMode:'offsets',
-								        		minListWidth:260,
-								        		msgTarget:'under',
-								        		name: 'subrubro',
-								        		hiddenName:'subrubro_id',
-								        		displayField:'nombreSubrubro',
-								        		valueField:'id',
-								        		mode:'local',
-								        		forceSelection:true,
-								        		store:subrubroStore,
-								        		width:260
+								        		layout:'column',
+								        		border:false,
+								        		anchor:'0',
+								        		items:[{
+								        			width:400,
+								        			layout:'form',
+								        			border:false,
+								        			items:
+										        		{xtype: 'combo',
+										        		fieldLabel:'Sub-Rubro de Empresa',
+										        		id:'idSubrubro',
+										        		store:subrubroStore,
+										        		allowBlank:false,
+										        		hideMode:'offsets',
+										        		minListWidth:200,
+										        		msgTarget:'under',
+										        		name: 'subrubro',
+										        		hiddenName:'subrubro_id',
+										        		displayField:'nombreSubrubro',
+										        		valueField:'id',
+										        		mode:'local',
+										        		//forceSelection:true,
+										        		store:subrubroStore,
+										        		width:260}
+										        		
+								        			},{
+								        				xtype:'button',
+								        				text:'Agregar'
+								        			}
+								        		]
 							        		}
 				]
 			}),
@@ -1375,7 +1389,9 @@ Ext.onReady(function(){
 				'empresa.telefonoRepresentante1':datos.datoscontactoId.telefonoRepresentante1,
 				'empresa.telefonoRepresentante2':datos.datoscontactoId.telefonoRepresentante2,
 				'empresa.telefonoRepresentante3':datos.datoscontactoId.telefonoRepresentante3,
+				'empresa.subrubro.rubro.id':datos.datosempresaId.rubro_id,
 				'empresa.subrubro.id':datos.datosempresaId.subrubro_id,
+				'empresa.subrubro.nombreSubrubro':datos.datosempresaId.subrubro,
 				'empresa.dniRep':datos.datoscontactoId.dniRep,
 				'empresa.email':datos.datosempresaId.email,
 				'empresa.cargoRep':datos.datoscontactoId.cargoRep,

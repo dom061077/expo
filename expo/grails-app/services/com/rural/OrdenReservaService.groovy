@@ -32,7 +32,11 @@ class OrdenReservaService {
     		throw new OrdenReservaException("Ocurrio un error al tratar de salvar los datos de la empresa. "
     			+empresa.errors.allErrors,ord)
    		}
-    		def empresaInstance = empresa.save()
+    	def empresaInstance = empresa.save()
+    	
+    	if(!empresaInstance.subrubro.save())
+    		throw new OrdenReservaException("Error al guardar el subrubro",ord)
+    	
 	    ord.detalle.each{
     			ord.subTotal=ord.subTotal+it.subTotal
     			if (ord.expo!=it.lote.sector.expo)
