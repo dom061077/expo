@@ -678,6 +678,52 @@ Ext.onReady(function(){
 		fields:['id','descripcion']
 	});	
 	
+
+	
+	var formSubrubro=new Ext.form.FormPanel ({
+		url:'../subrubro/savejson',
+		id:'formSubrubroId',
+		frame:true,
+		width:450,
+		height:150,
+		items:[
+			{
+				xtype:'textfield',
+				fieldLabel:'Nombre Sub-Rubro',
+				width:200
+			},{
+				xtype:'combo',
+				fieldLabel:'Rubro',
+				store:rubroStore,
+				mode:'local',
+				valueField:'id',
+				displayField:'nombreRubro',
+				width:200
+			}
+		],
+		buttons:[
+			{
+				text:'Guardar'
+			},{
+				text:'Cancelar',
+				handler:function(){
+					winSubrubro.hide();
+				}
+			}
+		]
+	});
+	
+	var winSubrubro=new Ext.Window({
+		title:'Agregar Sub-Rubro',
+		resizable:false,
+		modal:true,
+        formPanel: null,
+        width:400,
+        height:200,
+        closeAction:'hide',
+        plain: true,
+        items:[formSubrubro]		
+	});	
 	
 	var wizard = new Ext.ux.Wiz({
 		title:'Orden de Reserva',
@@ -688,7 +734,7 @@ Ext.onReady(function(){
 		nextButtonText:'Siguiente',
 		cancelButtonText:'Cancelar',
 		finishButtonText:'Finalizar',
-		width:650,
+		width:680,
 		headerConfig:{
 			title:'Alta de Orden de Reserva',
 			stepText : "Paso {0} de {1}: {2}"
@@ -946,7 +992,7 @@ Ext.onReady(function(){
 								        		border:false,
 								        		anchor:'0',
 								        		items:[{
-								        			width:400,
+								        			width:390,
 								        			layout:'form',
 								        			border:false,
 								        			items:
@@ -963,13 +1009,24 @@ Ext.onReady(function(){
 										        		displayField:'nombreSubrubro',
 										        		valueField:'id',
 										        		mode:'local',
-										        		//forceSelection:true,
+										        		forceSelection:true,
 										        		store:subrubroStore,
 										        		width:260}
 										        		
 								        			},{
-								        				xtype:'button',
-								        				text:'Agregar'
+								        			width:90,
+								        			layout:'form',
+								        			border:false,
+								     					items:
+								     						{
+								        						xtype:'button', 
+								        						text:'Agregar',
+								        						listeners:{
+								        							click: function(){
+								        								winSubrubro.show();
+								        							}
+								        						}
+								        					}
 								        			}
 								        		]
 							        		}
@@ -1128,7 +1185,6 @@ Ext.onReady(function(){
 					  hiddenName:'resinsValor',
 					  valueField:'id',
 					  hiddenField:'id',						  
-					  hiddenField:'id',
 					  displayField:'descripcion',
 					  msgTarget:'under',
 					  store:ivaStore,
