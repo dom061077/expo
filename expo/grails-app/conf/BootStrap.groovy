@@ -13,6 +13,7 @@ import com.rural.seguridad.Authority
 import com.rural.seguridad.Requestmap
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import  org.apache.commons.io.FileUtils;
 
 /*   class BootStrap {
 esto es para fixear el error:
@@ -65,14 +66,24 @@ class BootStrap {
 	 void inicializaTablas(){
 
 		 
-		 String sqlFilePath = 'path/to/your/script.sql'
-		 String sqlString = new File(sqlFilePath).text
+		 String sqlFilePath = 'src/templates/provincias.sql'
+		 String sqlString =  FileUtils.readFileToString(new File(sqlFilePath)); 
 		 def sql = Sql.newInstance(ConfigurationHolder.config.dataSource.url, ConfigurationHolder.config.dataSource.username, ConfigurationHolder.config.dataSource.password, ConfigurationHolder.config.dataSource.driverClassName)
+		 List<String> lines = FileUtils.readLines (new File(sqlFilePath))
+		 lines.each{
+			 sql.execute(it)
+		 }
+		 
+		 sqlFilePath = 'src/templates/localidades.sql'
+		 sqlString = new File(sqlFilePath).text
+		 sql = Sql.newInstance(ConfigurationHolder.config.dataSource.url, ConfigurationHolder.config.dataSource.username, ConfigurationHolder.config.dataSource.password, ConfigurationHolder.config.dataSource.driverClassName)
 		 sql.execute(sqlString)
-	 }
+	 	 println "Inicializacion de tablas completa"
+ }
 	 
 	 void createAdminUserIfRequired(){
 			if (!Person.findByUsername("admin")) {
+				//inicializaTablas()
 				println "Fresh Database. Creating ADMIN user."
 				def authority = new Authority(authority: "ROLE_ADMIN", description: "Super usuario")
 				def person = new Person(username:"admin",
