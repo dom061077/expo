@@ -143,6 +143,8 @@ class EmpresaController {
 		    			 ,codigoPostal:empresaInstance.codigoPostal
 		    			 ,localidadFiscal:empresaInstance.localidadFiscal
 		    			 ,provinciaId:empresaInstance.localidad.provincia.id
+		    			 ,provinciaNombre:empresaInstance.localidad.provincia.nombre
+		    			 ,localidadNombre:empresaInstance.localidad.nombreLoc
 		    			 ,localidadId:empresaInstance.localidad.id
 		    			 ,provinciaFiscal:empresaInstance.provinciaFiscal
 		    			 ,direccion:empresaInstance.direccion

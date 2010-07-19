@@ -150,7 +150,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			
     }
     
-    void testGenerarOrdenAddSubRubro(){
+    /*void testGenerarOrdenAddSubRubro(){
     		assertNotNull(authenticateService.userDomain())
 	    	assertNotNull(empresa)
 			def ordenreservaController = new OrdenReservaController()
@@ -191,7 +191,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 				fail("SubTotal erroneo: deberia ser 1805 pero resultó en: $ordenreservaInstance.subTotal")
 			
     
-    }
+    }*/
     
     void testAnularOrden(){
     	def ordenReservaInstance = new OrdenReserva(usuario:usuario,empresa:empresa,expo:exposicion,fechaAlta:new Date(),anio:2010,observacion:"OBSERVANDO")

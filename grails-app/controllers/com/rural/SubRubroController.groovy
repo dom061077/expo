@@ -113,6 +113,7 @@ class SubRubroController {
     		render(contentType:"text/json"){
     			success true
     			idSubRubro subrubroInstance.id
+    			nombreSubrubro subrubroInstance.nombreSubrubro
     		}
     	}else{
     		log.info("ERROR DE VALIDACION EN INSTANCIA DE SubRubro")
