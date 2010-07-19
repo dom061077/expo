@@ -147,10 +147,20 @@ Ext.onReady(function(){
 								Ext.getCmp('direccionfiscalId').setValue(respuesta.data.direccionFiscal);
 								Ext.getCmp('telefono1Id').setValue(respuesta.data.telefono1);
 								Ext.getCmp('telefono2Id').setValue(respuesta.data.telefono2);
-								Ext.getCmp('idProvincia').setValue(respuesta.data.provinciaId);
+								Ext.getCmp('idProvincia').setValue(respuesta.data.provinciaNombre);
 								Ext.getCmp('idProvincia').hiddenField.value=respuesta.data.provinciaId;
-								Ext.getCmp('idLocalidad').setValue(respuesta.data.localidadFiscal);
+								
+								var localidadCmb = Ext.getCmp('idLocalidad');
+								localidadCmb.clearValue();
+								localidadCmb.store.load({
+										params:{'provincia_id':Ext.getCmp('idProvincia').hiddenField.value}
+								});
+																
+								Ext.getCmp('idLocalidad').setValue(respuesta.data.localidadNombre);
 								Ext.getCmp('idLocalidad').hiddenField.value=respuesta.data.localidadId;
+								
+
+								
 	            				Ext.getCmp('idVendedor').setValue(respuesta.data.localidadId);
 	            				Ext.getCmp('idVendedor').hiddenField.value=respuesta.data.vendedorId;
 	            				Ext.getCmp('idNombreRepresentante').setValue(respuesta.data.nombreRepresentante);
@@ -681,7 +691,7 @@ Ext.onReady(function(){
 
 	
 	var formSubrubro=new Ext.form.FormPanel ({
-		url:'../subrubro/savejson',
+		url:'../subRubro/savejson',
 		id:'formSubrubroId',
 		frame:true,
 		width:450,
@@ -689,21 +699,65 @@ Ext.onReady(function(){
 		items:[
 			{
 				xtype:'textfield',
+				name:'nombreSubrubro',
 				fieldLabel:'Nombre Sub-Rubro',
 				width:200
-			},{
+			}/*,{
 				xtype:'combo',
 				fieldLabel:'Rubro',
+				id:'altarubroId',
+				name:'rubro.id',
 				store:rubroStore,
 				mode:'local',
 				valueField:'id',
+				forceSelection:true,
+				allowBlank:false,
 				displayField:'nombreRubro',
 				width:200
-			}
+			}*/
 		],
 		buttons:[
 			{
-				text:'Guardar'
+				text:'Guardar',
+				handler:function(){
+					formSubrubro.getForm().submit({
+						params:{
+			 					'rubro.id':Ext.getCmp('idRubro').hiddenField.value
+			 				},
+						success:function(f,a){
+							var subrubro = Ext.getCmp('idSubrubro')
+							subrubro.clearValue();
+	        				subrubro.store.load({
+	        					params:{'rubroid':Ext.getCmp('idRubro').hiddenField.value}
+	        				});
+	        				subrubro.enable();
+	        				winSubrubro.hide();
+	        				Ext.getCmp('idSubrubro').hiddenField.value=a.result.idSubRubro;
+							Ext.getCmp('idSubrubro').setValue(a.result.nombreSubrubro);
+						},
+						failure:function(f,a){
+						    var msg="";
+						    if (a.failureType==Ext.form.Action.CONNECT_FAILURE ||
+						    	a.failureType==Ext.form.Action.SERVER_INVALID){
+						    		Ext.Msg.alert('Error','El servidor no Responde')
+						    	}
+						    if (a.result){
+						    	if (a.result.loginredirect==true){
+						    		Ext.Msg.alert('Su sesion de usuario a caducado, ingrese nuevamente');
+						    		window.location='../logout/index';
+						    		}
+						    	if (a.result.errors){
+						    		for (var i=0; i<a.result.errors.length;i++){
+						    			msg=msg+a.result.errors[i].title+'\r\n';	
+				    				}
+				    				Ext.Msg.alert(msg);
+			    				}
+						    }	
+							
+						}
+					
+					});
+				}
 			},{
 				text:'Cancelar',
 				handler:function(){
@@ -1023,7 +1077,14 @@ Ext.onReady(function(){
 								        						text:'Agregar',
 								        						listeners:{
 								        							click: function(){
-								        								winSubrubro.show();
+								        								if(Ext.getCmp('idRubro').validate())
+								        									winSubrubro.show();
+								        								else
+								        									Ext.MessageBox.show({
+								        										title:'Error',
+								        										msg:'Seleccione un rubro andes de agregar el Sub-Rubro',
+								        										buttons:Ext.MessageBox.OK
+								        									});
 								        							}
 								        						}
 								        					}

@@ -34,8 +34,8 @@ class OrdenReservaService {
    		}
     	def empresaInstance = empresa.save()
     	
-    	if(!empresaInstance.subrubro.save())
-    		throw new OrdenReservaException("Error al guardar el subrubro",ord)
+    	//if(!empresaInstance.subrubro.save())
+    	//	throw new OrdenReservaException("Error al guardar el subrubro",ord)
     	
 	    ord.detalle.each{
     			ord.subTotal=ord.subTotal+it.subTotal

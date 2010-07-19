@@ -275,43 +275,51 @@ class OrdenReservaController {
     	def totalOrdenes=0
     	def ordenes=null
     	if(params.fieldSearch=="numero"){
-	    	totalOrdenes = OrdenReserva.createCriteria().count{
+	    	totalOrdenes = DetalleServicioContratado.createCriteria().count{
 	    		and{
-	    			eq('numero',new Long(params?.searchCriteria))
-	    			//eq('numero',null)
-	    			eq('anulada',false)
+	    			ordenReserva{
+			    			eq('numero',new Long(params?.searchCriteria))
+			    			//eq('numero',null)
+			    			eq('anulada',false)
+	    			}
     			}
 	    	}
-	    	ordenes = OrdenReserva.createCriteria().list(pagingconfig){
+	    	detalle = DetalleServicioContratado.createCriteria().list(pagingconfig){
 	    		and{
-		    		eq('numero',new Long(params?.searchCriteria))
-		    		//eq('numero',null)
-		    		eq('anulada',false)
+					ordenReserva{	    			
+			    		eq('numero',new Long(params?.searchCriteria))
+			    		//eq('numero',null)
+			    		eq('anulada',false)
+		    		}
 	    		}
 	    	}
     	}
 
     	if(params.fieldSearch=="empresa.nombre"){
-	    	totalOrdenes = OrdenReserva.createCriteria().count{
-				and{	    		
-		    		empresa{
-		    			like('nombre','%'+params?.searchCriteria+'%')
+	    	totalOrdenes = DetalleServicioContratado.createCriteria().count{
+					and{
+						ordenReserva{
+				    		empresa{
+				    			like('nombre','%'+params?.searchCriteria+'%')
+				   			}
+				   			eq('anulada',false)
+			   			}
 		   			}
-		   			eq('anulada',false)
-	   			}
 	    	}
-	    	ordenes = OrdenReserva.createCriteria().list(pagingconfig){
+	    	detalle = DetalleServicioContratado.createCriteria().list(pagingconfig){
 	    		and{
-		    		empresa{
-		   				like('nombre','%'+params?.searchCriteria+'%')
-		   				if(params.sort=="nombre")
-				   			order('nombre',params.dir.toLowerCase())
-		    		}
-		    		eq('anulada',false)
-		    		if(params.sort=="total")
-		    			order('total',params.dir.toLowerCase())
-		    		if(params.sort=="fechaAlta")
-		    			order('fechaAlta',params.dir.toLowerCase())	
+	    			ordenReserva{
+			    		empresa{
+			   				like('nombre','%'+params?.searchCriteria+'%')
+			   				if(params.sort=="nombre")
+					   			order('nombre',params.dir.toLowerCase())
+			    		}
+			    		eq('anulada',false)
+			    		if(params.sort=="total")
+			    			order('total',params.dir.toLowerCase())
+			    		if(params.sort=="fechaAlta")
+			    			order('fechaAlta',params.dir.toLowerCase())
+	    			}	
 	    		}
 	    	}
     	}
