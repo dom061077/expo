@@ -159,9 +159,7 @@ Ext.onReady(function(){
 								Ext.getCmp('idLocalidad').setValue(respuesta.data.localidadNombre);
 								Ext.getCmp('idLocalidad').hiddenField.value=respuesta.data.localidadId;
 								
-
-								
-	            				Ext.getCmp('idVendedor').setValue(respuesta.data.localidadId);
+	            				Ext.getCmp('idVendedor').setValue(respuesta.data.vendedor);
 	            				Ext.getCmp('idVendedor').hiddenField.value=respuesta.data.vendedorId;
 	            				Ext.getCmp('idNombreRepresentante').setValue(respuesta.data.nombreRepresentante);
 	            				Ext.getCmp('idTelefonoRepresentante1').setValue(respuesta.data.telefonoRepresentante1);
@@ -170,7 +168,9 @@ Ext.onReady(function(){
 	            				Ext.getCmp('idEmail').setValue(respuesta.data.email);
 	            				Ext.getCmp('idSitioweb').setValue(respuesta.data.sitioWeb);
 	            				Ext.getCmp('idRubro').setValue(respuesta.data.rubro);
+	            				
 	            				Ext.getCmp('idRubro').hiddenField.value=respuesta.data.rubroId;
+	            				
 	            				Ext.getCmp('idCodigopostal').setValue(respuesta.data.codigoPostal);
 	            				Ext.getCmp('idCargorep').setValue(respuesta.data.cargoRep);
 		        				var subrubroCmb = Ext.getCmp('idSubrubro');
@@ -732,8 +732,9 @@ Ext.onReady(function(){
 	        				});
 	        				subrubro.enable();
 	        				winSubrubro.hide();
-	        				Ext.getCmp('idSubrubro').hiddenField.value=a.result.idSubRubro;
 							Ext.getCmp('idSubrubro').setValue(a.result.nombreSubrubro);
+	        				Ext.getCmp('idSubrubro').hiddenField.value=a.result.idSubRubro;
+							
 						},
 						failure:function(f,a){
 						    var msg="";
@@ -1082,8 +1083,9 @@ Ext.onReady(function(){
 								        								else
 								        									Ext.MessageBox.show({
 								        										title:'Error',
-								        										msg:'Seleccione un rubro andes de agregar el Sub-Rubro',
-								        										buttons:Ext.MessageBox.OK
+								        										msg:'Seleccione un rubro antes de agregar el Sub-Rubro',
+								        										buttons:Ext.MessageBox.OK,
+								        										icon:Ext.MessageBox.ERROR
 								        									});
 								        							}
 								        						}
@@ -1506,9 +1508,9 @@ Ext.onReady(function(){
 				'empresa.telefonoRepresentante1':datos.datoscontactoId.telefonoRepresentante1,
 				'empresa.telefonoRepresentante2':datos.datoscontactoId.telefonoRepresentante2,
 				'empresa.telefonoRepresentante3':datos.datoscontactoId.telefonoRepresentante3,
-				'empresa.subrubro.rubro.id':datos.datosempresaId.rubro_id,
+				//'empresa.subrubro.rubro.id':datos.datosempresaId.rubro_id,
 				'empresa.subrubro.id':datos.datosempresaId.subrubro_id,
-				'empresa.subrubro.nombreSubrubro':datos.datosempresaId.subrubro,
+				//'empresa.subrubro.nombreSubrubro':Ext.getCmp(''),
 				'empresa.dniRep':datos.datoscontactoId.dniRep,
 				'empresa.email':datos.datosempresaId.email,
 				'empresa.cargoRep':datos.datoscontactoId.cargoRep,
