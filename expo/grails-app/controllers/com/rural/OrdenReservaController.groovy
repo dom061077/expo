@@ -264,7 +264,8 @@ class OrdenReservaController {
     
     	}
     }
-    
+
+
     def listjson = {
     	log.info("INGRESANDO AL METODO listjson DEL CONTROLADOR OrdenReservaController")
     	log.debug("PARAMETROS $params")
@@ -275,51 +276,60 @@ class OrdenReservaController {
     	def totalOrdenes=0
     	def ordenes=null
     	if(params.fieldSearch=="numero"){
-	    	totalOrdenes = DetalleServicioContratado.createCriteria().count{
+	    	totalOrdenes = OrdenReserva.createCriteria().count{
 	    		and{
-	    			ordenReserva{
-			    			eq('numero',new Long(params?.searchCriteria))
-			    			//eq('numero',null)
-			    			eq('anulada',false)
-	    			}
+	    			eq('numero',new Long(params?.searchCriteria))
+	    			//eq('numero',null)
+	    			eq('anulada',false)
     			}
 	    	}
-	    	detalle = DetalleServicioContratado.createCriteria().list(pagingconfig){
+	    	ordenes = OrdenReserva.createCriteria().list(){
 	    		and{
-					ordenReserva{	    			
-			    		eq('numero',new Long(params?.searchCriteria))
-			    		//eq('numero',null)
-			    		eq('anulada',false)
-		    		}
+		    		eq('numero',new Long(params?.searchCriteria))
+		    		//eq('numero',null)
+		    		eq('anulada',false)
 	    		}
 	    	}
     	}
 
     	if(params.fieldSearch=="empresa.nombre"){
-	    	totalOrdenes = DetalleServicioContratado.createCriteria().count{
-					and{
-						ordenReserva{
-				    		empresa{
-				    			like('nombre','%'+params?.searchCriteria+'%')
-				   			}
-				   			eq('anulada',false)
-			   			}
+	    	totalOrdenes = OrdenReserva.createCriteria().count{
+				and{	    		
+		    		empresa{
+		    			like('nombre','%'+params?.searchCriteria+'%')
 		   			}
+		   			eq('anulada',false)
+	   			}
 	    	}
-	    	detalle = DetalleServicioContratado.createCriteria().list(pagingconfig){
+	    	ordenes = OrdenReserva.createCriteria().list(){
 	    		and{
-	    			ordenReserva{
-			    		empresa{
-			   				like('nombre','%'+params?.searchCriteria+'%')
-			   				if(params.sort=="nombre")
-					   			order('nombre',params.dir.toLowerCase())
-			    		}
-			    		eq('anulada',false)
-			    		if(params.sort=="total")
-			    			order('total',params.dir.toLowerCase())
-			    		if(params.sort=="fechaAlta")
-			    			order('fechaAlta',params.dir.toLowerCase())
-	    			}	
+		    		empresa{
+		   				like('nombre','%'+params?.searchCriteria+'%')
+		   				if(params.sort=="nombre")
+				   			order('nombre',params.dir.toLowerCase())
+		    		}
+		    		eq('anulada',false)
+		    		if(params.sort=="total")
+		    			order('total',params.dir.toLowerCase())
+		    		if(params.sort=="fechaAlta")
+		    			order('fechaAlta',params.dir.toLowerCase())
+		    		if(params.sort=="numero")
+		    			order('numero',params.dir.toLowerCase())
+		    		if(params.sort=="sector" || params.sort=="lote"){
+		    			detalle{
+		    				lote{
+		    					if(params.sort=="lote"){
+		    						order('nombre',params.dir.toLowerCase())
+		    					}
+		    					if(params.sort="sector"){
+		    						sector{
+		    							order('nombre',params.dir.toLowerCase())
+	    							}
+		    					}
+		    				}
+		    			}
+		    		}		
+		    				
 	    		}
 	    	}
     	}
@@ -328,8 +338,9 @@ class OrdenReservaController {
     	log.debug("Cantidad de Ordenes Consultadas: "+ordenes?.size()+" - total count() $totalOrdenes")
     	def totalCancelado=0
     	def saldo=0
+    	def flagdetalle = false
+    	totalOrdenes=0
     	render(contentType:"text/json"){
-    		total totalOrdenes
     		rows{
     			ordenes.each{
     				totalCancelado=0
@@ -339,17 +350,28 @@ class OrdenReservaController {
     						totalCancelado=totalCancelado+it.total
     				}
     				saldo=it.total-totalCancelado
-    				def orden=it	
+    				def orden=it
+    				flagdetalle=false	
     				it.detalle.each{
+    					flagdetalle=true
     					row(id:orden.id,numero:orden.numero,fechaAlta:orden.fechaAlta,total:orden.total,anio:orden.anio,expoNombre:orden.expo.nombre
     						,sector:it.lote.sector.nombre
     						,lote:it.lote.nombre
     						,nombre:orden.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
    					}
+   					
+   					if(!flagdetalle)
+    					row(id:orden.id,numero:orden.numero,fechaAlta:orden.fechaAlta,total:orden.total,anio:orden.anio,expoNombre:orden.expo.nombre
+    						,sector:""
+    						,lote:""
+    						,nombre:orden.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
     			}
     		}
+   			total totalOrdenes
     	}
     }
+
+    
     
     def avancedlist = {
     	log.info("INGRESANDO AL METODO avancedlist DEL CONTROLLER OrdenReservaController")

@@ -108,7 +108,7 @@ class SubRubroController {
     	log.debug("Parámetros: $params")
     	def errorList = []
     	def subrubroInstance = new SubRubro(params)
-    	if (!subrubroInstance.hasErrors() && subrubroInstance.save()){
+    	if (!subrubroInstance.hasErrors() && subrubroInstance.save(flush:true)){
     		log.info("INSTANCIA DE SubRubro GUARDADA RENDERIZANDO JSON")
     		render(contentType:"text/json"){
     			success true

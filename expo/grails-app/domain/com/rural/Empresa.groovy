@@ -37,7 +37,9 @@ class Empresa {
 	String telefonoRepresentante2;
 	String telefonoRepresentante3;
 	
-	
+	void setNombre(String s){
+		nombre = s?.toUpperCase();
+	}
 	
 	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion,empresas:Empresa,ordenes:OrdenReserva]//empresas contiene todas las empress con nombre parecido
 	

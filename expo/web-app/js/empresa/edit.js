@@ -57,7 +57,7 @@
 	        			fields: ['id','nombre']
 	        		});
 	        	var departamentosStore = new Ext.data.JsonStore({
-	        			autoLoad:true,
+	        			//autoLoad:true,
 	        			url:'../departamento/listjson',
 	        			root:'rows',
 	        			fields:['id','nombreDep'],
@@ -73,7 +73,7 @@
 	        			 
 	        		});	
 	        	var localidadesStore = new Ext.data.JsonStore({
-	        			autoLoad:true,
+	        			//autoLoad:true,
 	        			url:'../localidad/listjson',
 	        			root:'rows',
 	        			fields:['id','nombreLoc'],

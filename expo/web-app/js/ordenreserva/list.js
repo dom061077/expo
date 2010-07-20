@@ -62,7 +62,7 @@ Ext.onReady(function(){
 					{header:"Exposición",dataIndex:'expoNombre',width:200},
 					{header:"Año",dataIndex:'anio',width:80},					
 					{header:"id",dataIndex:"id",hidden:true},
-					{header:"Número Orden",dataIndex:"numero",width:80,renderer:ordenRender},
+					{header:"Número Orden",dataIndex:"numero",width:80,renderer:ordenRender,sortable:true},
 					{header:"Fecha",dataIndex:'fechaAlta',width:80,renderer: Ext.util.Format.dateRenderer('d/m/y'),sortable:true}
 			],
 		stripeRows: true,	
@@ -187,14 +187,14 @@ Ext.onReady(function(){
         				});	
         			}
         		}
-        }],
+        }]/*,
         bbar: new Ext.PagingToolbar({
             	pageSize: 10,
             	store: ordenStore,
             	displayInfo:true,
-            	displayMsg: 'Visualizando ordenes {0} - {1} de {2}',
-            	emptyMsg: 'No hay ordenes para visualizar'
-			})
+            	displayMsg: 'Visualizando registros {0} - {1} de {2}',
+            	emptyMsg: 'No hay registros para visualizar'
+			})*/
 		
 	});
 	
