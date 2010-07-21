@@ -41,6 +41,26 @@ class Empresa {
 		nombre = s?.toUpperCase();
 	}
 	
+	void setDireccion(String s){
+		direccion = s?.toUpperCase()
+	}
+	
+	void setNombreRepresentante(String s){
+		nombreRepresentante = s?.toUpperCase()
+	}
+	
+	void setRazonSocial(String s){
+		razonSocial = s?.toUpperCase()
+	}
+	
+	void setCargoRep(String s){
+		cargoRep = s?.toUpperCase()
+	}
+	
+	void setDireccionFiscal(String s){
+		direccionFiscal=s?.toUpperCase()
+	}
+	
 	static hasMany = [expos:Exposicion,exposaparticipar:Exposicion,empresas:Empresa,ordenes:OrdenReserva]//empresas contiene todas las empress con nombre parecido
 	
 	

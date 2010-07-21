@@ -1,6 +1,7 @@
 <html>
     <head>
         <title><g:layoutTitle default="Grails" /></title>
+		<META HTTP-EQUIV="Cache-Control" CONTENT ="no-cache">        
         <link rel="stylesheet" href="${resource(dir:'css',file:'style.css')}" />
         <link rel="shortcut icon" href="${resource(dir:'images',file:'srt.ico')}" type="image/x-icon" />
         <g:javascript library="ext"  />

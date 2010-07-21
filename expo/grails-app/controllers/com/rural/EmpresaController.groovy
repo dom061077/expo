@@ -123,7 +123,7 @@ class EmpresaController {
     }
 
     def editempresajson = {
-    	log.info("INGRESANDO AL METODO editJson DE EMPRESACONTROLLER")
+    	log.info("INGRESANDO AL METODO editempresajson DE EMPRESACONTROLLER")
     	log.debug("Params: "+params)
     	
     	def empresaInstance = Empresa.get(params.id)
