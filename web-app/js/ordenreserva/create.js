@@ -438,7 +438,7 @@ Ext.onReady(function(){
 				 		var d = new Detalle({
 				 			sector:'',
 				 			lote_id:'',
-				 			importe:0
+				 			subTotal:0
 				 		});
 						gridDetalleServicioContratado.getStore().insert(
 							(gridDetalleServicioContratado.getStore().getCount()-1>=0?gridDetalleServicioContratado.getStore().getCount():0)
@@ -880,7 +880,7 @@ Ext.onReady(function(){
 							xtype:'textfield',
 							id:'cuitId',
 							fieldLabel:'C.U.I.T',
-							allowBlank:false,
+							allowBlank:true,
 							msgTarget:'under',
 							width:95,
 							vtype:'cuit',
@@ -1434,8 +1434,9 @@ Ext.onReady(function(){
 			flag=true;	
 		if (Ext.getCmp('exentoId').checked)
 			flag=true;
-		if (Ext.getCmp('consfinalId').checked)
+		if (Ext.getCmp('consfinalId').checked){
 			flag=true;
+		}
 		if (Ext.getCmp('monotributoId').checked)
 			flag=true;
 		if (Ext.getCmp('resinsradioId').checked)
@@ -1450,6 +1451,16 @@ Ext.onReady(function(){
 			return false;
 		}
 		
+		if ((Ext.getCmp('exentoId').checked || Ext.getCmp('monotributoId').checked || Ext.getCmp('resinsradioId').checked) 
+			&& Ext.getCmp('cuitId').getValue()==''){
+			Ext.MessageBox.show({
+				title:'Error',
+				msg:'Si no es un consumidor final, el ingreso de C.U.I.T es obligatorio',
+				icon:Ext.MessageBox.ERROR,
+				button:Ext.MessageBox.OK
+			})	
+			return false;
+		}
 		var storeDetalle = gridDetalleServicioContratado.getStore();
 		var storeOtrosConceptos = gridOtrosConceptos.getStore();
 		var detallejsonArr=[];
@@ -1458,10 +1469,10 @@ Ext.onReady(function(){
 		var otrosconceptosjsonStr='';
 		var productosjsonArr = [];
 		var productosjsonStr ='';
-		var flagdetallecero=false;
+		var flaglotevacio=false;
 		storeDetalle.data.each(function(rec){
-				if(! rec.data.subTotal>0){
-					flagdetallecero=true
+				if(! rec.data.lote_id>0){
+					flaglotevacio=true
 					return false;
 					/*Ext.MessageBox.show({
 						title:'Error',
@@ -1476,10 +1487,10 @@ Ext.onReady(function(){
 				detallejsonArr.push(rec.data);
 			}
 		);
-		if (flagdetallecero){
+		if (flaglotevacio){
 				Ext.MessageBox.show({
 						title:'Error',
-						msg:'El detalle del servicio contratado tiene una linea con importe cero',
+						msg:'El detalle del servicio contratado tiene una linea con lote incorrecto. Seleccione un lote correcto',
 						icon:Ext.MessageBox.ERROR,
 						button:Ext.MessageBox.OK
 					});

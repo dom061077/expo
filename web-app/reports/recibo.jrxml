@@ -16,12 +16,16 @@
 	<field name="concepto" class="java.lang.String"/>
 	<field name="ordenReserva.empresa.razonSocial" class="java.lang.String"/>
 	<field name="cheques" class="java.util.Collection"/>
+	<field name="usuario.userRealName" class="java.lang.String"/>
+	<field name="ordenReserva.detalle" class="java.util.Collection"/>
+	<field name="ordenReserva.otrosconceptos" class="java.util.Collection"/>
+	<variable name="subtotaldetalleotrosconceptos" class="java.lang.Double"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
 		<band height="814" splitType="Stretch">
-			<rectangle radius="10">
+			<rectangle>
 				<reportElement x="23" y="378" width="214" height="90"/>
 			</rectangle>
 			<rectangle radius="10">
@@ -556,7 +560,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{efectivo}]]></textFieldExpression>
 			</textField>
 			<rectangle radius="10">
-				<reportElement x="425" y="224" width="118" height="25"/>
+				<reportElement mode="Transparent" x="10" y="88" width="544" height="167"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="185" y="380" width="43" height="11"/>
@@ -736,7 +740,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				</graphicElement>
 			</line>
 			<rectangle radius="10">
-				<reportElement x="23" y="656" width="214" height="90"/>
+				<reportElement mode="Transparent" x="23" y="656" width="214" height="90"/>
 			</rectangle>
 			<line>
 				<reportElement x="226" y="780" width="100" height="1"/>
@@ -745,8 +749,25 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				</graphicElement>
 			</line>
 			<rectangle radius="10">
-				<reportElement mode="Transparent" x="10" y="88" width="544" height="167"/>
+				<reportElement mode="Transparent" x="425" y="224" width="118" height="25"/>
 			</rectangle>
+			<textField>
+				<reportElement x="208" y="228" width="137" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{usuario.userRealName}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="32" y="124" width="186" height="7"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ordenReserva.detalle})]]></dataSourceExpression>
+				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"reciboserviciocontratado.jasper")]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="32" y="132" width="186" height="7"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ordenReserva.otrosconceptos})]]></dataSourceExpression>
+				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"recibootrosconceptos.jasper")]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 </jasperReport>

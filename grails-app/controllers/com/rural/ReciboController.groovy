@@ -100,6 +100,15 @@ class ReciboController {
 			log.debug("Numero del cheque: "+it.numero)
 			log.debug("Vencimiento del cheque: "+it.vencimiento)
 		}
+		log.debug("DETALLE DE ORDEN DE RESERVA")
+		recibo.ordenReserva.detalle.each{
+			log.debug(it.lote.sector.nombre)
+		}
+		recibo.ordenReserva.otrosconceptos.each{
+			log.debug(it.descripcion)
+		}
+		log.debug(recibo.usuario.userRealName)
+		
 		String pathtofile = servletContext.getRealPath("/reports/images")+"/"+recibo.ordenReserva.expo.nombre.trim()+".jpg"
 		if(recibo.ordenReserva.expo.image){
 			FileOutputStream foutput = new FileOutputStream(new File(pathtofile))
