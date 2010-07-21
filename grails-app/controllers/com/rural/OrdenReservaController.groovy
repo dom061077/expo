@@ -321,7 +321,7 @@ class OrdenReservaController {
 		    					if(params.sort=="lote"){
 		    						order('nombre',params.dir.toLowerCase())
 		    					}
-		    					if(params.sort="sector"){
+		    					if(params.sort=="sector"){
 		    						sector{
 		    							order('nombre',params.dir.toLowerCase())
 	    							}

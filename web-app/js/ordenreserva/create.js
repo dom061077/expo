@@ -700,6 +700,7 @@ Ext.onReady(function(){
 			{
 				xtype:'textfield',
 				name:'nombreSubrubro',
+				id:'nombreSubrubroId',
 				fieldLabel:'Nombre Sub-Rubro',
 				width:200
 			}/*,{
@@ -1078,9 +1079,10 @@ Ext.onReady(function(){
 								        						text:'Agregar',
 								        						listeners:{
 								        							click: function(){
-								        								if(Ext.getCmp('idRubro').validate())
+								        								if(Ext.getCmp('idRubro').validate()){
+								        									Ext.getCmp('nombreSubrubroId').setValue('');
 								        									winSubrubro.show();
-								        								else
+								        								}else
 								        									Ext.MessageBox.show({
 								        										title:'Error',
 								        										msg:'Seleccione un rubro antes de agregar el Sub-Rubro',
@@ -1349,8 +1351,11 @@ Ext.onReady(function(){
 			   			
 			   }
 	   }
-       if(this.currentCard==2)
-		  	Ext.getCmp('nombreId').focus('',10);
+       if(this.currentCard==2){
+       		if(!Ext.getCmp('idSubrubro').validate())
+       			this.cardPanel.getLayout().setActiveItem(this.currentCard - 1)
+		  	
+       }
 		    //if(this.currentCard==4 && gridDetalleServicioContratado.getStore().getCount()==0)
 		    //	this.cardPanel.getLayout().setActiveItem(this.currentCard - 1);
 		    	

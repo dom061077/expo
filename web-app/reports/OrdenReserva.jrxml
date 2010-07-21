@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrdenReserva" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="5">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="465"/>
+	<property name="ireport.y" value="0"/>
 	<subDataset name="dataset1"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
@@ -151,7 +151,7 @@
 				<text><![CDATA[DATOS CATALOGO EXPOSITORES]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="430" y="54" width="22" height="15"/>
+				<reportElement x="430" y="30" width="22" height="15"/>
 				<textElement>
 					<font fontName="Bookman Old Style" size="11" isBold="false"/>
 				</textElement>
@@ -173,7 +173,7 @@
 				<text><![CDATA[Monotributo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="430" y="36" width="45" height="13"/>
+				<reportElement x="430" y="53" width="45" height="13"/>
 				<textElement>
 					<font fontName="Bookman Old Style" size="11" isBold="false"/>
 				</textElement>
@@ -193,7 +193,7 @@ Tel./ Fax: (0381) - 4347777/6146/6258
 www.srt.org.ar - informes@srt.org.ar]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="487" y="55" width="60" height="14" isRemoveLineWhenBlank="true"/>
+				<reportElement x="487" y="31" width="60" height="14" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Right">
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
@@ -207,14 +207,14 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[Sociedad Rural de Tucumán]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="452" y="55" width="45" height="14"/>
+				<reportElement x="452" y="31" width="45" height="14"/>
 				<textElement textAlignment="Center">
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[0002-]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="472" y="36" width="75" height="15"/>
+				<reportElement x="472" y="53" width="75" height="15"/>
 				<textElement textAlignment="Right">
 					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
@@ -228,7 +228,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[DATOS DE FACTURACION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="384" y="15" width="164" height="20"/>
+				<reportElement x="380" y="3" width="164" height="20"/>
 				<textElement>
 					<font fontName="Bookman Old Style" size="11" isBold="true"/>
 				</textElement>
@@ -544,11 +544,11 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="8" y="450" width="181" height="11"/>
+				<reportElement x="8" y="437" width="181" height="13"/>
 				<textElement textAlignment="Center">
-					<font fontName="Courier New" size="8" isBold="true"/>
+					<font fontName="Courier New" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Por "+$F{usuario.userRealName}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{usuario.userRealName}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="8" y="424" width="181" height="1"/>
@@ -597,11 +597,11 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{observacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="10" y="439" width="181" height="17"/>
+				<reportElement x="8" y="451" width="181" height="10"/>
 				<textElement textAlignment="Center">
-					<font fontName="Courier New" size="11" isBold="true"/>
+					<font fontName="Courier New" size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.vendedor.nombre}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["Por "+$F{empresa.vendedor.nombre}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="8" y="342" width="43" height="9"/>

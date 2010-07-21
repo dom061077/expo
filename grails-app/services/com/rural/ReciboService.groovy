@@ -1,4 +1,5 @@
 package com.rural
+import com.rural.seguridad.Person
 
 class ReciboException extends RuntimeException{
 	String message
@@ -16,7 +17,7 @@ class ReciboService {
 
     boolean transactional = true
 
-    Recibo generarRecibo(Long ordId,String concepto,Double efectivo,cheques) {
+    Recibo generarRecibo(Long ordId,String concepto,Double efectivo,cheques,Person user) {
     		def ord = OrdenReserva.get(ordId)
     		
     		Double totalCancelado = 0
@@ -25,7 +26,7 @@ class ReciboService {
     		}
     		
     		if(ord){
-    			def recibo = new Recibo(fechaAlta:new Date(),ordenReserva:ord,efectivo:efectivo,concepto:concepto,total:0)
+    			def recibo = new Recibo(fechaAlta:new Date(),ordenReserva:ord,efectivo:efectivo,concepto:concepto,total:0,usuario:user)
     			
     			cheques.each{
     				recibo.addToCheques(it)

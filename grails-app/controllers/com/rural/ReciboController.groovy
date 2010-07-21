@@ -9,7 +9,7 @@ import java.util.Date
 class ReciboController {
 	def reciboService
     def index = { redirect(action:list,params:params) }
-
+	def authenticateService
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
@@ -142,14 +142,15 @@ class ReciboController {
 		
 		Double efectivo = new Double((params.efectivo)) 
 		
-		def recibo = reciboService.generarRecibo(new Long(params.ordenreservaid),params.concepto,efectivo,cheques)
+		def recibo = reciboService.generarRecibo(new Long(params.ordenreservaid),params.concepto,efectivo,cheques,authenticateService.userDomain())
 		int entero = recibo.total.intValue()
 		Double totalaux = (recibo.total - entero)*100
 		int decimal = totalaux.intValue()
 		log.debug("XXXXXXXXXXXXXXXXXXXXXXXANTES DE CREAR EL CONVERTIDOR DE NUMEROS A LETRAS")
 		N2t num2letra = new N2t()
 		log.debug("DESPUES DE CREAR EL CONVERTIDOR DE NUMEROS A LETRAS")
-		String totalenletras=num2letra.convertirLetras(entero)+" PESOS CON "+((num2letra.convertirLetras(0)).trim()=="" ? "CERO" : num2letra.convertirLetras(decimal))+" CENTAVOS"
+		//String totalenletras=num2letra.convertirLetras(entero)+" PESOS CON "+((num2letra.convertirLetras(0)).trim()=="" ? "CERO" : num2letra.convertirLetras(decimal))+" CENTAVOS"
+		String totalenletras=num2letra.convertirLetras(entero)+" CON "+decimal+"/100"
 		totalenletras = totalenletras.toUpperCase()
 		if(recibo){
 			render(contentType:"text/json"){
@@ -254,7 +255,7 @@ class ReciboController {
 					totalaux = (it.total - entero)*100
 					decimal = totalaux.intValue()
 					
-					totalenletras="SON "+num2letra.convertirLetras(entero)+" PESOS CON "+((num2letra.convertirLetras(0)).trim()=="" ? "CERO" : num2letra.convertirLetras(decimal))+" CENTAVOS"
+					totalenletras= num2letra.convertirLetras(entero)+" CON "+decimal+"/100"
 					totalenletras = totalenletras.toUpperCase()
 					row(id:it.id,fechaAlta:it.fechaAlta,nombre:it.ordenReserva.empresa.nombre,numero:it.numero,total:it.total,numeroordenreserva:it.ordenReserva.numero,totalletras:totalenletras)
 				}
