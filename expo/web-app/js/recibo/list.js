@@ -73,7 +73,7 @@ Ext.onReady(function(){
 						else{
 							Ext.MessageBox.show({
 								title:'Mensaje',
-								msg:'Desea Anular la Orden de Reserva?',
+								msg:'Desea Anular el Recibo?',
 								icon: Ext.MessageBox.QUESTION,
 								buttons:Ext.MessageBox.YESNO,
 								fn: function(btn){

@@ -8,8 +8,8 @@ class OrdenReserva {
 	Exposicion expo
 	Boolean anulada = false
 	Double ivaGral=0
-	Double ivaRni=0
-	Double ivaSujNoCateg=0
+	Double ivaRni=0/*es el resultado subtotal neto + ivaGral*/
+	Double ivaSujNoCateg=0 /*es mayor a cero cuando la condicion de IVA es ivaRniCheck true*/
 	Double subTotal=0
 	Double total=0
 	Integer anio
@@ -21,7 +21,7 @@ class OrdenReserva {
 	Float porcentajeResIns=0
 	Float porcentajeResNoIns=0
 	String observacion
-	
+	//Double subtotalDetalle
 	
 	Long numero
 	Date fechaAlta
@@ -34,9 +34,9 @@ class OrdenReserva {
     }
     
     
-    static mapping = {
-    	
-    }
+    /*static mapping = {
+    	subtotalDetalle(formula:"select sum(sub_total) from detalle_servicio_contratado where orden_reserva_id=id")
+    }*/
     
     def sigNumero(){
     	def c = OrdenReserva.createCriteria()

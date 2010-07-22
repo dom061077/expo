@@ -28,6 +28,25 @@ class LoteController {
 		}
 	}
 
+    def listjsonstock = {
+		log.info("INGRESANDO AL METODO listjsonstock DEL CONTROLLER LoteController")
+		log.debug("PARAMETROS $params")
+		def c = Lote.createCriteria()
+		def lotes = c.list(sort:'nombre',order:'asc'){
+			sector{
+				eq('id', new Long(params.sector_id))
+			}
+		} 
+		render(contentType:"text/json"){
+			total lotes.size()
+			rows{
+				lotes.each{
+					row(id:it.id,nombre:it.nombre)
+				}
+			}
+		}    	
+    }
+    
     def list = {
         params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
         [ loteInstanceList: Lote.list( params ), loteInstanceTotal: Lote.count() ]
