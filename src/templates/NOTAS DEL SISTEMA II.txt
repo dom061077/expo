@@ -8,3 +8,24 @@
 
 ---En Modificacion de la exposicion permitir modificar el nombre de la exposicion sin
 necesidad de subir el logo
+
+
+para la ultima actualizacion
+
+script de sql a tner en cuenta
+
+-update del usuario en recibo
+UPDATE recibo r
+INNER JOIN orden_reserva o ON r.orden_reserva_id=o.id
+SET r.usuario_id=o.usuario_id
+
+-update del sector en detalle servicio contratado
+		update detalle_servicio_contratado d
+		inner join lote l on d.lote_id=l.id
+		inner join sector s on l.sector_id=s.id
+		set d.sector_id=s.id
+-update en ivaRni que sea igual a subtotal+ivaresins
+
+update orden_reserva 
+set iva_rni = sub_total+iva_gral
+
