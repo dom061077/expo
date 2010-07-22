@@ -21,6 +21,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	def exposicion = null
 	def sector = null
 	def lote = null
+	
 	def iva = null
 	def rubro = null
 	def subrubro = null
@@ -76,7 +77,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			ordenreservaController.params.empresa=new Empresa(subrubro:subrubro)
 	    	ordenreservaController.params.empresa.nombre="empresa nueva"
 	    	ordenreservaController.params.empresa.razonSocial="empresa nueva razon social"
-	    	ordenreservaController.params.detallejson="[{lote_id:$lote.id,subTotal:1900}]"
+	    	ordenreservaController.params.detallejson="[{lote_id:$lote.id,sector_id:$sector.id,subTotal:1900}]"
 	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"
 	    	ordenreservaController.params.observacion="OBSERVACION" 
 	    	ordenreservaController.params.porcentajeResIns=iva.id
@@ -97,13 +98,15 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	
 	    	ordenreservaController.generarordenreserva()
 			def respuesta = ordenreservaController.response.contentAsString
+			//fail("RESPUESTA JSON "+ordenreservaController.response.contentAsString)
 			def respuestaJson = grails.converters.JSON.parse(respuesta)
 			def ordenreservaInstance = OrdenReserva.get(respuestaJson.ordenid)
-			assertTrue(ordenreservaInstance.empresa.nombre.equals("empresa nueva"))
+			
+			assertTrue(ordenreservaInstance.empresa.nombre.equals("EMPRESA NUEVA"))
 			assertNotNull(ordenreservaInstance)
 			assertTrue(ordenreservaInstance.detalle.size()==1)
 			assertTrue(ordenreservaInstance.otrosconceptos.size()==1)
-			assertTrue(ordenreservaInstance.empresa.razonSocial.equals("empresa nueva razon social"))
+			assertTrue(ordenreservaInstance.empresa.razonSocial.equals("EMPRESA NUEVA RAZON SOCIAL"))
 			assertTrue(ordenreservaInstance.numero==1)
 			if(ordenreservaInstance.subTotal!=1805)
 				fail("SubTotal erroneo: deberia ser 1805 pero resultó en: $ordenreservaInstance.subTotal")
@@ -124,7 +127,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.params.empresa=empresa
 	    	ordenreservaController.params.empresa.nombre="empresa modificada"
 	    	ordenreservaController.params.empresa.razonSocial="empresa modificada razon social"
-	    	ordenreservaController.params.detallejson="[{lote_id:$lote.id,subTotal:1900}]"
+	    	ordenreservaController.params.detallejson="[{lote_id:$lote.id,sector_id:$sector.id,subTotal:1900}]"
 	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"
 	    	ordenreservaController.params.observacion="OBSERVACION "
 	    	ordenreservaController.params.porcentajeResIns=iva.id
@@ -135,15 +138,17 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.request.getAttribute("org.codehaus.groovy.grails.WEB_REQUEST").informParameterCreationListeners()
 			ordenreservaController.generarordenreserva()
 			def empresaInstance=Empresa.get(empresa.id)
-			assertTrue(empresaInstance.nombre.equals("empresa modificada"))
+			
+			assertTrue(empresaInstance.nombre.equals("EMPRESA MODIFICADA"))
 			def respuesta = ordenreservaController.response.contentAsString
+			
 			def respuestaJson = grails.converters.JSON.parse(respuesta)
 			def ordenreservaInstance = OrdenReserva.get(respuestaJson.ordenid)
 			assertNotNull(ordenreservaInstance)
 			assertTrue(ordenreservaInstance.detalle.size()==1)
 			assertTrue(ordenreservaInstance.otrosconceptos.size()==1)
-			assertTrue(ordenreservaInstance.empresa.nombre.equals("empresa modificada"))
-			assertTrue(ordenreservaInstance.empresa.razonSocial.equals("empresa modificada razon social"))
+			assertTrue(ordenreservaInstance.empresa.nombre.equals("EMPRESA MODIFICADA"))
+			assertTrue(ordenreservaInstance.empresa.razonSocial.equals("EMPRESA MODIFICADA RAZON SOCIAL"))
 			assertTrue(ordenreservaInstance.numero==1)
 			if(ordenreservaInstance.subTotal!=1805)
 				fail("SubTotal erroneo: deberia ser 1805 pero resultó en: $ordenreservaInstance.subTotal")

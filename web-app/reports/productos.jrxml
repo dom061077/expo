@@ -7,9 +7,9 @@
 	<detail>
 		<band height="18" splitType="Stretch">
 			<textField>
-				<reportElement x="14" y="3" width="245" height="15"/>
+				<reportElement x="0" y="2" width="245" height="15"/>
 				<textElement>
-					<font fontName="Courier New" size="11" isBold="true"/>
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>

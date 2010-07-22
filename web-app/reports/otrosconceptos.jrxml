@@ -15,22 +15,22 @@
 		<band height="18" splitType="Stretch">
 			<textField>
 				<reportElement x="14" y="4" width="369" height="14"/>
-				<textElement>
-					<font fontName="Courier New" size="11" isBold="true"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="446" y="4" width="7" height="14"/>
-				<textElement>
-					<font fontName="Bookman Old Style"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Arial" size="9"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="465" y="4" width="62" height="14"/>
-				<textElement textAlignment="Right">
-					<font fontName="Courier New" size="11" isBold="true"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotal}]]></textFieldExpression>
 			</textField>
@@ -39,16 +39,16 @@
 	<summary>
 		<band height="18">
 			<staticText>
-				<reportElement x="385" y="2" width="78" height="15"/>
-				<textElement>
-					<font fontName="Bookman Old Style" size="10" isBold="false"/>
+				<reportElement x="389" y="2" width="65" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Arial" size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[SUBTOTAL  $]]></text>
 			</staticText>
 			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="465" y="2" width="62" height="15"/>
-				<textElement textAlignment="Right">
-					<font fontName="Courier New" size="11" isBold="true"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$V{subTotalConcetos}]]></textFieldExpression>
 			</textField>

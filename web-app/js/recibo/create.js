@@ -138,13 +138,13 @@ Ext.onReady(function (){
 				id:'saldoordenId',
 				disabled:true,
 				name:'saldoorden',
-				fieldLabel:'Saldo Orden'
+				fieldLabel:'Saldo $'
 			},{
 				xtype: 'textarea',
 				id:'conceptoId',
 				name:'concepto',
 				width:250,
-				fieldLabel: 'Concepto',
+				fieldLabel: 'Detalle de Pago',
 				msgTarget:'under',
 				allowBlank: false,
 				maxLength:255

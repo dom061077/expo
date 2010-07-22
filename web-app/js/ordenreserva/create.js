@@ -340,7 +340,7 @@ Ext.onReady(function(){
 		reader: new Ext.data.ArrayReader({
 			record:'detalleservicio',
 			fields:[
-				{name: 'sector',type:'string'},
+				{name: 'sector_id',type:'string'},
 				{name: 'lote_id',type:'string'},
 				{name: 'subTotal', type: 'float'}
 			]
@@ -383,7 +383,7 @@ Ext.onReady(function(){
 		columns:[
 			{
 				header:'Sector',
-				dataIndex: 'sector',
+				dataIndex: 'sector_id',
 				width:250,
 				editor: comboboxSector,
 				renderer:sector_nombre
@@ -436,7 +436,7 @@ Ext.onReady(function(){
 				 	if(gridDetalleServicioContratado.getStore().getCount()<3){
 				 		var Detalle = grid.getStore().recordType;
 				 		var d = new Detalle({
-				 			sector:'',
+				 			sector_id:'',
 				 			lote_id:'',
 				 			subTotal:0
 				 		});
@@ -1455,7 +1455,7 @@ Ext.onReady(function(){
 			&& Ext.getCmp('cuitId').getValue()==''){
 			Ext.MessageBox.show({
 				title:'Error',
-				msg:'Si no es un consumidor final, el ingreso de C.U.I.T es obligatorio',
+				msg:'Si no es un Consumidor Final o responsable No Inscripto, el ingreso de C.U.I.T es obligatorio',
 				icon:Ext.MessageBox.ERROR,
 				button:Ext.MessageBox.OK
 			})	
@@ -1471,23 +1471,14 @@ Ext.onReady(function(){
 		var productosjsonStr ='';
 		var flaglotevacio=false;
 		storeDetalle.data.each(function(rec){
-				if(! rec.data.lote_id>0){
+				/*if(! rec.data.lote_id>0){
 					flaglotevacio=true
 					return false;
-					/*Ext.MessageBox.show({
-						title:'Error',
-						msg:'El detalle del servicio contratado tiene una linea con importe cero',
-						icon:Ext.MessageBox.ERROR,
-						button:Ext.MessageBox.OK,
-						fn:function(btn){
-							return false;
-						}
-					});	*/
-				}
+				}*/
 				detallejsonArr.push(rec.data);
 			}
 		);
-		if (flaglotevacio){
+		/*if (flaglotevacio){
 				Ext.MessageBox.show({
 						title:'Error',
 						msg:'El detalle del servicio contratado tiene una linea con lote incorrecto. Seleccione un lote correcto',
@@ -1495,7 +1486,7 @@ Ext.onReady(function(){
 						button:Ext.MessageBox.OK
 					});
 				return false;	
-		}
+		}*/
 					
 		storeOtrosConceptos.data.each(function(rec){
 				otrosconceptosjsonArr.push(rec.data);

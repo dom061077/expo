@@ -26,7 +26,8 @@ class OrdenReservaController {
     	def ordenReserva = OrdenReserva.get(params.id)
     	def saldo = ordenReserva.total
     	ordenReserva.recibos.each{
-    		saldo = saldo - it.total
+    		if(!it.anulado)
+    			saldo = saldo - it.total
     	}
     	render(contentType : "text/json"){
     		success true
@@ -131,7 +132,8 @@ class OrdenReservaController {
     		def total=0
 	    	detalle.each{
 	    		def lote = Lote.get(it.lote_id)
-	    		ord.addToDetalle(new DetalleServicioContratado(lote:lote,subTotal:it.subTotal))
+	    		def sector = Sector.get(it.sector_id)
+	    		ord.addToDetalle(new DetalleServicioContratado(lote:lote,sector:sector,subTotal:it.subTotal))
 	    		total=total+it.subTotal
 	    	}
 	    	ord.total=total
@@ -178,6 +180,11 @@ class OrdenReservaController {
    		iterarConceptos(ordenReservaInstance,otrosconceptosjson)
    		log.debug("PORCENTAJE IVA RESINS: "+ordenReservaInstance.porcentajeResIns)
    		log.debug("PORCENTAJE IVA RESNOINS: "+ordenReservaInstance.porcentajeResNoIns)
+   		println(Empresa.count())
+   		/*if(empresaInstance.hasErrors() && !empresaInstance.save())
+   			throw new Exception("empresaInstance errores: "+empresaInstance.errors.allErrors)
+   		else
+   			log.debug("SE SALVO BINE!!!!!")*/
    		try{
 			ordenReservaInstance=ordenReservaService.generarOrdenReserva(ordenReservaInstance,empresaInstance)
 			render(contentType: "text/json"){
@@ -200,7 +207,8 @@ class OrdenReservaController {
     	log.debug(ordenReservaInstance.empresa.vendedor.nombre)
     	ordenReservaInstance.detalle.each{
     		log.debug(it)
-    		log.debug(it.lote.sector.nombre)
+    		log.debug(it.sector?.nombre)
+    		log.debug(it.lote?.nombre)
     	}
     	ordenReservaInstance.otrosconceptos.each{
     		log.debug(it.subTotal)
@@ -315,7 +323,7 @@ class OrdenReservaController {
 		    			order('fechaAlta',params.dir.toLowerCase())
 		    		if(params.sort=="numero")
 		    			order('numero',params.dir.toLowerCase())
-		    		if(params.sort=="sector" || params.sort=="lote"){
+		    		/*if(params.sort=="sector" || params.sort=="lote"){
 		    			detalle{
 		    				lote{
 		    					if(params.sort=="lote"){
@@ -328,7 +336,7 @@ class OrdenReservaController {
 		    					}
 		    				}
 		    			}
-		    		}		
+		    		}*/		
 		    				
 	    		}
 	    	}
@@ -355,8 +363,8 @@ class OrdenReservaController {
     				it.detalle.each{
     					flagdetalle=true
     					row(id:orden.id,numero:orden.numero,fechaAlta:orden.fechaAlta,total:orden.total,anio:orden.anio,expoNombre:orden.expo.nombre
-    						,sector:it.lote.sector.nombre
-    						,lote:it.lote.nombre
+    						,sector:it.sector.nombre
+    						,lote:it.lote?.nombre
     						,nombre:orden.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
    					}
    					

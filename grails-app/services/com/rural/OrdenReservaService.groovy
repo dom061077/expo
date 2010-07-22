@@ -34,20 +34,26 @@ class OrdenReservaService {
    		}
     	def empresaInstance = empresa.save()
     	
+    	if(!empresaInstance)
+    		throw new OrdenReservaException("Ocurrio un error. No se guardo la empresa")
+    	
     	//if(!empresaInstance.subrubro.save())
     	//	throw new OrdenReservaException("Error al guardar el subrubro",ord)
     	
 	    ord.detalle.each{
-    			ord.subTotal=ord.subTotal+it.subTotal
-    			if (ord.expo!=it.lote.sector.expo)
-	    				throw new OrdenReservaException("Sector asignado no pertenece a la Exposición",ord)
+    			ord.subTotal=ord.subTotal+it.subTotal 
+    			//if (ord.expo!=it.lote?.sector?.expo)
+	    		//		throw new OrdenReservaException("Sector asignado no pertenece a la Exposición",ord)
     		}
     		
     	log.debug("PORCENTAJE ResIns ANTES DEL CALCULO")
     	log.debug("PROCENTAJE ResNoIns ANTES DEL CALCULO")
     	ord.ivaGral = ord.subTotal*(ord.porcentajeResIns > 0 ? ord.porcentajeResIns : ord.porcentajeResNoIns)/100
     	//ord.ivaRni = ord.subTotal*ord.porcentajeResNoIns/100	
-    	ord.total=ord.subTotal+ord.ivaGral+ord.ivaRni
+    	ord.ivaRni=ord.subTotal+ord.ivaGral
+    	if(ord.ivaRniCheck)
+    		ord.ivaSujNoCateg=ord.ivaRni*10.5/100
+    	ord.total=ord.subTotal+ord.ivaGral+ord.ivaSujNoCateg
     	ord.total=Math.round(ord.total*Math.pow(10,2))/Math.pow(10,2);
 		ord.empresa=empresaInstance
 		ord.fechaAlta=new Date()	
