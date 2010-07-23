@@ -272,7 +272,7 @@ Ext.onReady(function(){
 	var storeLote = new Ext.data.JsonStore({
 		//autoLoad:true,
 		root:'rows',
-		url: '../lote/listjson',
+		url: '../lote/listjsonstock',
 		fields: ['id','nombre'],
 		reader: new Ext.data.ArrayReader(
 			{id:'id'},
@@ -372,7 +372,10 @@ Ext.onReady(function(){
 			'select': function(cmb,rec,idx){
 				var lote = Ext.getCmp('comboboxLoteId')
 				lote.store.load({
-					params:{'sector_id':Ext.getCmp('comboboxSectorId').hiddenField.value}
+					params:{'sector_id':Ext.getCmp('comboboxSectorId').hiddenField.value,
+							'expo_id':Ext.getCmp('exposicionCombo').hiddenField.value,
+							'anio':Ext.getCmp('')
+					}
 				});
 				comboboxLote.hiddenField.value=1;
 			}

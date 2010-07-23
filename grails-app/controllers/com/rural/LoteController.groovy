@@ -31,16 +31,13 @@ class LoteController {
     def listjsonstock = {
 		log.info("INGRESANDO AL METODO listjsonstock DEL CONTROLLER LoteController")
 		log.debug("PARAMETROS $params")
-		def c = Lote.createCriteria()
-		def lotes = c.list(sort:'nombre',order:'asc'){
-			sector{
-				eq('id', new Long(params.sector_id))
-			}
-		} 
+		
+		def stocklotes = Lote.findAll("from Lote l where l.sector.id=:sector_id and l not in (select d.lote from DetalleServicioContratado d where d.ordenReserva.anulada = false and d.ordenReserva.anio=:anio and d.ordenReserva.expo.id=:expoId)",[sectorid:new Long(params.sectorId),anio:new Integer(params.anio)],expo_id:new Long(params.expoId))		
+		
 		render(contentType:"text/json"){
-			total lotes.size()
+			total stocklotes.size()
 			rows{
-				lotes.each{
+				stocklotes.each{
 					row(id:it.id,nombre:it.nombre)
 				}
 			}
