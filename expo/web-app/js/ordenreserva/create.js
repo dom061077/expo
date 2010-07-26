@@ -374,7 +374,7 @@ Ext.onReady(function(){
 				lote.store.load({
 					params:{'sector_id':Ext.getCmp('comboboxSectorId').hiddenField.value,
 							'expo_id':Ext.getCmp('exposicionCombo').hiddenField.value,
-							'anio':Ext.getCmp('')
+							'anio':Ext.getCmp('idAnio').getValue()
 					}
 				});
 				comboboxLote.hiddenField.value=1;
