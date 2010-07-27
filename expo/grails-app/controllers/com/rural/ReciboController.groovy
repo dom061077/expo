@@ -236,7 +236,7 @@ class ReciboController {
     		}
     	}
 
-		recibos = Recibo.createCriteria().list(pagingconfig){
+		recibos = Recibo.createCriteria().list(){
     		or{
     			eq("numero",numeroRecibo)
     			ordenReserva{

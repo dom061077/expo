@@ -83,6 +83,7 @@ Ext.onReady(function(){
         				}
 							
         		}
+        		
 			},{
 				text:'Anular'
 				,handler:function(){
@@ -187,6 +188,15 @@ Ext.onReady(function(){
         				});	
         			}
         		}
+			},{
+            	icon: imagePath+'/skin/excel.gif'
+            	,text:'Exportar'
+            	,cls:'x-btn-text-icon'
+            	,handler: function(){
+    				open('exportexcel?searchCriteria='+Ext.getCmp('searchCriteriaId').getValue()+'&fieldSearch='
+    					+Ext.getCmp('combocriteriosId').getValue(),'_blank')
+            	}
+        		
         }]/*,
         bbar: new Ext.PagingToolbar({
             	pageSize: 10,
