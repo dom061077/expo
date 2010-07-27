@@ -3,7 +3,14 @@ package com.rural
 import com.rural.seguridad.*
 import grails.converters.JSON
 import java.util.StringTokenizer
-import com.rural.OrdenReserva 
+import com.rural.OrdenReserva
+import jxl.*
+import jxl.write.Label
+import jxl.write.Number
+import jxl.write.WritableWorkbook
+import jxl.write.WritableSheet
+
+ 
 
 class OrdenReservaController {
     def ordenReservaService
@@ -423,5 +430,111 @@ class OrdenReservaController {
     	}*/
     }
 		
+	def exportexcel = {
+		log.info("INGRESANDO AL METODO exportexcel DEL CONTROLADOR OrdenReservaController")
+		log.debug("PARAMETROS DE INGRESO: "+params)
+		def totalOrdenes
+		def ordenes
+		
+		
+    	if(params.fieldSearch=="numero"){
+	    	totalOrdenes = OrdenReserva.createCriteria().count{
+	    		and{
+	    			eq('numero',new Long(params?.searchCriteria))
+	    			//eq('numero',null)
+	    			eq('anulada',false)
+    			}
+	    	}
+	    	ordenes = OrdenReserva.createCriteria().list(){
+	    		and{
+		    		eq('numero',new Long(params?.searchCriteria))
+		    		//eq('numero',null)
+		    		eq('anulada',false)
+	    		}
+	    	}
+    	}
+
+    	if(params.fieldSearch=="empresa.nombre"){
+	    	totalOrdenes = OrdenReserva.createCriteria().count{
+				and{	    		
+		    		empresa{
+		    			like('nombre','%'+params?.searchCriteria+'%')
+		   			}
+		   			eq('anulada',false)
+	   			}
+	    	}
+	    	ordenes = OrdenReserva.createCriteria().list(){
+	    		and{
+		    		empresa{
+		   				like('nombre','%'+params?.searchCriteria+'%')
+		   				if(params.sort=="nombre")
+				   			order('nombre',params.dir.toLowerCase())
+		    		}
+		    		eq('anulada',false)
+		    		if(params.sort=="total")
+		    			order('total',params.dir.toLowerCase())
+		    		if(params.sort=="fechaAlta")
+		    			order('fechaAlta',params.dir.toLowerCase())
+		    		if(params.sort=="numero")
+		    			order('numero',params.dir.toLowerCase())
+		    		/*if(params.sort=="sector" || params.sort=="lote"){
+		    			detalle{
+		    				lote{
+		    					if(params.sort=="lote"){
+		    						order('nombre',params.dir.toLowerCase())
+		    					}
+		    					if(params.sort=="sector"){
+		    						sector{
+		    							order('nombre',params.dir.toLowerCase())
+	    							}
+		    					}
+		    				}
+		    			}
+		    		}*/		
+		    				
+	    		}
+	    	}
+    	}
+	   	
+	     response.setHeader("Content-disposition", "attachment; filename=listadoordenes.xls")
+	     response.contentType = "application/vnd.ms-excel"
+	 
+	     log.debug("Cantidad de Ordenes consultadas: "+ordenes.size())
+      	 def workbook = Workbook.createWorkbook(out)
+    	 def sheet = workbook.createSheet("Request",0)
+	     
+	 	 boolean falgdetalle=false
+	 	 sheet.addCell(new Label(c, 0, ""))
+   		 rows{
+    			ordenes.each{
+    				totalCancelado=0
+    				saldo=0
+    				it.recibos.each{ 
+    					if(!it.anulado)
+    						totalCancelado=totalCancelado+it.total
+    				}
+    				saldo=it.total-totalCancelado
+    				def orden=it
+    				flagdetalle=false	
+    				it.detalle.each{
+    					flagdetalle=true
+    					row(id:orden.id,numero:orden.numero,fechaAlta:orden.fechaAlta,total:orden.total,anio:orden.anio,expoNombre:orden.expo.nombre
+    						,sector:it.sector.nombre
+    						,lote:it.lote?.nombre
+    						,nombre:orden.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
+   					}
+   					
+   					if(!flagdetalle)
+    					row(id:orden.id,numero:orden.numero,fechaAlta:orden.fechaAlta,total:orden.total,anio:orden.anio,expoNombre:orden.expo.nombre
+    						,sector:""
+    						,lote:""
+    						,nombre:orden.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
+    			}
+   		} 
+	         	
+	
+			
+    }
+    
     
 }

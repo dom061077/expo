@@ -60,18 +60,18 @@
 				<reportElement x="2" y="76" width="549" height="1"/>
 			</line>
 			<staticText>
-				<reportElement x="355" y="207" width="32" height="13"/>
+				<reportElement x="292" y="207" width="32" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[MAIL:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="7" y="221" width="89" height="13"/>
+				<reportElement x="7" y="222" width="218" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="9" isBold="false"/>
 				</textElement>
-				<text><![CDATA[REPRESENTANTE:]]></text>
+				<text><![CDATA[EXPOSITOR / REPRESENTANTE ANTE LA EXPO:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="7" y="236" width="42" height="13"/>
@@ -102,21 +102,21 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.nombre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="66" y="207" width="259" height="13"/>
+				<reportElement x="66" y="207" width="221" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.direccion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="386" y="207" width="160" height="13"/>
-				<textElement verticalAlignment="Bottom">
+				<reportElement x="323" y="207" width="221" height="13"/>
+				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.email}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="117" y="221" width="427" height="13"/>
+				<reportElement x="227" y="222" width="317" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
@@ -155,14 +155,14 @@
 				<textElement>
 					<font fontName="Arial" size="11" isBold="false"/>
 				</textElement>
-				<text><![CDATA[NÂº:]]></text>
+				<text><![CDATA[Nº:]]></text>
 			</staticText>
 			<image>
-				<reportElement x="454" y="115" width="16" height="13"/>
+				<reportElement x="454" y="116" width="16" height="13"/>
 				<imageExpression class="java.io.File"><![CDATA[$F{consFinalCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
 			</image>
 			<image>
-				<reportElement x="526" y="115" width="16" height="13"/>
+				<reportElement x="526" y="116" width="16" height="13"/>
 				<imageExpression class="java.io.File"><![CDATA[$F{monotributoCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
 			</image>
 			<staticText>
@@ -180,15 +180,15 @@
 				<text><![CDATA[FECHA:]]></text>
 			</staticText>
 			<image>
-				<reportElement x="385" y="115" width="16" height="13"/>
+				<reportElement x="385" y="116" width="16" height="13"/>
 				<imageExpression class="java.io.File"><![CDATA[$F{exentoCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="139" y="39" width="235" height="34"/>
+				<reportElement x="152" y="39" width="235" height="34"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Camino del PerÃº 1050 - Cevil Redondo - TucumÃ¡n - (4105)
+				<text><![CDATA[Camino del Perú 1050 - Cevil Redondo - Tucumán - (4105)
 Tel./ Fax: (0381) - 4347777/6146/6258
 www.srt.org.ar - informes@srt.org.ar]]></text>
 			</staticText>
@@ -200,11 +200,11 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[($F{numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="139" y="23" width="235" height="19"/>
+				<reportElement x="152" y="23" width="235" height="19"/>
 				<textElement textAlignment="Center">
 					<font fontName="Bookman Old Style" size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Sociedad Rural de TucumÃ¡n]]></text>
+				<text><![CDATA[Sociedad Rural de Tucumán]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="449" y="31" width="45" height="14"/>
@@ -235,14 +235,14 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[ORDEN DE CONTRATACION]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="139" y="3" width="235" height="20"/>
+				<reportElement x="152" y="3" width="235" height="20"/>
 				<textElement textAlignment="Center">
 					<font fontName="Bookman Old Style" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$V{tipo}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="271" y="115" width="16" height="13"/>
+				<reportElement x="271" y="116" width="16" height="13"/>
 				<imageExpression class="java.io.File"><![CDATA[$F{ivaGralCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
 			</image>
 			<staticText>
@@ -401,7 +401,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[Resp.Ins.]]></text>
 			</staticText>
 			<image>
-				<reportElement x="330" y="115" width="16" height="13"/>
+				<reportElement x="330" y="116" width="16" height="13"/>
 				<imageExpression class="java.io.File"><![CDATA[$F{ivaRniCheck} == true ? new File($P{reportsDirPath},"tilde.gif") : new File($P{reportsDirPath},"sintilde.gif")]]></imageExpression>
 			</image>
 			<staticText>
@@ -432,7 +432,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[DATOS DEL SERVICIO CONTRATADO]]></text>
 			</staticText>
 			<subreport isUsingCache="false" runToBottom="false">
-				<reportElement x="7" y="23" width="533" height="14"/>
+				<reportElement x="7" y="24" width="533" height="14"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalle})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"detalleserviciocontratado.jasper")]]></subreportExpression>
 			</subreport>
@@ -477,7 +477,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[SUBTOTAL $:]]></text>
 			</staticText>
 			<subreport isUsingCache="true">
-				<reportElement x="7" y="206" width="280" height="14"/>
+				<reportElement x="7" y="206" width="318" height="14"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{productos})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"productos.jasper")]]></subreportExpression>
 			</subreport>
@@ -498,7 +498,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="465" y="196" width="73" height="13"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="Arial" size="10" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotal}]]></textFieldExpression>
 			</textField>
@@ -577,22 +577,22 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<reportElement x="2" y="288" width="549" height="1"/>
 			</line>
 			<line>
-				<reportElement x="3" y="341" width="549" height="1"/>
+				<reportElement x="3" y="348" width="549" height="1"/>
 			</line>
 			<line>
-				<reportElement x="3" y="338" width="549" height="1"/>
+				<reportElement x="3" y="345" width="549" height="1"/>
 			</line>
 			<staticText>
-				<reportElement x="7" y="289" width="212" height="13"/>
+				<reportElement x="7" y="294" width="212" height="13"/>
 				<textElement>
 					<font fontName="Bookman Old Style" size="11" isBold="false" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[OBSERVACIONES]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="7" y="304" width="533" height="31"/>
+				<reportElement x="7" y="312" width="533" height="28"/>
 				<textElement>
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{observacion}]]></textFieldExpression>
 			</textField>
@@ -604,18 +604,18 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA["Por "+$F{empresa.vendedor.nombre}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="8" y="342" width="43" height="9"/>
+				<reportElement x="8" y="349" width="43" height="9"/>
 				<textElement>
 					<font fontName="Tahoma" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nota:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="34" y="342" width="506" height="9"/>
+				<reportElement x="34" y="349" width="506" height="9"/>
 				<textElement>
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Expresamos nuestro total consentimiento y conformidad con las disposiciones del Reglamento General de ExposiciÃ³n de la Sociedad Rural de TucumÃ¡n.]]></text>
+				<text><![CDATA[Expresamos nuestro total consentimiento y conformidad con las disposiciones del Reglamento General de Exposición de la Sociedad Rural de Tucumán.]]></text>
 			</staticText>
 		</band>
 	</detail>
@@ -627,15 +627,15 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement textAlignment="Justified">
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
-				<text><![CDATA[La reserva estÃ¡ sujeta a distribuciÃ³n definitiva y disponibilidad de los espacios. Cualquier otro requerimiento de la adjunta, respecto a especificaciones, deberÃ¡ ser solicitada por nota. Los gastos que eventualmente ocasione el presente serÃ¡n asumidos en su totalidad por S.R.T.
-Obligatoriamente deberÃ¡ ser presentada la constancia que acredite la condiciÃ³n del expositor frente al I.V.A (F576 F460. ComunicaciÃ³n DGI, etc.)]]></text>
+				<text><![CDATA[La reserva está sujeta a distribución definitiva y disponibilidad de los espacios. Cualquier otro requerimiento de la adjunta, respecto a especificaciones, deberá ser solicitada por nota. Los gastos que eventualmente ocasione el presente serán asumidos en su totalidad por S.R.T.
+Obligatoriamente deberá ser presentada la constancia que acredite la condición del expositor frente al I.V.A (F576 F460. Comunicación DGI, etc.)]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="7" y="17" width="376" height="10"/>
 				<textElement>
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Los precios designados no incluyen impuestos u otros derivados de la explotaciÃ³n de la actividad de cada expositor.]]></text>
+				<text><![CDATA[Los precios designados no incluyen impuestos u otros derivados de la explotación de la actividad de cada expositor.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="7" y="7" width="24" height="10"/>

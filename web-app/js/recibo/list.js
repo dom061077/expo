@@ -26,6 +26,15 @@ Ext.onReady(function(){
 		
 	});
 	
+	function currencyRender(v,params,data){
+		return Ext.util.Format.usMoney(v);
+	}
+	
+	function reciboRender(v,params,data){
+		var numero = 100000000+v;
+		return numero.toString().substring(1,9);
+		//00000011
+	}
 	
 	var grid=new Ext.grid.GridPanel({
 		store:reciboStore,
@@ -33,13 +42,13 @@ Ext.onReady(function(){
 			{header:"Id",dataIndex:'id',hidden:true},
 			{header:"Empresa",dataIndex:'nombre',width:250},
 			{header:"Fecha Alta",dataIndex:'fechaAlta',width:90,renderer: Ext.util.Format.dateRenderer('d/m/y')},
-			{header:"Nro.Recibo",dataIndex:'numero',width:100},
-			{header:"Total",dataIndex:'total',width:90},
-			{header:"Nro.Orden de Reserva",dataIndex:'numeroordenreserva',width:100},			
+			{header:"Nro.Recibo",dataIndex:'numero',width:100,renderer:reciboRender},
+			{header:"Total",dataIndex:'total',width:90,renderer:currencyRender},
+			{header:"Nro.Orden de Reserva",dataIndex:'numeroordenreserva',width:100,renderer:reciboRender},			
 			{header:"Total Letras",dataIndex:'totalletras',width:100,hidden:true}
 		],
 		stripeRows:true,
-		height:250,
+		height:450,
 		width:600,
 		title:"Recibos",
         tbar:[{
@@ -137,14 +146,14 @@ Ext.onReady(function(){
 					}
 				}
         	}
-		],
+		]/*,
         bbar: new Ext.PagingToolbar({
             	pageSize: 10,
             	store: reciboStore,
             	displayInfo:true,
             	displayMsg: 'Visualizando recibos {0} - {1} de {2}',
             	emptyMsg: 'No hay recibos para visualizar'
-			})
+			})*/
 		
 	});
 	

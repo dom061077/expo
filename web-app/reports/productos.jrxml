@@ -9,7 +9,7 @@
 			<textField>
 				<reportElement x="0" y="2" width="245" height="15"/>
 				<textElement>
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
