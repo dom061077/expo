@@ -8,8 +8,11 @@ import jxl.*
 import jxl.write.Label
 import jxl.write.Number
 import jxl.write.WritableWorkbook
+import jxl.write.DateFormat
+import jxl.write.DateTime
+import jxl.write.WritableCellFormat
 import jxl.write.WritableSheet
-
+ 
  
 
 class OrdenReservaController {
@@ -330,20 +333,20 @@ class OrdenReservaController {
 		    			order('fechaAlta',params.dir.toLowerCase())
 		    		if(params.sort=="numero")
 		    			order('numero',params.dir.toLowerCase())
-		    		/*if(params.sort=="sector" || params.sort=="lote"){
+		    		if(params.sort=="sector" || params.sort=="lote"){
 		    			detalle{
-		    				lote{
-		    					if(params.sort=="lote"){
-		    						order('nombre',params.dir.toLowerCase())
-		    					}
-		    					if(params.sort=="sector"){
-		    						sector{
+	    					if(params.sort=="sector"){
+			    				sector{
 		    							order('nombre',params.dir.toLowerCase())
-	    							}
 		    					}
 		    				}
+	    					if(params.sort=="lote"){
+	    						lote{
+		    						order('nombre',params.dir.toLowerCase())
+	    						}
+	    					}
 		    			}
-		    		}*/		
+		    		}		
 		    				
 	    		}
 	    	}
@@ -434,7 +437,10 @@ class OrdenReservaController {
 		log.info("INGRESANDO AL METODO exportexcel DEL CONTROLADOR OrdenReservaController")
 		log.debug("PARAMETROS DE INGRESO: "+params)
 		def totalOrdenes
+		def totalCancelado
+		def saldo
 		def ordenes
+		def flagdetalle
 		
 		
     	if(params.fieldSearch=="numero"){
@@ -500,13 +506,25 @@ class OrdenReservaController {
 	     response.contentType = "application/vnd.ms-excel"
 	 
 	     log.debug("Cantidad de Ordenes consultadas: "+ordenes.size())
-      	 def workbook = Workbook.createWorkbook(out)
+      	 def workbook = Workbook.createWorkbook(response.outputStream)
     	 def sheet = workbook.createSheet("Request",0)
 	     
 	 	 boolean falgdetalle=false
-	 	 sheet.addCell(new Label(c, 0, ""))
-   		 rows{
-    			ordenes.each{
+	 	 sheet.addCell(new Label(0, 0, "Empresa"))
+	 	 sheet.addCell(new Label(1, 0, "Sector"))
+	 	 sheet.addCell(new Label(2, 0, "Lote"))
+	 	 sheet.addCell(new Label(3, 0, "Total"))
+	 	 sheet.addCell(new Label(4, 0, "Total Cancelado"))
+ 	 	 sheet.addCell(new Label(5, 0, "Saldo"))
+	 	 sheet.addCell(new Label(6, 0, "Exposición")) 	 	 
+	 	 sheet.addCell(new Label(7, 0, "Año"))
+	 	 sheet.addCell(new Label(8, 0, "Número Orden"))	 	 
+	 	 sheet.addCell(new Label(9, 0, "Fecha"))
+		 DateFormat customDateFormat = new DateFormat ("d/m/yy h:mm") 
+		 WritableCellFormat dateFormat = new WritableCellFormat (customDateFormat)                    
+
+	 	 def fil=1	 	 
+		 ordenes.each{
     				totalCancelado=0
     				saldo=0
     				it.recibos.each{ 
@@ -516,25 +534,49 @@ class OrdenReservaController {
     				saldo=it.total-totalCancelado
     				def orden=it
     				flagdetalle=false	
+                    
     				it.detalle.each{
     					flagdetalle=true
-    					row(id:orden.id,numero:orden.numero,fechaAlta:orden.fechaAlta,total:orden.total,anio:orden.anio,expoNombre:orden.expo.nombre
+    					sheet.addCell(new Label(0,fil,orden.empresa.nombre))
+    					sheet.addCell(new Label(1,fil,it.sector.nombre))    					
+    					sheet.addCell(new Label(2,fil,it.lote?.nombre))    					
+    					sheet.addCell(new Number(3,fil,orden.total))
+    					sheet.addCell(new Number(4,fil,totalCancelado))
+    					sheet.addCell(new Number(5,fil,saldo))
+    					sheet.addCell(new Label(6,fil,orden.expo.nombre))
+    					sheet.addCell(new Number(7,fil,orden.anio))
+    					sheet.addCell(new Number(8,fil,orden.numero))
+    					sheet.addCell(new DateTime (9,fil,orden.fechaAlta,dateFormat))
+    					fil=fil+1    					    					    					    					    					    					    					
+    					/*row(id:orden.id,numero:orden.numero,fechaAlta:orden.fechaAlta,total:orden.total,anio:orden.anio,expoNombre:orden.expo.nombre
     						,sector:it.sector.nombre
     						,lote:it.lote?.nombre
-    						,nombre:orden.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
+    						,nombre:orden.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)*/
    					}
    					
-   					if(!flagdetalle)
-    					row(id:orden.id,numero:orden.numero,fechaAlta:orden.fechaAlta,total:orden.total,anio:orden.anio,expoNombre:orden.expo.nombre
+   					if(!flagdetalle){
+    					sheet.addCell(new Label(0,fil,orden.empresa.nombre))
+    					sheet.addCell(new Label(1,fil,""))    					
+    					sheet.addCell(new Label(2,fil,""))    					
+    					sheet.addCell(new Number(3,fil,orden.total))
+    					sheet.addCell(new Number(4,fil,totalCancelado))
+    					sheet.addCell(new Number(5,fil,saldo))
+    					sheet.addCell(new Label(6,fil,orden.expo.nombre))
+    					sheet.addCell(new Number(7,fil,orden.anio))
+    					sheet.addCell(new Number(8,fil,orden.numero))
+    					sheet.addCell(new DateTime (9,fil,orden.fechaAlta,dateFormat))
+    					fil=fil+1    					    					    					    					    					    					    					
+   						
+    					/*row(id:orden.id,numero:orden.numero,fechaAlta:orden.fechaAlta,total:orden.total,anio:orden.anio,expoNombre:orden.expo.nombre
     						,sector:""
     						,lote:""
-    						,nombre:orden.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
-    			}
-   		} 
-	         	
-	
-			
+    						,nombre:orden.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)*/
+    					//fil=fil+1	
+					}
+    				
+    	}
+      	workbook.write()  
+	    workbook.close()  	
     }
-    
     
 }

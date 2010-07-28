@@ -483,18 +483,29 @@
 									        	name:'telefono2',
 									        	layout:'form'
 								        	},{
-								        		xtype: 'textfield',
+								        		xtype: 'combo',
 								        		fieldLabel: 'Provincia',
 								        		id:'idProvincia',
 								        		name: 'provinciaFiscal',
+								        		mode:'local',
+								        		displayField:'nombre',
+								        		valueField:'id',
+								        		hiddenName:'localidad.provincia.id',
+								        		store:provinciasStore,
 								        		allowBlank:false,
+								        		forceSelection:true,
 								        		layout:'form',
 								        		msgTarget:'under',
 								        		width: 120
 								        	},{
-								        		xtype: 'textfield',
+								        		xtype: 'combo',
 								        		id: 'idLocalidad',
 								        		fieldLabel: 'Localidad',
+								        		store:localidadesStore,
+								        		valueField:'id',
+								        		displayField:'nombreLoc',
+								        		hiddenName:'localidad.id',
+								        		mode:'local',
 								        		allowBlank: false,
 								        		name: 'localidadFiscal',
 								        		layout:'form',
@@ -785,7 +796,16 @@
 	        				'id':empresaId
 	        			},
 	        			success: function(f,a){
-	            				Ext.getCmp('idProvincia').setValue(a.result.data.provinciaLn);
+	            				Ext.getCmp('idProvincia').setValue(a.result.data.provinciaNombre);
+								Ext.getCmp('idProvincia').hiddenField.value=a.result.data.provinciaId;
+								var localidadCmb = Ext.getCmp('idLocalidad');
+								localidadCmb.clearValue();
+								localidadCmb.store.load({
+										params:{'provincia_id':Ext.getCmp('idProvincia').hiddenField.value}
+								});
+								Ext.getCmp('idLocalidad').setValue(a.result.data.localidadNombre);
+								Ext.getCmp('idLocalidad').hiddenField.value=a.result.data.localidadId;
+
 								
 	            				exposdeempresaStore.load({
 	            					params:{'id':a.result.data.id}
@@ -795,7 +815,7 @@
 	            					params:{'id':a.result.data.id}
 	            				});
 	            				
-								Ext.getCmp('id')	            				
+									            				
 	            				Ext.getCmp('idVendedor').setValue(a.result.data.vendedor);
 	            				Ext.getCmp('idVendedor').hiddenField.value=a.result.data.vendedorId;
 	            				
@@ -816,8 +836,6 @@
 		        					params:{'rubroid':a.result.data.rubroId}
 		        				});
 		        				subrubroCmb.enable();
-		        				Ext.getCmp('idLocalidad').setValue(a.result.data.localidadAux);
-		        				Ext.getCmp('idProvincia').setValue(a.result.data.provinciaLn);
 		        				
 										            				
 	            				Ext.getCmp('idSubrubro').setValue(a.result.data.subrubro);
