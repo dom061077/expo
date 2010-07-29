@@ -42,7 +42,7 @@
                           		],
                         stripeRows: true,
                         height:250,
-                        width:440,
+                        width:540,
                         title:'Empresas',
                         iconCls: 'icon-grid', 
                         tbar:[{
@@ -74,7 +74,7 @@
     					renderTo: 'empresa-grid',
     					id:'formSearchId',
     					title:'Listado de Empresas',
-    					width:470,
+    					width:550,
     					frame:true,
     					items: [{
     							layout: 'column',

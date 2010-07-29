@@ -145,7 +145,16 @@ Ext.onReady(function(){
         				});	
 					}
 				}
-        	}
+        	},{
+            	icon: imagePath+'/skin/excel.gif'
+            	,text:'Exportar'
+            	,cls:'x-btn-text-icon'
+            	,handler: function(){
+    				open('exportexcel?searchCriteria='+Ext.getCmp('searchCriteriaId').getValue()+'&fieldSearch='
+    					+Ext.getCmp('combocriteriosId').getValue(),'_blank')
+            	}
+        		
+        }        	
 		]/*,
         bbar: new Ext.PagingToolbar({
             	pageSize: 10,
@@ -165,6 +174,24 @@ Ext.onReady(function(){
 		width:650,
 		frame:true,
 		items:[
+					new Ext.form.ComboBox({
+										mode:'local',
+										valueField:'myId',
+										displayField:'displayText',
+										store: new Ext.data.SimpleStore({
+											id: 0,
+											fields:['myId','displayText'],
+											data:[['empresa.nombre','Nombre Empresa'],['numero','Por Num.Recibo']]
+										}),
+										id:'combocriteriosId',
+										name:'criterios',
+										boxMaxWidth:100,
+										allowBlank:false,
+										msgTarget:'under',
+										value:'empresa.nombre',
+										fieldLabel:'Criterios',
+										forceSelection:true
+										}),		
 			{
 				layout:'column',
 				items:[
@@ -185,7 +212,7 @@ Ext.onReady(function(){
 							listeners:{
 								click:function(){
 									reciboStore.load({
-										params:{'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()}
+										params:{'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue(),'fieldSearch':Ext.getCmp('combocriteriosId').getValue()}
 									});		
 								}
 							}
