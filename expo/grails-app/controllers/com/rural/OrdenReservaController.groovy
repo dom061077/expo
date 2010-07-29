@@ -433,7 +433,7 @@ class OrdenReservaController {
     	}*/
     }
 		
-	def exportexcel = {
+	def export = {
 		log.info("INGRESANDO AL METODO exportexcel DEL CONTROLADOR OrdenReservaController")
 		log.debug("PARAMETROS DE INGRESO: "+params)
 		def totalOrdenes

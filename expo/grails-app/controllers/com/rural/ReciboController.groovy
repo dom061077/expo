@@ -5,6 +5,16 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.text.ParseException
 import java.util.Date
+import jxl.*
+import jxl.write.Label
+import jxl.write.Number
+import jxl.write.WritableWorkbook
+import jxl.write.DateFormat
+import jxl.write.DateTime
+import jxl.write.WritableCellFormat
+import jxl.write.WritableSheet
+
+
 
 class ReciboController {
 	def reciboService
@@ -290,6 +300,42 @@ class ReciboController {
 				msg e.message
 			}
 		}
+		
+	}
+	
+	def excel = {
+		log.info("INGRESANDO AL METODO excel DEL CONTROLLER ReciboController")
+		log.debug("PARAMETROS: $params")
+		def recibos = Recibo.createCriteria().list(){
+			if(params.fieldSearch=='empresa.nombre'){
+				ordenReserva{ 
+					empresa{
+						like('nombre','%'+params.searchCriteria+'%')
+					}
+				}
+			}
+			if(params.fieldSearch=='nombre'){
+				ordenReserva{
+					eq('numero',new Long(params.searchCriteria))
+				}
+			}				    		
+		} 
+      	 def workbook = Workbook.createWorkbook(response.outputStream)
+    	 def sheet = workbook.createSheet("Request",0)
+	     
+	 	 boolean falgdetalle=false
+	 	 sheet.addCell(new Label(0, 0, "Empresa"))
+	 	 sheet.addCell(new Label(1, 0, "Sector"))
+	 	 sheet.addCell(new Label(2, 0, "Lote"))
+	 	 sheet.addCell(new Label(3, 0, "Total"))
+	 	 sheet.addCell(new Label(4, 0, "Total Cancelado"))
+ 	 	 sheet.addCell(new Label(5, 0, "Saldo"))
+	 	 sheet.addCell(new Label(6, 0, "Exposición")) 	 	 
+	 	 sheet.addCell(new Label(7, 0, "Año"))
+	 	 sheet.addCell(new Label(8, 0, "Número Orden"))	 	 
+	 	 sheet.addCell(new Label(9, 0, "Fecha"))
+		 DateFormat customDateFormat = new DateFormat ("d/m/yy h:mm") 
+		 WritableCellFormat dateFormat = new WritableCellFormat (customDateFormat)                    
 		
 	}
 	

@@ -364,13 +364,17 @@ class EmpresaController {
     	log.debug("PARAMETROS: "+params)
     	
     	
-    	def empresa = Empresa.get(params.id)
+    	def ordenes = OrdenReserva.createCriteria().list{
+    		empresa{
+    			eq("id",new Long(params.id))
+    		}	
+    	}
     	
     	render(contentType:"text/json"){
-    		total empresa.expos.count()
+    		total ordenes.size()
     		rows{
-    			empresa.expos.each{
-    				row(id:it.id,nombre:it.nombre,isnew:false)
+    			ordenes.each{
+    				row(id:it.expo.id,nombre:it.expo.nombre,isnew:false)
     			}
     		}
     	}
