@@ -20,7 +20,11 @@
 				out << "var imagePath='"+"${resource(dir:'images')}';";
 				
 			%>        	
-
+			<%
+				out << "var blankimagePath='"+"${resource(dir:'js')}';";
+				
+			%>   			
+				Ext.BLANK_IMAGE_URL =blankimagePath+ '/ext/2.0.2/resources/images/default/s.gif'; 
         </script>
         			
 
