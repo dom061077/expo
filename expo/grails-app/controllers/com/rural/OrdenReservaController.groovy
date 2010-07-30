@@ -287,6 +287,7 @@ class OrdenReservaController {
     def listjson = {
     	log.info("INGRESANDO AL METODO listjson DEL CONTROLADOR OrdenReservaController")
     	log.debug("PARAMETROS $params")
+    	log.debug("PARAMETRO ANULADA: "+Boolean.parseBoolean(params.anulada))
     	def pagingconfig = [
     		max: params.limit as Integer ?:10,
     		offset: params.start as Integer ?:0
@@ -298,14 +299,14 @@ class OrdenReservaController {
 	    		and{
 	    			eq('numero',new Long(params?.searchCriteria))
 	    			//eq('numero',null)
-	    			eq('anulada',false)
+	    			eq('anulada',Boolean.parseBoolean(params.anulada))
     			}
 	    	}
 	    	ordenes = OrdenReserva.createCriteria().list(){
 	    		and{
 		    		eq('numero',new Long(params?.searchCriteria))
 		    		//eq('numero',null)
-		    		eq('anulada',false)
+		    		eq('anulada',Boolean.parseBoolean(params.anulada)) 
 	    		}
 	    	}
     	}
@@ -316,7 +317,7 @@ class OrdenReservaController {
 		    		empresa{
 		    			like('nombre','%'+params?.searchCriteria+'%')
 		   			}
-		   			eq('anulada',false)
+		   			eq('anulada',true)
 	   			}
 	    	}
 	    	ordenes = OrdenReserva.createCriteria().list(){
@@ -326,7 +327,7 @@ class OrdenReservaController {
 		   				if(params.sort=="nombre")
 				   			order('nombre',params.dir.toLowerCase())
 		    		}
-		    		eq('anulada',false)
+		    		eq('anulada',Boolean.parseBoolean(params.anulada))
 		    		if(params.sort=="total")
 		    			order('total',params.dir.toLowerCase())
 		    		if(params.sort=="fechaAlta")
@@ -448,14 +449,14 @@ class OrdenReservaController {
 	    		and{
 	    			eq('numero',new Long(params?.searchCriteria))
 	    			//eq('numero',null)
-	    			eq('anulada',false)
+	    			eq('anulada',Boolean.parseBoolean(params.anulada))
     			}
 	    	}
 	    	ordenes = OrdenReserva.createCriteria().list(){
 	    		and{
 		    		eq('numero',new Long(params?.searchCriteria))
 		    		//eq('numero',null)
-		    		eq('anulada',false)
+		    		eq('anulada',Boolean.parseBoolean(params.anulada))
 	    		}
 	    	}
     	}
@@ -466,7 +467,7 @@ class OrdenReservaController {
 		    		empresa{
 		    			like('nombre','%'+params?.searchCriteria+'%')
 		   			}
-		   			eq('anulada',false)
+		   			eq('anulada',Boolean.parseBoolean(params.anulada))
 	   			}
 	    	}
 	    	ordenes = OrdenReserva.createCriteria().list(){
@@ -476,7 +477,7 @@ class OrdenReservaController {
 		   				if(params.sort=="nombre")
 				   			order('nombre',params.dir.toLowerCase())
 		    		}
-		    		eq('anulada',false)
+		    		eq('anulada',Boolean.parseBoolean(params.anulada))
 		    		if(params.sort=="total")
 		    			order('total',params.dir.toLowerCase())
 		    		if(params.sort=="fechaAlta")

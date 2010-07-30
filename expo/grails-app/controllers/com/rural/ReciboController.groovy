@@ -225,7 +225,7 @@ class ReciboController {
     		offset: params.start as Integer ?:0
     	]
     	
-		Long numeroRecibo=null
+		/*Long numeroRecibo=null
 		
 		try{
 			numeroRecibo=new Long(params.searchCriteria)
@@ -259,7 +259,23 @@ class ReciboController {
     			eq('anulado',false)
     		}
     		
-		}
+		}*/
+		
+		recibos = Recibo.createCriteria().list(){
+			and{
+				if(params.fieldSearch=='empresa.nombre'){
+					ordenReserva{ 
+						empresa{
+							like('nombre','%'+params.searchCriteria+'%')
+						}
+					}
+				}
+				if(params.fieldSearch=='numero'){
+						eq('numero',new Long(params.searchCriteria))
+				}
+				eq('anulado',false)
+			}		
+		} 		
 		
 		log.debug("Cantidad de recibos consultados: $totalRecibos")
 		int entero
