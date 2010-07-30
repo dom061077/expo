@@ -22,7 +22,8 @@ class ReciboService {
     		
     		Double totalCancelado = 0
     		ord.recibos.each{
-    			totalCancelado = totalCancelado + it.total
+    			if(it.anulado==false)
+    				totalCancelado = totalCancelado + it.total
     		}
     		
     		if(ord){

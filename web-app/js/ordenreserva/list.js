@@ -193,8 +193,8 @@ Ext.onReady(function(){
             	,text:'Exportar'
             	,cls:'x-btn-text-icon'
             	,handler: function(){
-    				open('exportexcel?searchCriteria='+Ext.getCmp('searchCriteriaId').getValue()+'&fieldSearch='
-    					+Ext.getCmp('combocriteriosId').getValue(),'_blank')
+    				open('export?searchCriteria='+Ext.getCmp('searchCriteriaId').getValue()+'&fieldSearch='
+    					+Ext.getCmp('combocriteriosId').getValue()+'&anulada='+Ext.getCmp('soloanuladasId').getValue(),'_blank')
             	}
         		
         }]/*,
@@ -233,8 +233,13 @@ Ext.onReady(function(){
 										value:'empresa.nombre',
 										fieldLabel:'Criterios',
 										forceSelection:true
-										}),		
+										}),	
 				{
+					xtype:'checkbox',
+					name:'soloanuladas',
+					id:'soloanuladasId',
+					fieldLabel:'Solo Anuladas'
+				},{
 					layout:'column',
 					
 					items:[
@@ -256,7 +261,10 @@ Ext.onReady(function(){
 										listeners:{
 											click: function(){
 												ordenStore.load({
-														params:{'fieldSearch':Ext.getCmp('combocriteriosId').getValue(),'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()}
+														params:{'fieldSearch':Ext.getCmp('combocriteriosId').getValue(),'start':0,'limit':10
+															,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
+															,'anulada':Ext.getCmp('soloanuladasId').getValue()
+															}
 													});
 											}
 										}
