@@ -244,6 +244,7 @@ Ext.onReady(function(){
                         stripeRows: true,
                         height:250,
                         width:440,
+                        loadMask:true,
                         title:'Empresas',
                         iconCls: 'icon-grid', 
                         tbar:[{
