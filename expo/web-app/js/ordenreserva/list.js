@@ -65,7 +65,8 @@ Ext.onReady(function(){
 					{header:"Número Orden",dataIndex:"numero",width:80,renderer:ordenRender,sortable:true},
 					{header:"Fecha",dataIndex:'fechaAlta',width:80,renderer: Ext.util.Format.dateRenderer('d/m/y'),sortable:true}
 			],
-		stripeRows: true,	
+		stripeRows: true,
+		loadMask:true,
 		height:250,
 		width:600,
 		title:'Ordenes de Reserva',

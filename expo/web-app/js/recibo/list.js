@@ -50,6 +50,7 @@ Ext.onReady(function(){
 		stripeRows:true,
 		height:450,
 		width:600,
+		loadMask:true,
 		title:"Recibos",
         tbar:[{
         		icon: imagePath+'/pdf.gif'
