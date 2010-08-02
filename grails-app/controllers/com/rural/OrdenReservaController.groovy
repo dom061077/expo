@@ -293,33 +293,14 @@ class OrdenReservaController {
     		offset: params.start as Integer ?:0
     	]
     	def totalOrdenes=0
-    	def ordenes=null
+    	List ordenes=null
+    	List 
+    	def detalleservcontratado=null
     	if(params.fieldSearch=="numero"){
-	    	totalOrdenes = OrdenReserva.createCriteria().count{
-	    		and{
-	    			eq('numero',new Long(params?.searchCriteria))
-	    			//eq('numero',null)
-	    			eq('anulada',Boolean.parseBoolean(params.anulada))
-    			}
-	    	}
-	    	ordenes = OrdenReserva.createCriteria().list(){
-	    		and{
-		    		eq('numero',new Long(params?.searchCriteria))
-		    		//eq('numero',null)
-		    		eq('anulada',Boolean.parseBoolean(params.anulada)) 
-	    		}
-	    	}
+    		ordenes = OrdenReserva.findAll("from OrdenReserva o left outer join o.detalle det where det is null and o.numero= :numero",[numero,new Long(params.searchCriteria)])    		
     	}
 
     	if(params.fieldSearch=="empresa.nombre"){
-	    	totalOrdenes = OrdenReserva.createCriteria().count{
-				and{	    		
-		    		empresa{
-		    			like('nombre','%'+params?.searchCriteria+'%')
-		   			}
-		   			eq('anulada',true)
-	   			}
-	    	}
 	    	ordenes = OrdenReserva.createCriteria().list(){
 	    		and{
 		    		empresa{
