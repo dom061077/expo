@@ -152,8 +152,8 @@ Ext.onReady(function (){
 				xtype: 'numberfield',
 				id:'efectivoId',
 				msgTarget:'under',
-				
-				emptyText:'0',
+				value:0,
+				//emptyText:'0',
 				name:'efectivo',
 				width:100,
 				fieldLabel:'Pago Efectivo',
