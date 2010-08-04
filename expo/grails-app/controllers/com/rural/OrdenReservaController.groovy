@@ -3,6 +3,7 @@ package com.rural
 import com.rural.seguridad.*
 import grails.converters.JSON
 import java.util.StringTokenizer
+import java.util.HashMap
 import com.rural.OrdenReserva
 import jxl.*
 import jxl.write.Label
@@ -292,82 +293,104 @@ class OrdenReservaController {
     		max: params.limit as Integer ?:10,
     		offset: params.start as Integer ?:0
     	]
-    	def totalOrdenes=0
-    	List ordenes=null
-    	List 
+    	def ordenes=null
+    	def detalle=null
+    	String hqlstr
+    	List list = new ArrayList()
+    	HashMap parameters = new HashMap()
     	def detalleservcontratado=null
     	if(params.fieldSearch=="numero"){
-    		ordenes = OrdenReserva.findAll("from OrdenReserva o left outer join o.detalle det where det is null and o.numero= :numero",[numero,new Long(params.searchCriteria)])    		
-    	}
-
-    	if(params.fieldSearch=="empresa.nombre"){
-	    	ordenes = OrdenReserva.createCriteria().list(){
-	    		and{
-		    		empresa{
-		   				like('nombre','%'+params?.searchCriteria+'%')
-		   				if(params.sort=="nombre")
-				   			order('nombre',params.dir.toLowerCase())
-		    		}
-		    		eq('anulada',Boolean.parseBoolean(params.anulada))
-		    		if(params.sort=="total")
-		    			order('total',params.dir.toLowerCase())
-		    		if(params.sort=="fechaAlta")
-		    			order('fechaAlta',params.dir.toLowerCase())
-		    		if(params.sort=="numero")
-		    			order('numero',params.dir.toLowerCase())
-		    		if(params.sort=="sector" || params.sort=="lote"){
-		    			detalle{
-	    					if(params.sort=="sector"){
-			    				sector{
-		    							order('nombre',params.dir.toLowerCase())
-		    					}
+    		ordenes = OrdenReserva.findAll("from OrdenReserva o left outer join o.detalle det where det is null and o.numero= :numero and o.anulada=:anulada"
+    					,[numero:new Long(params.searchCriteria),anulada:Boolean.parseBoolean(params.anulada)])
+    		list.addAll(ordenes) 
+    	}else{
+			hqlstr="from OrdenReserva o left outer join o.detalle det where det is null and o.anulada=:anulada"
+	    	parameters.put('anulada',Boolean.parseBoolean(params.anulada))			
+	   		detalle = DetalleServicioContratado.createCriteria().list([fetch:[lote:'eager']]){
+				and{
+					ordenReserva{
+						and{
+		    				eq('anulada',Boolean.parseBoolean(params.anulada))
+		    				if(params.fieldSearch=="empresa.nombre"){
+		    					hqlstr=hqlstr+" and o.empresa.nombre like :empresa_nombre"
+		    					parameters.put('empresa_nombre','%'+params.searchCriteria+'%')
+		        				empresa{
+		        					like('nombre','%'+params.searchCriteria+'%')
+		        				}
 		    				}
-	    					if(params.sort=="lote"){
-	    						lote{
-		    						order('nombre',params.dir.toLowerCase())
-	    						}
-	    					}
-		    			}
-		    		}		
-		    				
-	    		}
-	    	}
-    	}
+						}
+					}
+    				if(params.fieldSearch=="sector.nombre"){
+    					hqlstr=hqlstr+" and sector.nombre like '%'+:sector_nombre+'%'"
+    					parameters.put('sector_nombre',params.searchCriteria)
+    					sector{
+    						like('nombre',params.searchCriteria)
+    					}
+    				}
+    				if(params.fieldSearch=="lote.nombre"){
+    					hqlstr=hqlstr+" and lote.nombre like '%'+:lote_nombre+'%'"
+    					parameters.put('lote_nombre',params.searchCriteria)
+    					lote{
+    						like('nombre',params.searchCtiteria)
+    					}
+    					
+    				}
+    		    	/*if(params.fieldSearch=='fechaalta'){
+    		    		hqlstr=hqlstr+" and fechaAlta = :fechaalta"
+    		    		parameters.put('fechaalta',new Date())
+    		    		eq('fechaAlta',params.fechaalta)
+    		    	} */   					
+				}
+			}
+	   		ordenes = OrdenReserva.findAll(hqlstr,parameters)
+			
+			list.addAll(ordenes)
+			list.addAll(detalle)
+    	}			
+
     	
     	
-    	log.debug("Cantidad de Ordenes Consultadas: "+ordenes?.size()+" - total count() $totalOrdenes")
-    	def totalCancelado=0
-    	def saldo=0
+    	
+    	log.debug("Cantidad de lineas Consultadas: "+list?.size())
+    	Double totalCancelado=0
+    	Double saldo=0
     	def flagdetalle = false
-    	totalOrdenes=0
     	render(contentType:"text/json"){
     		rows{
-    			ordenes.each{
+    			list.each{
     				totalCancelado=0
     				saldo=0
-    				it.recibos.each{ 
-    					if(!it.anulado)
-    						totalCancelado=totalCancelado+it.total
+    				if(it instanceof DetalleServicioContratado){
+        				it.ordenReserva.recibos.each{ 
+        					if(!it.anulado)
+        						totalCancelado=totalCancelado+it.total
+        				}
+        				saldo=it.ordenReserva.total-totalCancelado
+    					row(id:it.ordenReserva.id,numero:it.ordenReserva.numero,fechaAlta:it.ordenReserva.fechaAlta,total:it.ordenReserva.total,anio:it.ordenReserva.anio
+    							,expoNombre:it.ordenReserva.expo.nombre
+        						,sector:it.sector.nombre
+        						,lote:it.lote?.nombre
+        						,nombre:it.ordenReserva.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
+        				
+    				}else{
+        				it[0].recibos.each{r-> 
+        					if(!r.anulado){
+        						totalCancelado=totalCancelado+r.total
+        						log.debug("SALE LA PROPIEDAD TOTAL?-->"+r.total)
+        					}
+        				}
+        				saldo=it.total[0]-totalCancelado
+        				log.debug("SALDO: $saldo total cancelado: $totalCancelado")
+    					row(id:it.id[0],numero:it.numero[0],fechaAlta:it.fechaAlta[0],total:it.total[0],anio:it.anio[0],expoNombre:it.expo.nombre[0]
+        						,sector:""
+        						,lote:""
+        						,nombre:it.empresa.nombre[0],totalCancelado:totalCancelado,saldo:saldo)        				
     				}
-    				saldo=it.total-totalCancelado
-    				def orden=it
-    				flagdetalle=false	
-    				it.detalle.each{
-    					flagdetalle=true
-    					row(id:orden.id,numero:orden.numero,fechaAlta:orden.fechaAlta,total:orden.total,anio:orden.anio,expoNombre:orden.expo.nombre
-    						,sector:it.sector.nombre
-    						,lote:it.lote?.nombre
-    						,nombre:orden.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
-   					}
-   					
-   					if(!flagdetalle)
-    					row(id:orden.id,numero:orden.numero,fechaAlta:orden.fechaAlta,total:orden.total,anio:orden.anio,expoNombre:orden.expo.nombre
-    						,sector:""
-    						,lote:""
-    						,nombre:orden.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
+    				
+
     			}
     		}
-   			total totalOrdenes
+   			total list.size()
     	}
     }
 
