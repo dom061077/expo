@@ -482,70 +482,13 @@ class OrdenReservaController {
 		def ordenes
 		def flagdetalle
 		
-		
-    	if(params.fieldSearch=="numero"){
-	    	totalOrdenes = OrdenReserva.createCriteria().count{
-	    		and{
-	    			eq('numero',new Long(params?.searchCriteria))
-	    			//eq('numero',null)
-	    			eq('anulada',Boolean.parseBoolean(params.anulada))
-    			}
-	    	}
-	    	ordenes = OrdenReserva.createCriteria().list(){
-	    		and{
-		    		eq('numero',new Long(params?.searchCriteria))
-		    		//eq('numero',null)
-		    		eq('anulada',Boolean.parseBoolean(params.anulada))
-	    		}
-	    	}
-    	}
-
-    	if(params.fieldSearch=="empresa.nombre"){
-	    	totalOrdenes = OrdenReserva.createCriteria().count{
-				and{	    		
-		    		empresa{
-		    			like('nombre','%'+params?.searchCriteria+'%')
-		   			}
-		   			eq('anulada',Boolean.parseBoolean(params.anulada))
-	   			}
-	    	}
-	    	ordenes = OrdenReserva.createCriteria().list(){
-	    		and{
-		    		empresa{
-		   				like('nombre','%'+params?.searchCriteria+'%')
-		   				if(params.sort=="nombre")
-				   			order('nombre',params.dir.toLowerCase())
-		    		}
-		    		eq('anulada',Boolean.parseBoolean(params.anulada))
-		    		if(params.sort=="total")
-		    			order('total',params.dir.toLowerCase())
-		    		if(params.sort=="fechaAlta")
-		    			order('fechaAlta',params.dir.toLowerCase())
-		    		if(params.sort=="numero")
-		    			order('numero',params.dir.toLowerCase())
-		    		/*if(params.sort=="sector" || params.sort=="lote"){
-		    			detalle{
-		    				lote{
-		    					if(params.sort=="lote"){
-		    						order('nombre',params.dir.toLowerCase())
-		    					}
-		    					if(params.sort=="sector"){
-		    						sector{
-		    							order('nombre',params.dir.toLowerCase())
-	    							}
-		    					}
-		    				}
-		    			}
-		    		}*/		
-		    				
-	    		}
-	    	}
-    	}
-	   	
-	     response.setHeader("Content-disposition", "attachment; filename=listadoordenes.xls")
+		List list = consultar(params)	   	
+	     response.setHeader("Content-disposition", "attachment")
 	     response.contentType = "application/vnd.ms-excel"
 	 
-	     log.debug("Cantidad de Ordenes consultadas: "+ordenes.size())
+	     log.debug("Cantidad registros consultados: "+list.size())
+	     
+	     
       	 def workbook = Workbook.createWorkbook(response.outputStream)
     	 def sheet = workbook.createSheet("Request",0)
 	     
@@ -564,16 +507,22 @@ class OrdenReservaController {
 		 WritableCellFormat dateFormat = new WritableCellFormat (customDateFormat)                    
 
 	 	 def fil=1	 	 
-		 ordenes.each{
+		 list.each{
     				totalCancelado=0
     				saldo=0
-    				it.recibos.each{ 
-    					if(!it.anulado)
-    						totalCancelado=totalCancelado+it.total
+    				if(it instanceof DetalleServicioContratado){
+	    				it.ordenReserva.recibos.each{ 
+	    					if(!it.anulado)
+	    						totalCancelado=totalCancelado+it.total
+	    				}
+	    				saldo=it.total-totalCancelado
+    				}else{
+    					it[0].recibos.each{r->
+    						if(!r.anulado)
+    							totalCancelado=totalCancelado+r.total
+    					}
+    					saldo=it.total-totalCancelado
     				}
-    				saldo=it.total-totalCancelado
-    				def orden=it
-    				flagdetalle=false	
                     
     				it.detalle.each{
     					flagdetalle=true
