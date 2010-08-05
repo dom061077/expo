@@ -3,8 +3,16 @@ package com.rural
 import com.rural.seguridad.*
 import grails.converters.JSON
 import java.util.StringTokenizer
+import java.util.List
 import java.util.HashMap
+import java.util.Collections
 import com.rural.OrdenReserva
+import com.rural.utils.EmpresaNombreComparator
+import com.rural.utils.FechaOrdenComparator
+import com.rural.utils.LoteComparator
+import com.rural.utils.NumeroOrdenComparator
+import com.rural.utils.SectorComparator
+
 import jxl.*
 import jxl.write.Label
 import jxl.write.Number
@@ -284,74 +292,101 @@ class OrdenReservaController {
     	}
     }
 
+    List  consultar(params){
+    	log.debug("Dentro del closure consultar")
+    	def pagingconfig = [
+    	            		max: params.limit as Integer ?:10,
+    	            		offset: params.start as Integer ?:0
+    	            	]
+    	            	def ordenes=null
+    	            	def detalle=null
+    	            	String hqlstr
+    	            	List list = new ArrayList()
+    	            	HashMap parameters = new HashMap()
+    	            	def detalleservcontratado=null
+    	            	if(params.fieldSearch=="numero"){
+    	            		ordenes = OrdenReserva.findAll("from OrdenReserva o left outer join o.detalle det where det is null and o.numero= :numero and o.anulada=:anulada"
+    	            					,[numero:new Long(params.searchCriteria),anulada:Boolean.parseBoolean(params.anulada)])
+    	            		list.addAll(ordenes) 
+    	            	}else{
+    	            		log.debug("INGRESO POR EL ELSE DEL LA PREGUNTA DEL FIELDSEARCH")
+    	        			hqlstr="from OrdenReserva o left outer join o.detalle det where det is null and o.anulada=:anulada"
+    	        	    	parameters.put('anulada',Boolean.parseBoolean(params.anulada))			
+    	        	   		detalle = DetalleServicioContratado.createCriteria().list([fetch:[lote:'eager']]){
+    	            			log.debug("DENTRO DEL CLOSURE DE CONSULTA POR DETALLESERVICIO CONTRATADO")
+    	        				and{
+    	        					ordenReserva{
+    	        						and{
+    	        		    				eq('anulada',Boolean.parseBoolean(params.anulada))
+    	        		    				if(params.fieldSearch=="empresa.nombre"){
+    	        		    					hqlstr=hqlstr+" and o.empresa.nombre like :empresa_nombre"
+    	        		    					parameters.put('empresa_nombre','%'+params.searchCriteria+'%')
+    	        		        				empresa{
+    	        		        					like('nombre','%'+params.searchCriteria+'%')
+    	        		        				}
+    	        		    				}
+    	        						}
+    	        					}
+    	            				if(params.fieldSearch=="sector.nombre"){
+    	            					hqlstr=hqlstr+" and sector.nombre like '%'+:sector_nombre+'%'"
+    	            					parameters.put('sector_nombre',params.searchCriteria)
+    	            					sector{
+    	            						like('nombre',params.searchCriteria)
+    	            					}
+    	            				}
+    	            				if(params.fieldSearch=="lote.nombre"){
+    	            					hqlstr=hqlstr+" and lote.nombre like '%'+:lote_nombre+'%'"
+    	            					parameters.put('lote_nombre',params.searchCriteria)
+    	            					lote{
+    	            						like('nombre',params.searchCtiteria)
+    	            					}
+    	            					
+    	            				}
+    	            		    	/*if(params.fieldSearch=='fechaalta'){
+    	            		    		hqlstr=hqlstr+" and fechaAlta = :fechaalta"
+    	            		    		parameters.put('fechaalta',new Date())
+    	            		    		eq('fechaAlta',params.fechaalta)
+    	            		    	} */   					
+    	        				}
+    	        			}
+    	            		log.debug("antes de hacer el findAll con hql")
+    	        	   		ordenes = OrdenReserva.findAll(hqlstr,parameters)
+    	        			log.debug("termina de hacer un findAll con hql")
+    	        			list.addAll(ordenes)
+    	        			list.addAll(detalle)
+    	            	}			
+    	            	log.debug("TERMINO DE AGREGAR AL LIST ordenes y detalle")
+    	            	if(params.sort){
+    	            		if(params.sort=="nombre"){
+    	           				Collections.sort(list,new EmpresaNombreComparator())
+    	            		}
+    	            		if(params.sort=="fechaAlta"){
+    	            			Collections.sort(list,new FechaOrdenComparator())
+    	            		}
+    	            		if(params.sort=="lote"){
+    	            			Collections.sort(list,new LoteComparator())
+    	            		}
+    	            		if(params.sort=="numero"){
+    	            			Collections.sort(list,new NumeroOrdenComparator())
+    	            		}
+    	            		if(params.sort=="sector"){
+    	            			Collections.sort(list,new SectorComparator())
+    	            		}
+    	        			if(params.dir=="DESC"){
+    	        				Collections.reverse(list)
+    	        				log.debug("Orden inverso aplicado")
+    	        			}
+    	            	}
+    	            	log.debug("Cantidad de lineas Consultadas: "+list?.size())
+    	            	return list
+    }
 
     def listjson = {
     	log.info("INGRESANDO AL METODO listjson DEL CONTROLADOR OrdenReservaController")
     	log.debug("PARAMETROS $params")
     	log.debug("PARAMETRO ANULADA: "+Boolean.parseBoolean(params.anulada))
-    	def pagingconfig = [
-    		max: params.limit as Integer ?:10,
-    		offset: params.start as Integer ?:0
-    	]
-    	def ordenes=null
-    	def detalle=null
-    	String hqlstr
-    	List list = new ArrayList()
-    	HashMap parameters = new HashMap()
-    	def detalleservcontratado=null
-    	if(params.fieldSearch=="numero"){
-    		ordenes = OrdenReserva.findAll("from OrdenReserva o left outer join o.detalle det where det is null and o.numero= :numero and o.anulada=:anulada"
-    					,[numero:new Long(params.searchCriteria),anulada:Boolean.parseBoolean(params.anulada)])
-    		list.addAll(ordenes) 
-    	}else{
-			hqlstr="from OrdenReserva o left outer join o.detalle det where det is null and o.anulada=:anulada"
-	    	parameters.put('anulada',Boolean.parseBoolean(params.anulada))			
-	   		detalle = DetalleServicioContratado.createCriteria().list([fetch:[lote:'eager']]){
-				and{
-					ordenReserva{
-						and{
-		    				eq('anulada',Boolean.parseBoolean(params.anulada))
-		    				if(params.fieldSearch=="empresa.nombre"){
-		    					hqlstr=hqlstr+" and o.empresa.nombre like :empresa_nombre"
-		    					parameters.put('empresa_nombre','%'+params.searchCriteria+'%')
-		        				empresa{
-		        					like('nombre','%'+params.searchCriteria+'%')
-		        				}
-		    				}
-						}
-					}
-    				if(params.fieldSearch=="sector.nombre"){
-    					hqlstr=hqlstr+" and sector.nombre like '%'+:sector_nombre+'%'"
-    					parameters.put('sector_nombre',params.searchCriteria)
-    					sector{
-    						like('nombre',params.searchCriteria)
-    					}
-    				}
-    				if(params.fieldSearch=="lote.nombre"){
-    					hqlstr=hqlstr+" and lote.nombre like '%'+:lote_nombre+'%'"
-    					parameters.put('lote_nombre',params.searchCriteria)
-    					lote{
-    						like('nombre',params.searchCtiteria)
-    					}
-    					
-    				}
-    		    	/*if(params.fieldSearch=='fechaalta'){
-    		    		hqlstr=hqlstr+" and fechaAlta = :fechaalta"
-    		    		parameters.put('fechaalta',new Date())
-    		    		eq('fechaAlta',params.fechaalta)
-    		    	} */   					
-				}
-			}
-	   		ordenes = OrdenReserva.findAll(hqlstr,parameters)
-			
-			list.addAll(ordenes)
-			list.addAll(detalle)
-    	}			
-
-    	
-    	
-    	
-    	log.debug("Cantidad de lineas Consultadas: "+list?.size())
+    	def list = consultar(params)
+    	log.debug("Objecto list devuelo por el closure consultar: "+list.size())
     	Double totalCancelado=0
     	Double saldo=0
     	def flagdetalle = false

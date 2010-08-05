@@ -1,6 +1,7 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
-	
+	var sort;
+	var dir;
 	var ordenStore = new Ext.data.JsonStore({
 		totalProperty: 'total',
 		remoteSort:true,
@@ -195,7 +196,9 @@ Ext.onReady(function(){
             	,cls:'x-btn-text-icon'
             	,handler: function(){
     				open('export?searchCriteria='+Ext.getCmp('searchCriteriaId').getValue()+'&fieldSearch='
-    					+Ext.getCmp('combocriteriosId').getValue()+'&anulada='+Ext.getCmp('soloanuladasId').getValue(),'_blank')
+    					+Ext.getCmp('combocriteriosId').getValue()+'&anulada='+Ext.getCmp('soloanuladasId').getValue()
+    					+'&sort='+sort+'&dir='+dir
+    					,'_blank')
             	}
         		
         }]/*,
@@ -206,6 +209,12 @@ Ext.onReady(function(){
             	displayMsg: 'Visualizando registros {0} - {1} de {2}',
             	emptyMsg: 'No hay registros para visualizar'
 			})*/
+		
+	});
+	
+	grid.on('sortchange',function(grid,sortInfo){
+		sort = sortInfo.field;
+		dir = sortInfo.direction;
 		
 	});
 	
