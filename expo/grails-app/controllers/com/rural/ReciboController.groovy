@@ -225,41 +225,6 @@ class ReciboController {
     		offset: params.start as Integer ?:0
     	]
     	
-		/*Long numeroRecibo=null
-		
-		try{
-			numeroRecibo=new Long(params.searchCriteria)
-		}catch(java.lang.NumberFormatException e){
-			numeroRecibo = new Long(0)
-		}    	
-    	totalRecibos = Recibo.createCriteria().count{
-    		or{
-    			eq('numero',numeroRecibo)
-    			ordenReserva{
-    				empresa{
-    					like('nombre',"%"+params?.searchCriteria+"%")
-   					}
-   				}
-    		}
-    		and{
-    			eq('anulado',false)
-    		}
-    	}
-
-		recibos = Recibo.createCriteria().list(){
-    		or{
-    			eq("numero",numeroRecibo)
-    			ordenReserva{
-    				empresa{
-    					like("nombre","%"+params?.searchCriteria+"%")
-   					}
-   				}
-    		}
-    		and{
-    			eq('anulado',false)
-    		}
-    		
-		}*/
 		
 		recibos = Recibo.createCriteria().list(){
 			and{
@@ -273,8 +238,24 @@ class ReciboController {
 				if(params.fieldSearch=='numero'){
 						eq('numero',new Long(params.searchCriteria))
 				}
-				eq('anulado',false)
-			}		
+				eq('anulado',Boolean.parseBoolean(params.anulada))
+			}
+			ordenReserva{
+				if(params.sort=="nombre"){
+						empresa{
+							order("nombre",params.dir.toLowerCase())
+						}
+				}
+				if(params.sort=="numeroordenreserva"){
+						order("numero",params.dir.toLowerCase())
+				}
+			}
+			if(params.sort=="fechaAlta"){
+				order("fechaAlta",params.dir.toLowerCase())
+			}
+			if(params.sort=="numero"){
+				order("numero",params.dir.toLowerCase())
+			}
 		} 		
 		
 		log.debug("Cantidad de recibos consultados: $totalRecibos")
@@ -322,37 +303,67 @@ class ReciboController {
 	def excel = {
 		log.info("INGRESANDO AL METODO excel DEL CONTROLLER ReciboController")
 		log.debug("PARAMETROS: $params")
+	     response.setHeader("Content-disposition", "attachment")
+	     response.contentType = "application/vnd.ms-excel"		
 		def recibos = Recibo.createCriteria().list(){
-			if(params.fieldSearch=='empresa.nombre'){
-				ordenReserva{ 
-					empresa{
-						like('nombre','%'+params.searchCriteria+'%')
+			and{
+				if(params.fieldSearch=='empresa.nombre'){
+					ordenReserva{ 
+						empresa{
+							like('nombre','%'+params.searchCriteria+'%')
+						}
 					}
 				}
-			}
-			if(params.fieldSearch=='nombre'){
-				ordenReserva{
-					eq('numero',new Long(params.searchCriteria))
+				if(params.fieldSearch=='numero'){
+						eq('numero',new Long(params.searchCriteria))
 				}
-			}				    		
-		} 
-      	 def workbook = Workbook.createWorkbook(response.outputStream)
+				eq('anulado',Boolean.parseBoolean(params.anulada))
+			}
+			ordenReserva{
+				if(params.sort=="nombre"){
+						empresa{
+							order("nombre",params.dir.toLowerCase())
+						}
+				}
+				if(params.sort=="numeroordenreserva"){
+						order("numero",params.dir.toLowerCase())
+				}
+			}
+			if(params.sort=="fechaAlta"){
+				order("fechaAlta",params.dir.toLowerCase())
+			}
+			if(params.sort=="numero"){
+				order("numero",params.dir.toLowerCase())
+			}
+		} 		
+
+		def workbook = Workbook.createWorkbook(response.outputStream)
     	 def sheet = workbook.createSheet("Request",0)
-	     
-	 	 boolean falgdetalle=false
-	 	 sheet.addCell(new Label(0, 0, "Empresa"))
-	 	 sheet.addCell(new Label(1, 0, "Sector"))
-	 	 sheet.addCell(new Label(2, 0, "Lote"))
-	 	 sheet.addCell(new Label(3, 0, "Total"))
-	 	 sheet.addCell(new Label(4, 0, "Total Cancelado"))
- 	 	 sheet.addCell(new Label(5, 0, "Saldo"))
-	 	 sheet.addCell(new Label(6, 0, "Exposición")) 	 	 
-	 	 sheet.addCell(new Label(7, 0, "Año"))
-	 	 sheet.addCell(new Label(8, 0, "Número Orden"))	 	 
-	 	 sheet.addCell(new Label(9, 0, "Fecha"))
 		 DateFormat customDateFormat = new DateFormat ("d/m/yy h:mm") 
-		 WritableCellFormat dateFormat = new WritableCellFormat (customDateFormat)                    
-		
+		 WritableCellFormat dateFormat = new WritableCellFormat (customDateFormat)  	     
+	 	 boolean falgdetalle=false
+	 	 def fil=0
+	 	 if(Boolean.parseBoolean(params.anulada)){
+	 		 sheet.addCell(new Label(0,fil,"SOLO RECIBOS ANULADOS"))
+	 		 fil=fil+1
+	 	 }
+	 	 sheet.addCell(new Label(0, fil, "Empresa"))
+	 	 sheet.addCell(new Label(1, fil, "Fecha Alta"))
+	 	 sheet.addCell(new Label(2, fil, "Nro.Recibo"))
+	 	 sheet.addCell(new Label(3, fil, "Total"))	
+	 	 sheet.addCell(new Label(4, fil, "Nro.Orden de Reserva"))
+	 	 fil=fil+1
+	 	 recibos.each{
+	 		 sheet.addCell(new Label(0,fil,it.ordenReserva.empresa.nombre))
+	 		 sheet.addCell(new DateTime(1,fil,it.fechaAlta,dateFormat))
+	 		 sheet.addCell(new Number(2,fil,it.numero))
+	 		 sheet.addCell(new Number(3,fil,it.total))
+	 		 sheet.addCell(new Number(4,fil,it.ordenReserva.numero))
+	 		 fil=fil+1
+	 	 }
+		 
+      	 workbook.write()  
+	     workbook.close()  		
 	}
 	
 }

@@ -17,10 +17,10 @@
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="7" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Ch. Nº]]></text>
+				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="72" y="0" width="29" height="9"/>
+				<reportElement x="98" y="0" width="29" height="9"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="7" isBold="false"/>
 				</textElement>
@@ -34,36 +34,36 @@
 				<text><![CDATA[Vto.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="247" y="0" width="10" height="9"/>
+				<reportElement x="242" y="0" width="10" height="9"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font fontName="Arial" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="24" y="0" width="47" height="9"/>
-				<textElement verticalAlignment="Middle">
+				<reportElement x="1" y="0" width="91" height="9"/>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{numero}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="89" y="0" width="98" height="9"/>
-				<textElement verticalAlignment="Middle">
+				<reportElement x="115" y="0" width="70" height="9"/>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{banco}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
 				<reportElement x="204" y="0" width="45" height="9"/>
-				<textElement verticalAlignment="Middle">
+				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{vencimiento}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="240" y="0" width="47" height="9"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font fontName="Arial" size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{importe}]]></textFieldExpression>

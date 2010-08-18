@@ -6,12 +6,12 @@
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="subTotal" class="java.lang.Double"/>
 	<detail>
-		<band height="9" splitType="Stretch">
+		<band height="8" splitType="Stretch">
 			<printWhenExpression><![CDATA[$F{subTotal}!=null]]></printWhenExpression>
 			<textField>
-				<reportElement x="0" y="0" width="134" height="9"/>
+				<reportElement x="0" y="0" width="216" height="8"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="7"/>
+					<font fontName="Arial" size="6"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>

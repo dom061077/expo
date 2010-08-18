@@ -155,7 +155,7 @@
 				<textElement>
 					<font fontName="Arial" size="11" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Nº:]]></text>
+				<text><![CDATA[NÂº:]]></text>
 			</staticText>
 			<image>
 				<reportElement x="454" y="116" width="16" height="13"/>
@@ -188,7 +188,7 @@
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Camino del Perú 1050 - Cevil Redondo - Tucumán - (4105)
+				<text><![CDATA[Camino del PerÃº 1050 - Cevil Redondo - TucumÃ¡n - (4105)
 Tel./ Fax: (0381) - 4347777/6146/6258
 www.srt.org.ar - informes@srt.org.ar]]></text>
 			</staticText>
@@ -204,7 +204,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement textAlignment="Center">
 					<font fontName="Bookman Old Style" size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Sociedad Rural de Tucumán]]></text>
+				<text><![CDATA[Sociedad Rural de TucumÃ¡n]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="449" y="31" width="45" height="14"/>
@@ -615,7 +615,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement>
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Expresamos nuestro total consentimiento y conformidad con las disposiciones del Reglamento General de Exposición de la Sociedad Rural de Tucumán.]]></text>
+				<text><![CDATA[Expresamos nuestro total consentimiento y conformidad con las disposiciones del Reglamento General de ExposiciÃ³n de la Sociedad Rural de TucumÃ¡n.]]></text>
 			</staticText>
 		</band>
 	</detail>
@@ -627,15 +627,15 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement textAlignment="Justified">
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
-				<text><![CDATA[La reserva está sujeta a distribución definitiva y disponibilidad de los espacios. Cualquier otro requerimiento de la adjunta, respecto a especificaciones, deberá ser solicitada por nota. Los gastos que eventualmente ocasione el presente serán asumidos en su totalidad por S.R.T.
-Obligatoriamente deberá ser presentada la constancia que acredite la condición del expositor frente al I.V.A (F576 F460. Comunicación DGI, etc.)]]></text>
+				<text><![CDATA[La reserva estÃ¡ sujeta a distribuciÃ³n definitiva y disponibilidad de los espacios. Cualquier otro requerimiento de la adjunta, respecto a especificaciones, deberÃ¡ ser solicitada por nota. Los gastos que eventualmente ocasione el presente serÃ¡n asumidos en su totalidad por S.R.T.
+Obligatoriamente deberÃ¡ ser presentada la constancia que acredite la condiciÃ³n del expositor frente al I.V.A (F576 F460. ComunicaciÃ³n DGI, etc.)]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="7" y="17" width="376" height="10"/>
 				<textElement>
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Los precios designados no incluyen impuestos u otros derivados de la explotación de la actividad de cada expositor.]]></text>
+				<text><![CDATA[Los precios designados no incluyen impuestos u otros derivados de la explotaciÃ³n de la actividad de cada expositor.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="7" y="7" width="24" height="10"/>

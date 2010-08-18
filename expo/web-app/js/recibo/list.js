@@ -1,8 +1,10 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
-	
+	var sort;
+	var dir;
 	var reciboStore = new Ext.data.JsonStore({
 		totalProperty:'total',
+		remoteSort:true,
 		root:'rows',
 		url:'listjson',
 		fields:['id','fechaAlta','numero','nombre','total','numeroordenreserva','totalletras'],
@@ -40,11 +42,11 @@ Ext.onReady(function(){
 		store:reciboStore,
 		columns:[
 			{header:"Id",dataIndex:'id',hidden:true},
-			{header:"Empresa",dataIndex:'nombre',width:250},
-			{header:"Fecha Alta",dataIndex:'fechaAlta',width:90,renderer: Ext.util.Format.dateRenderer('d/m/y')},
-			{header:"Nro.Recibo",dataIndex:'numero',width:100,renderer:reciboRender},
+			{header:"Empresa",dataIndex:'nombre',width:250,sortable:true},
+			{header:"Fecha Alta",dataIndex:'fechaAlta',width:90,renderer: Ext.util.Format.dateRenderer('d/m/y'),sortable:true},
+			{header:"Nro.Recibo",dataIndex:'numero',width:100,renderer:reciboRender,sortable:true},
 			{header:"Total",dataIndex:'total',width:90,renderer:currencyRender},
-			{header:"Nro.Orden de Reserva",dataIndex:'numeroordenreserva',width:100,renderer:reciboRender},			
+			{header:"Nro.Orden de Reserva",dataIndex:'numeroordenreserva',width:100,renderer:reciboRender,sortable:true},			
 			{header:"Total Letras",dataIndex:'totalletras',width:100,hidden:true}
 		],
 		stripeRows:true,
@@ -63,6 +65,7 @@ Ext.onReady(function(){
 
 							//window.location='reporte?target=_blank&_format=PDF&_name=recibo&_file=recibo&id='+a.result.id+"&totalletras="+a.result.totalletras;        					
 							open('reporte?target=_blank&_format=PDF&_name=recibo&_file=recibo&id='+sel.data.id+"&totalletras="+sel.data.totalletras
+    						+'&sort='+sort+'&dir='+dir							
 							,'_blank')
         				}
 							
@@ -151,8 +154,10 @@ Ext.onReady(function(){
             	,text:'Exportar'
             	,cls:'x-btn-text-icon'
             	,handler: function(){
-    				open('exportexcel?searchCriteria='+Ext.getCmp('searchCriteriaId').getValue()+'&fieldSearch='
-    					+Ext.getCmp('combocriteriosId').getValue(),'_blank')
+    				open('excel?searchCriteria='+Ext.getCmp('searchCriteriaId').getValue()+'&fieldSearch='
+    					+Ext.getCmp('combocriteriosId').getValue()+'&anulada='+Ext.getCmp('soloanuladasId').getValue()
+    					+'&sort='+sort+'&dir='+dir    					
+						,'_blank')    					
             	}
         		
         }        	
@@ -166,6 +171,12 @@ Ext.onReady(function(){
 			})*/
 		
 	});
+	
+	grid.on('sortchange',function(grid,sortInfo){
+		sort = sortInfo.field;
+		dir = sortInfo.direction;
+		
+	});	
 	
 	var formSearch = new Ext.form.FormPanel({
 		url:'search',
@@ -192,8 +203,13 @@ Ext.onReady(function(){
 										value:'empresa.nombre',
 										fieldLabel:'Criterios',
 										forceSelection:true
-										}),		
+										}),
 			{
+				xtype:'checkbox',
+				name:'soloanuladas',
+				id:'soloanuladasId',
+				fieldLabel:'Solo Recibos Anulados'
+			},{
 				layout:'column',
 				items:[
 					{	columnWidth: .42,
@@ -213,7 +229,9 @@ Ext.onReady(function(){
 							listeners:{
 								click:function(){
 									reciboStore.load({
-										params:{'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue(),'fieldSearch':Ext.getCmp('combocriteriosId').getValue()}
+										params:{'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
+											,'fieldSearch':Ext.getCmp('combocriteriosId').getValue()
+											,'anulada':Ext.getCmp('soloanuladasId').getValue()}
 									});		
 								}
 							}

@@ -69,7 +69,7 @@ Ext.onReady(function(){
 									'sector.id':sector_id
 								},
 								success:function(response,opt){
-									var loteid=Ext.util.JSON.decode(resp.responseText).loteid;
+									var loteid=Ext.util.JSON.decode(response.responseText).loteid;
 									gridlote.getStore().insert(0,new dslotemodel({id:loteid,nombre:'Lote Nuevo'}))
 									gridlote.startEditing(0,0);
 								},
