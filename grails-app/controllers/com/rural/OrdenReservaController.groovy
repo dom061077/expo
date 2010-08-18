@@ -403,7 +403,7 @@ class OrdenReservaController {
         				saldo=it.ordenReserva.total-totalCancelado
     					row(id:it.ordenReserva.id,numero:it.ordenReserva.numero,fechaAlta:it.ordenReserva.fechaAlta,total:it.ordenReserva.total,anio:it.ordenReserva.anio
     							,expoNombre:it.ordenReserva.expo.nombre
-        						,sector:it.sector.nombre
+        						,sector:it.sector?.nombre
         						,lote:it.lote?.nombre
         						,nombre:it.ordenReserva.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
         				
@@ -493,20 +493,24 @@ class OrdenReservaController {
     	 def sheet = workbook.createSheet("Request",0)
 	     
 	 	 boolean falgdetalle=false
-	 	 sheet.addCell(new Label(0, 0, "Empresa"))
-	 	 sheet.addCell(new Label(1, 0, "Sector"))
-	 	 sheet.addCell(new Label(2, 0, "Lote"))
-	 	 sheet.addCell(new Label(3, 0, "Total"))
-	 	 sheet.addCell(new Label(4, 0, "Total Cancelado"))
- 	 	 sheet.addCell(new Label(5, 0, "Saldo"))
-	 	 sheet.addCell(new Label(6, 0, "Exposición")) 	 	 
-	 	 sheet.addCell(new Label(7, 0, "Año"))
-	 	 sheet.addCell(new Label(8, 0, "Número Orden"))	 	 
-	 	 sheet.addCell(new Label(9, 0, "Fecha"))
+	 	 def fil=0
+	 	 if(Boolean.parseBoolean(params.anulada)){
+	 		 sheet.addCell(new Label(3,fil,(Boolean.parseBoolean(params.anulada)?"SOLO ORDENES ANULADAS":"") ))
+	 		 fil=fil+1
+	 	 }
+	 	 sheet.addCell(new Label(0, fil, "Empresa"))
+	 	 sheet.addCell(new Label(1, fil, "Sector"))
+	 	 sheet.addCell(new Label(2, fil, "Lote"))
+	 	 sheet.addCell(new Label(3, fil, "Total"))
+	 	 sheet.addCell(new Label(4, fil, "Total Cancelado"))
+ 	 	 sheet.addCell(new Label(5, fil, "Saldo"))
+	 	 sheet.addCell(new Label(6, fil, "Exposición")) 	 	 
+	 	 sheet.addCell(new Label(7, fil, "Año"))
+	 	 sheet.addCell(new Label(8, fil, "Número Orden"))	 	 
+	 	 sheet.addCell(new Label(9, fil, "Fecha"))
 		 DateFormat customDateFormat = new DateFormat ("d/m/yy h:mm") 
 		 WritableCellFormat dateFormat = new WritableCellFormat (customDateFormat)                    
-
-	 	 def fil=1	 	 
+		 fil=fil+1
 		 list.each{
     				totalCancelado=0
     				saldo=0
@@ -515,53 +519,36 @@ class OrdenReservaController {
 	    					if(!it.anulado)
 	    						totalCancelado=totalCancelado+it.total
 	    				}
-	    				saldo=it.total-totalCancelado
+	    				saldo=it.ordenReserva.total-totalCancelado
+    					sheet.addCell(new Label(0,fil,it.ordenReserva.empresa.nombre))
+    					sheet.addCell(new Label(1,fil,it.sector?.nombre))    					
+    					sheet.addCell(new Label(2,fil,it.lote?.nombre))    					
+    					sheet.addCell(new Number(3,fil,it.ordenReserva.total))
+    					sheet.addCell(new Number(4,fil,totalCancelado))
+    					sheet.addCell(new Number(5,fil,saldo))
+    					sheet.addCell(new Label(6,fil,it.ordenReserva.expo.nombre))
+    					sheet.addCell(new Number(7,fil,it.ordenReserva.anio))
+    					sheet.addCell(new Number(8,fil,it.ordenReserva.numero))
+    					sheet.addCell(new DateTime (9,fil,it.ordenReserva.fechaAlta,dateFormat))
+    					fil=fil+1    					    					    					    					    					    					    					
     				}else{
     					it[0].recibos.each{r->
     						if(!r.anulado)
     							totalCancelado=totalCancelado+r.total
     					}
-    					saldo=it.total-totalCancelado
-    				}
-                    
-    				it.detalle.each{
-    					flagdetalle=true
-    					sheet.addCell(new Label(0,fil,orden.empresa.nombre))
-    					sheet.addCell(new Label(1,fil,it.sector.nombre))    					
-    					sheet.addCell(new Label(2,fil,it.lote?.nombre))    					
-    					sheet.addCell(new Number(3,fil,orden.total))
-    					sheet.addCell(new Number(4,fil,totalCancelado))
-    					sheet.addCell(new Number(5,fil,saldo))
-    					sheet.addCell(new Label(6,fil,orden.expo.nombre))
-    					sheet.addCell(new Number(7,fil,orden.anio))
-    					sheet.addCell(new Number(8,fil,orden.numero))
-    					sheet.addCell(new DateTime (9,fil,orden.fechaAlta,dateFormat))
-    					fil=fil+1    					    					    					    					    					    					    					
-    					/*row(id:orden.id,numero:orden.numero,fechaAlta:orden.fechaAlta,total:orden.total,anio:orden.anio,expoNombre:orden.expo.nombre
-    						,sector:it.sector.nombre
-    						,lote:it.lote?.nombre
-    						,nombre:orden.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)*/
-   					}
-   					
-   					if(!flagdetalle){
-    					sheet.addCell(new Label(0,fil,orden.empresa.nombre))
+    					saldo=it.total[0]-totalCancelado
+    					sheet.addCell(new Label(0,fil,it.empresa.nombre[0]))
     					sheet.addCell(new Label(1,fil,""))    					
     					sheet.addCell(new Label(2,fil,""))    					
-    					sheet.addCell(new Number(3,fil,orden.total))
-    					sheet.addCell(new Number(4,fil,totalCancelado))
+    					sheet.addCell(new Number(3,fil,it.total[0]))
+    					sheet.addCell(new Number(4,fil,totalCancelado)) 
     					sheet.addCell(new Number(5,fil,saldo))
-    					sheet.addCell(new Label(6,fil,orden.expo.nombre))
-    					sheet.addCell(new Number(7,fil,orden.anio))
-    					sheet.addCell(new Number(8,fil,orden.numero))
-    					sheet.addCell(new DateTime (9,fil,orden.fechaAlta,dateFormat))
+    					sheet.addCell(new Label(6,fil,it.expo.nombre[0]))
+    					sheet.addCell(new Number(7,fil,it.anio[0]))
+    					sheet.addCell(new Number(8,fil,it.numero[0]))
+    					sheet.addCell(new DateTime (9,fil,it.fechaAlta[0],dateFormat))
     					fil=fil+1    					    					    					    					    					    					    					
-   						
-    					/*row(id:orden.id,numero:orden.numero,fechaAlta:orden.fechaAlta,total:orden.total,anio:orden.anio,expoNombre:orden.expo.nombre
-    						,sector:""
-    						,lote:""
-    						,nombre:orden.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)*/
-    					//fil=fil+1	
-					}
+    				}
     				
     	}
       	workbook.write()  

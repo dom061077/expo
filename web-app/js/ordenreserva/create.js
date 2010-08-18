@@ -491,7 +491,10 @@ Ext.onReady(function(){
 				dataIndex:'descripcion',
 				width:200,
 				editor:new Ext.form.TextField({
-					allowBlank:false
+					allowBlank:false,
+					maxLength:60,
+					maxLengthText:'Cantidad máxima de caracteres es de 60'
+																		
 				})
 			},{
 				header:'Importe',
@@ -577,7 +580,7 @@ Ext.onReady(function(){
 				header:'Producto',
 				dataIndex:'descripcion',
 				width:200,
-				editor: new Ext.form.TextField({allowBlank:false})
+				editor: new Ext.form.TextField({allowBlank:false,maxLength:50,maxLengthText:'Cantidad máxima de caracteres es de 50'})
 			}
 		]
 	});
@@ -807,6 +810,7 @@ Ext.onReady(function(){
             }
         },   
 		cards : [
+		
 			new Ext.ux.Wiz.Card({
 				title : 'Seleccione Empresa',
 				id:'seleccionempresacardId',
@@ -851,35 +855,17 @@ Ext.onReady(function(){
 				]
 			}),
 			new Ext.ux.Wiz.Card({
-				title: 'Datos de Empresa',
-				id:'datosempresaId',
-				monitorValid: true,
-				autoScroll:true,
-				width:450,
-				items: [{
+				title:'Datos Impositivos',
+				id:'exposicionId',
+				monitorValid:true,
+				items:[
+					{
 							xtype:'textfield',
 							id:'empresaId',
 							hideLabel:true,
 							fieldLabel:'id de Empresa',
 							name:'id',
 							hidden:true
-						},{
-							xtype:'textfield',
-							id:'nombreId',
-							fieldLabel:'Nombre Comercial',
-							allowBlank:false,
-							msgTarget:'under',
-							width:260,
-							name:'nombre'
-						},{
-							xtype:'textfield',
-							id:'razonsocialId',
-							fieldLabel:'Razón Social',
-							width:260,
-							allowBlank:false,
-							msgTarget:'under',
-							name:'razonSocial'
-							
 						},{
 							xtype:'textfield',
 							id:'cuitId',
@@ -891,20 +877,113 @@ Ext.onReady(function(){
 							name:'cuit'
 						},{
 							xtype:'textfield',
-							id:'direccionId',
-							fieldLabel: 'Dirección',
-							allowBlank: false,
-							width:260,
-							msgTarget:'under',
-							name:'direccion'			
-						},{
-							xtype:'textfield',
 							id:'direccionfiscalId',
 							fieldLabel:'Dirección Fiscal',
 							allowBlank: false,
 							width:260,
 							msgTarget: 'under',
 							name: 'direccionFiscal'
+							
+					},{
+							xtype:'textfield',
+							id:'nombreId',
+							fieldLabel:'Nombre Comercial',
+							allowBlank:false,
+							msgTarget:'under',
+							width:260,
+							name:'nombre'
+					},{
+							xtype:'textfield',
+							id:'razonsocialId',
+							fieldLabel:'Razón Social',
+							width:260,
+							allowBlank:false,
+							msgTarget:'under',
+							name:'razonSocial'				
+					},{
+						xtype:'radio',
+					 	id:'resinsradioId',
+					 	fieldLabel:'Res.Ins.',
+					 	name:'resins'
+					},{
+						xtype:'radio',
+					  	id:'noinsradioId',
+					  	fieldLabel:'No Ins.',
+					  	name:'noins'
+					 },{
+					  xtype:'radio',
+					  id:'exentoId',	
+					  fieldLabel:'Exento',
+					  name:'exento'
+					 },{
+					  xtype:'radio',
+					  id:'consfinalId',
+					  fieldLabel:'Cons.Final',
+					  name:'consfinal'
+					 },{
+					  xtype:'radio',
+					  id:'monotributoId',
+					  fieldLabel:'Monotributo',
+					  name:'monotributo'
+					 },{
+					  xtype:'combo',
+					  fieldLabel:'I.V.A',
+					  name:'resinsValorCmb',
+					  hiddenName:'resinsValor',
+					  valueField:'id',
+					  hiddenField:'id',						  
+					  displayField:'descripcion',
+					  msgTarget:'under',
+					  store:ivaStore,
+					  width:100,
+					  listWidth:100,
+					  allowBlank:false,
+					  forceSelection:true,
+					  mode:'local',
+					  id:'resinsvalorId'
+					 },{
+						  xtype:'textarea',
+						  fieldLabel:'Observación',
+						  maxLength:255,
+						  width:200,
+						  name:'observacion',
+						  id:'observacionId'
+			          },{
+			        		xtype: 'combo',
+			        		id: 'idVendedor',
+			        		fieldLabel:'Vendedor',
+			        		allowBlank: false,
+			        		name: 'vendedor',
+			        		hiddenName:'vendedor_id',
+			        		displayField:'nombre',
+			        		hideMode:'offsets',
+			        		minListWidth:260,
+			        		layout:'card',
+			        		valueField: 'id',
+			        		mode: 'local',
+			        		store: vendedoresStore,
+			        		msgTarget:'under',
+			        		forceSelection:true,
+			        		width: 260
+					 }
+				]
+			}),
+			new Ext.ux.Wiz.Card({
+				title: 'Datos de Empresa',
+				id:'datosempresaId',
+				monitorValid: true,
+				autoScroll:true,
+				width:450,
+				items: [
+							
+						{
+							xtype:'textfield',
+							id:'direccionId',
+							fieldLabel: 'Dirección',
+							allowBlank: false,
+							width:260,
+							msgTarget:'under',
+							name:'direccion'			
 						},{
 							xtype:'textfield',
 							id:'telefono1Id',
@@ -1217,89 +1296,6 @@ Ext.onReady(function(){
 				id:'productosexpuestosId',
 				monitorValid:true,
 				items:[gridProductosExpuestos]
-			}),
-			new Ext.ux.Wiz.Card({
-				title:'Datos Impositivos',
-				id:'exposicionId',
-				monitorValid:true,
-				items:[
-					{xtype:'radio',
-					 id:'resinsradioId',
-					 fieldLabel:'Res.Ins.',
-					 name:'resins'
-					 },
-					 {xtype:'radio',
-					  id:'noinsradioId',
-					  fieldLabel:'No Ins.',
-					  name:'noins'
-					 },
-					 {xtype:'radio',
-					  id:'exentoId',	
-					  fieldLabel:'Exento',
-					  name:'exento'
-					 },
-					 {xtype:'radio',
-					  id:'consfinalId',
-					  fieldLabel:'Cons.Final',
-					  name:'consfinal'
-					 },
-					 {xtype:'radio',
-					  id:'monotributoId',
-					  fieldLabel:'Monotributo',
-					  name:'monotributo'
-					 },
-					 {xtype:'combo',
-					  fieldLabel:'I.V.A',
-					  name:'resinsValorCmb',
-					  hiddenName:'resinsValor',
-					  valueField:'id',
-					  hiddenField:'id',						  
-					  displayField:'descripcion',
-					  msgTarget:'under',
-					  store:ivaStore,
-					  width:100,
-					  listWidth:100,
-					  allowBlank:false,
-					  forceSelection:true,
-					  mode:'local',
-					  id:'resinsvalorId'
-					  
-					 /*,
-					 {xtype:'numberfield',
-					  fieldLabel:'Valor No Ins.',
-					  name:'noinsValor',
-					  allowBlank:false,
-					  minValue:0,
-					  id:'noinsvalorId',
-					  msgTarget:'under',
-					  value:0
-					 }*/
-					 },{
-						  xtype:'textarea',
-						  fieldLabel:'Observación',
-						  maxLength:255,
-						  width:200,
-						  name:'observacion',
-						  id:'observacionId'
-			          },{
-			        		xtype: 'combo',
-			        		id: 'idVendedor',
-			        		fieldLabel:'Vendedor',
-			        		allowBlank: false,
-			        		name: 'vendedor',
-			        		hiddenName:'vendedor_id',
-			        		displayField:'nombre',
-			        		hideMode:'offsets',
-			        		minListWidth:260,
-			        		layout:'card',
-			        		valueField: 'id',
-			        		mode: 'local',
-			        		store: vendedoresStore,
-			        		msgTarget:'under',
-			        		forceSelection:true,
-			        		width: 260
-					 }
-				]
 			})
 			
 		]		
@@ -1311,7 +1307,7 @@ Ext.onReady(function(){
 	
 	
 	wizard.on('nextstep',function(wizard){
-	   var sel = grid.getSelectionModel().getSelected();
+	   /*var sel = grid.getSelectionModel().getSelected();
 	   if(this.currentCard==0)
 	   		wizard.headPanel.el.dom.firstChild.firstChild.data='';
 	   
@@ -1359,11 +1355,7 @@ Ext.onReady(function(){
        		if(!Ext.getCmp('idSubrubro').validate())
        			this.cardPanel.getLayout().setActiveItem(this.currentCard - 1)
 		  	
-       }
-		    //if(this.currentCard==4 && gridDetalleServicioContratado.getStore().getCount()==0)
-		    //	this.cardPanel.getLayout().setActiveItem(this.currentCard - 1);
-		    	
-       //}
+       }*/
 	});
 	
 	function radioHandler(check,checked){
