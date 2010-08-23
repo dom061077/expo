@@ -7,8 +7,8 @@ class Cheque {
 	Recibo recibo
 	Date vencimiento
 	static belongsTo = [recibo:Recibo]
-	
+	 
     static constraints = {
     	vencimiento(blank:true,nullable:true)
-    }
+    } 
 }
