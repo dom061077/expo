@@ -877,6 +877,14 @@ Ext.onReady(function(){
 							name:'cuit'
 						},{
 							xtype:'textfield',
+							id:'razonsocialId',
+							fieldLabel:'Razón Social',
+							width:260,
+							allowBlank:false,
+							msgTarget:'under',
+							name:'razonSocial'				
+						},{
+							xtype:'textfield',
 							id:'direccionfiscalId',
 							fieldLabel:'Dirección Fiscal',
 							allowBlank: false,
@@ -892,14 +900,6 @@ Ext.onReady(function(){
 							msgTarget:'under',
 							width:260,
 							name:'nombre'
-					},{
-							xtype:'textfield',
-							id:'razonsocialId',
-							fieldLabel:'Razón Social',
-							width:260,
-							allowBlank:false,
-							msgTarget:'under',
-							name:'razonSocial'				
 					},{
 						xtype:'radio',
 					 	id:'resinsradioId',
@@ -928,6 +928,7 @@ Ext.onReady(function(){
 					 },{
 					  xtype:'combo',
 					  fieldLabel:'I.V.A',
+					  id:'resinsValorCmbId',
 					  name:'resinsValorCmb',
 					  hiddenName:'resinsValor',
 					  valueField:'id',
@@ -941,30 +942,6 @@ Ext.onReady(function(){
 					  forceSelection:true,
 					  mode:'local',
 					  id:'resinsvalorId'
-					 },{
-						  xtype:'textarea',
-						  fieldLabel:'Observación',
-						  maxLength:255,
-						  width:200,
-						  name:'observacion',
-						  id:'observacionId'
-			          },{
-			        		xtype: 'combo',
-			        		id: 'idVendedor',
-			        		fieldLabel:'Vendedor',
-			        		allowBlank: false,
-			        		name: 'vendedor',
-			        		hiddenName:'vendedor_id',
-			        		displayField:'nombre',
-			        		hideMode:'offsets',
-			        		minListWidth:260,
-			        		layout:'card',
-			        		valueField: 'id',
-			        		mode: 'local',
-			        		store: vendedoresStore,
-			        		msgTarget:'under',
-			        		forceSelection:true,
-			        		width: 260
 					 }
 				]
 			}),
@@ -1177,6 +1154,23 @@ Ext.onReady(function(){
 								        					}
 								        			}
 								        		]
+									          },{
+									        		xtype: 'combo',
+									        		id: 'idVendedor',
+									        		fieldLabel:'Vendedor',
+									        		allowBlank: false,
+									        		name: 'vendedor',
+									        		hiddenName:'vendedor_id',
+									        		displayField:'nombre',
+									        		hideMode:'offsets',
+									        		minListWidth:260,
+									        		layout:'card',
+									        		valueField: 'id',
+									        		mode: 'local',
+									        		store: vendedoresStore,
+									        		msgTarget:'under',
+									        		forceSelection:true,
+									        		width: 260
 							        		}
 				]
 			}),
@@ -1276,7 +1270,14 @@ Ext.onReady(function(){
 												 	fields:['id','descripcion'],
 												 	data : [['2010','2010'],['2011','2011'],['2012','2012']]
 												 })
-											 	}
+												 },{
+													  xtype:'textarea',
+													  fieldLabel:'Observación',
+													  maxLength:255,
+													  width:200,
+													  name:'observacion',
+													  id:'observacionId'
+												 }		  		
 	        								]
 			}),
 			new Ext.ux.Wiz.Card({
@@ -1307,7 +1308,7 @@ Ext.onReady(function(){
 	
 	
 	wizard.on('nextstep',function(wizard){
-	   /*var sel = grid.getSelectionModel().getSelected();
+	   var sel = grid.getSelectionModel().getSelected();
 	   if(this.currentCard==0)
 	   		wizard.headPanel.el.dom.firstChild.firstChild.data='';
 	   
@@ -1352,10 +1353,47 @@ Ext.onReady(function(){
 			   }
 	   }
        if(this.currentCard==2){
-       		if(!Ext.getCmp('idSubrubro').validate())
-       			this.cardPanel.getLayout().setActiveItem(this.currentCard - 1)
+//       		if(!Ext.getCmp('idSubrubro').validate())
+//       			this.cardPanel.getLayout().setActiveItem(this.currentCard - 1)
+				
+				var flag=false;
+				if (Ext.getCmp('noinsradioId').checked)
+					flag=true;	
+				if (Ext.getCmp('exentoId').checked)
+					flag=true;
+				if (Ext.getCmp('consfinalId').checked){
+					flag=true;
+				}
+				if (Ext.getCmp('monotributoId').checked)
+					flag=true;
+				if (Ext.getCmp('resinsradioId').checked)
+					flag=true;
+				if (!flag){
+					Ext.MessageBox.show({
+						title:'Error',
+						msg:'Seleccione una condición de I.V.A',
+						icon:Ext.MessageBox.ERROR,
+						buttons:Ext.MessageBox.OK
+					});
+					this.cardPanel.getLayout().setActiveItem(this.currentCard - 1)
+				}
+				
+				if ((Ext.getCmp('exentoId').checked || Ext.getCmp('monotributoId').checked || Ext.getCmp('resinsradioId').checked) 
+					&& Ext.getCmp('cuitId').getValue()==''){
+					Ext.MessageBox.show({
+						title:'Error',
+						msg:'Si no es un Consumidor Final o responsable No Inscripto, el ingreso de C.U.I.T es obligatorio',
+						icon:Ext.MessageBox.ERROR,
+						button:Ext.MessageBox.OK
+					})	
+					this.cardPanel.getLayout().setActiveItem(this.currentCard - 1)
+				}
+		   
+		   
+		   
+		   
 		  	
-       }*/
+       }
 	});
 	
 	function radioHandler(check,checked){
@@ -1415,48 +1453,6 @@ Ext.onReady(function(){
 		alert(datos.datosempresaId.id);
 		alert(datos.datosempresaId.localidadFiscal);
 		*/
-		if (datos.exposicionId.resinsValor==0 && datos.exposicionId.noinsValor ){
-			Ext.MessageBox.show({
-				title:'Error',
-				msg:'Ingrese una valor mayor a cero para I.V.A Res. Ins.',
-				icon:Ext.MessageBox.ERROR,
-				buttons:Ext.MessageBox.OK
-			});
-			return false;
-		}
-		
-		var flag=false;
-		if (Ext.getCmp('noinsradioId').checked)
-			flag=true;	
-		if (Ext.getCmp('exentoId').checked)
-			flag=true;
-		if (Ext.getCmp('consfinalId').checked){
-			flag=true;
-		}
-		if (Ext.getCmp('monotributoId').checked)
-			flag=true;
-		if (Ext.getCmp('resinsradioId').checked)
-			flag=true;
-		if (!flag){
-			Ext.MessageBox.show({
-				title:'Error',
-				msg:'Seleccione una condición de I.V.A',
-				icon:Ext.MessageBox.ERROR,
-				buttons:Ext.MessageBox.OK
-			});
-			return false;
-		}
-		
-		if ((Ext.getCmp('exentoId').checked || Ext.getCmp('monotributoId').checked || Ext.getCmp('resinsradioId').checked) 
-			&& Ext.getCmp('cuitId').getValue()==''){
-			Ext.MessageBox.show({
-				title:'Error',
-				msg:'Si no es un Consumidor Final o responsable No Inscripto, el ingreso de C.U.I.T es obligatorio',
-				icon:Ext.MessageBox.ERROR,
-				button:Ext.MessageBox.OK
-			})	
-			return false;
-		}
 		var storeDetalle = gridDetalleServicioContratado.getStore();
 		var storeOtrosConceptos = gridOtrosConceptos.getStore();
 		var detallejsonArr=[];
