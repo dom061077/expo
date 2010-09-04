@@ -14,7 +14,7 @@
 				<textElement>
 					<font fontName="Arial" size="7"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["SECTOR:  "+$F{sector.nombre}+" -  LOTE:  "+($F{lote.nombre}==null?"":$F{lote.nombre})]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["SECTOR:  "+($F{sector.nombre}==null?"":$F{sector.nombre})+" -  LOTE:  "+($F{lote.nombre}==null?"":$F{lote.nombre})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
