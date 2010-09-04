@@ -139,6 +139,7 @@ Ext.onReady(function(){
 						window.location='../logout/index';
 					else{
 						if(respuesta.success){
+								
 								Ext.getCmp('empresaId').setValue(respuesta.data.id);
 								Ext.getCmp('nombreId').setValue(respuesta.data.nombre);
 								Ext.getCmp('razonsocialId').setValue(respuesta.data.razonSocial);
@@ -182,6 +183,31 @@ Ext.onReady(function(){
 	            				Ext.getCmp('idSubrubro').setValue(respuesta.data.subrubro);
 	            				Ext.getCmp('idSubrubro').hiddenField.value=respuesta.data.subrubroId;
 								Ext.getCmp('idDnirep').setValue(respuesta.data.dniRep);
+								if(respuesta.data.conordenes){
+										Ext.getCmp('nombreId').el.dom.readOnly = true;
+										Ext.getCmp('razonsocialId').el.dom.readOnly = true;
+										Ext.getCmp('cuitId').el.dom.readOnly = true;
+										Ext.getCmp('direccionId').el.dom.readOnly = true;
+										Ext.getCmp('direccionfiscalId').el.dom.readOnly = true;
+										Ext.getCmp('telefono1Id').el.dom.readOnly = true;
+										Ext.getCmp('telefono2Id').el.dom.readOnly = true;
+										Ext.getCmp('idProvincia').el.dom.readOnly = true;
+										Ext.getCmp('idLocalidad').el.dom.readOnly = true;
+										
+			            				Ext.getCmp('idVendedor').el.dom.readOnly = true;
+			            				Ext.getCmp('idNombreRepresentante').el.dom.readOnly = true;
+			            				Ext.getCmp('idTelefonoRepresentante1').el.dom.readOnly = true;
+			            				Ext.getCmp('idTelefonoRepresentante2').el.dom.readOnly = true;
+			            				Ext.getCmp('idTelefonoRepresentante3').el.dom.readOnly = true;
+			            				Ext.getCmp('idEmail').el.dom.readOnly = true;
+			            				Ext.getCmp('idSitioweb').el.dom.readOnly = true;
+			            				
+			            				Ext.getCmp('idCodigopostal').el.dom.readOnly = true;
+			            				Ext.getCmp('idCargorep').el.dom.readOnly = true;
+			            				Ext.getCmp('idSubrubro').el.dom.readOnly = true;
+										Ext.getCmp('idDnirep').el.dom.readOnly = true;
+									
+								}
 								
 						
 						}else{
@@ -1496,13 +1522,13 @@ Ext.onReady(function(){
 			url:'generarordenreserva',
 			method:'POST',
 			params:{
-				id:datos.datosempresaId.id,
-				'empresa.nombre':datos.datosempresaId.nombre,
+				id:datos.exposicionId.id,
+				'empresa.nombre':datos.exposicionId.nombre,
 				'empresa.codigoPostal':datos.datosempresaId.codigoPostal,
 				'empresa.nombreRepresentante':datos.datoscontactoId.nombreRepresentante,
 				'empresa.telefono1':datos.datosempresaId.telefono1,
 				'empresa.telefono2':datos.datosempresaId.telefono2,
-				'empresa.cuit':datos.datosempresaId.cuit,
+				'empresa.cuit':datos.exposicionId.cuit,
 				'empresa.direccion':datos.datosempresaId.direccion,
 				'empresa.telefonoRepresentante1':datos.datoscontactoId.telefonoRepresentante1,
 				'empresa.telefonoRepresentante2':datos.datoscontactoId.telefonoRepresentante2,
@@ -1515,13 +1541,13 @@ Ext.onReady(function(){
 				'empresa.cargoRep':datos.datoscontactoId.cargoRep,
 				'empresa.dniRep':datos.datoscontactoId.dniRep,
 				'empresa.sitioWeb':datos.datosempresaId.sitioWeb,
-				'empresa.razonSocial':datos.datosempresaId.razonSocial,
-				'empresa.direccionFiscal':datos.datosempresaId.direccionFiscal,
+				'empresa.razonSocial':datos.exposicionId.razonSocial,
+				'empresa.direccionFiscal':datos.exposicionId.direccionFiscal,
 				'empresa.localidad.id':datos.datosempresaId.localidad_id,
 				//'empresa.localidadFiscal':datos.datosempresaId.localidadFiscal,
 				//'empresa.provinciaFiscal':datos.datosempresaId.provinciaFiscal,
 				'empresa.codigoPostal':datos.datosempresaId.codigoPostal,
-				'empresa.vendedor.id':datos.exposicionId.vendedor_id,
+				'empresa.vendedor.id':datos.datosempresaId.vendedor_id,
 				detallejson:detallejsonStr,
 				otrosconceptosjson:otrosconceptosjsonStr,
 				productosjson:productosjsonStr,
@@ -1534,7 +1560,7 @@ Ext.onReady(function(){
 				monotributoCheck:(datos.exposicionId.monotributo=='on'?true:false),
 				porcentajeResIns:datos.exposicionId.resinsValor,
 				porcentajeResNoIns:0,
-				observacion:datos.exposicionId.observacion
+				observacion:datos.datoscontactoId.observacion
 			},
 			success: function(resp,opt){
 				var respuesta = Ext.decode(resp.responseText);
@@ -1552,12 +1578,18 @@ Ext.onReady(function(){
 					if(respuesta.success)
 						window.location='ordenreservareporte?target=_blank&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+respuesta.ordenid;
 					else
-						Ext.MessageBox.show({
-							title:'error',
-							msg:respuesta.msg,
-							icon:Ext.MessageBox.ERROR,
-							buttons:Ext.MessageBox.OK
-						});
+						var msg="";
+						if(respuesta.errors){
+							for(var i=0;i<respuesta.errors.length;i++){
+								msg=msg+respuesta.errors[i].title+'\r\n';
+							}
+							Ext.MessageBox.show({
+								title:'Error',
+								msg:msg,
+								icon:Ext.MessageBox.ERROR,
+								buttons:Ext.MessageBox.OK
+							});
+						}
 				}
 			},
 			failure: function(resp,opt){
@@ -1576,8 +1608,12 @@ Ext.onReady(function(){
 					Ext.MessageBox.show({
 						title:'Error',
 						msg:'Se produjo un error al intentar generar la orden de reserva'
+						,buttons:Ext.MessageBox.OK
+						,fn:function(btn){
+						}
 					});
 				}
+				
 			}
 		});
 		

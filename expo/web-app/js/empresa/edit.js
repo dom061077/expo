@@ -457,7 +457,7 @@
 								        	},{
 								        	xtype: 'textfield',
 								        	fieldLabel: 'C.U.I.T',
-								        	allowBlank: false,
+								        	//allowBlank: false,
 								        	msgTarget:'under',
 								        	layout:'form',
 								        	name: 'cuit'

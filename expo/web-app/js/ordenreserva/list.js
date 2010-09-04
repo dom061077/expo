@@ -7,7 +7,7 @@ Ext.onReady(function(){
 		remoteSort:true,
 		root: 'rows',
 		url:'listjson',
-		fields:['id','numero','fechaAlta','total','totalCancelado','saldo','anio','expoNombre','nombre','sector','lote'],
+		fields:['id','numero','fechaAlta','subTotal','total','totalCancelado','saldo','anio','expoNombre','nombre','sector','lote'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -56,7 +56,8 @@ Ext.onReady(function(){
 		columns:[
 					{header:"Empresa",dataIndex:'nombre',width:200,sortable:true},
 					{header:"Sector",dataIndex:'sector',width:200,sortable:true},
-					{header:"Lote",dataIndex:'lote',width:100,hidden:false,sortable:true},					
+					{header:"Lote",dataIndex:'lote',width:100,hidden:false,sortable:true},
+					{header:"Sub Total",dataIndex:'subTotal',width:100,renderer:currencyRender},					
 					{header:"Total",dataIndex:'total',width:80,renderer:currencyRender,sortable:true},
 					{header:"Total Cancelado",dataIndex:'totalCancelado',width:100,renderer:currencyRender},
 					{header:"Saldo",dataIndex:'saldo',width:80,renderer:currencyRender},					
