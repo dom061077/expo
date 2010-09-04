@@ -28,7 +28,7 @@ Ext.onReady(function (){
 				width:90,
 				editor: new Ext.form.NumberField({
 					allowBlank:false,
-					allowNegative:false,
+					//allowNegative:false,
 					maxValue:1000000
 				})
 			},{
