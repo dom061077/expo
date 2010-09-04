@@ -113,7 +113,7 @@ class ReciboController {
 		log.debug("DETALLE DE ORDEN DE RESERVA")
 		recibo.ordenReserva.detalle.each{
 			log.debug(it.lote?.sector?.nombre)
-			log.debug(it.sector.nombre)
+			log.debug(it.sector?.nombre)
 		}
 		recibo.ordenReserva.otrosconceptos.each{
 			log.debug(it.descripcion)

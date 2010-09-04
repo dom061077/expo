@@ -204,6 +204,7 @@ class OrdenReservaController {
    			throw new Exception("empresaInstance errores: "+empresaInstance.errors.allErrors)
    		else
    			log.debug("SE SALVO BINE!!!!!")*/
+		def errorsList=[]   
    		try{
 			ordenReservaInstance=ordenReservaService.generarOrdenReserva(ordenReservaInstance,empresaInstance)
 			render(contentType: "text/json"){
@@ -211,9 +212,32 @@ class OrdenReservaController {
 				ordenid ordenReservaInstance.id
 			}
 		}catch(OrdenReservaException e){
+			if(e.ordenReserva.hasErrors()){
+				e.ordenReserva.errors.allErrors.each {error->
+					error.codes.each{
+						if(g.message(code:it)!=it)
+							errorsList.add(g.message(code:it))
+					}
+				}	
+			}else{
+				if(e.ordenReserva.empresa.hasErrors()){
+					e.ordenReserva.empresa.errors.allErrors.each{error->
+						error.codes.each{
+							if(g.message(code:it)!=it)
+								errorsList.add(g.message(code:it))
+						}
+					}
+				}else{
+					errorsList.add(e.message)
+				}
+			}
 			render(contentType: "text/json"){			
 				success false
-				msg e.message
+				errors{
+					errorsList.each { 
+						title it
+					}
+				}
 			}
 		}   	
     }
@@ -403,6 +427,7 @@ class OrdenReservaController {
         				saldo=it.ordenReserva.total-totalCancelado
     					row(id:it.ordenReserva.id,numero:it.ordenReserva.numero,fechaAlta:it.ordenReserva.fechaAlta,total:it.ordenReserva.total,anio:it.ordenReserva.anio
     							,expoNombre:it.ordenReserva.expo.nombre
+								,subTotal:it.subTotal
         						,sector:it.sector?.nombre
         						,lote:it.lote?.nombre
         						,nombre:it.ordenReserva.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
@@ -418,6 +443,7 @@ class OrdenReservaController {
         				log.debug("SALDO: $saldo total cancelado: $totalCancelado")
     					row(id:it.id[0],numero:it.numero[0],fechaAlta:it.fechaAlta[0],total:it.total[0],anio:it.anio[0],expoNombre:it.expo.nombre[0]
         						,sector:""
+								,subTotal:0
         						,lote:""
         						,nombre:it.empresa.nombre[0],totalCancelado:totalCancelado,saldo:saldo)        				
     				}
@@ -498,7 +524,7 @@ class OrdenReservaController {
 	 		 sheet.addCell(new Label(3,fil,(Boolean.parseBoolean(params.anulada)?"SOLO ORDENES ANULADAS":"") ))
 	 		 fil=fil+1
 	 	 }
-	 	 sheet.addCell(new Label(0, fil, "Empresa"))
+	 	 sheet.addCell(new Label(0, fil, "Nombre Comercial"))
 	 	 sheet.addCell(new Label(1, fil, "Sector"))
 	 	 sheet.addCell(new Label(2, fil, "Lote"))
 	 	 sheet.addCell(new Label(3, fil, "Total"))
@@ -508,6 +534,22 @@ class OrdenReservaController {
 	 	 sheet.addCell(new Label(7, fil, "Año"))
 	 	 sheet.addCell(new Label(8, fil, "Número Orden"))	 	 
 	 	 sheet.addCell(new Label(9, fil, "Fecha"))
+		 sheet.addCell(new Label(10,fil, "Razon Social"))
+		 sheet.addCell(new Label(11,fil, "C.U.I.T"))
+		 sheet.addCell(new Label(12,fil, "Direccion")) 
+		 sheet.addCell(new Label(13,fil, "E-mail"))
+		 sheet.addCell(new Label(14,fil, "Nombre Representante"))
+		 sheet.addCell(new Label(15,fil, "D.N.I Representante"))
+		 sheet.addCell(new Label(16,fil, "Telefono 1 Representante"))
+		 sheet.addCell(new Label(17,fil, "Telefono 2 Representante"))
+		 sheet.addCell(new Label(18,fil, "Telefono 3 Representante"))
+		 sheet.addCell(new Label(19,fil, "Sitio Web"))
+		 sheet.addCell(new Label(20,fil, "Rubro"))
+		 sheet.addCell(new Label(21,fil, "Sub-Rubro"))
+		 sheet.addCell(new Label(22,fil, "Vendedor"))
+		 sheet.addCell(new Label(23,fil, "Provincia"))
+		 sheet.addCell(new Label(24,fil, "Localidad"))
+		 sheet.addCell(new Label(25,fil, "Observacion"))
 		 DateFormat customDateFormat = new DateFormat ("d/m/yy h:mm") 
 		 WritableCellFormat dateFormat = new WritableCellFormat (customDateFormat)                    
 		 fil=fil+1
@@ -529,7 +571,24 @@ class OrdenReservaController {
     					sheet.addCell(new Label(6,fil,it.ordenReserva.expo.nombre))
     					sheet.addCell(new Number(7,fil,it.ordenReserva.anio))
     					sheet.addCell(new Number(8,fil,it.ordenReserva.numero))
-    					sheet.addCell(new DateTime (9,fil,it.ordenReserva.fechaAlta,dateFormat))
+    					sheet.addCell(new DateTime(9,fil,it.ordenReserva.fechaAlta,dateFormat))
+						sheet.addCell(new Label(10,fil,it.ordenReserva.empresa.razonSocial))
+						sheet.addCell(new Label(11,fil,it.ordenReserva.empresa.cuit))
+						sheet.addCell(new Label(12,fil,it.ordenReserva.empresa.direccion))
+						sheet.addCell(new Label(13,fil,it.ordenReserva.empresa.email))
+						sheet.addCell(new Label(14,fil,it.ordenReserva.empresa.nombreRepresentante))
+						sheet.addCell(new Label(15,fil,it.ordenReserva.empresa.dniRep))
+						sheet.addCell(new Label(16,fil,it.ordenReserva.empresa.telefonoRepresentante1))
+						sheet.addCell(new Label(17,fil,it.ordenReserva.empresa.telefonoRepresentante2))
+						sheet.addCell(new Label(18,fil,it.ordenReserva.empresa.telefonoRepresentante3))
+						sheet.addCell(new Label(19,fil,it.ordenReserva.empresa.sitioWeb))
+						sheet.addCell(new Label(20,fil,it.ordenReserva.empresa.subrubro?.rubro?.nombreRubro))
+						sheet.addCell(new Label(21,fil,it.ordenReserva.empresa.subrubro?.nombreSubrubro))
+						sheet.addCell(new Label(22,fil,it.ordenReserva.empresa.vendedor.nombre))
+						sheet.addCell(new Label(23,fil,it.ordenReserva.empresa.localidad?.provincia?.nombre))
+						sheet.addCell(new Label(24,fil,it.ordenReserva.empresa.localidad?.nombreLoc))
+						sheet.addCell(new Label(25,fil,it.ordenReserva.observacion))
+						
     					fil=fil+1    					    					    					    					    					    					    					
     				}else{
     					it[0].recibos.each{r->

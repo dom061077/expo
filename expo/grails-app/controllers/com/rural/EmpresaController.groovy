@@ -127,7 +127,11 @@ class EmpresaController {
     	log.debug("Params: "+params)
     	
     	def empresaInstance = Empresa.get(params.id)
+		def tieneordenes=false
+	
     	if (empresaInstance){
+				if (empresaInstance.ordenes?.size()>0)
+					tieneordenes=true
 		    	log.debug("empresaInstance encontrada: "+empresaInstance.id+" nombre: "+empresaInstance.nombre);
 		    	render(contentType:'text/json'){
 		    		success true
@@ -161,6 +165,7 @@ class EmpresaController {
 		    			 ,cargoRep:empresaInstance.cargoRep
 		    			 ,email:empresaInstance.email
 		    			 ,sitioWeb:empresaInstance.sitioWeb
+						 ,conordenes:tieneordenes
 		    			)
 		    	}
     	}else{
