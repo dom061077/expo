@@ -23,9 +23,7 @@ Ext.onReady(function(){
 		                    		window.location='../logout/index';
 	                    }
 	                   }
-				
 			}							
-		
 	});
 	
 
@@ -224,7 +222,7 @@ Ext.onReady(function(){
 		renderTo:'ordenreserva_form',
 		id:'formSearchId',
 		title:'Ordenes de Reserva',
-		width:650,
+		width:680,
 		frame:true,
 		items:[	
 					new Ext.form.ComboBox({
@@ -244,6 +242,7 @@ Ext.onReady(function(){
 										value:'empresa.nombre',
 										fieldLabel:'Criterios',
 										forceSelection:true
+										
 										}),	
 				{
 					xtype:'checkbox',
@@ -255,20 +254,66 @@ Ext.onReady(function(){
 					
 					items:[
 						{
-							columnWidth: .4,
+							columnWidth: .3,
 							layout:'form',
+							width:50,
 							items:{
-								xtype:'textfield',
-								name:'searchCriteria',
-								id:'searchCriteriaId',
-								fieldLabel:'Valor Criterio'
+								xtype:'combo',
+								mode:'local',
+								name:'campos',
+								id:'campoId',
+								hideLabel:true,
+								valueField:'idcampo',
+								displayField:'labelcampo',
+								store: new Ext.data.SimpleStore({
+									id:0,
+									fields:['idcampo','labelcampo'],
+									data:[['nombre','Nom.Empresa'],['sector','Sector'],['lote','Lote'],['expo','Exposición'],['numero','Número']]
+								}),
+								boxMaxWidth:100
 							}
 						},{
-							columnWidth: .4,
+							columnWidth: .3,
+							layout:'form',
+							items:{
+								xtype:'combo',
+								mode:'local',
+								name:'condiciones',
+								id:'condicionesId',
+								valueField:'idcond',
+								displayField:'nombrecond',
+								store: new Ext.data.SimpleStore({
+									id:0,
+									fields:['idcond','nombrecond'],
+									data:[['eq','Igual a'],['ne','No es igual a'],['cn','Contiene'],['nc','No Contiene']]
+								}),
+								boxMaxWidth:100,
+								msgTarget:'under',
+								hideLabel:true
+							}
+							
+						},{
+							columnWidth: .3,
+							layout:'form',
+							items:{
+										xtype:'textfield',
+										hideLabel:true,
+										listeners:{
+											click: function(){
+												ordenStore.load({
+														params:{'fieldSearch':Ext.getCmp('combocriteriosId').getValue(),'start':0,'limit':10
+															,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
+															,'anulada':Ext.getCmp('soloanuladasId').getValue()
+															}
+													});
+											}
+										}
+							}
+						},{
+							columnWidth: .2,
 							layout:'form',
 							items:{
 										xtype:'button',
-										text:'Buscar',
 										listeners:{
 											click: function(){
 												ordenStore.load({
@@ -281,6 +326,7 @@ Ext.onReady(function(){
 										}
 							}
 						}
+						
 					]
 				},grid
 		

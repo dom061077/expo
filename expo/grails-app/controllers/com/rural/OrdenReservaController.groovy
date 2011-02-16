@@ -248,6 +248,7 @@ class OrdenReservaController {
     	def ordenReservaInstance = OrdenReserva.get(params.id)
     	log.debug(ordenReservaInstance.empresa.nombre)
     	log.debug(ordenReservaInstance.empresa.vendedor.nombre)
+    	log.debug "SUBTOTAL DE ORDEN DE RESERVA: "+ordenReservaInstance.subtotalDetalle
     	ordenReservaInstance.detalle.each{
     		log.debug(it)
     		log.debug(it.sector?.nombre)
@@ -425,6 +426,7 @@ class OrdenReservaController {
         						totalCancelado=totalCancelado+it.total
         				}
         				saldo=it.ordenReserva.total-totalCancelado
+        				
     					row(id:it.ordenReserva.id,numero:it.ordenReserva.numero,fechaAlta:it.ordenReserva.fechaAlta,total:it.ordenReserva.total,anio:it.ordenReserva.anio
     							,expoNombre:it.ordenReserva.expo.nombre
 								,subTotal:it.subTotal
