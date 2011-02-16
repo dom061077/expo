@@ -15,6 +15,16 @@ Ext.onReady(function(){
 			{header:"id",dataIndex:'id',hidden:true},
 			{header:"Nombre de Exposición",width:200,dataIndex:"nombre"}
 		],
+		tbar:[{
+			text:'Pre-visualizar',
+			handler:function(){
+				var sm = gridexposiciones.getSelectionModel();
+				var sel = sm.getSelected();
+				if(sm.hasSelection()){
+					open('logopreview?id='+sel.data.id,'_blank');
+				}
+			}
+		}],
 		stripRows:true,
 		height:250,
 		width:460,

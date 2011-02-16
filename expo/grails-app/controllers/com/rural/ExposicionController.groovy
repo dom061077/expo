@@ -3,6 +3,7 @@ import grails.converters.JSON
 import org.springframework.web.multipart.MultipartHttpServletRequest
 import java.io.FileOutputStream
 
+
 class ExposicionController {
 	
 
@@ -151,4 +152,35 @@ class ExposicionController {
     		}
     	}
     }
+	
+	def logopreview = {
+		log.info "INGRESANDO AL METODO logopreview DEL CONTROLADOR ExposicionController"	
+		log.debug "PARAMETROS $params"
+		def exposicionInstance = Exposicion.get(params.id)
+		def list = new ArrayList()
+		if(exposicionInstance){
+			log.debug("EXPOSICION ENCONTRADA")
+			def pathtofile = servletContext.getRealPath("/reports/images")+"/"+exposicionInstance.nombre.trim()+".jpg"
+			def reportDirPath = servletContext.getRealPath("/reports")
+			if (exposicionInstance){
+				FileOutputStream foutput = new FileOutputStream(new File(pathtofile))
+				if(exposicionInstance.image){
+					foutput.write(exposicionInstance.image)
+					foutput.flush()
+				}
+			}
+			params.put("reportsDirPath",reportDirPath)
+			params.put("logo",exposicionInstance.nombre.trim()+".jpg")	
+			params.put("_format","PDF")
+			params.put("_name","exposicion")
+			params.put("_file","previewlogo")
+			chain(controller:'jasper',action:'index',model:[data:list],params:params)
+		}else{
+			log.debug("EXPOSICION NO ENCONTRADA")
+			render(contentType:"text/json"){
+				success false
+				msg "Exposición no encontrada."
+			}
+		}
+	}
 }
