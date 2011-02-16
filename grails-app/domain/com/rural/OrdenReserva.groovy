@@ -21,7 +21,7 @@ class OrdenReserva {
 	Float porcentajeResIns=0
 	Float porcentajeResNoIns=0
 	String observacion
-	//Double subtotalDetalle
+	Double subtotalDetalle
 	
 	Long numero
 	Date fechaAlta
@@ -34,9 +34,9 @@ class OrdenReserva {
     }
     
     
-    /*static mapping = {
-    	subtotalDetalle(formula:"select sum(sub_total) from detalle_servicio_contratado where orden_reserva_id=id")
-    }*/
+    static mapping = {
+    	subtotalDetalle formula:"(select sum(d.sub_total) from detalle_servicio_contratado d where d.orden_reserva_id=id)"
+    }
     
     def sigNumero(){
     	def c = OrdenReserva.createCriteria()
