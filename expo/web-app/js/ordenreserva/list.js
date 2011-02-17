@@ -217,10 +217,10 @@ Ext.onReady(function(){
 		
 	});
 	var camposStore= new Ext.data.SimpleStore({
-											id: 0,
-											fields:['myId','displayText'],
-											data:[['empresa.nombre','Nombre Empresa'],['numero','Por Num.Orden']]
-										});
+									id:0,
+									fields:['idcampo','labelcampo'],
+									data:[['nombre','Nom.Empresa'],['sector','Sector'],['lote','Lote'],['expo','Exposición'],['numero','Número'],['anulada','Anulada']]
+								})
 	var condicionesStore=new Ext.data.SimpleStore({
 									id:0,
 									fields:['idcond','nombrecond'],
@@ -257,11 +257,7 @@ Ext.onReady(function(){
 								labelWidth:60,
 								valueField:'idcampo',
 								displayField:'labelcampo',
-								store: new Ext.data.SimpleStore({
-									id:0,
-									fields:['idcampo','labelcampo'],
-									data:[['nombre','Nom.Empresa'],['sector','Sector'],['lote','Lote'],['expo','Exposición'],['numero','Número'],['anulada','Anulada']]
-								}),
+								store: camposStore,
 								anchor:'95%'
 							}
 						},{
@@ -337,11 +333,7 @@ Ext.onReady(function(){
 								labelWidth:60,
 								valueField:'idcampo',
 								displayField:'labelcampo',
-								store: new Ext.data.SimpleStore({
-									id:0,
-									fields:['idcampo','labelcampo'],
-									data:[['nombre','Nom.Empresa'],['sector','Sector'],['lote','Lote'],['expo','Exposición'],['numero','Número'],['anulada','Anulada']]
-								}),
+								store: camposStore,
 								anchor:'95%'
 							}
 						},{
@@ -384,6 +376,87 @@ Ext.onReady(function(){
 						}
 
 					]
+				},{
+					layout:'column',
+					items:[
+						{
+							columnWidth: .3,
+							layout:'form',
+							width:50,
+							items:{
+								xtype:'combo',
+								mode:'local',
+								name:'campos',
+								id:'campoIdFiltro3',
+								hideLabel:false,
+								fieldLabel:'Filtro 3',
+								labelWidth:60,
+								valueField:'idcampo',
+								displayField:'labelcampo',
+								store: camposStore,
+								anchor:'95%'
+							}
+						},{
+							columnWidth: .2,
+							layout:'form',
+							items:{
+								xtype:'combo',
+								mode:'local',
+								name:'condiciones',
+								id:'condicionesIdFiltro3',
+								valueField:'idcond',
+								displayField:'nombrecond',
+								store: condicionesStore,
+								boxMaxWidth:100,
+								msgTarget:'under',
+								hideLabel:true,
+								anchor:'95%'
+							}
+							
+						},{
+							columnWidth: .3,
+							layout:'form',
+							items:{
+										xtype:'textfield',
+										hideLabel:true,
+										id:'searchStringIdFiltro3',
+										anchor:'95%'
+										/*,
+										listeners:{
+											click: function(){
+												ordenStore.load({
+														params:{'fieldSearch':Ext.getCmp('combocriteriosId').getValue(),'start':0,'limit':10
+															,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
+															,'anulada':Ext.getCmp('soloanuladasId').getValue()
+															}
+													});
+											}
+										}*/
+							}
+						}
+
+					]					
+				},{
+						xtype:'button',
+						text:'Buscar',
+						listeners:{
+							click: function(){
+								ordenStore.load({
+										params:{
+											'campos':[Ext.getCmp('campoIdFiltro1').getValue()
+														,Ext.getCmp('campoIdFiltro2').getValue()
+														,Ext.getCmp('campoIdFiltro3').getValue()],
+											'condiciones':[Ext.getCmp('condicionesIdFiltro1')
+														,Ext.getCmp('condicionesIdFiltro2').getValue()
+														,Ext.getCmp('condicionesIdFiltro3').getValue()],
+											'searchString':[Ext.getCmp('searchStringIdFiltro1').getValue()
+														,Ext.getCmp('searchStringIdFiltro2').getValue()
+														,Ext.getCmp('searchStringIdFiltro3').getValue()
+													]
+										}
+								});
+							}
+						}
 				},grid
 		
 		]

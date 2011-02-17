@@ -316,6 +316,8 @@ class OrdenReservaController {
     
     	}
     }
+    
+    
 
     List  consultar(params){
     	log.debug("Dentro del closure consultar")
@@ -329,57 +331,61 @@ class OrdenReservaController {
     	            	List list = new ArrayList()
     	            	HashMap parameters = new HashMap()
     	            	def detalleservcontratado=null
-    	            	if(params.fieldSearch=="numero"){
-    	            		ordenes = OrdenReserva.findAll("from OrdenReserva o left outer join o.detalle det where det is null and o.numero= :numero and o.anulada=:anulada"
-    	            					,[numero:new Long(params.searchCriteria),anulada:Boolean.parseBoolean(params.anulada)])
-    	            		list.addAll(ordenes) 
-    	            	}else{
-    	            		log.debug("INGRESO POR EL ELSE DEL LA PREGUNTA DEL FIELDSEARCH")
-    	        			hqlstr="from OrdenReserva o left outer join o.detalle det where det is null and o.anulada=:anulada"
-    	        	    	parameters.put('anulada',Boolean.parseBoolean(params.anulada))			
-    	        	   		detalle = DetalleServicioContratado.createCriteria().list([fetch:[lote:'eager']]){
-    	            			log.debug("DENTRO DEL CLOSURE DE CONSULTA POR DETALLESERVICIO CONTRATADO")
-    	        				and{
-    	        					ordenReserva{
-    	        						and{
-    	        		    				eq('anulada',Boolean.parseBoolean(params.anulada))
-    	        		    				if(params.fieldSearch=="empresa.nombre"){
-    	        		    					hqlstr=hqlstr+" and o.empresa.nombre like :empresa_nombre"
-    	        		    					parameters.put('empresa_nombre','%'+params.searchCriteria+'%')
-    	        		        				empresa{
-    	        		        					like('nombre','%'+params.searchCriteria+'%')
-    	        		        				}
-    	        		    				}
-    	        						}
-    	        					}
-    	            				if(params.fieldSearch=="sector.nombre"){
-    	            					hqlstr=hqlstr+" and sector.nombre like '%'+:sector_nombre+'%'"
-    	            					parameters.put('sector_nombre',params.searchCriteria)
-    	            					sector{
-    	            						like('nombre',params.searchCriteria)
-    	            					}
-    	            				}
-    	            				if(params.fieldSearch=="lote.nombre"){
-    	            					hqlstr=hqlstr+" and lote.nombre like '%'+:lote_nombre+'%'"
-    	            					parameters.put('lote_nombre',params.searchCriteria)
-    	            					lote{
-    	            						like('nombre',params.searchCtiteria)
-    	            					}
-    	            					
-    	            				}
-    	            		    	/*if(params.fieldSearch=='fechaalta'){
-    	            		    		hqlstr=hqlstr+" and fechaAlta = :fechaalta"
-    	            		    		parameters.put('fechaalta',new Date())
-    	            		    		eq('fechaAlta',params.fechaalta)
-    	            		    	} */   					
-    	        				}
-    	        			}
-    	            		log.debug("antes de hacer el findAll con hql")
-    	        	   		ordenes = OrdenReserva.findAll(hqlstr,parameters)
-    	        			log.debug("termina de hacer un findAll con hql")
-    	        			list.addAll(ordenes)
-    	        			list.addAll(detalle)
-    	            	}			
+    	            	def i
+    	            	def valorSearch
+    	            	String condicion
+    	            	def campo 
+    	            	hqlstr="from OrdenReserva o left outer join o.detalle det where det is null "
+    	            	
+    	        			
+	        	   		detalle = DetalleServicioContratado.createCriteria().list([fetch:[lote:'eager']]){
+	            				log.debug("DENTRO DEL CLOSURE DE CONSULTA POR DETALLESERVICIO CONTRATADO")
+		    	            	for(i = 0; i<params.campos.size();i++){
+		    	            		valorSearch = params.searchString[i].toString()
+		    	            		condicion = params.condiciones[i].toString()
+		    	            		log.debug "condicion registrada: $condicion"
+		    	            		campo = params.campos[i].toString()
+		    	            		and{
+			    	            		if(!campo.trim().equals("") && !condicion.trim().equals("")
+			    	            			&& !valorSearch.trim().equals("")){
+											if(campo.trim().equals("nombre")){
+												ordenReserva{
+													empresa{
+														"${condicion}" ("nombre",valorSearch)
+														hqlstr=hqlstr+" and empresa.nombre $condicion $valorSearch"
+													}
+												}		    	            				
+											}
+											if(campo.trim().equals("sector")){
+												sector{
+													condicion("nombre",valorSearch)
+													hqlstr=hqlstr+" and sector.nombre $condicion $valorSearch "
+												}
+											}
+											if(campo.equals("expo") || campo.equals("numero") || campo.trim().equals("anulada")){
+											   ordenReserva{
+											   		if(campo.trim().equals("expo")){
+											   			expo{
+											   				condicion("nombre",valorSearch)
+											   				hqlstr=hqlstr+" and expo.nombre $condicion $valorSearch"
+											   			}
+											   		}else{
+										   				condicion(params.campos[i],valorSearch)
+										   				hqlstr=hqlstr+" and $campo $condicion $valorSearch"
+											   		}
+											   				
+											   }
+										   }	
+			   	            			}
+			   	            		}	
+		    	            	}
+	            			
+	        			}
+	            		log.debug("antes de hacer el findAll con hql")
+	        	   		ordenes = OrdenReserva.findAll(hqlstr,parameters)
+	        			log.debug("termina de hacer un findAll con hql")
+	        			list.addAll(ordenes)
+	        			list.addAll(detalle)
     	            	log.debug("TERMINO DE AGREGAR AL LIST ordenes y detalle")
     	            	if(params.sort){
     	            		if(params.sort=="nombre"){
@@ -410,7 +416,10 @@ class OrdenReservaController {
     	log.info("INGRESANDO AL METODO listjson DEL CONTROLADOR OrdenReservaController")
     	log.debug("PARAMETROS $params")
     	log.debug("PARAMETRO ANULADA: "+Boolean.parseBoolean(params.anulada))
-    	def list = consultar(params)
+    	def list =  consultar(params)
+    	
+    	log.debug "Campos: "+params.campos?.size()+", Condiciones: "+params.condiciones?.size()+",searchString: "+params.searchString?.size()
+    	
     	log.debug("Objecto list devuelo por el closure consultar: "+list.size())
     	Double totalCancelado=0
     	Double saldo=0
