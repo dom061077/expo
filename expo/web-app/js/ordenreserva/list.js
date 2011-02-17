@@ -216,6 +216,20 @@ Ext.onReady(function(){
 		dir = sortInfo.direction;
 		
 	});
+	var camposStore= new Ext.data.SimpleStore({
+											id: 0,
+											fields:['myId','displayText'],
+											data:[['empresa.nombre','Nombre Empresa'],['numero','Por Num.Orden']]
+										});
+	var condicionesStore=new Ext.data.SimpleStore({
+									id:0,
+									fields:['idcond','nombrecond'],
+									data:[['eq','Igual a'],['ne','No es igual a'],['gt','Mayor que']
+										  ,['lt','Menor que'],['ge','Mayor o igual que']
+										  ,['le','Menor o igual que']
+										  ,['cn','Contiene']
+										  ,['nc','No Contiene']]
+								});									
 	
 	var formSearch = new  Ext.form.FormPanel({
 		url:'search',
@@ -225,31 +239,7 @@ Ext.onReady(function(){
 		width:680,
 		frame:true,
 		items:[	
-					new Ext.form.ComboBox({
-										mode:'local',
-										valueField:'myId',
-										displayField:'displayText',
-										store: new Ext.data.SimpleStore({
-											id: 0,
-											fields:['myId','displayText'],
-											data:[['empresa.nombre','Nombre Empresa'],['numero','Por Num.Orden']]
-										}),
-										id:'combocriteriosId',
-										name:'criterios',
-										boxMaxWidth:100,
-										allowBlank:false,
-										msgTarget:'under',
-										value:'empresa.nombre',
-										fieldLabel:'Criterios',
-										forceSelection:true
-										
-										}),	
 				{
-					xtype:'checkbox',
-					name:'soloanuladas',
-					id:'soloanuladasId',
-					fieldLabel:'Solo Anuladas'
-				},{
 					layout:'column',
 					
 					items:[
@@ -261,35 +251,34 @@ Ext.onReady(function(){
 								xtype:'combo',
 								mode:'local',
 								name:'campos',
-								id:'campoId',
-								hideLabel:true,
+								id:'campoIdFiltro1',
+								hideLabel:false,
+								fieldLabel:'Filtro 1',
+								labelWidth:60,
 								valueField:'idcampo',
 								displayField:'labelcampo',
 								store: new Ext.data.SimpleStore({
 									id:0,
 									fields:['idcampo','labelcampo'],
-									data:[['nombre','Nom.Empresa'],['sector','Sector'],['lote','Lote'],['expo','Exposición'],['numero','Número']]
+									data:[['nombre','Nom.Empresa'],['sector','Sector'],['lote','Lote'],['expo','Exposición'],['numero','Número'],['anulada','Anulada']]
 								}),
-								boxMaxWidth:100
+								anchor:'95%'
 							}
 						},{
-							columnWidth: .3,
+							columnWidth: .2,
 							layout:'form',
 							items:{
 								xtype:'combo',
 								mode:'local',
 								name:'condiciones',
-								id:'condicionesId',
+								id:'condicionesIdFiltro1',
 								valueField:'idcond',
 								displayField:'nombrecond',
-								store: new Ext.data.SimpleStore({
-									id:0,
-									fields:['idcond','nombrecond'],
-									data:[['eq','Igual a'],['ne','No es igual a'],['cn','Contiene'],['nc','No Contiene']]
-								}),
+								store: condicionesStore,
 								boxMaxWidth:100,
 								msgTarget:'under',
-								hideLabel:true
+								hideLabel:true,
+								anchor:'95%'
 							}
 							
 						},{
@@ -298,6 +287,9 @@ Ext.onReady(function(){
 							items:{
 										xtype:'textfield',
 										hideLabel:true,
+										id:'searchStringIdFiltro1',
+										anchor:'95%'
+										/*,
 										listeners:{
 											click: function(){
 												ordenStore.load({
@@ -307,10 +299,10 @@ Ext.onReady(function(){
 															}
 													});
 											}
-										}
+										}*/
 							}
-						},{
-							columnWidth: .2,
+						}/*,{
+							columnWidth: .3,
 							layout:'form',
 							items:{
 										xtype:'button',
@@ -325,8 +317,72 @@ Ext.onReady(function(){
 											}
 										}
 							}
-						}
+						}*/
 						
+					]
+				},{
+					layout:'column',
+					items:[
+						{
+							columnWidth: .3,
+							layout:'form',
+							width:50,
+							items:{
+								xtype:'combo',
+								mode:'local',
+								name:'campos',
+								id:'campoIdFiltro2',
+								hideLabel:false,
+								fieldLabel:'Filtro 2',
+								labelWidth:60,
+								valueField:'idcampo',
+								displayField:'labelcampo',
+								store: new Ext.data.SimpleStore({
+									id:0,
+									fields:['idcampo','labelcampo'],
+									data:[['nombre','Nom.Empresa'],['sector','Sector'],['lote','Lote'],['expo','Exposición'],['numero','Número'],['anulada','Anulada']]
+								}),
+								anchor:'95%'
+							}
+						},{
+							columnWidth: .2,
+							layout:'form',
+							items:{
+								xtype:'combo',
+								mode:'local',
+								name:'condiciones',
+								id:'condicionesIdFiltro2',
+								valueField:'idcond',
+								displayField:'nombrecond',
+								store: condicionesStore,
+								boxMaxWidth:100,
+								msgTarget:'under',
+								hideLabel:true,
+								anchor:'95%'
+							}
+							
+						},{
+							columnWidth: .3,
+							layout:'form',
+							items:{
+										xtype:'textfield',
+										hideLabel:true,
+										id:'searchStringIdFiltro2',
+										anchor:'95%'
+										/*,
+										listeners:{
+											click: function(){
+												ordenStore.load({
+														params:{'fieldSearch':Ext.getCmp('combocriteriosId').getValue(),'start':0,'limit':10
+															,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
+															,'anulada':Ext.getCmp('soloanuladasId').getValue()
+															}
+													});
+											}
+										}*/
+							}
+						}
+
 					]
 				},grid
 		
