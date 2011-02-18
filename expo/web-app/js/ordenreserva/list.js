@@ -446,7 +446,7 @@ Ext.onReady(function(){
 											'campos':[Ext.getCmp('campoIdFiltro1').getValue()
 														,Ext.getCmp('campoIdFiltro2').getValue()
 														,Ext.getCmp('campoIdFiltro3').getValue()],
-											'condiciones':[Ext.getCmp('condicionesIdFiltro1')
+											'condiciones':[Ext.getCmp('condicionesIdFiltro1').getValue()
 														,Ext.getCmp('condicionesIdFiltro2').getValue()
 														,Ext.getCmp('condicionesIdFiltro3').getValue()],
 											'searchString':[Ext.getCmp('searchStringIdFiltro1').getValue()

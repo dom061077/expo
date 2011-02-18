@@ -332,19 +332,19 @@ class OrdenReservaController {
     	            	HashMap parameters = new HashMap()
     	            	def detalleservcontratado=null
     	            	def i
-    	            	def valorSearch
+    	            	String valorSearch
     	            	String condicion
-    	            	def campo 
+    	            	String campo 
     	            	hqlstr="from OrdenReserva o left outer join o.detalle det where det is null "
     	            	
     	        			
 	        	   		detalle = DetalleServicioContratado.createCriteria().list([fetch:[lote:'eager']]){
 	            				log.debug("DENTRO DEL CLOSURE DE CONSULTA POR DETALLESERVICIO CONTRATADO")
 		    	            	for(i = 0; i<params.campos.size();i++){
-		    	            		valorSearch = params.searchString[i].toString()
-		    	            		condicion = params.condiciones[i].toString()
-		    	            		log.debug "condicion registrada: $condicion"
-		    	            		campo = params.campos[i].toString()
+
+		    	            		valorSearch = params.searchString[i]
+		    	            		condicion = params.condiciones[i]
+		    	            		campo = params.campos[i]
 		    	            		and{
 			    	            		if(!campo.trim().equals("") && !condicion.trim().equals("")
 			    	            			&& !valorSearch.trim().equals("")){
@@ -382,7 +382,7 @@ class OrdenReservaController {
 	            			
 	        			}
 	            		log.debug("antes de hacer el findAll con hql")
-	        	   		ordenes = OrdenReserva.findAll(hqlstr,parameters)
+	        	   		//ordenes = OrdenReserva.findAll(hqlstr,parameters)
 	        			log.debug("termina de hacer un findAll con hql")
 	        			list.addAll(ordenes)
 	        			list.addAll(detalle)
