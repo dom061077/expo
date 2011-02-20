@@ -317,10 +317,54 @@ class OrdenReservaController {
     	}
     }
     
+	
+	List consultar2(params){
+		log.debug "DENTRO DEL METODO consultar2"
+		def ordenes=null
+		def detalle=null
+		ordenes=OrdenReserva.createCriteria().list(){
+			for(i = 0; i<params.campos.size();i++){
+				
+					valorSearch = params.searchString[i]
+					condicion = params.condiciones[i]
+					campo = params.campos[i]
+					and{
+						if(!campo.trim().equals("") && !condicion.trim().equals("")
+							&& !valorSearch.trim().equals("")){
+									if(campo.trim().equals("nombre")){
+										ordenReserva{
+											empresa{
+												"${condicion}" ("nombre",valorSearch)
+											}
+										}
+									}
+									if(campo.trim().equals("sector")){
+										sector{
+											condicion("nombre",valorSearch)
+										}
+									}
+									if(campo.equals("expo") || campo.equals("numero") || campo.trim().equals("anulada")){
+									   ordenReserva{
+											   if(campo.trim().equals("expo")){
+												   expo{
+													   condicion("nombre",valorSearch)
+												   }
+											   }else{
+												   condicion(params.campos[i],valorSearch)
+											   }
+									   }
+								   }
+						   }
+					   }
+				}
+		}//llave de cierre del list
+		list.addAll(ordenes)
+		
+	}
     
 
     List  consultar(params){
-    	log.debug("Dentro del closure consultar")
+    	log.debug("Dentro del metodo consultar")
     	def pagingconfig = [
     	            		max: params.limit as Integer ?:10,
     	            		offset: params.start as Integer ?:0
