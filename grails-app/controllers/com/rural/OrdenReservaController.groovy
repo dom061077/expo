@@ -322,43 +322,95 @@ class OrdenReservaController {
 		log.debug "DENTRO DEL METODO consultar2"
 		def ordenes=null
 		def detalle=null
+		def i
+		String valorSearch
+		String condicion
+		String campo
+		ArrayList list = new ArrayList()
+		/*consulto las ordenes que no tienen detalle*/
 		ordenes=OrdenReserva.createCriteria().list(){
 			for(i = 0; i<params.campos.size();i++){
-				
 					valorSearch = params.searchString[i]
 					condicion = params.condiciones[i]
+					if(condicion.trim().equals("ilike2"))
+						condicion="ilike"
 					campo = params.campos[i]
 					and{
 						if(!campo.trim().equals("") && !condicion.trim().equals("")
-							&& !valorSearch.trim().equals("")){
+							&& !valorSearch.trim().equals("")
+							&& !campo.trim().equals("sector")
+							&& !campo.trim().equals("lote")){
 									if(campo.trim().equals("nombre")){
-										ordenReserva{
-											empresa{
-												"${condicion}" ("nombre",valorSearch)
+										empresa{
+											"${condicion}" ("nombre",valorSearch)
+										}
+									}else{
+										if(campo.trim().equals("expo")){
+											expo{
+											   condicion("nombre",valorSearch)
 											}
+										}else{
+										   condicion(params.campos[i],valorSearch)
 										}
 									}
-									if(campo.trim().equals("sector")){
-										sector{
-											condicion("nombre",valorSearch)
-										}
-									}
-									if(campo.equals("expo") || campo.equals("numero") || campo.trim().equals("anulada")){
-									   ordenReserva{
-											   if(campo.trim().equals("expo")){
-												   expo{
-													   condicion("nombre",valorSearch)
-												   }
-											   }else{
-												   condicion(params.campos[i],valorSearch)
-											   }
-									   }
-								   }
-						   }
-					   }
+						}
+						isEmpty("detalle")	
+					 }
 				}
 		}//llave de cierre del list
+		log.debug "ORDENES CONSULTADAS: "+ordenes
 		list.addAll(ordenes)
+		/*consulto las ordenes que tienen detalle*/
+		detalle = DetalleServicioContratado.createCriteria().list([fetch:[lote:'eager']]){
+
+			for(i = 0; i<params.campos.size();i++){
+
+				valorSearch = params.searchString[i]
+				condicion = params.condiciones[i]
+				if(condicion.trim().equals("ilike2"))
+					condicion="ilike"
+				campo = params.campos[i]
+				
+				and{
+					if(!campo.trim().equals("") && !condicion.trim().equals("")
+						&& !valorSearch.trim().equals("")){
+						if(campo.trim().equals("nombre")){
+							ordenReserva{
+								empresa{
+									"${condicion}" ("nombre",valorSearch)
+									
+								}
+							}
+						}
+						if(campo.trim().equals("sector")){
+							sector{
+								condicion("nombre",valorSearch)
+								
+							}
+						}
+						if(campo.equals("expo") || campo.equals("numero") || campo.trim().equals("anulada")){
+						   ordenReserva{
+								   if(campo.trim().equals("expo")){
+									   expo{
+										   condicion("nombre",valorSearch)
+										   
+									   }
+								   }else{
+									   condicion(params.campos[i],valorSearch)
+									   
+								   }
+										   
+						   }
+					   }
+					   }
+				   }
+			}
+		
+		}
+		log.debug "DETALLE: "+detalle
+		list.addAll(detalle)
+		return list
+		
 		
 	}
     
@@ -460,11 +512,11 @@ class OrdenReservaController {
     	log.info("INGRESANDO AL METODO listjson DEL CONTROLADOR OrdenReservaController")
     	log.debug("PARAMETROS $params")
     	log.debug("PARAMETRO ANULADA: "+Boolean.parseBoolean(params.anulada))
-    	def list =  consultar(params)
+    	def list =  consultar2(params)
     	
     	log.debug "Campos: "+params.campos?.size()+", Condiciones: "+params.condiciones?.size()+",searchString: "+params.searchString?.size()
     	
-    	log.debug("Objecto list devuelo por el closure consultar: "+list.size())
+    	log.debug("Objecto list devuelo por el closure consultar: "+list?.size())
     	Double totalCancelado=0
     	Double saldo=0
     	def flagdetalle = false
@@ -488,25 +540,28 @@ class OrdenReservaController {
         						,nombre:it.ordenReserva.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
         				
     				}else{
-        				it[0].recibos.each{r-> 
+						log.debug "ESTRUCTURA DEL DETALLE: "+it.empresa.nombre
+						
+        				it.recibos.each{r-> 
         					if(!r.anulado){
         						totalCancelado=totalCancelado+r.total
         						log.debug("SALE LA PROPIEDAD TOTAL?-->"+r.total)
         					}
         				}
-        				saldo=it.total[0]-totalCancelado
+        				saldo=it.total-totalCancelado
         				log.debug("SALDO: $saldo total cancelado: $totalCancelado")
-    					row(id:it.id[0],numero:it.numero[0],fechaAlta:it.fechaAlta[0],total:it.total[0],anio:it.anio[0],expoNombre:it.expo.nombre[0]
+    					row(id:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre
         						,sector:""
 								,subTotal:0
         						,lote:""
-        						,nombre:it.empresa.nombre[0],totalCancelado:totalCancelado,saldo:saldo)        				
+        						,nombre:it.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)   
+						     				
     				}
     				
 
     			}
     		}
-   			total list.size()
+   			total list?.size()
     	}
     }
 
