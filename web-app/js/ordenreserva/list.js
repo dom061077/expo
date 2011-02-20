@@ -224,11 +224,14 @@ Ext.onReady(function(){
 	var condicionesStore=new Ext.data.SimpleStore({
 									id:0,
 									fields:['idcond','nombrecond'],
-									data:[['eq','Igual a'],['ne','No es igual a'],['gt','Mayor que']
-										  ,['lt','Menor que'],['ge','Mayor o igual que']
+									data:[['eq','Igual a']
+										  ,['ne','No es igual a']
+										  ,['gt','Mayor que']
+										  ,['lt','Menor que']
+										  ,['ge','Mayor o igual que']
 										  ,['le','Menor o igual que']
-										  ,['cn','Contiene']
-										  ,['nc','No Contiene']]
+										  ,['ilike2','Contiene']
+										  ,['ilike','No Contiene']]
 								});									
 	
 	var formSearch = new  Ext.form.FormPanel({
