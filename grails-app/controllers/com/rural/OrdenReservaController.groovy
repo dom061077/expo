@@ -318,28 +318,39 @@ class OrdenReservaController {
     }
     
 	
+
+	
 	List consultar2(params){
 		log.debug "DENTRO DEL METODO consultar2"
 		def ordenes=null
-		def detalle=null
+		def detalles=null
 		def i
 		String valorSearch
 		String condicion
 		String campo
 		ArrayList list = new ArrayList()
 		/*consulto las ordenes que no tienen detalle*/
+
 		ordenes=OrdenReserva.createCriteria().list(){
+
 			for(i = 0; i<params.campos.size();i++){
 					valorSearch = params.searchString[i]
 					condicion = params.condiciones[i]
-					if(condicion.trim().equals("ilike2"))
+					if(condicion.trim().equals("ilike2")){
 						condicion="ilike"
+						valorSearch="%"+valorSearch+"%"
+					}
 					campo = params.campos[i]
+
+					
 					and{
+						isEmpty("detalle")
+
 						if(!campo.trim().equals("") && !condicion.trim().equals("")
-							&& !valorSearch.trim().equals("")
-							&& !campo.trim().equals("sector")
-							&& !campo.trim().equals("lote")){
+							&& !valorSearch.trim().equals("")){
+								
+
+							
 									if(campo.trim().equals("nombre")){
 										empresa{
 											"${condicion}" ("nombre",valorSearch)
@@ -347,29 +358,68 @@ class OrdenReservaController {
 									}else{
 										if(campo.trim().equals("expo")){
 											expo{
-											   condicion("nombre",valorSearch)
+											   "${condicion}"("nombre",valorSearch)
 											}
 										}else{
-										   condicion(params.campos[i],valorSearch)
+											if(campo.trim().equals("sector")){
+
+												detalle{
+													sector{	
+														"${condicion}" ("nombre",valorSearch)
+														
+													}
+												}
+											}else{
+												if(campo.trim().equals("lote")){
+													detalle{
+														lote{
+															"${condicion}"("nombre",valorSearch)
+														}
+													}	
+												}else{
+												
+													if(campo.equals("anulada")){
+														
+													
+														if(valorSearch.trim().equals("SI"))
+															"${condicion}"(campo,true)
+														else
+															"${condicion}"(campo,false)
+														
+														
+													}
+													
+												}
+											}
 										}
 									}
+									
 						}
-						isEmpty("detalle")	
+							
 					 }
 				}
 		}//llave de cierre del list
 		log.debug "ORDENES CONSULTADAS: "+ordenes
+		
 		list.addAll(ordenes)
 		/*consulto las ordenes que tienen detalle*/
-		detalle = DetalleServicioContratado.createCriteria().list([fetch:[lote:'eager']]){
+		detalles = DetalleServicioContratado.createCriteria().list([fetch:[lote:'eager']]){
 
 			for(i = 0; i<params.campos.size();i++){
 
 				valorSearch = params.searchString[i]
 				condicion = params.condiciones[i]
-				if(condicion.trim().equals("ilike2"))
+				if(condicion.trim().equals("ilike2")){
 					condicion="ilike"
+					valorSearch="%"+valorSearch+"%"
+				}
 				campo = params.campos[i]
+				if(campo.equals("anulada")){
+				    valorSearch=false
+ 					if(valorSearch.equals("SI"))
+				        valorSearch=true
+				
+				}
 				
 				and{
 					if(!campo.trim().equals("") && !condicion.trim().equals("")
@@ -384,7 +434,7 @@ class OrdenReservaController {
 						}
 						if(campo.trim().equals("sector")){
 							sector{
-								condicion("nombre",valorSearch)
+								"${condicion}"("nombre",valorSearch)
 								
 							}
 						}
@@ -392,11 +442,11 @@ class OrdenReservaController {
 						   ordenReserva{
 								   if(campo.trim().equals("expo")){
 									   expo{
-										   condicion("nombre",valorSearch)
+										   "${condicion}"("nombre",valorSearch)
 										   
 									   }
 								   }else{
-									   condicion(params.campos[i],valorSearch)
+									   "${condicion}"(campo,valorSearch)
 									   
 								   }
 										   
@@ -407,8 +457,8 @@ class OrdenReservaController {
 			}
 		
 		}
-		log.debug "DETALLE: "+detalle
-		list.addAll(detalle)
+		
+		list.addAll(detalles)
 		return list
 		
 		
