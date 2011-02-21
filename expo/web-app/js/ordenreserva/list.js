@@ -194,8 +194,25 @@ Ext.onReady(function(){
             	,text:'Exportar'
             	,cls:'x-btn-text-icon'
             	,handler: function(){
-    				open('export?searchCriteria='+Ext.getCmp('searchCriteriaId').getValue()+'&fieldSearch='
-    					+Ext.getCmp('combocriteriosId').getValue()+'&anulada='+Ext.getCmp('soloanuladasId').getValue()
+            		/*'campos':[Ext.getCmp('campoIdFiltro1').getValue()
+														,Ext.getCmp('campoIdFiltro2').getValue()
+														,Ext.getCmp('campoIdFiltro3').getValue()],
+											'condiciones':[Ext.getCmp('condicionesIdFiltro1').getValue()
+														,Ext.getCmp('condicionesIdFiltro2').getValue()
+														,Ext.getCmp('condicionesIdFiltro3').getValue()],
+											'searchString':[Ext.getCmp('searchStringIdFiltro1').getValue()
+														,Ext.getCmp('searchStringIdFiltro2').getValue()
+														,Ext.getCmp('searchStringIdFiltro3').getValue()
+													]*/
+            		
+    				open('export?campos='+Ext.getCmp('campoIdFiltro1').getValue()+','+Ext.getCmp('campoIdFiltro2').getValue()
+    					+','+Ext.getCmp('campoIdFiltro3').getValue()+'&condiciones='+
+    					Ext.getCmp('condicionesIdFiltro1').getValue()+','
+    					+Ext.getCmp('condicionesIdFiltro2').getValue()+','
+    					+Ext.getCmp('condicionesIdFiltro3').getValue()+'&searchString='
+    					+Ext.getCmp('searchStringIdFiltro1').getValue()+','
+    					+Ext.getCmp('searchStringIdFiltro2').getValue()+','
+    					+Ext.getCmp('searchStringIdFiltro3').getValue()
     					+'&sort='+sort+'&dir='+dir
     					,'_blank')
             	}
@@ -219,7 +236,8 @@ Ext.onReady(function(){
 	var camposStore= new Ext.data.SimpleStore({
 									id:0,
 									fields:['idcampo','labelcampo'],
-									data:[['nombre','Nom.Empresa'],['sector','Sector'],['lote','Lote'],['expo','Exposición'],['numero','Número'],['anulada','Anulada']]
+									data:[['nombre','Nom.Empresa'],['sector','Sector'],['lote','Lote'],['expo','Exposición']
+											,['numero','Número'],['anulada','Anulada'],['fechaAlta','Fecha Alta']]
 								})
 	var condicionesStore=new Ext.data.SimpleStore({
 									id:0,

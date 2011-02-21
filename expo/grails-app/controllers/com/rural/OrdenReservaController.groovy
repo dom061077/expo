@@ -21,6 +21,8 @@ import jxl.write.DateFormat
 import jxl.write.DateTime
 import jxl.write.WritableCellFormat
 import jxl.write.WritableSheet
+
+
  
  
 
@@ -321,7 +323,7 @@ class OrdenReservaController {
 
 	
 	List consultar2(params){
-		log.debug "DENTRO DEL METODO consultar2"
+		log.info "DENTRO DEL METODO consultar2"
 		def ordenes=null
 		def detalles=null
 		def i
@@ -330,7 +332,7 @@ class OrdenReservaController {
 		String campo
 		ArrayList list = new ArrayList()
 		/*consulto las ordenes que no tienen detalle*/
-
+		java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy")	 
 		ordenes=OrdenReserva.createCriteria().list(){
 
 			for(i = 0; i<params.campos.size();i++){
@@ -341,7 +343,19 @@ class OrdenReservaController {
 						valorSearch="%"+valorSearch+"%"
 					}
 					campo = params.campos[i]
-
+					log.debug "CAMPO: $campo"
+					if(campo.trim().equals("fechaAlta")){
+						try{
+							valorSearch = df.parse(valorSearch)		
+							log.debug "FECHA CONSULTADA 1: $valorSearch TIPO: "+valorSearch.class
+						}catch(Exception e){
+							log.debug "EXCEPCION LANZADA "+e
+							valorSearch = new Date()
+						}
+						
+					}else{
+						log.debug "LA CONDICION DEL CAMPO FECHAALTA INGRESA POR EL ELSE"
+					}
 					
 					and{
 						isEmpty("detalle")
@@ -349,7 +363,8 @@ class OrdenReservaController {
 						if(!campo.trim().equals("") && !condicion.trim().equals("")
 							&& !valorSearch.trim().equals("")){
 								
-
+									log.debug "CUMPLE CON LAS CONDICIONES DE CAMPO,CONDICION Y VALOR VACIO $campo, $condicion, $valorSearch"
+									
 							
 									if(campo.trim().equals("nombre")){
 										empresa{
@@ -385,9 +400,9 @@ class OrdenReservaController {
 															"${condicion}"(campo,true)
 														else
 															"${condicion}"(campo,false)
-														
-														
-													}
+													}else
+														log.debug "ANTES DE AGREGAR EL FILTRO DE FINAL"
+														"${condicion}"(campo,valorSearch)
 													
 												}
 											}
@@ -398,10 +413,11 @@ class OrdenReservaController {
 							
 					 }
 				}
+
 		}//llave de cierre del list
-		log.debug "ORDENES CONSULTADAS: "+ordenes
 		
 		list.addAll(ordenes)
+		log.debug "CANTIDAD DE ORDENES: "+ordenes.size()
 		/*consulto las ordenes que tienen detalle*/
 		detalles = DetalleServicioContratado.createCriteria().list([fetch:[lote:'eager']]){
 
@@ -421,9 +437,20 @@ class OrdenReservaController {
 				
 				}
 				
+				if(campo.trim().equals("fechaAlta")){
+					try{
+						valorSearch = df.parse(valorSearch)		
+						log.debug "FECHA CONSULTADA2: $valorSearch"
+					}catch(Exception e){
+						valorSearch = new Date()
+					}
+					
+				}				
+				
 				and{
 					if(!campo.trim().equals("") && !condicion.trim().equals("")
 						&& !valorSearch.trim().equals("")){
+						
 						if(campo.trim().equals("nombre")){
 							ordenReserva{
 								empresa{
@@ -432,12 +459,14 @@ class OrdenReservaController {
 								}
 							}
 						}
+						
 						if(campo.trim().equals("sector")){
 							sector{
 								"${condicion}"("nombre",valorSearch)
 								
 							}
 						}
+						
 						if(campo.equals("expo") || campo.equals("numero") || campo.trim().equals("anulada")){
 						   ordenReserva{
 								   if(campo.trim().equals("expo")){
@@ -446,19 +475,48 @@ class OrdenReservaController {
 										   
 									   }
 								   }else{
-									   "${condicion}"(campo,valorSearch)
-									   
-								   }
-										   
-						   }
-					   }
-					   }
-				   }
+										if(campo.equals("anulada")){
+											if(valorSearch.trim().equals("SI"))
+												"${condicion}"(campo,true)
+											else
+												"${condicion}"(campo,false)
+										}else
+											"${condicion}"(campo,valorSearch)
+						   			}
+					   
+					   		} 
+				   		}
+				   }//end del if de condicion de condicion, campo y valorSearch no vacio
+				 }  
 			}
 		
 		}
-		
+		log.debug "CANTIDAD DE DETALLES: "+detalles.size()
 		list.addAll(detalles)
+    	if(params.sort){
+    		if(params.sort=="nombre"){
+   				Collections.sort(list,new EmpresaNombreComparator())
+    		}
+    		if(params.sort=="fechaAlta"){
+    			Collections.sort(list,new FechaOrdenComparator())
+    		}
+    		if(params.sort=="lote"){
+    			Collections.sort(list,new LoteComparator())
+    		}
+    		if(params.sort=="numero"){
+    			Collections.sort(list,new NumeroOrdenComparator())
+    		}
+    		if(params.sort=="sector"){
+    			Collections.sort(list,new SectorComparator())
+    		}
+			if(params.dir=="DESC"){
+				Collections.reverse(list)
+				log.debug("Orden inverso aplicado")
+			}
+    	}
+		
+		
+		
 		return list
 		
 		
@@ -564,7 +622,6 @@ class OrdenReservaController {
     	log.debug("PARAMETRO ANULADA: "+Boolean.parseBoolean(params.anulada))
     	def list =  consultar2(params)
     	
-    	log.debug "Campos: "+params.campos?.size()+", Condiciones: "+params.condiciones?.size()+",searchString: "+params.searchString?.size()
     	
     	log.debug("Objecto list devuelo por el closure consultar: "+list?.size())
     	Double totalCancelado=0
@@ -590,16 +647,13 @@ class OrdenReservaController {
         						,nombre:it.ordenReserva.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
         				
     				}else{
-						log.debug "ESTRUCTURA DEL DETALLE: "+it.empresa.nombre
 						
         				it.recibos.each{r-> 
         					if(!r.anulado){
         						totalCancelado=totalCancelado+r.total
-        						log.debug("SALE LA PROPIEDAD TOTAL?-->"+r.total)
         					}
         				}
         				saldo=it.total-totalCancelado
-        				log.debug("SALDO: $saldo total cancelado: $totalCancelado")
     					row(id:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre
         						,sector:""
 								,subTotal:0
@@ -668,7 +722,7 @@ class OrdenReservaController {
 		def ordenes
 		def flagdetalle
 		
-		List list = consultar(params)	   	
+		List list = consultar2(params)	   	
 	     response.setHeader("Content-disposition", "attachment")
 	     response.contentType = "application/vnd.ms-excel"
 	 
@@ -751,21 +805,21 @@ class OrdenReservaController {
 						
     					fil=fil+1    					    					    					    					    					    					    					
     				}else{
-    					it[0].recibos.each{r->
+    					it.recibos.each{r->
     						if(!r.anulado)
     							totalCancelado=totalCancelado+r.total
     					}
-    					saldo=it.total[0]-totalCancelado
-    					sheet.addCell(new Label(0,fil,it.empresa.nombre[0]))
+    					saldo=it.total-totalCancelado
+    					sheet.addCell(new Label(0,fil,it.empresa.nombre))
     					sheet.addCell(new Label(1,fil,""))    					
     					sheet.addCell(new Label(2,fil,""))    					
-    					sheet.addCell(new Number(3,fil,it.total[0]))
+    					sheet.addCell(new Number(3,fil,it.total))
     					sheet.addCell(new Number(4,fil,totalCancelado)) 
     					sheet.addCell(new Number(5,fil,saldo))
-    					sheet.addCell(new Label(6,fil,it.expo.nombre[0]))
-    					sheet.addCell(new Number(7,fil,it.anio[0]))
-    					sheet.addCell(new Number(8,fil,it.numero[0]))
-    					sheet.addCell(new DateTime (9,fil,it.fechaAlta[0],dateFormat))
+    					sheet.addCell(new Label(6,fil,it.expo.nombre))
+    					sheet.addCell(new Number(7,fil,it.anio))
+    					sheet.addCell(new Number(8,fil,it.numero))
+    					sheet.addCell(new DateTime (9,fil,it.fechaAlta,dateFormat))
     					fil=fil+1    					    					    					    					    					    					    					
     				}
     				
