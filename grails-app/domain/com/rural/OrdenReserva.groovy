@@ -27,7 +27,7 @@ class OrdenReserva {
 	Date fechaAlta
 	static belongsTo = [empresa:Empresa,usuario:Person,expo:Exposicion] 
 
-	static hasMany = [detalle:DetalleServicioContratado,otrosconceptos:OtrosConceptos,productos:ProductoExpuesto,recibos:Recibo,logos:Logo]
+	static hasMany = [detalle:DetalleServicioContratado,otrosconceptos:OtrosConceptos,productos:ProductoExpuesto,recibos:Recibo]
 	
     static constraints = {
     	numero(blank:true,nullable:true)
