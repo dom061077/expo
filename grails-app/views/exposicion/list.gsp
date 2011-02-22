@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
 		<script type="text/javascript" src='${resource(dir:'js/exposicion',file:'list.js')}'></script>        
-        <title>Exposicion List</title>
+        <title>Listado de Exposiciñn</title>
     </head>
     <body>
         <div class="nav">
