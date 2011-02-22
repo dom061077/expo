@@ -364,9 +364,12 @@ class OrdenReservaController {
 											"${condicion}" ("nombre",valorSearch)
 										}
 									}else{
-										if(campo.trim().equals("expo")){
+										if(campo.trim().equals("expo")||campo.trim().equals("anio")){
 											expo{
-											   "${condicion}"("nombre",valorSearch)
+												if(campo.trim().equals("anio"))
+													"${condicion}"("anio",new Integer(valorSearch))
+												else
+											   		"${condicion}"("nombre",valorSearch)
 											}
 										}else{
 											if(campo.trim().equals("sector")){

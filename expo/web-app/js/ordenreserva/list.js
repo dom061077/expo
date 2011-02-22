@@ -237,7 +237,7 @@ Ext.onReady(function(){
 									id:0,
 									fields:['idcampo','labelcampo'],
 									data:[['nombre','Nom.Empresa'],['sector','Sector'],['lote','Lote'],['expo','Exposición']
-											,['numero','Número'],['fechaAlta','Fecha Alta']]
+											,['numero','Número'],['fechaAlta','Fecha Alta'],['anio','Año']]
 								})
 	var condicionesStore=new Ext.data.SimpleStore({
 									id:0,
