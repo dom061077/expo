@@ -4,7 +4,7 @@ class Exposicion {
 	String nombre
 	byte[] image
 
-	static hasMany = [empresas:Empresa,sectores:Sector]
+	static hasMany = [empresas:Empresa,sectores:Sector,logos:Logo]
 
     static constraints = {
 		image(blank:true,nullable:true,maxSize:1024*30)

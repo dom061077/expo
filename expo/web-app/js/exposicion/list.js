@@ -31,6 +31,13 @@ Ext.onReady(function(){
 					var sel = sm.getSelected();
 					if(sm.hasSelection()){
 						window.location='../logo/list?expoid='+sel.data.id+'&exponombre='+sel.data.nombre	
+					}else{
+						Ext.MessageBox.show({
+								title:'Error',
+								msg:'Seleccione una Exposición para cargar logos',
+								icon:Ext.MessageBox.ERROR,
+								buttons:Ext.MessageBox.OK
+							});
 					}
 				}
 			}],

@@ -106,8 +106,20 @@ class LogoController {
     def savejson = {
     	log.info "INGRESANDO AL CLOSURE savejson DEL CONTROLLER LogoController"
     	log.debug "PARAMETROS $params"
-    	def logoInstance = new Logo(params)
+		def image = request.getFile('image')
+		if (image?.empty || image?.size>1024*30){
+			log.error "LA IMAGEN  SUPERA EL LIMITE PERMITIDO O ES UNA IMAGEN VACIA"
+			render """{success:false,msg:'El tamaño máximo de la imagen es de 30 KB'}"""
+			return
+		}
+		def logoInstance = new Logo(params)
+		
     	if(!logoInstance.hasErrors() && logoInstance.save()){
-    	}
+			log.info "LA INSTACIA DE LA CLASE Logo SE GUARDO CORRECTAMENTE"
+			render """{success:true}"""
+    	}else{
+			log.error "ERROR AL GUARDAR LA INSTACIA DE LA CLASE Logo "+logoInstance.errors.allErrors
+			render """{success:false,msg:'Se produjo un error al tratar de guardar los datos'}"""
+		}
     }
 }

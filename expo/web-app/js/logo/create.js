@@ -2,15 +2,17 @@ Ext.onReady(function(){
 	Ext.QuickTips.init();
 	
 	var formLogo = new Ext.form.FormPanel({
+		url:'savejson',
 		title:"Alta de Logo",
 		renderTo:'formulario_extjs',
 		width:470,
+		fileUpload:true,
 		frame:true,
 		items:[
 			{
 				xtype:'textfield',
 				id:'exposicionId',
-				name:'exposicionId',
+				name:'expo.id',
 				value:exposicionId,
 				hidden:true,
 				hideLabel:true
@@ -27,7 +29,8 @@ Ext.onReady(function(){
 				name:'anio',
 				msgTarget:'under',
 				fieldLabel:'Año',
-				maxLength:4
+				maxLength:4,
+				allowBlank:false
 				
 			},{
 				xtype:'textfield',
@@ -35,7 +38,8 @@ Ext.onReady(function(){
 				name:'image',
 				inputType:'file',
 				msgTarget:'under',
-				fieldLabel:'Logo'
+				fieldLabel:'Logo',
+				allowBlank:false
 			}
 		],
 		buttons:[
