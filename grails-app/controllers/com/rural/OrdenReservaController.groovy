@@ -333,33 +333,26 @@ class OrdenReservaController {
 		ArrayList list = new ArrayList()
 		/*consulto las ordenes que no tienen detalle*/
 		java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy")	 
+		Date fecha
 		ordenes=OrdenReserva.createCriteria().list(){
-
 			for(i = 0; i<params.campos.size();i++){
 					valorSearch = params.searchString[i]
 					condicion = params.condiciones[i]
+					campo = params.campos[i]
 					if(condicion.trim().equals("ilike2")){
 						condicion="ilike"
+						 
+					}
+					if(condicion.trim().equals("ilike")&&!campo.trim().equals("fechaAlta"))
 						valorSearch="%"+valorSearch+"%"
-					}
-					campo = params.campos[i]
-					log.debug "CAMPO: $campo"
-					if(campo.trim().equals("fechaAlta")){
-						try{
-							valorSearch = df.parse(valorSearch)		
-							log.debug "FECHA CONSULTADA 1: $valorSearch TIPO: "+valorSearch.class
-						}catch(Exception e){
-							log.debug "EXCEPCION LANZADA "+e
-							valorSearch = new Date()
-						}
 						
-					}else{
-						log.debug "LA CONDICION DEL CAMPO FECHAALTA INGRESA POR EL ELSE"
-					}
+					
+					log.debug "CAMPO: $campo"
+					
 					
 					and{
 						isEmpty("detalle")
-
+						eq("anulada",Boolean.parseBoolean(params.soloAnuladas))	
 						if(!campo.trim().equals("") && !condicion.trim().equals("")
 							&& !valorSearch.trim().equals("")){
 								
@@ -400,10 +393,23 @@ class OrdenReservaController {
 															"${condicion}"(campo,true)
 														else
 															"${condicion}"(campo,false)
-													}else
-														log.debug "ANTES DE AGREGAR EL FILTRO DE FINAL"
-														"${condicion}"(campo,valorSearch)
-													
+													}else{
+														
+														if(campo.trim().equals("fechaAlta")){
+															try{
+																fecha = df.parse(valorSearch)
+																log.debug "FECHA CONSULTADA 1 "+fecha
+															}catch(Exception e){
+																log.debug "EXCEPCION LANZADA "+e
+																fecha = new Date()
+															}
+															"${condicion}"(campo,fecha)
+															log.debug "LOGRA APLICAR EL FILTRO"	
+														}else{
+															log.debug "ANTES APLICAR EL ULTIMO FILTRO "+campo+" VALORSEARCH "+valorSearch
+															"${condicion}"(campo,valorSearch)
+														}	
+													}
 												}
 											}
 										}
@@ -415,9 +421,9 @@ class OrdenReservaController {
 				}
 
 		}//llave de cierre del list
-		
-		list.addAll(ordenes)
 		log.debug "CANTIDAD DE ORDENES: "+ordenes.size()
+		list.addAll(ordenes)
+		
 		/*consulto las ordenes que tienen detalle*/
 		detalles = DetalleServicioContratado.createCriteria().list([fetch:[lote:'eager']]){
 
@@ -430,22 +436,8 @@ class OrdenReservaController {
 					valorSearch="%"+valorSearch+"%"
 				}
 				campo = params.campos[i]
-				if(campo.equals("anulada")){
-				    valorSearch=false
- 					if(valorSearch.equals("SI"))
-				        valorSearch=true
 				
-				}
 				
-				if(campo.trim().equals("fechaAlta")){
-					try{
-						valorSearch = df.parse(valorSearch)		
-						log.debug "FECHA CONSULTADA2: $valorSearch"
-					}catch(Exception e){
-						valorSearch = new Date()
-					}
-					
-				}				
 				
 				and{
 					if(!campo.trim().equals("") && !condicion.trim().equals("")
@@ -467,7 +459,7 @@ class OrdenReservaController {
 							}
 						}
 						
-						if(campo.equals("expo") || campo.equals("numero") || campo.trim().equals("anulada")){
+						if(campo.equals("expo") || campo.equals("numero") || campo.trim().equals("anulada")||campo.trim().equals("fechaAlta") ){
 						   ordenReserva{
 								   if(campo.trim().equals("expo")){
 									   expo{
@@ -480,8 +472,22 @@ class OrdenReservaController {
 												"${condicion}"(campo,true)
 											else
 												"${condicion}"(campo,false)
-										}else
-											"${condicion}"(campo,valorSearch)
+										}else{
+											if(campo.trim().equals("fechaAlta")){
+												try{
+													fecha = df.parse(valorSearch)
+													log.debug "FECHA CONSULTADA 2: $valorSearch TIPO: "+fecha
+												}catch(Exception e){
+													log.debug "EXCEPCION LANZADA "+e
+													fecha = new Date()
+												}
+												
+												"${condicion}" (campo,fecha)
+												
+											}else
+												
+												"${condicion}"(campo,valorSearch)
+										}
 						   			}
 					   
 					   		} 
