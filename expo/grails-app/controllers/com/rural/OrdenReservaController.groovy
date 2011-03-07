@@ -21,8 +21,6 @@ import jxl.write.DateFormat
 import jxl.write.DateTime
 import jxl.write.WritableCellFormat
 import jxl.write.WritableSheet
-
-
  
  
 
@@ -250,7 +248,6 @@ class OrdenReservaController {
     	def ordenReservaInstance = OrdenReserva.get(params.id)
     	log.debug(ordenReservaInstance.empresa.nombre)
     	log.debug(ordenReservaInstance.empresa.vendedor.nombre)
-    	log.debug "SUBTOTAL DE ORDEN DE RESERVA: "+ordenReservaInstance.subtotalDetalle
     	ordenReservaInstance.detalle.each{
     		log.debug(it)
     		log.debug(it.sector?.nombre)
@@ -318,222 +315,9 @@ class OrdenReservaController {
     
     	}
     }
-    
-	
-
-	
-	List consultar2(params){
-		log.info "DENTRO DEL METODO consultar2"
-		def ordenes=null
-		def detalles=null
-		def i
-		String valorSearch
-		String condicion
-		String campo
-		ArrayList list = new ArrayList()
-		/*consulto las ordenes que no tienen detalle*/
-		java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy")	 
-		Date fecha
-		ordenes=OrdenReserva.createCriteria().list(){
-			for(i = 0; i<params.campos.size();i++){
-					valorSearch = params.searchString[i]
-					condicion = params.condiciones[i]
-					campo = params.campos[i]
-					if(condicion.trim().equals("ilike2")){
-						condicion="ilike"
-						 
-					}
-					if(condicion.trim().equals("ilike")&&!campo.trim().equals("fechaAlta"))
-						valorSearch="%"+valorSearch+"%"
-						
-					
-					log.debug "CAMPO: $campo"
-					
-					
-					and{
-						isEmpty("detalle")
-						eq("anulada",Boolean.parseBoolean(params.soloAnuladas))	
-						if(!campo.trim().equals("") && !condicion.trim().equals("")
-							&& !valorSearch.trim().equals("")){
-								
-									log.debug "CUMPLE CON LAS CONDICIONES DE CAMPO,CONDICION Y VALOR VACIO $campo, $condicion, $valorSearch"
-									
-							
-									if(campo.trim().equals("nombre")){
-										empresa{
-											"${condicion}" ("nombre",valorSearch)
-										}
-									}else{
-										if(campo.trim().equals("expo")||campo.trim().equals("anio")){
-											expo{
-												if(campo.trim().equals("anio"))
-													"${condicion}"("anio",new Integer(valorSearch))
-												else
-											   		"${condicion}"("nombre",valorSearch)
-											}
-										}else{
-											if(campo.trim().equals("sector")){
-
-												detalle{
-													sector{	
-														"${condicion}" ("nombre",valorSearch)
-														
-													}
-												}
-											}else{
-												if(campo.trim().equals("lote")){
-													detalle{
-														lote{
-															"${condicion}"("nombre",valorSearch)
-														}
-													}	
-												}else{
-												
-													if(campo.equals("anulada")){
-														
-													
-														if(valorSearch.trim().equals("SI"))
-															"${condicion}"(campo,true)
-														else
-															"${condicion}"(campo,false)
-													}else{
-														
-														if(campo.trim().equals("fechaAlta")){
-															try{
-																fecha = df.parse(valorSearch)
-																log.debug "FECHA CONSULTADA 1 "+fecha
-															}catch(Exception e){
-																log.debug "EXCEPCION LANZADA "+e
-																fecha = new Date()
-															}
-															"${condicion}"(campo,fecha)
-															log.debug "LOGRA APLICAR EL FILTRO"	
-														}else{
-															log.debug "ANTES APLICAR EL ULTIMO FILTRO "+campo+" VALORSEARCH "+valorSearch
-															"${condicion}"(campo,valorSearch)
-														}	
-													}
-												}
-											}
-										}
-									}
-									
-						}
-							
-					 }
-				}
-
-		}//llave de cierre del list
-		log.debug "CANTIDAD DE ORDENES: "+ordenes.size()
-		list.addAll(ordenes)
-		
-		/*consulto las ordenes que tienen detalle*/
-		detalles = DetalleServicioContratado.createCriteria().list([fetch:[lote:'eager']]){
-
-			for(i = 0; i<params.campos.size();i++){
-
-				valorSearch = params.searchString[i]
-				condicion = params.condiciones[i]
-				if(condicion.trim().equals("ilike2")){
-					condicion="ilike"
-					valorSearch="%"+valorSearch+"%"
-				}
-				campo = params.campos[i]
-				
-				
-				
-				and{
-					if(!campo.trim().equals("") && !condicion.trim().equals("")
-						&& !valorSearch.trim().equals("")){
-						
-						if(campo.trim().equals("nombre")){
-							ordenReserva{
-								empresa{
-									"${condicion}" ("nombre",valorSearch)
-									
-								}
-							}
-						}
-						
-						if(campo.trim().equals("sector")){
-							sector{
-								"${condicion}"("nombre",valorSearch)
-								
-							}
-						}
-						
-						if(campo.equals("expo") || campo.equals("numero") || campo.trim().equals("anulada")||campo.trim().equals("fechaAlta") ){
-						   ordenReserva{
-								   if(campo.trim().equals("expo")){
-									   expo{
-										   "${condicion}"("nombre",valorSearch)
-										   
-									   }
-								   }else{
-										if(campo.equals("anulada")){
-											if(valorSearch.trim().equals("SI"))
-												"${condicion}"(campo,true)
-											else
-												"${condicion}"(campo,false)
-										}else{
-											if(campo.trim().equals("fechaAlta")){
-												try{
-													fecha = df.parse(valorSearch)
-													log.debug "FECHA CONSULTADA 2: $valorSearch TIPO: "+fecha
-												}catch(Exception e){
-													log.debug "EXCEPCION LANZADA "+e
-													fecha = new Date()
-												}
-												
-												"${condicion}" (campo,fecha)
-												
-											}else
-												
-												"${condicion}"(campo,valorSearch)
-										}
-						   			}
-					   
-					   		} 
-				   		}
-				   }//end del if de condicion de condicion, campo y valorSearch no vacio
-				 }  
-			}
-		
-		}
-		log.debug "CANTIDAD DE DETALLES: "+detalles.size()
-		list.addAll(detalles)
-    	if(params.sort){
-    		if(params.sort=="nombre"){
-   				Collections.sort(list,new EmpresaNombreComparator())
-    		}
-    		if(params.sort=="fechaAlta"){
-    			Collections.sort(list,new FechaOrdenComparator())
-    		}
-    		if(params.sort=="lote"){
-    			Collections.sort(list,new LoteComparator())
-    		}
-    		if(params.sort=="numero"){
-    			Collections.sort(list,new NumeroOrdenComparator())
-    		}
-    		if(params.sort=="sector"){
-    			Collections.sort(list,new SectorComparator())
-    		}
-			if(params.dir=="DESC"){
-				Collections.reverse(list)
-				log.debug("Orden inverso aplicado")
-			}
-    	}
-		
-		
-		
-		return list
-		
-		
-	}
-    
 
     List  consultar(params){
-    	log.debug("Dentro del metodo consultar")
+    	log.debug("Dentro del closure consultar")
     	def pagingconfig = [
     	            		max: params.limit as Integer ?:10,
     	            		offset: params.start as Integer ?:0
@@ -544,61 +328,57 @@ class OrdenReservaController {
     	            	List list = new ArrayList()
     	            	HashMap parameters = new HashMap()
     	            	def detalleservcontratado=null
-    	            	def i
-    	            	String valorSearch
-    	            	String condicion
-    	            	String campo 
-    	            	hqlstr="from OrdenReserva o left outer join o.detalle det where det is null "
-    	            	
-    	        			
-	        	   		detalle = DetalleServicioContratado.createCriteria().list([fetch:[lote:'eager']]){
-	            				log.debug("DENTRO DEL CLOSURE DE CONSULTA POR DETALLESERVICIO CONTRATADO")
-		    	            	for(i = 0; i<params.campos.size();i++){
-
-		    	            		valorSearch = params.searchString[i]
-		    	            		condicion = params.condiciones[i]
-		    	            		campo = params.campos[i]
-		    	            		and{
-			    	            		if(!campo.trim().equals("") && !condicion.trim().equals("")
-			    	            			&& !valorSearch.trim().equals("")){
-											if(campo.trim().equals("nombre")){
-												ordenReserva{
-													empresa{
-														"${condicion}" ("nombre",valorSearch)
-														hqlstr=hqlstr+" and empresa.nombre $condicion $valorSearch"
-													}
-												}		    	            				
-											}
-											if(campo.trim().equals("sector")){
-												sector{
-													condicion("nombre",valorSearch)
-													hqlstr=hqlstr+" and sector.nombre $condicion $valorSearch "
-												}
-											}
-											if(campo.equals("expo") || campo.equals("numero") || campo.trim().equals("anulada")){
-											   ordenReserva{
-											   		if(campo.trim().equals("expo")){
-											   			expo{
-											   				condicion("nombre",valorSearch)
-											   				hqlstr=hqlstr+" and expo.nombre $condicion $valorSearch"
-											   			}
-											   		}else{
-										   				condicion(params.campos[i],valorSearch)
-										   				hqlstr=hqlstr+" and $campo $condicion $valorSearch"
-											   		}
-											   				
-											   }
-										   }	
-			   	            			}
-			   	            		}	
-		    	            	}
-	            			
-	        			}
-	            		log.debug("antes de hacer el findAll con hql")
-	        	   		//ordenes = OrdenReserva.findAll(hqlstr,parameters)
-	        			log.debug("termina de hacer un findAll con hql")
-	        			list.addAll(ordenes)
-	        			list.addAll(detalle)
+    	            	if(params.fieldSearch=="numero"){
+    	            		ordenes = OrdenReserva.findAll("from OrdenReserva o left outer join o.detalle det where det is null and o.numero= :numero and o.anulada=:anulada"
+    	            					,[numero:new Long(params.searchCriteria),anulada:Boolean.parseBoolean(params.anulada)])
+    	            		list.addAll(ordenes) 
+    	            	}else{
+    	            		log.debug("INGRESO POR EL ELSE DEL LA PREGUNTA DEL FIELDSEARCH")
+    	        			hqlstr="from OrdenReserva o left outer join o.detalle det where det is null and o.anulada=:anulada"
+    	        	    	parameters.put('anulada',Boolean.parseBoolean(params.anulada))			
+    	        	   		detalle = DetalleServicioContratado.createCriteria().list([fetch:[lote:'eager']]){
+    	            			log.debug("DENTRO DEL CLOSURE DE CONSULTA POR DETALLESERVICIO CONTRATADO")
+    	        				and{
+    	        					ordenReserva{
+    	        						and{
+    	        		    				eq('anulada',Boolean.parseBoolean(params.anulada))
+    	        		    				if(params.fieldSearch=="empresa.nombre"){
+    	        		    					hqlstr=hqlstr+" and o.empresa.nombre like :empresa_nombre"
+    	        		    					parameters.put('empresa_nombre','%'+params.searchCriteria+'%')
+    	        		        				empresa{
+    	        		        					like('nombre','%'+params.searchCriteria+'%')
+    	        		        				}
+    	        		    				}
+    	        						}
+    	        					}
+    	            				if(params.fieldSearch=="sector.nombre"){
+    	            					hqlstr=hqlstr+" and sector.nombre like '%'+:sector_nombre+'%'"
+    	            					parameters.put('sector_nombre',params.searchCriteria)
+    	            					sector{
+    	            						like('nombre',params.searchCriteria)
+    	            					}
+    	            				}
+    	            				if(params.fieldSearch=="lote.nombre"){
+    	            					hqlstr=hqlstr+" and lote.nombre like '%'+:lote_nombre+'%'"
+    	            					parameters.put('lote_nombre',params.searchCriteria)
+    	            					lote{
+    	            						like('nombre',params.searchCtiteria)
+    	            					}
+    	            					
+    	            				}
+    	            		    	/*if(params.fieldSearch=='fechaalta'){
+    	            		    		hqlstr=hqlstr+" and fechaAlta = :fechaalta"
+    	            		    		parameters.put('fechaalta',new Date())
+    	            		    		eq('fechaAlta',params.fechaalta)
+    	            		    	} */   					
+    	        				}
+    	        			}
+    	            		log.debug("antes de hacer el findAll con hql")
+    	        	   		ordenes = OrdenReserva.findAll(hqlstr,parameters)
+    	        			log.debug("termina de hacer un findAll con hql")
+    	        			list.addAll(ordenes)
+    	        			list.addAll(detalle)
+    	            	}			
     	            	log.debug("TERMINO DE AGREGAR AL LIST ordenes y detalle")
     	            	if(params.sort){
     	            		if(params.sort=="nombre"){
@@ -629,10 +409,8 @@ class OrdenReservaController {
     	log.info("INGRESANDO AL METODO listjson DEL CONTROLADOR OrdenReservaController")
     	log.debug("PARAMETROS $params")
     	log.debug("PARAMETRO ANULADA: "+Boolean.parseBoolean(params.anulada))
-    	def list =  consultar2(params)
-    	
-    	
-    	log.debug("Objecto list devuelo por el closure consultar: "+list?.size())
+    	def list = consultar(params)
+    	log.debug("Objecto list devuelo por el closure consultar: "+list.size())
     	Double totalCancelado=0
     	Double saldo=0
     	def flagdetalle = false
@@ -647,7 +425,6 @@ class OrdenReservaController {
         						totalCancelado=totalCancelado+it.total
         				}
         				saldo=it.ordenReserva.total-totalCancelado
-        				
     					row(id:it.ordenReserva.id,numero:it.ordenReserva.numero,fechaAlta:it.ordenReserva.fechaAlta,total:it.ordenReserva.total,anio:it.ordenReserva.anio
     							,expoNombre:it.ordenReserva.expo.nombre
 								,subTotal:it.subTotal
@@ -656,25 +433,25 @@ class OrdenReservaController {
         						,nombre:it.ordenReserva.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
         				
     				}else{
-						
-        				it.recibos.each{r-> 
+        				it[0].recibos.each{r-> 
         					if(!r.anulado){
         						totalCancelado=totalCancelado+r.total
+        						log.debug("SALE LA PROPIEDAD TOTAL?-->"+r.total)
         					}
         				}
-        				saldo=it.total-totalCancelado
-    					row(id:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre
+        				saldo=it.total[0]-totalCancelado
+        				log.debug("SALDO: $saldo total cancelado: $totalCancelado")
+    					row(id:it.id[0],numero:it.numero[0],fechaAlta:it.fechaAlta[0],total:it.total[0],anio:it.anio[0],expoNombre:it.expo.nombre[0]
         						,sector:""
 								,subTotal:0
         						,lote:""
-        						,nombre:it.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)   
-						     				
+        						,nombre:it.empresa.nombre[0],totalCancelado:totalCancelado,saldo:saldo)        				
     				}
     				
 
     			}
     		}
-   			total list?.size()
+   			total list.size()
     	}
     }
 
@@ -731,7 +508,7 @@ class OrdenReservaController {
 		def ordenes
 		def flagdetalle
 		
-		List list = consultar2(params)	   	
+		List list = consultar(params)	   	
 	     response.setHeader("Content-disposition", "attachment")
 	     response.contentType = "application/vnd.ms-excel"
 	 
@@ -814,21 +591,21 @@ class OrdenReservaController {
 						
     					fil=fil+1    					    					    					    					    					    					    					
     				}else{
-    					it.recibos.each{r->
+    					it[0].recibos.each{r->
     						if(!r.anulado)
     							totalCancelado=totalCancelado+r.total
     					}
-    					saldo=it.total-totalCancelado
-    					sheet.addCell(new Label(0,fil,it.empresa.nombre))
+    					saldo=it.total[0]-totalCancelado
+    					sheet.addCell(new Label(0,fil,it.empresa.nombre[0]))
     					sheet.addCell(new Label(1,fil,""))    					
     					sheet.addCell(new Label(2,fil,""))    					
-    					sheet.addCell(new Number(3,fil,it.total))
+    					sheet.addCell(new Number(3,fil,it.total[0]))
     					sheet.addCell(new Number(4,fil,totalCancelado)) 
     					sheet.addCell(new Number(5,fil,saldo))
-    					sheet.addCell(new Label(6,fil,it.expo.nombre))
-    					sheet.addCell(new Number(7,fil,it.anio))
-    					sheet.addCell(new Number(8,fil,it.numero))
-    					sheet.addCell(new DateTime (9,fil,it.fechaAlta,dateFormat))
+    					sheet.addCell(new Label(6,fil,it.expo.nombre[0]))
+    					sheet.addCell(new Number(7,fil,it.anio[0]))
+    					sheet.addCell(new Number(8,fil,it.numero[0]))
+    					sheet.addCell(new DateTime (9,fil,it.fechaAlta[0],dateFormat))
     					fil=fil+1    					    					    					    					    					    					    					
     				}
     				
