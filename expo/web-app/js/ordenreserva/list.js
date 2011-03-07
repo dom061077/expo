@@ -23,7 +23,9 @@ Ext.onReady(function(){
 		                    		window.location='../logout/index';
 	                    }
 	                   }
+				
 			}							
+		
 	});
 	
 
@@ -194,25 +196,8 @@ Ext.onReady(function(){
             	,text:'Exportar'
             	,cls:'x-btn-text-icon'
             	,handler: function(){
-            		/*'campos':[Ext.getCmp('campoIdFiltro1').getValue()
-														,Ext.getCmp('campoIdFiltro2').getValue()
-														,Ext.getCmp('campoIdFiltro3').getValue()],
-											'condiciones':[Ext.getCmp('condicionesIdFiltro1').getValue()
-														,Ext.getCmp('condicionesIdFiltro2').getValue()
-														,Ext.getCmp('condicionesIdFiltro3').getValue()],
-											'searchString':[Ext.getCmp('searchStringIdFiltro1').getValue()
-														,Ext.getCmp('searchStringIdFiltro2').getValue()
-														,Ext.getCmp('searchStringIdFiltro3').getValue()
-													]*/
-            		
-    				open('export?campos='+Ext.getCmp('campoIdFiltro1').getValue()+'&campos='+Ext.getCmp('campoIdFiltro2').getValue()
-    					+'&campos='+Ext.getCmp('campoIdFiltro3').getValue()+'&condiciones='+
-    					Ext.getCmp('condicionesIdFiltro1').getValue()+'&condiciones='
-    					+Ext.getCmp('condicionesIdFiltro2').getValue()+'&condiciones='
-    					+Ext.getCmp('condicionesIdFiltro3').getValue()+'&searchString='
-    					+Ext.getCmp('searchStringIdFiltro1').getValue()+'&searchString='
-    					+Ext.getCmp('searchStringIdFiltro2').getValue()+'&searchString='
-    					+Ext.getCmp('searchStringIdFiltro3').getValue()
+    				open('export?searchCriteria='+Ext.getCmp('searchCriteriaId').getValue()+'&fieldSearch='
+    					+Ext.getCmp('combocriteriosId').getValue()+'&anulada='+Ext.getCmp('soloanuladasId').getValue()
     					+'&sort='+sort+'&dir='+dir
     					,'_blank')
             	}
@@ -233,96 +218,57 @@ Ext.onReady(function(){
 		dir = sortInfo.direction;
 		
 	});
-	var camposStore= new Ext.data.SimpleStore({
-									id:0,
-									fields:['idcampo','labelcampo'],
-									data:[['nombre','Nom.Empresa'],['sector','Sector'],['lote','Lote'],['expo','Exposición']
-											,['numero','Número'],['fechaAlta','Fecha Alta'],['anio','Año']]
-								})
-	var condicionesStore=new Ext.data.SimpleStore({
-									id:0,
-									fields:['idcond','nombrecond'],
-									data:[['eq','Igual a']
-										  ,['ne','No es igual a']
-										  ,['gt','Mayor que']
-										  ,['lt','Menor que']
-										  ,['ge','Mayor o igual que']
-										  ,['le','Menor o igual que']
-										  ,['ilike2','Contiene']
-										  ,['ilike','No Contiene']]
-								});									
 	
 	var formSearch = new  Ext.form.FormPanel({
 		url:'search',
 		renderTo:'ordenreserva_form',
 		id:'formSearchId',
 		title:'Ordenes de Reserva',
-		width:680,
+		width:650,
 		frame:true,
 		items:[	
+					new Ext.form.ComboBox({
+										mode:'local',
+										valueField:'myId',
+										displayField:'displayText',
+										store: new Ext.data.SimpleStore({
+											id: 0,
+											fields:['myId','displayText'],
+											data:[['empresa.nombre','Nombre Empresa'],['numero','Por Num.Orden']]
+										}),
+										id:'combocriteriosId',
+										name:'criterios',
+										boxMaxWidth:100,
+										allowBlank:false,
+										msgTarget:'under',
+										value:'empresa.nombre',
+										fieldLabel:'Criterios',
+										forceSelection:true
+										}),	
 				{
+					xtype:'checkbox',
+					name:'soloanuladas',
+					id:'soloanuladasId',
+					fieldLabel:'Solo Anuladas'
+				},{
 					layout:'column',
 					
 					items:[
 						{
-							columnWidth: .3,
+							columnWidth: .4,
 							layout:'form',
-							width:50,
 							items:{
-								xtype:'combo',
-								mode:'local',
-								name:'campos',
-								id:'campoIdFiltro1',
-								hideLabel:false,
-								fieldLabel:'Filtro 1',
-								labelWidth:60,
-								valueField:'idcampo',
-								displayField:'labelcampo',
-								store: camposStore,
-								anchor:'95%'
+								xtype:'textfield',
+								name:'searchCriteria',
+								id:'searchCriteriaId',
+								fieldLabel:'Valor Criterio'
 							}
 						},{
-							columnWidth: .2,
-							layout:'form',
-							items:{
-								xtype:'combo',
-								mode:'local',
-								name:'condiciones',
-								id:'condicionesIdFiltro1',
-								valueField:'idcond',
-								displayField:'nombrecond',
-								store: condicionesStore,
-								boxMaxWidth:100,
-								msgTarget:'under',
-								hideLabel:true,
-								anchor:'95%'
-							}
-							
-						},{
-							columnWidth: .3,
-							layout:'form',
-							items:{
-										xtype:'textfield',
-										hideLabel:true,
-										id:'searchStringIdFiltro1',
-										anchor:'95%'
-										/*,
-										listeners:{
-											click: function(){
-												ordenStore.load({
-														params:{'fieldSearch':Ext.getCmp('combocriteriosId').getValue(),'start':0,'limit':10
-															,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
-															,'anulada':Ext.getCmp('soloanuladasId').getValue()
-															}
-													});
-											}
-										}*/
-							}
-						}/*,{
-							columnWidth: .3,
+							columnWidth: .4,
 							layout:'form',
 							items:{
 										xtype:'button',
+										text:'Buscar',
 										listeners:{
 											click: function(){
 												ordenStore.load({
@@ -334,156 +280,8 @@ Ext.onReady(function(){
 											}
 										}
 							}
-						}*/
-						
-					]
-				},{
-					layout:'column',
-					items:[
-						{
-							columnWidth: .3,
-							layout:'form',
-							width:50,
-							items:{
-								xtype:'combo',
-								mode:'local',
-								name:'campos',
-								id:'campoIdFiltro2',
-								hideLabel:false,
-								fieldLabel:'Filtro 2',
-								labelWidth:60,
-								valueField:'idcampo',
-								displayField:'labelcampo',
-								store: camposStore,
-								anchor:'95%'
-							}
-						},{
-							columnWidth: .2,
-							layout:'form',
-							items:{
-								xtype:'combo',
-								mode:'local',
-								name:'condiciones',
-								id:'condicionesIdFiltro2',
-								valueField:'idcond',
-								displayField:'nombrecond',
-								store: condicionesStore,
-								boxMaxWidth:100,
-								msgTarget:'under',
-								hideLabel:true,
-								anchor:'95%'
-							}
-							
-						},{
-							columnWidth: .3,
-							layout:'form',
-							items:{
-										xtype:'textfield',
-										hideLabel:true,
-										id:'searchStringIdFiltro2',
-										anchor:'95%'
-										/*,
-										listeners:{
-											click: function(){
-												ordenStore.load({
-														params:{'fieldSearch':Ext.getCmp('combocriteriosId').getValue(),'start':0,'limit':10
-															,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
-															,'anulada':Ext.getCmp('soloanuladasId').getValue()
-															}
-													});
-											}
-										}*/
-							}
 						}
-
 					]
-				},{
-					layout:'column',
-					items:[
-						{
-							columnWidth: .3,
-							layout:'form',
-							width:50,
-							items:{
-								xtype:'combo',
-								mode:'local',
-								name:'campos',
-								id:'campoIdFiltro3',
-								hideLabel:false,
-								fieldLabel:'Filtro 3',
-								labelWidth:60,
-								valueField:'idcampo',
-								displayField:'labelcampo',
-								store: camposStore,
-								anchor:'95%'
-							}
-						},{
-							columnWidth: .2,
-							layout:'form',
-							items:{
-								xtype:'combo',
-								mode:'local',
-								name:'condiciones',
-								id:'condicionesIdFiltro3',
-								valueField:'idcond',
-								displayField:'nombrecond',
-								store: condicionesStore,
-								boxMaxWidth:100,
-								msgTarget:'under',
-								hideLabel:true,
-								anchor:'95%'
-							}
-							
-						},{
-							columnWidth: .3,
-							layout:'form',
-							items:{
-										xtype:'textfield',
-										hideLabel:true,
-										id:'searchStringIdFiltro3',
-										anchor:'95%'
-										/*,
-										listeners:{
-											click: function(){
-												ordenStore.load({
-														params:{'fieldSearch':Ext.getCmp('combocriteriosId').getValue(),'start':0,'limit':10
-															,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
-															,'anulada':Ext.getCmp('soloanuladasId').getValue()
-															}
-													});
-											}
-										}*/
-							}
-						}
-
-					]
-				},{
-					xtype:'checkbox',
-					name:'soloanuladas',
-					id:'soloanuladasId',
-					fieldLabel:'Solo Anuladas?'
-				},{
-						xtype:'button',
-						text:'Buscar',
-						listeners:{
-							click: function(){
-								ordenStore.load({
-										params:{
-											'campos':[Ext.getCmp('campoIdFiltro1').getValue()
-														,Ext.getCmp('campoIdFiltro2').getValue()
-														,Ext.getCmp('campoIdFiltro3').getValue()],
-											'condiciones':[Ext.getCmp('condicionesIdFiltro1').getValue()
-														,Ext.getCmp('condicionesIdFiltro2').getValue()
-														,Ext.getCmp('condicionesIdFiltro3').getValue()],
-											'searchString':[Ext.getCmp('searchStringIdFiltro1').getValue()
-														,Ext.getCmp('searchStringIdFiltro2').getValue()
-														,Ext.getCmp('searchStringIdFiltro3').getValue()
-													],
-											'soloAnuladas':Ext.getCmp('soloanuladasId').getValue()		
-										}
-								});
-							}
-						}
 				},grid
 		
 		]
