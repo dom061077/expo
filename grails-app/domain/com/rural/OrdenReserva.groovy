@@ -1,5 +1,8 @@
 package com.rural
 
+
+
+import java.util.Date;
 import com.rural.seguridad.*
 
 class OrdenReserva {
@@ -25,12 +28,76 @@ class OrdenReserva {
 	
 	Long numero
 	Date fechaAlta
+	
+	Integer puntoVenta
+	
+	//-------datos persistidos del expositor----
+	String nombreRepresentante
+	String direccion
+	String email
+	String nombre//es el nombre comercial
+	String telefono1
+	String telefono2
+	String cargoRep//cargo representante
+	String dniRep
+	
+	
+	//datos fiscales para la facturación
+	String cuit
+	String razonSocial //apellido y nombre del expositor o razón social
+	String direccionFiscal
+	String localidadFiscal
+	String provinciaFiscal
+	String codigoPostal
+	String pais
+	String telefonoFiscal
+	
+	
+	Vendedor vendedor
+	Localidad localidad
+	
+	
+	String telefonoRepresentante1;
+	String telefonoRepresentante2;
+	String telefonoRepresentante3;
+	
+	
+	//-------fin datos persistidos del expositor-----
+	
+	
 	static belongsTo = [empresa:Empresa,usuario:Person,expo:Exposicion] 
 
 	static hasMany = [detalle:DetalleServicioContratado,otrosconceptos:OtrosConceptos,productos:ProductoExpuesto,recibos:Recibo]
 	
     static constraints = {
     	numero(blank:true,nullable:true)
+		puntoVenta(blank:true,nullable:true)
+		nombreRepresentante(blank:true,nullable:true)
+		direccion(blank:true,nullable:true)
+		email(blank:true,nullable:true)
+		nombre(blank:true,nullable:true)
+		telefono1(blank:true,nullable:true)
+		telefono2(blank:true,nullable:true)
+		cargoRep(blank:true,nullable:true)
+		dniRep(blank:true,nullable:true)
+		cuit(blank:true,nullable:true)
+		razonSocial(blank:true,nullable:true) //apellido y nombre del expositor o razón social
+		direccionFiscal(blank:true,nullable:true)
+		localidadFiscal(blank:true,nullable:true)
+		provinciaFiscal(blank:true,nullable:true)
+		codigoPostal(blank:true,nullable:true)
+		pais(blank:true,nullable:true)
+		telefonoFiscal(blank:true,nullable:true)
+		
+		puntoVenta=expo.puntoVenta
+		
+		vendedor(blank:true,nullable:true)
+		localidad(blank:true,nullable:true)
+		
+		
+		telefonoRepresentante1(blank:true,nullable:true)
+		telefonoRepresentante2(blank:true,nullable:true)
+		telefonoRepresentante3(blank:true,nullable:true)
     }
     
     
@@ -39,18 +106,54 @@ class OrdenReserva {
     }
     
     def sigNumero(){
-    	def c = OrdenReserva.createCriteria()
+    	/*def c = OrdenReserva.createCriteria()
     	def lastNum = c.get{
     		projections{
     			max("numero")
     		}
     		
     	}
-		return lastNum ? lastNum+1 : 1    	
+		return lastNum ? lastNum+1 : 1    */
+		def max = OrdenReserva.executeQuery("select max(numero)+1 from OrdenReserva o where o.expo = ?",[expo])[0]
+		if (max == null) {
+			max = 1
+		}
+		return max
+
     }
     
     def beforeInsert={
     	numero = sigNumero()
+		
+		nombreRepresentante=empresa.nombreRepresentante
+		direccion=empresa.direccion
+		email=empresa.email
+		nombre=empresa.nombre//es el nombre comercial
+		telefono1=empresa.telefono1
+		telefono2=empresa.telefono2
+		cargoRep=empresa.cargoRep//cargo representante
+		dniRep=empresa.dniRep
+		
+		
+		//datos fiscales para la facturación
+		cuit=empresa.cuit
+		razonSocial=empresa.razonSocial //apellido y nombre del expositor o razón social
+		direccionFiscal=empresa.direccionFiscal
+		localidadFiscal=empresa.localidadFiscal
+		provinciaFiscal=empresa.provinciaFiscal
+		codigoPostal=empresa.codigoPostal
+		pais=empresa.pais
+		telefonoFiscal=empresa.telefonoFiscal
+		vendedor=empresa.vendedor
+		localidad=empresa.localidad
+		telefonoRepresentante1=empresa.telefonoRepresentante1
+		telefonoRepresentante2=empresa.telefonoRepresentante2
+		telefonoRepresentante3=empresa.telefonoRepresentante3
+
+		
+		
+		
+		
     }
     
 }
