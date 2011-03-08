@@ -116,10 +116,12 @@ class LogoController {
 		
     	if(!logoInstance.hasErrors() && logoInstance.save()){
 			log.info "LA INSTACIA DE LA CLASE Logo SE GUARDO CORRECTAMENTE"
-			render """{success:true}"""
+			render """{success:true},msg:''"""
     	}else{
 			log.error "ERROR AL GUARDAR LA INSTACIA DE LA CLASE Logo "+logoInstance.errors.allErrors
 			render """{success:false,msg:'Se produjo un error al tratar de guardar los datos'}"""
 		}
     }
+	
+	
 }

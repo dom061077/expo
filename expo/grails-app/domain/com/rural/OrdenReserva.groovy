@@ -89,7 +89,7 @@ class OrdenReserva {
 		pais(blank:true,nullable:true)
 		telefonoFiscal(blank:true,nullable:true)
 		
-		puntoVenta=expo.puntoVenta
+		puntoVenta(blank:true,nullable:true)
 		
 		vendedor(blank:true,nullable:true)
 		localidad(blank:true,nullable:true)
@@ -149,7 +149,7 @@ class OrdenReserva {
 		telefonoRepresentante1=empresa.telefonoRepresentante1
 		telefonoRepresentante2=empresa.telefonoRepresentante2
 		telefonoRepresentante3=empresa.telefonoRepresentante3
-
+		puntoVenta=expo.puntoVenta
 		
 		
 		

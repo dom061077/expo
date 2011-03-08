@@ -13,6 +13,13 @@ Ext.onReady(function(){
 		renderTo:'formulario_extjs',
 		items:[
 			{
+				xtype:'numberfield',
+				name:'puntoVenta',
+				id:'puntoVentaId',
+				allowBlank:false,
+				msgTarget:'under',
+				fieldLabel:'Nro. Punto Venta'
+			},{
 				xtype:'textfield',
 				name:'nombre',
 				id:'nombreId',
@@ -63,5 +70,5 @@ Ext.onReady(function(){
 			}
 		]
 	});
-	Ext.getCmp('nombreId').focus('',10);
+	Ext.getCmp('puntoVentaId').focus('',10);
 });
