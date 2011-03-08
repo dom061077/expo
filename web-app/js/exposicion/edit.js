@@ -19,6 +19,13 @@ Ext.onReady(function(){
 				value:exposicionId,
 				hideLabel:true
 			},{
+				xtype:'numberfield',
+				name:'puntoVenta',
+				id:'puntoVentaId',
+				allowBlank:false,
+				msgTarget:'under',
+				fieldLabel:'Nro. Punto de Venta'
+			},{	
 				xtype:'textfield',
 				name:'nombre',
 				id:'nombreId',
@@ -160,6 +167,7 @@ Ext.onReady(function(){
 		success: function(f,a){
 			Ext.getCmp('nombreId').setValue(a.result.data.nombre);
 			Ext.getCmp('imagelogoId').el.dom.firstChild.src=a.result.pathfile;
+			Ext.getCmp('puntoVentaId').setValue(a.result.data.puntoVenta);
 		},
 		failure: function (thisform,action){
 			alert(action);

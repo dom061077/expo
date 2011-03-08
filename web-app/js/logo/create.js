@@ -50,11 +50,32 @@ Ext.onReady(function(){
 					formLogo.getForm().submit({
 						success: function(f,a){
 							if(a.result.success){
-								
+								Ext.MessageBox.show({
+								title:'Mensaje',
+								msg:a.result.msg,
+								icon:Ext.MessageBox.INFO,
+								buttons:Ext.MessageBox.OK,
+								fn:function(btn){
+									window.location=list
+								}
+							});
+							}else{
+								Ext.MessageBox.show({
+								title:'Error',
+								msg:a.result.msg,
+								icon:Ext.MessageBox.ERROR,
+								buttons:Ext.MessageBox.OK
+							});
 							}
+							
 						},
 						failure: function(f,a){
-							
+							Ext.MessageBox.show({
+								title:'Error',
+								msg:'Ocurrió un error, intente más tarde',
+								icon:Ext.MessageBox.ERROR,
+								buttons:Ext.MessageBox.OK
+							});
 						}
 					});
 				}
@@ -66,5 +87,6 @@ Ext.onReady(function(){
 			}
 		]
 	});
+	Ext.getCmp('anioId').focus('',10);
 	
 });

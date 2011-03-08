@@ -62,7 +62,7 @@ class ExposicionController {
 	    	render(contentType:"text/json"){
 	    		success true
 	    		pathfile "/expo/reports/images/"+exposicionInstance.nombre.trim()+".jpg"
-	    		data(id:exposicionInstance.id,nombre:exposicionInstance.nombre)
+	    		data(id:exposicionInstance.id,puntoVenta:exposicionInstance.puntoVenta,nombre:exposicionInstance.nombre)
 	    	}
     	}else{
     		render(contentType:"text/json"){
