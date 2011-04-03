@@ -9,21 +9,21 @@
 	</parameter>
 	<parameter name="reportsDirPath" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
-	<field name="empresa.razonSocial" class="java.lang.String"/>
-	<field name="empresa.cuit" class="java.lang.String"/>
-	<field name="empresa.direccionFiscal" class="java.lang.String"/>
-	<field name="empresa.telefonoFiscal" class="java.lang.String"/>
-	<field name="empresa.nombre" class="java.lang.String"/>
-	<field name="empresa.direccion" class="java.lang.String"/>
-	<field name="empresa.nombreRepresentante" class="java.lang.String"/>
-	<field name="empresa.email" class="java.lang.String"/>
-	<field name="empresa.cargoRep" class="java.lang.String"/>
-	<field name="empresa.telefonoRepresentante1" class="java.lang.String"/>
-	<field name="empresa.dniRep" class="java.lang.String"/>
+	<field name="razonSocial" class="java.lang.String"/>
+	<field name="cuit" class="java.lang.String"/>
+	<field name="direccionFiscal" class="java.lang.String"/>
+	<field name="telefonoFiscal" class="java.lang.String"/>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="direccion" class="java.lang.String"/>
+	<field name="nombreRepresentante" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="cargoRep" class="java.lang.String"/>
+	<field name="telefonoRepresentante1" class="java.lang.String"/>
+	<field name="dniRep" class="java.lang.String"/>
 	<field name="detalle" class="java.util.Collection"/>
 	<field name="otrosconceptos" class="java.util.Collection"/>
 	<field name="fechaAlta" class="java.util.Date"/>
-	<field name="empresa.telefono1" class="java.lang.String"/>
+	<field name="telefono1" class="java.lang.String"/>
 	<field name="numero" class="java.lang.Long"/>
 	<field name="productos" class="java.util.Collection"/>
 	<field name="subTotal" class="java.lang.Double"/>
@@ -38,13 +38,14 @@
 	<field name="exentoCheck" class="java.lang.Boolean"/>
 	<field name="consFinalCheck" class="java.lang.Boolean"/>
 	<field name="monotributoCheck" class="java.lang.Boolean"/>
-	<field name="empresa.vendedor.nombre" class="java.lang.String"/>
-	<field name="empresa.localidadFiscal" class="java.lang.String"/>
+	<field name="vendedor.nombre" class="java.lang.String"/>
+	<field name="localidadFiscal" class="java.lang.String"/>
 	<field name="observacion" class="java.lang.String"/>
 	<field name="usuario.userRealName" class="java.lang.String"/>
-	<field name="empresa.localidad.nombreLoc" class="java.lang.String"/>
-	<field name="empresa.localidad.provincia.nombre" class="java.lang.String"/>
-	<field name="empresa.localidad.codigoPostal" class="java.lang.String"/>
+	<field name="localidad.nombreLoc" class="java.lang.String"/>
+	<field name="localidad.provincia.nombre" class="java.lang.String"/>
+	<field name="localidad.codigoPostal" class="java.lang.String"/>
+	<field name="puntoVenta" class="java.lang.Integer"/>
 	<variable name="subtotal" class="java.lang.Double"/>
 	<variable name="tipo" class="java.lang.String">
 		<variableExpression><![CDATA[($V{PAGE_NUMBER}==0 ? "ORIGINAL - CLIENTE " : ($V{PAGE_NUMBER} == 1 ? "DUPLICADO - CONTADURIA" : "TRIPLICADO - DEPTO. EXPOSICIONES"))]]></variableExpression>
@@ -99,49 +100,49 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.nombre}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="66" y="207" width="221" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.direccion}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{direccion}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="323" y="207" width="221" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.email}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{email}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="227" y="222" width="317" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.nombreRepresentante}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombreRepresentante}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="66" y="236" width="115" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.cargoRep}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{cargoRep}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="238" y="237" width="112" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.telefonoRepresentante1}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{telefonoRepresentante1}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="459" y="237" width="85" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.dniRep}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dniRep}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="7" y="174" width="226" height="13"/>
@@ -173,7 +174,7 @@
 				<text><![CDATA[Monotributo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="427" y="53" width="45" height="14"/>
+				<reportElement x="427" y="46" width="45" height="14"/>
 				<textElement>
 					<font fontName="Arial" size="11" isBold="false"/>
 				</textElement>
@@ -193,7 +194,7 @@ Tel./ Fax: (0381) - 4347777/6146/6258
 www.srt.org.ar - informes@srt.org.ar]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="484" y="31" width="60" height="14" isRemoveLineWhenBlank="true"/>
+				<reportElement x="483" y="31" width="60" height="14" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Right">
 					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
@@ -206,15 +207,8 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				</textElement>
 				<text><![CDATA[Sociedad Rural de Tucumán]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="449" y="31" width="45" height="14"/>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[0002-]]></text>
-			</staticText>
 			<textField>
-				<reportElement x="469" y="53" width="75" height="14"/>
+				<reportElement x="469" y="46" width="75" height="14"/>
 				<textElement textAlignment="Right">
 					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
@@ -264,28 +258,28 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.telefono1}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{telefono1}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="66" y="117" width="115" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[($F{empresa.cuit}==null ? "" : $F{empresa.cuit})]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{cuit}==null ? "" : $F{cuit})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="66" y="132" width="242" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.direccionFiscal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{direccionFiscal}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="253" y="103" width="280" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.razonSocial}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{razonSocial}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="7" y="103" width="246" height="13"/>
@@ -334,14 +328,14 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.localidad.nombreLoc}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{localidad.nombreLoc}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="66" y="147" width="195" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.localidad.provincia.nombre}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{localidad.provincia.nombre}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="231" y="147" width="23" height="13"/>
@@ -355,7 +349,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{empresa.localidad.codigoPostal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{localidad.codigoPostal}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="355" y="146" width="29" height="13"/>
@@ -415,6 +409,20 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<reportElement x="4" y="7" width="131" height="64"/>
 				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath}+"/images/",$P{logo})]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="450" y="31" width="25" height="14"/>
+				<textElement>
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{puntoVenta}+10000).toString().substring(1,5)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="477" y="31" width="5" height="14"/>
+				<textElement>
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -601,7 +609,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="7" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Por "+$F{empresa.vendedor.nombre}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["Por "+$F{vendedor.nombre}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="8" y="349" width="43" height="9"/>

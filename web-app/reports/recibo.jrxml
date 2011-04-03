@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" language="groovy" pageWidth="595" pageHeight="842" columnWidth="567" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="14">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="269"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
 	</parameter>
@@ -14,11 +14,12 @@
 	<field name="total" class="java.lang.Double"/>
 	<field name="efectivo" class="java.lang.Double"/>
 	<field name="concepto" class="java.lang.String"/>
-	<field name="ordenReserva.empresa.razonSocial" class="java.lang.String"/>
+	<field name="ordenReserva.razonSocial" class="java.lang.String"/>
 	<field name="cheques" class="java.util.Collection"/>
 	<field name="usuario.userRealName" class="java.lang.String"/>
 	<field name="ordenReserva.detalle" class="java.util.Collection"/>
 	<field name="ordenReserva.otrosconceptos" class="java.util.Collection"/>
+	<field name="puntoVenta" class="java.lang.Integer"/>
 	<variable name="subtotaldetalleotrosconceptos" class="java.lang.Double"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -131,7 +132,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.empresa.razonSocial}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.razonSocial}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement mode="Transparent" x="479" y="227" width="58" height="13"/>
@@ -161,13 +162,6 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{fechaAlta}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="459" y="44" width="35" height="15"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[0002-]]></text>
-			</staticText>
 			<rectangle>
 				<reportElement x="372" y="5" width="29" height="33"/>
 			</rectangle>
@@ -300,13 +294,6 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				</textElement>
 				<text><![CDATA[Sociedad Rural de Tucumán]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="459" y="322" width="35" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[0002-]]></text>
-			</staticText>
 			<rectangle>
 				<reportElement x="372" y="562" width="29" height="33"/>
 			</rectangle>
@@ -374,13 +361,6 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 					<font size="20" isBold="true"/>
 				</textElement>
 				<text><![CDATA[X]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="459" y="600" width="35" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[0002-]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="459" y="562" width="60" height="22"/>
@@ -455,7 +435,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.empresa.razonSocial}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.razonSocial}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="322" y="391" width="220" height="11"/>
@@ -523,7 +503,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.empresa.razonSocial}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.razonSocial}]]></textFieldExpression>
 			</textField>
 			<rectangle radius="10">
 				<reportElement x="425" y="779" width="118" height="25"/>
@@ -745,6 +725,27 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="459" y="44" width="35" height="15"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{puntoVenta}+10000).toString().substring(1,5)+"-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="459" y="322" width="35" height="15"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{puntoVenta}+10000).toString().substring(1,5)+"-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="459" y="600" width="35" height="15"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{puntoVenta}+10000).toString().substring(1,5)+"-"]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>
