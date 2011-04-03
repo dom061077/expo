@@ -15,7 +15,7 @@ Ext.onReady(function(){
 			{header:"id",dataIndex:'id',hidden:true},
 			{header:"Nombre de Exposición",width:200,dataIndex:"nombre"}
 		],
-		tbar:[{
+		tbar:[/*{
 				text:'Pre-visualizar',
 				handler:function(){
 					var sm = gridexposiciones.getSelectionModel();
@@ -24,7 +24,7 @@ Ext.onReady(function(){
 						open('logopreview?id='+sel.data.id,'_blank');
 					}
 				}
-			},{
+			},*/{
 				text:'Logos',
 				handler:function(){
 					var sm = gridexposiciones.getSelectionModel();

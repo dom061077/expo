@@ -54,7 +54,7 @@ class LoginController {
 			redirect uri: '/'
 			return
 		}
-
+														
 		String view
 		String postUrl
 		def config = authenticateService.securityConfig.security

@@ -261,17 +261,31 @@ class OrdenReservaController {
     	}
     	log.debug(ordenReservaInstance.expo.nombre)
     	log.debug(ordenReservaInstance.usuario.userRealName)
-    	log.debug(ordenReservaInstance.empresa.localidad.nombreLoc)
-    	log.debug(ordenReservaInstance.empresa.localidad.provincia.nombre)
+    	log.debug(ordenReservaInstance.localidad?.nombreLoc)
+    	log.debug(ordenReservaInstance.localidad?.provincia?.nombre)
     	List ordenList = new ArrayList()
     	ordenList.add(ordenReservaInstance)
     	ordenList.add(ordenReservaInstance)    	
-    	ordenList.add(ordenReservaInstance)    	
+    	ordenList.add(ordenReservaInstance)
+		//-------recuperacion de desde la instancia de logo correspondiente a la exposicion y al año de la Orden
+		def listlogos = Logo.createCriteria().list(){
+			and{
+				expo{
+					eq("id",ordenReservaInstance.expo.id)
+				}
+				eq("anio",ordenReservaInstance.anio)
+			}
+		}	
+		def logo
+		listlogos.each{
+			logo = it
+		}
+		//------------------------------------------------------------------------------------    	
 
-		String pathtofile = servletContext.getRealPath("/reports/images")+"/"+ordenReservaInstance.expo.nombre.trim()+".jpg"
-		if(ordenReservaInstance.expo.image){
+		String pathtofile = servletContext.getRealPath("/reports/images")+"/"+ordenReservaInstance.expo.nombre.trim()+ordenReservaInstance.anio+".jpg"
+		if(logo?.image){
 			FileOutputStream foutput = new FileOutputStream(new File(pathtofile))
-			foutput.write(ordenReservaInstance.expo.image)
+			foutput.write(logo?.image)
 			foutput.flush()
 		}
     	
@@ -279,7 +293,7 @@ class OrdenReservaController {
     	log.debug("Orden Reserva: $ordenReservaInstance")
 		String reportsDirPath = servletContext.getRealPath("/reports/");
 		params.put("reportsDirPath", reportsDirPath);
-		params.put("logo",ordenReservaInstance.expo.nombre.trim()+".jpg")
+		params.put("logo",ordenReservaInstance.expo.nombre.trim()+ordenReservaInstance.anio+".jpg")
 		log.debug("Parametros: $params")
 		chain(controller:'jasper',action:'index',model:[data:ordenList],params:params)
     }

@@ -6,7 +6,8 @@ Ext.onReady(function(){
 		totalProperty:'total',
 		root:'rows',
 		url:'listjson',
-		fields:['id','nombre']
+		fields:['id','anio','exponombre'],
+		baseParams:{exposicionId:exposicionId}
 		
 	});
 	
@@ -14,23 +15,33 @@ Ext.onReady(function(){
 		store:logosStore,
 		columns:[
 			{header:"id",dataIndex:'id',hidden:true},
-			{header:"Año",dataIndex:'anio'}
+			{header:"Año",dataIndex:'anio'},
+			{header:"Expo nombre",dataIndex:'exponombre'}
 		],
 		height:250,
 		width:460,
 		tbar:[
-			/*{
-				text:'Agregar',
+			{
+				text:'Pre-visualizar',
 				handler:function(){
 					var sm = gridlogos.getSelectionModel();
-					var sel = sm.geSelected();
+					var sel = sm.getSelected();
 					if(sm.hasSelection()){
-						
+						open('logopreview?id='+sel.data.id,'_blank');
 					}
 				}
-			}*/
+			}
 		]
 	});
+	
+	gridlogos.on('rowdblclick',function(grid,rowIndex,e){
+		                  var r = grid.getStore().getAt(rowIndex);
+		                  var selectedId = r.get('id');
+		                  logosStore.reload({params: {id_ft: selectedId}});
+		                  window.location = 'edit?id='+selectedId;
+
+		}
+	);
 	
 	var formSearch = new Ext.form.FormPanel({
 		title:'Logos de Exposición',
@@ -42,7 +53,8 @@ Ext.onReady(function(){
 				xtype:'textfield',
 				id:'exposicionId',
 				name:'exposicionId',
-				hidden:true,
+				hidden:true
+				,
 				value:exposicionId,
 				hideLabel:true
 			},{
