@@ -184,7 +184,7 @@ Ext.onReady(function(){
 	            				Ext.getCmp('idSubrubro').hiddenField.value=respuesta.data.subrubroId;
 								Ext.getCmp('idDnirep').setValue(respuesta.data.dniRep);
 								if(respuesta.data.conordenes){
-										Ext.getCmp('nombreId').el.dom.readOnly = true;
+										/*Ext.getCmp('nombreId').el.dom.readOnly = true;
 										Ext.getCmp('razonsocialId').el.dom.readOnly = true;
 										Ext.getCmp('cuitId').el.dom.readOnly = true;
 										Ext.getCmp('direccionId').el.dom.readOnly = true;
@@ -205,7 +205,7 @@ Ext.onReady(function(){
 			            				Ext.getCmp('idCodigopostal').el.dom.readOnly = true;
 			            				Ext.getCmp('idCargorep').el.dom.readOnly = true;
 			            				Ext.getCmp('idSubrubro').el.dom.readOnly = true;
-										Ext.getCmp('idDnirep').el.dom.readOnly = true;
+										Ext.getCmp('idDnirep').el.dom.readOnly = true;*/
 									
 								}
 								
