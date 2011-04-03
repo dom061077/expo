@@ -120,11 +120,25 @@ class ReciboController {
 		}
 		log.debug(recibo.usuario.userRealName)
 
-		
-		String pathtofile = servletContext.getRealPath("/reports/images")+"/"+recibo.ordenReserva.expo.nombre.trim()+".jpg"
-		if(recibo.ordenReserva.expo.image){
+		//-------recuperacion de desde la instancia de logo correspondiente a la exposicion y al año de la Orden
+		def listlogos = Logo.createCriteria().list(){
+			and{
+				expo{
+					eq("id",recibo.ordenReserva.expo.id)
+				}
+				eq("anio",recibo.ordenReserva.anio)
+			}
+		}
+		def logo
+		listlogos.each{
+			logo = it
+		}
+		//------------------------------------------------------------------------------------
+
+		String pathtofile = servletContext.getRealPath("/reports/images")+"/"+recibo.ordenReserva.expo.nombre.trim()+recibo.ordenReserva.anio+".jpg"
+		if(logo?.image){
 			FileOutputStream foutput = new FileOutputStream(new File(pathtofile))
-			foutput.write(recibo.ordenReserva.expo.image)
+			foutput.write(logo?.image)
 			foutput.flush()
 		}
 		
@@ -133,7 +147,7 @@ class ReciboController {
 		reciboList.add(recibo)
 		String reportsDirPath = servletContext.getRealPath("/reports/");
 		params.put("reportsDirPath", reportsDirPath);
-		params.put("logo",recibo.ordenReserva.expo.nombre.trim()+".jpg")
+		params.put("logo",recibo.ordenReserva.expo.nombre.trim()+recibo.ordenReserva.anio+".jpg")
 		log.debug("Parametros: $params")
 		chain(controller:'jasper',action:'index',model:[data:reciboList],params:params)
 		

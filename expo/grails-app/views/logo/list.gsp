@@ -8,7 +8,7 @@
         
         
         <script type="text/javascript">
-        	var exposicionId = '<%out << "${expocisionId}"%>';
+        	var exposicionId = '<%out << "${exposicionId}"%>';
         	var exposicionNombre = '<% out << "${exposicionNombre}"%>';
         </script>
         <title>Logo List</title>

@@ -15,6 +15,7 @@ class Recibo {
     static constraints = {
 		numero(blank:true,nullable:true)
 		usuario(blank:true,nullable:true)
+		puntoVenta(blank:true,nullable:true)
     }
 	
 	static belongsTo = [ordenReserva:OrdenReserva,usuario:Person]

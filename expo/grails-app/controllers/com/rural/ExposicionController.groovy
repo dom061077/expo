@@ -74,11 +74,11 @@ class ExposicionController {
     def savejson = {
     	log.info("INGRESANDO AL METODO savejson DEL CONTROLADOR ExposicionController")
     	log.debug("PARAMETROS $params")
-    	def image =  request.getFile('image')
+    	/*def image =  request.getFile('image')
     	if (image?.empty || image?.size>1024*30){
     		render """{success:false,msg:'El tamaño máximo de la imagen es de 30 KB'}"""
     		return
-    	}
+    	}*/
     	def exposicionInstance=new Exposicion(params)
     	if(!exposicionInstance.hasErrors() && exposicionInstance.save()){
     		/*render(contentType:"text/json"){
@@ -98,9 +98,10 @@ class ExposicionController {
     	log.info("INGRESANDO AL METODO updatejson DEL CONTROLADOR ExposicionController")
     	log.debug("PARAMETROS $params")
     	def exposicionInstance = Exposicion.get(params.id)
-    	def image = request.getFile('image')
+		exposicionInstance.properties = params
+    	/*def image = request.getFile('image')
     	def imagesaved = exposicionInstance.image
-    	exposicionInstance.properties = params
+    	
     	if (!image?.empty ){
     		if(image.size>1024*30){
     			log.debug("Error de tama�o de archivo")
@@ -113,7 +114,7 @@ class ExposicionController {
     	}else{
     		log.debug("Imagen de Exposicion recuperada")
 			exposicionInstance.image=imagesaved			    		
-    	}
+    	}*/
     	
     	
     	if(!exposicionInstance.hasErrors() && exposicionInstance.save()){

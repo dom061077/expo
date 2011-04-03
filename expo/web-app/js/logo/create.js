@@ -47,8 +47,10 @@ Ext.onReady(function(){
 				text:'Guardar',
 				id:'guardarId',
 				handler:function(){
+					if(formLogo.getForm().isValid())
 					formLogo.getForm().submit({
 						success: function(f,a){
+							
 							if(a.result.success){
 								Ext.MessageBox.show({
 								title:'Mensaje',
@@ -56,7 +58,7 @@ Ext.onReady(function(){
 								icon:Ext.MessageBox.INFO,
 								buttons:Ext.MessageBox.OK,
 								fn:function(btn){
-									window.location=list
+									window.location='list?expoid='+exposicionId+'&exponombre='+exposicionNombre
 								}
 							});
 							}else{
@@ -72,7 +74,7 @@ Ext.onReady(function(){
 						failure: function(f,a){
 							Ext.MessageBox.show({
 								title:'Error',
-								msg:'Ocurrió un error, intente más tarde',
+								msg:a.result.msg,
 								icon:Ext.MessageBox.ERROR,
 								buttons:Ext.MessageBox.OK
 							});
