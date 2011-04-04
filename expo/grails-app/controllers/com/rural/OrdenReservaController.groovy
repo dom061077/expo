@@ -12,6 +12,7 @@ import com.rural.utils.FechaOrdenComparator
 import com.rural.utils.LoteComparator
 import com.rural.utils.NumeroOrdenComparator
 import com.rural.utils.SectorComparator
+import com.rural.utils.GUtilDomainClass
 
 import jxl.*
 import jxl.write.Label
@@ -329,6 +330,36 @@ class OrdenReservaController {
     
     	}
     }
+	
+	List consultar2(params){
+		log.debug("Dentro del Closure consultar2")
+		def ordenes = OrdenReserva.createCriteria().list(){
+			and{
+				if(condiciones.size()>0){
+					condiciones.each{
+							
+					}
+				}
+			}
+			/*if(params.searchOper.equals(GUtilDomainClass.CONTAINS) || searchOp.equals(GUtilDomainClass.DOESNOTCONTAIN) )
+			searchValue="%"+searchValue+"%"
+
+			log.debug "OPERACION DE BUSQUEDA: "+searchOp+" VALOR DE BUSQUEDA: $searchValue"
+			if(params.searchOper.equals(GUtilDomainClass.DOESNOTCONTAIN)){
+				log.debug "NEGACION DE LA BUSQUEDA LIKE"
+				not {
+					"${searchOp}"(params.searchField,searchValue)
+				}
+			}else{
+				"${searchOp}"(params.searchField,searchValue)
+			}*/
+
+		}
+		params.condiciones.each{
+			log.debug "Condicion: "+it
+		}
+		return ordenes
+	}
 
     List  consultar(params){
     	log.debug("Dentro del closure consultar")
@@ -423,7 +454,7 @@ class OrdenReservaController {
     	log.info("INGRESANDO AL METODO listjson DEL CONTROLADOR OrdenReservaController")
     	log.debug("PARAMETROS $params")
     	log.debug("PARAMETRO ANULADA: "+Boolean.parseBoolean(params.anulada))
-    	def list = consultar(params)
+    	def list = consultar2(params)
     	log.debug("Objecto list devuelo por el closure consultar: "+list.size())
     	Double totalCancelado=0
     	Double saldo=0
