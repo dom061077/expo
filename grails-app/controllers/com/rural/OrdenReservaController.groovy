@@ -332,35 +332,73 @@ class OrdenReservaController {
     }
 	
 	List consultar2(params){
-		log.debug("Dentro del Closure consultar2")
-		def ordenes = OrdenReserva.createCriteria().list(){
-			and{
-				if(condiciones.size()>0){
-					condiciones.each{
-							
+		def ordenes=null
+		def detalles=null
+		def i
+		String valorSearch
+		String condicion
+		String campo
+		ArrayList list = new ArrayList()
+		/*consulto las ordenes que no tienen detalle*/
+		java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy")
+		Date fecha
+		ordenes=OrdenReserva.createCriteria().list(){
+			for(i = 0; i<params.campos.size();i++){
+					valorSearch = params.searchString[i]
+					condicion = params.condiciones[i]
+					campo = params.campos[i]
+					if(condicion.trim().equals("ilike2")){
+					
+						condicion="ilike"
+						 
 					}
-				}
-			}
-			/*if(params.searchOper.equals(GUtilDomainClass.CONTAINS) || searchOp.equals(GUtilDomainClass.DOESNOTCONTAIN) )
-			searchValue="%"+searchValue+"%"
+					if(condicion.trim().equals("ilike")&&!campo.trim().equals("fechaAlta")&&!campo.trim().equals("anulada"))
+						valorSearch="%"+valorSearch+"%"
+						
+					
+					and{
+						//if(!campo.trim().equals("lote")&&!campo.trim().equals("sector"))
+						//    isEmpty("detalle")
+						//eq("anulada",Boolean.parseBoolean(params.soloAnuladas))
+//						if(!campo.trim().equals("") && !condicion.trim().equals("")
+//							&& !valorSearch.trim().equals("")){
+//								
+//								   "${condicion}" ("nombre",valorSearch)
+//									if(campo.trim().equals("lote")){
+//										detalle{
+//											lote{
+//												"$condicion"("nombre",valorSearch)
+//											}
+//										}
+//									}else{
+//										if(campo.trim().equals("sector")){
+//																detalle{
+//																	sector{
+//																		"${condicion}" ("nombre",'%Sector%')
+//																		
+//																	}
+//																}
+//										}else{
+//											"$condicion"(campo,valorSearch)
+//										}
+//									}
+//							}
+//									/*if(campo.trim().equals("fechaAlta")){
+//																		try{
+//																			fecha = df.parse(valorSearch)
+//																		}catch(Exception e){
+//																			fecha = new Date()
+//																		}
+//												  }*/
+												
+						}//cierre del and
+							
+					 }//cierre del and
+				}//cierre del for
+				return ordenes
+			}//cierre del closure list
 
-			log.debug "OPERACION DE BUSQUEDA: "+searchOp+" VALOR DE BUSQUEDA: $searchValue"
-			if(params.searchOper.equals(GUtilDomainClass.DOESNOTCONTAIN)){
-				log.debug "NEGACION DE LA BUSQUEDA LIKE"
-				not {
-					"${searchOp}"(params.searchField,searchValue)
-				}
-			}else{
-				"${searchOp}"(params.searchField,searchValue)
-			}*/
-
-		}
-		params.condiciones.each{
-			log.debug "Condicion: "+it
-		}
-		return ordenes
-	}
-
+	
     List  consultar(params){
     	log.debug("Dentro del closure consultar")
     	def pagingconfig = [
