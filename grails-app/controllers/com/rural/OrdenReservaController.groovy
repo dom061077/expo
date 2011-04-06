@@ -13,6 +13,7 @@ import com.rural.utils.LoteComparator
 import com.rural.utils.NumeroOrdenComparator
 import com.rural.utils.SectorComparator
 import com.rural.utils.GUtilDomainClass
+import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass;
 
 import jxl.*
 import jxl.write.Label
@@ -335,16 +336,20 @@ class OrdenReservaController {
 		def ordenes=null
 		def detalles=null
 		def i
-		String valorSearch
+		def valorSearch
 		String condicion
 		String campo
 		ArrayList list = new ArrayList()
 		/*consulto las ordenes que no tienen detalle*/
 		java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy")
 		Date fecha
+		DefaultGrailsDomainClass dc = new DefaultGrailsDomainClass(OrdenReserva);
 		ordenes=OrdenReserva.createCriteria().list(){
 			for(i = 0; i<params.campos.size();i++){
-					valorSearch = params.searchString[i]
+				
+							
+			if(!campo.trim().equals("") && !condicion.trim().equals("")){
+					valorSearch = dc.getPropertyByName(params.campos[i]).getType().newInstance(params.searchString[i])
 					condicion = params.condiciones[i]
 					campo = params.campos[i]
 					if(condicion.trim().equals("ilike2")){
@@ -354,49 +359,46 @@ class OrdenReservaController {
 					}
 					if(condicion.trim().equals("ilike")&&!campo.trim().equals("fechaAlta")&&!campo.trim().equals("anulada"))
 						valorSearch="%"+valorSearch+"%"
-						
-					
+
 					and{
 						//if(!campo.trim().equals("lote")&&!campo.trim().equals("sector"))
 						//    isEmpty("detalle")
 						//eq("anulada",Boolean.parseBoolean(params.soloAnuladas))
-//						if(!campo.trim().equals("") && !condicion.trim().equals("")
-//							&& !valorSearch.trim().equals("")){
-//								
+								
 //								   "${condicion}" ("nombre",valorSearch)
-//									if(campo.trim().equals("lote")){
-//										detalle{
-//											lote{
-//												"$condicion"("nombre",valorSearch)
-//											}
-//										}
-//									}else{
-//										if(campo.trim().equals("sector")){
-//																detalle{
-//																	sector{
-//																		"${condicion}" ("nombre",'%Sector%')
-//																		
-//																	}
-//																}
-//										}else{
-//											"$condicion"(campo,valorSearch)
-//										}
-//									}
-//							}
-//									/*if(campo.trim().equals("fechaAlta")){
-//																		try{
-//																			fecha = df.parse(valorSearch)
-//																		}catch(Exception e){
-//																			fecha = new Date()
-//																		}
-//												  }*/
+									if(campo.trim().equals("lote")){
+										detalle{
+											lote{
+												"$condicion"("nombre",valorSearch)
+											}
+										}
+									}else{
+										if(campo.trim().equals("sector")){
+																detalle{
+																	sector{
+																		"${condicion}" ("nombre",'%Sector%')
+																		
+																	}
+																}
+										}else{
+											"$condicion"(campo,valorSearch)
+										}
+									}
+							
+									/*if(campo.trim().equals("fechaAlta")){
+																		try{
+																			fecha = df.parse(valorSearch)
+																		}catch(Exception e){
+																			fecha = new Date()
+																		}
+												  }*/
 												
 						}//cierre del and
-							
-					 }//cierre del and
-				}//cierre del for
+			}							
+			}//cierre del for
+		}//cierre del closure de consulta list
 				return ordenes
-			}//cierre del closure list
+	}//cierre del closure principal
 
 	
     List  consultar(params){
@@ -516,19 +518,19 @@ class OrdenReservaController {
         						,nombre:it.ordenReserva.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
         				
     				}else{
-        				it[0].recibos.each{r-> 
+        				it.recibos.each{r-> 
         					if(!r.anulado){
         						totalCancelado=totalCancelado+r.total
         						log.debug("SALE LA PROPIEDAD TOTAL?-->"+r.total)
         					}
         				}
-        				saldo=it.total[0]-totalCancelado
+        				saldo=it.total-totalCancelado
         				log.debug("SALDO: $saldo total cancelado: $totalCancelado")
-    					row(id:it.id[0],numero:it.numero[0],fechaAlta:it.fechaAlta[0],total:it.total[0],anio:it.anio[0],expoNombre:it.expo.nombre[0]
+    					row(id:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre
         						,sector:""
 								,subTotal:0
         						,lote:""
-        						,nombre:it.empresa.nombre[0],totalCancelado:totalCancelado,saldo:saldo)        				
+        						,nombre:it.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)        				
     				}
     				
 
