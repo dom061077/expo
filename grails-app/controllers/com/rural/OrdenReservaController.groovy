@@ -344,20 +344,21 @@ class OrdenReservaController {
 		java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy")
 		Date fecha
 		DefaultGrailsDomainClass dc = new DefaultGrailsDomainClass(OrdenReserva);
+		log.debug "CANTIDAD DE CAMPOS: "+params.campos.size()
 		ordenes=OrdenReserva.createCriteria().list(){
-			for(i = 0; i<params.campos.size();i++){
-				
-							
-			if(!campo.trim().equals("") && !condicion.trim().equals("")){
-					valorSearch = dc.getPropertyByName(params.campos[i]).getType().newInstance(params.searchString[i])
-					condicion = params.condiciones[i]
-					campo = params.campos[i]
-					if(condicion.trim().equals("ilike2")){
-					
-						condicion="ilike"
+			for(i = 0; i<params.campos.size()-1;i++){
+				condicion = params.condiciones[i]
+				campo = params.campos[i]
+				valorSearch	= params.searchString[i]			
+				if(!campo?.trim().equals("") && !condicion?.trim().equals("")){
+					log.debug "Campo a reflexionar: "+params.campos[i]
+				if(!campo.equals("sector") && !campo.equals("lote"))
+					valorSearch = dc.getPropertyByName(campo).getType().newInstance(params.searchString[i])
+				if(condicion.trim().equals("ilike2")){
+					condicion="ilike"
 						 
 					}
-					if(condicion.trim().equals("ilike")&&!campo.trim().equals("fechaAlta")&&!campo.trim().equals("anulada"))
+				if(condicion.trim().equals("ilike")&&!campo.trim().equals("fechaAlta")&&!campo.trim().equals("anulada"))
 						valorSearch="%"+valorSearch+"%"
 
 					and{
@@ -369,14 +370,14 @@ class OrdenReservaController {
 									if(campo.trim().equals("lote")){
 										detalle{
 											lote{
-												"$condicion"("nombre",valorSearch)
+												ilike("nombre",valorSearch)
 											}
 										}
 									}else{
 										if(campo.trim().equals("sector")){
 																detalle{
 																	sector{
-																		"${condicion}" ("nombre",'%Sector%')
+																		like ("nombre",valorSearch)
 																		
 																	}
 																}
@@ -676,21 +677,21 @@ class OrdenReservaController {
 						
     					fil=fil+1    					    					    					    					    					    					    					
     				}else{
-    					it[0].recibos.each{r->
+    					it.recibos.each{r->
     						if(!r.anulado)
     							totalCancelado=totalCancelado+r.total
     					}
-    					saldo=it.total[0]-totalCancelado
-    					sheet.addCell(new Label(0,fil,it.empresa.nombre[0]))
+    					saldo=it.total-totalCancelado
+    					sheet.addCell(new Label(0,fil,it.empresa.nombre))
     					sheet.addCell(new Label(1,fil,""))    					
     					sheet.addCell(new Label(2,fil,""))    					
-    					sheet.addCell(new Number(3,fil,it.total[0]))
+    					sheet.addCell(new Number(3,fil,it.total))
     					sheet.addCell(new Number(4,fil,totalCancelado)) 
     					sheet.addCell(new Number(5,fil,saldo))
-    					sheet.addCell(new Label(6,fil,it.expo.nombre[0]))
-    					sheet.addCell(new Number(7,fil,it.anio[0]))
-    					sheet.addCell(new Number(8,fil,it.numero[0]))
-    					sheet.addCell(new DateTime (9,fil,it.fechaAlta[0],dateFormat))
+    					sheet.addCell(new Label(6,fil,it.expo.nombre))
+    					sheet.addCell(new Number(7,fil,it.anio))
+    					sheet.addCell(new Number(8,fil,it.numero))
+    					sheet.addCell(new DateTime (9,fil,it.fechaAlta,dateFormat))
     					fil=fil+1    					    					    					    					    					    					    					
     				}
     				
