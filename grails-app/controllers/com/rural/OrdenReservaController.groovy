@@ -350,23 +350,19 @@ class OrdenReservaController {
 				condicion = params.condiciones[i]
 				campo = params.campos[i]
 				valorSearch	= params.searchString[i]			
-				if(!campo?.trim().equals("") && !condicion?.trim().equals("")){
-					log.debug "Campo a reflexionar: "+params.campos[i]
-				if(!campo.equals("sector") && !campo.equals("lote"))
+				log.debug "campo"	
+				if(!campo.equals("sector") && !campo.equals("lote")&&!campo.equals(""))
 					valorSearch = dc.getPropertyByName(campo).getType().newInstance(params.searchString[i])
-				if(condicion.trim().equals("ilike2")){
+				if(condicion.trim().equals("ilike2"))
 					condicion="ilike"
-						 
-					}
+				
 				if(condicion.trim().equals("ilike")&&!campo.trim().equals("fechaAlta")&&!campo.trim().equals("anulada"))
 						valorSearch="%"+valorSearch+"%"
-
+						
+				if(!campo.trim().equals("")&&!condicion.trim().equals("")){			
 					and{
-						//if(!campo.trim().equals("lote")&&!campo.trim().equals("sector"))
-						//    isEmpty("detalle")
-						//eq("anulada",Boolean.parseBoolean(params.soloAnuladas))
-								
-//								   "${condicion}" ("nombre",valorSearch)
+						if(campo.trim().equals("lote")|| campo.trim().equals("sector"))
+						    flagsectorlote=true
 									if(campo.trim().equals("lote")){
 										detalle{
 											lote{
@@ -395,10 +391,46 @@ class OrdenReservaController {
 												  }*/
 												
 						}//cierre del and
-			}							
+				}//cierre del if donde se pregunta is está vacío el campo y la condicion
 			}//cierre del for
-		}//cierre del closure de consulta list
-				return ordenes
+
+			}//cierre del list de la consulta
+		
+		ordenes.each{
+			if(it.detalle?.size()==0)
+				list.add(it)
+			else{
+				it.detalle.each{
+					
+					list.add(it)
+				}
+			}
+		}
+		if(params.sort){
+			if(params.sort=="nombre"){
+				   Collections.sort(list,new EmpresaNombreComparator())
+			}
+			if(params.sort=="fechaAlta"){
+				Collections.sort(list,new FechaOrdenComparator())
+			}
+			if(params.sort=="lote"){
+				Collections.sort(list,new LoteComparator())
+			}
+			if(params.sort=="numero"){
+				Collections.sort(list,new NumeroOrdenComparator())
+			}
+			if(params.sort=="sector"){
+				Collections.sort(list,new SectorComparator())
+			}
+			if(params.dir=="DESC"){
+				Collections.reverse(list)
+				log.debug("Orden inverso aplicado")
+			}
+		}
+
+		
+				
+		return list
 	}//cierre del closure principal
 
 	
@@ -522,11 +554,10 @@ class OrdenReservaController {
         				it.recibos.each{r-> 
         					if(!r.anulado){
         						totalCancelado=totalCancelado+r.total
-        						log.debug("SALE LA PROPIEDAD TOTAL?-->"+r.total)
         					}
         				}
         				saldo=it.total-totalCancelado
-        				log.debug("SALDO: $saldo total cancelado: $totalCancelado")
+        				log.debug("Objeto: "+it)
     					row(id:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre
         						,sector:""
 								,subTotal:0
