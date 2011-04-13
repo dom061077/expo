@@ -351,7 +351,7 @@ class OrdenReservaController {
 				campo = params.campos[i]
 				valorSearch	= params.searchString[i]			
 				log.debug "campo"	
-				if(!campo.equals("sector") && !campo.equals("lote")&&!campo.equals(""))
+				if(!campo.equals("sector") && !campo.equals("lote")&&!campo.equals("") && !campo.equals("exponombre"))
 					valorSearch = dc.getPropertyByName(campo).getType().newInstance(params.searchString[i])
 				if(condicion.trim().equals("ilike2"))
 					condicion="ilike"
@@ -359,10 +359,11 @@ class OrdenReservaController {
 				if(condicion.trim().equals("ilike")&&!campo.trim().equals("fechaAlta")&&!campo.trim().equals("anulada"))
 						valorSearch="%"+valorSearch+"%"
 						
-				if(!campo.trim().equals("")&&!condicion.trim().equals("")){			
+				if(!campo.trim().equals("")&&!condicion.trim().equals("") && !valorSearch.equals("")){			
 					and{
-						if(campo.trim().equals("lote")|| campo.trim().equals("sector"))
-						    flagsectorlote=true
+						
+						if(campo.trim().equals("lote")|| campo.trim().equals("sector")){
+						    
 									if(campo.trim().equals("lote")){
 										detalle{
 											lote{
@@ -377,8 +378,6 @@ class OrdenReservaController {
 																		
 																	}
 																}
-										}else{
-											"$condicion"(campo,valorSearch)
 										}
 									}
 							
@@ -389,23 +388,87 @@ class OrdenReservaController {
 																			fecha = new Date()
 																		}
 												  }*/
-												
+						}else{
+							if(!campo.equals("exponombre"))
+								"$condicion"(campo,valorSearch)
+							else{
+								expo{
+									ilike("nombre",valorSearch)
+								}
+							}
+									
+						}		
+						eq("anulada", Boolean.parseBoolean(params.soloanuladas) )		
+						isEmpty("detalle")					
 						}//cierre del and
 				}//cierre del if donde se pregunta is está vacío el campo y la condicion
 			}//cierre del for
 
 			}//cierre del list de la consulta
 		
-		ordenes.each{
-			if(it.detalle?.size()==0)
-				list.add(it)
-			else{
-				it.detalle.each{
-					
-					list.add(it)
-				}
-			}
-		}
+		list.addAll(ordenes)
+	
+		def detalle=DetalleServicioContratado.createCriteria().list(){
+			for(i = 0; i<params.campos.size()-1;i++){
+				condicion = params.condiciones[i]
+				campo = params.campos[i]
+				valorSearch	= params.searchString[i]
+				log.debug "campo"
+				if(!campo.equals("sector") && !campo.equals("lote")&&!campo.equals("") && !campo.equals("exponombre"))
+					valorSearch = dc.getPropertyByName(campo).getType().newInstance(params.searchString[i])
+				if(condicion.trim().equals("ilike2"))
+					condicion="ilike"
+				
+				if(condicion.trim().equals("ilike")&&!campo.trim().equals("fechaAlta")&&!campo.trim().equals("anulada"))
+						valorSearch="%"+valorSearch+"%"
+						
+				if(!campo.trim().equals("")&&!condicion.trim().equals("") && !valorSearch.equals("")){
+					and{
+						if(campo.trim().equals("lote")|| campo.trim().equals("sector")){
+							
+									if(campo.trim().equals("lote")){
+											lote{
+												ilike("nombre",valorSearch)
+											}
+									}else{
+										if(campo.trim().equals("sector")){
+																	sector{
+																		like ("nombre",valorSearch)
+																		
+																	}
+										}
+									}
+							
+									/*if(campo.trim().equals("fechaAlta")){
+																		try{
+																			fecha = df.parse(valorSearch)
+																		}catch(Exception e){
+																			fecha = new Date()
+																		}
+												  }*/
+						}else{
+							ordenReserva{
+								
+								if(!campo.equals("exponombre"))
+									"$condicion"(campo,valorSearch)
+								else{
+									expo{
+										ilike("nombre",valorSearch)
+									}
+								}
+								eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
+							}
+						}
+						
+
+						}//cierre del and
+				}//cierre del if donde se pregunta is está vacío el campo y la condicion
+			}//cierre del for
+
+			}//cierre del list de la consulta
+
+		list.addAll(detalle)	
+
 		if(params.sort){
 			if(params.sort=="nombre"){
 				   Collections.sort(list,new EmpresaNombreComparator())

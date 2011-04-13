@@ -222,7 +222,7 @@ Ext.onReady(function(){
 	var camposStore= new Ext.data.SimpleStore({
 									id:0,
 									fields:['idcampo','labelcampo'],
-									data:[['nombre','Nom.Empresa'],['sector','Sector'],['lote','Lote'],['anio','Exposición'],['numero','Número'],['anulada','Anulada']]
+									data:[['nombre','Nom.Empresa'],['sector','Sector'],['lote','Lote'],['anio','Año Exposición'],['exponombre','Nombre Exposición'],['numero','Número'],['anulada','Anulada']]
 								})
 	var condicionesStore=new Ext.data.SimpleStore({
 									id:0,
@@ -442,7 +442,12 @@ Ext.onReady(function(){
 							}
 						}
 
-					]					
+					]	
+				},{
+						xtype:'checkbox',
+						name:'soloanuladas',
+						id:'soloanuladasId',
+						fieldLabel:'Solo Anuladas'	
 				},{
 						xtype:'button',
 						text:'Buscar',
@@ -459,7 +464,8 @@ Ext.onReady(function(){
 											'searchString':[Ext.getCmp('searchStringIdFiltro1').getValue()
 														,Ext.getCmp('searchStringIdFiltro2').getValue()
 														,Ext.getCmp('searchStringIdFiltro3').getValue()
-													]
+													],
+											'soloanuladas':Ext.getCmp('soloanuladasId').getValue()		
 										}
 								});
 							}
