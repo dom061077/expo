@@ -351,12 +351,28 @@ class OrdenReservaController {
 				campo = params.campos[i]
 				valorSearch	= params.searchString[i]			
 				log.debug "campo"	
-				if(!campo.equals("sector") && !campo.equals("lote")&&!campo.equals("") && !campo.equals("exponombre"))
-					valorSearch = dc.getPropertyByName(campo).getType().newInstance(params.searchString[i])
+				if(!campo.equals("")){
+						if(!campo.equals("sector") && !campo.equals("lote") && dc.getPropertyByName(campo).getType()==Date){
+											try{
+												log.debug "fecha a parsear: $valorSearch"
+												valorSearch = df.parse(valorSearch)
+											}catch(Exception e){
+												log.error "Error en fecha"
+												valorSearch = new Date() 
+											}
+						}else{
+							try{
+								valorSearch = dc.getPropertyByName(campo).getType().newInstance(params.searchString[i])
+							}catch(org.codehaus.groovy.grails.exceptions.InvalidPropertyException e){
+								valorSearch = params.searchString[i]	
+							}
+						}
+				}
+				
 				if(condicion.trim().equals("ilike2"))
 					condicion="ilike"
 				
-				if(condicion.trim().equals("ilike")&&!campo.trim().equals("fechaAlta")&&!campo.trim().equals("anulada"))
+				if(!campo.equals("sector") && !campo.equals("lote") && !campo.equals("") && dc.getPropertyByName(campo).getType()==String)
 						valorSearch="%"+valorSearch+"%"
 						
 				if(!campo.trim().equals("")&&!condicion.trim().equals("") && !valorSearch.equals("")){			
@@ -381,17 +397,11 @@ class OrdenReservaController {
 										}
 									}
 							
-									/*if(campo.trim().equals("fechaAlta")){
-																		try{
-																			fecha = df.parse(valorSearch)
-																		}catch(Exception e){
-																			fecha = new Date()
-																		}
-												  }*/
+									
 						}else{
-							if(!campo.equals("exponombre"))
-								"$condicion"(campo,valorSearch)
-							else{
+							if(!campo.equals("exponombre")){
+									"$condicion"(campo,valorSearch)
+							}else{
 								expo{
 									ilike("nombre",valorSearch)
 								}
@@ -414,12 +424,27 @@ class OrdenReservaController {
 				campo = params.campos[i]
 				valorSearch	= params.searchString[i]
 				log.debug "campo"
-				if(!campo.equals("sector") && !campo.equals("lote")&&!campo.equals("") && !campo.equals("exponombre"))
-					valorSearch = dc.getPropertyByName(campo).getType().newInstance(params.searchString[i])
+				if(!campo.equals("")){
+					if(!campo.equals("sector") && !campo.equals("lote") &&  dc.getPropertyByName(campo).getType()==Date){
+						try{
+							log.debug "fecha a parsear: $valorSearch"
+							valorSearch = df.parse(valorSearch)
+						}catch(Exception e){
+							log.error "Error en fecha"
+							valorSearch = new Date()
+						}
+					}else
+							try{
+								valorSearch = dc.getPropertyByName(campo).getType().newInstance(params.searchString[i])
+							}catch(org.codehaus.groovy.grails.exceptions.InvalidPropertyException e){
+								valorSearch = params.searchString[i]	
+							}
+				}
+
 				if(condicion.trim().equals("ilike2"))
 					condicion="ilike"
 				
-				if(condicion.trim().equals("ilike")&&!campo.trim().equals("fechaAlta")&&!campo.trim().equals("anulada"))
+				if(!campo.equals("sector") && !campo.equals("lote")&& !campo.equals("") && dc.getPropertyByName(campo).getType()==String)
 						valorSearch="%"+valorSearch+"%"
 						
 				if(!campo.trim().equals("")&&!condicion.trim().equals("") && !valorSearch.equals("")){
@@ -439,19 +464,13 @@ class OrdenReservaController {
 										}
 									}
 							
-									/*if(campo.trim().equals("fechaAlta")){
-																		try{
-																			fecha = df.parse(valorSearch)
-																		}catch(Exception e){
-																			fecha = new Date()
-																		}
-												  }*/
+									
 						}else{
 							ordenReserva{
 								
-								if(!campo.equals("exponombre"))
-									"$condicion"(campo,valorSearch)
-								else{
+								if(!campo.equals("exponombre")){
+										"$condicion"(campo,valorSearch)
+								}else{
 									expo{
 										ilike("nombre",valorSearch)
 									}
@@ -620,7 +639,6 @@ class OrdenReservaController {
         					}
         				}
         				saldo=it.total-totalCancelado
-        				log.debug("Objeto: "+it)
     					row(id:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre
         						,sector:""
 								,subTotal:0
