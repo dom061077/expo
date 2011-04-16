@@ -196,8 +196,29 @@ Ext.onReady(function(){
             	,text:'Exportar'
             	,cls:'x-btn-text-icon'
             	,handler: function(){
-    				open('export?searchCriteria='+Ext.getCmp('searchCriteriaId').getValue()+'&fieldSearch='
-    					+Ext.getCmp('combocriteriosId').getValue()+'&anulada='+Ext.getCmp('soloanuladasId').getValue()
+            		
+											/*'campos':[Ext.getCmp('campoIdFiltro1').getValue()
+														,Ext.getCmp('campoIdFiltro2').getValue()
+														,Ext.getCmp('campoIdFiltro3').getValue()],
+											'condiciones':[Ext.getCmp('condicionesIdFiltro1').getValue()
+														,Ext.getCmp('condicionesIdFiltro2').getValue()
+														,Ext.getCmp('condicionesIdFiltro3').getValue()],
+											'searchString':[Ext.getCmp('searchStringIdFiltro1').getValue()
+														,Ext.getCmp('searchStringIdFiltro2').getValue()
+														,Ext.getCmp('searchStringIdFiltro3').getValue()
+													],
+											'soloanuladas':Ext.getCmp('soloanuladasId').getValue()*/		
+            		
+            		
+            		
+    				open('export?campos='+Ext.getCmp('campoIdFiltro1').getValue()+'&campos='+Ext.getCmp('campoIdFiltro2').getValue()
+    					+'&campos='+Ext.getCmp('campoIdFiltro3').getValue()
+    					+"&condiciones="+Ext.getCmp('condicionesIdFiltro1').getValue()+'&condiciones='+Ext.getCmp('condicionesIdFiltro2').getValue()
+    					+'&condiciones='+Ext.getCmp('condicionesIdFiltro3').getValue()
+    					+'&searchString='+Ext.getCmp('searchStringIdFiltro1').getValue()
+    					+'&searchString='+Ext.getCmp('searchStringIdFiltro2').getValue()
+    					+'&searchString='+Ext.getCmp('searchStringIdFiltro3').getValue()
+    					+'&anulada='+Ext.getCmp('soloanuladasId').getValue()
     					+'&sort='+sort+'&dir='+dir
     					,'_blank')
             	}
@@ -233,8 +254,8 @@ Ext.onReady(function(){
 										  ,['lt','Menor que']
 										  ,['ge','Mayor o igual que']
 										  ,['le','Menor o igual que']
-										  ,['ilike2','Contiene']
-										  ,['ilike','No Contiene']]
+										  ,['ilike','Contiene']
+										  ,['ilike2','No Contiene']]
 								});									
 	
 	
@@ -251,7 +272,7 @@ Ext.onReady(function(){
 					
 					items:[
 						{
-							columnWidth: .3,
+							columnWidth: .4,
 							layout:'form',
 							width:50,
 							items:{
@@ -327,7 +348,7 @@ Ext.onReady(function(){
 					layout:'column',
 					items:[
 						{
-							columnWidth: .3,
+							columnWidth: .4,
 							layout:'form',
 							width:50,
 							items:{
@@ -387,7 +408,7 @@ Ext.onReady(function(){
 					layout:'column',
 					items:[
 						{
-							columnWidth: .3,
+							columnWidth: .4,
 							layout:'form',
 							width:50,
 							items:{
