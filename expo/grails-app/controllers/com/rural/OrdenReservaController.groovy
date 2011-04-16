@@ -344,6 +344,7 @@ class OrdenReservaController {
 		java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy")
 		Date fecha
 		DefaultGrailsDomainClass dc = new DefaultGrailsDomainClass(OrdenReserva);
+		def flagnot=false
 		log.debug "CANTIDAD DE CAMPOS: "+params.campos.size()
 		ordenes=OrdenReserva.createCriteria().list(){
 			for(i = 0; i<params.campos.size()-1;i++){
@@ -352,7 +353,7 @@ class OrdenReservaController {
 				valorSearch	= params.searchString[i]			
 				log.debug "campo"	
 				if(!campo.equals("")){
-						if(!campo.equals("sector") && !campo.equals("lote") && dc.getPropertyByName(campo).getType()==Date){
+						if(!campo.equals("sector") && !campo.equals("lote") && !campo.equals("exponombre") && dc.getPropertyByName(campo).getType()==Date){
 											try{
 												log.debug "fecha a parsear: $valorSearch"
 												valorSearch = df.parse(valorSearch)
@@ -369,29 +370,51 @@ class OrdenReservaController {
 						}
 				}
 				
-				if(condicion.trim().equals("ilike2"))
+				if(condicion.trim().equals("ilike2")){
 					condicion="ilike"
+					flagnot=true
+				}
 				
-				if(!campo.equals("sector") && !campo.equals("lote") && !campo.equals("") && dc.getPropertyByName(campo).getType()==String)
+				/*
+				 * 
+				 * def c = OrdenReserva.createCriteria()
+def criteriaclosure ={
+    c.eq("expo.id",new Long(4))
+}
+
+				 * 
+				 * */
+				
+				if(!campo.equals("sector") && !campo.equals("lote")&& !campo.equals("exponombre") && !campo.equals("") && dc.getPropertyByName(campo).getType()==String)
 						valorSearch="%"+valorSearch+"%"
 						
 				if(!campo.trim().equals("")&&!condicion.trim().equals("") && !valorSearch.equals("")){			
 					and{
 						
 						if(campo.trim().equals("lote")|| campo.trim().equals("sector")){
-						    
+						     
 									if(campo.trim().equals("lote")){
 										detalle{
 											lote{
+												if(flagnot){
+													"not{"
+												}
 												ilike("nombre",valorSearch)
+												if(flagnot){
+													"}"
+												}
+												
 											}
 										}
 									}else{
 										if(campo.trim().equals("sector")){
 																detalle{
 																	sector{
-																		like ("nombre",valorSearch)
-																		
+																		if (flagnot)
+																			"not{"
+																		 ilike ("nombre",valorSearch)
+																		if (flagnot)
+																			"}"
 																	}
 																}
 										}
@@ -400,10 +423,18 @@ class OrdenReservaController {
 									
 						}else{
 							if(!campo.equals("exponombre")){
+									if(flagnot)
+										"not{"	
 									"$condicion"(campo,valorSearch)
+									if(flagnot)
+										"}"
 							}else{
 								expo{
+									if(flagnot)
+										"not{"
 									ilike("nombre",valorSearch)
+									if(flagnot)
+										"}"
 								}
 							}
 									
@@ -425,7 +456,7 @@ class OrdenReservaController {
 				valorSearch	= params.searchString[i]
 				log.debug "campo"
 				if(!campo.equals("")){
-					if(!campo.equals("sector") && !campo.equals("lote") &&  dc.getPropertyByName(campo).getType()==Date){
+					if(!campo.equals("sector") && !campo.equals("lote")&&!campo.equals("exponombre") &&  dc.getPropertyByName(campo).getType()==Date){
 						try{
 							log.debug "fecha a parsear: $valorSearch"
 							valorSearch = df.parse(valorSearch)
@@ -441,10 +472,12 @@ class OrdenReservaController {
 							}
 				}
 
-				if(condicion.trim().equals("ilike2"))
+				if(condicion.trim().equals("ilike2")){
 					condicion="ilike"
+					flagnot=true
+				}
 				
-				if(!campo.equals("sector") && !campo.equals("lote")&& !campo.equals("") && dc.getPropertyByName(campo).getType()==String)
+				if(!campo.equals("sector") && !campo.equals("lote")&&!campo.equals("exponombre")&& !campo.equals("") && dc.getPropertyByName(campo).getType()==String)
 						valorSearch="%"+valorSearch+"%"
 						
 				if(!campo.trim().equals("")&&!condicion.trim().equals("") && !valorSearch.equals("")){
@@ -453,12 +486,20 @@ class OrdenReservaController {
 							
 									if(campo.trim().equals("lote")){
 											lote{
-												ilike("nombre",valorSearch)
+												if(flagnot)
+													"not{"
+												"$condicion"("nombre","%"+valorSearch+"%")
+												if(flagnot)
+													"}"
 											}
 									}else{
 										if(campo.trim().equals("sector")){
 																	sector{
-																		like ("nombre",valorSearch)
+																		if(flagnot)
+																			"not{"	
+																		"$condicion" ("nombre","%"+valorSearch+"%")
+																		if(flagnot)
+																			"}"
 																		
 																	}
 										}
@@ -469,10 +510,18 @@ class OrdenReservaController {
 							ordenReserva{
 								
 								if(!campo.equals("exponombre")){
+										if(flagnot)
+											"not{"
 										"$condicion"(campo,valorSearch)
+										if(flagnot)
+											"}"
 								}else{
 									expo{
+										if(true)
+											"not{"
 										ilike("nombre",valorSearch)
+										if(true)
+											"}"
 									}
 								}
 								eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
@@ -706,7 +755,7 @@ class OrdenReservaController {
 		def ordenes
 		def flagdetalle
 		
-		List list = consultar(params)	   	
+		List list = consultar2(params)	   	
 	     response.setHeader("Content-disposition", "attachment")
 	     response.contentType = "application/vnd.ms-excel"
 	 
