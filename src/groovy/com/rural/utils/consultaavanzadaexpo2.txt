@@ -1,0 +1,108 @@
+import com.rural.*
+import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass;
+import com.rural.utils.FilterUtils
+
+    def parseValue(def prop, def paramName, def rawValue, MetaClass mc, def params) {
+        def mp = FilterUtils.getNestedMetaProperty(mc, prop)
+        //log.debug("prop is ${prop}")
+        //log.debug("mc is ${mc}, mc class is ${mc.theClass.name}")
+        //log.debug("mp is ${mp}, name is ${mp.name} and type is ${mp.type} and is enum is ${mp.type.isEnum()}")
+        System.out.println "Meta property: "+mp
+        def val = rawValue
+        //log.debug("cls is ${cls}")
+        System.out.println "Valor val: "+val
+        if (val) {
+            System.out.println "Si entra"
+            Class cls = mc.theClass.getDeclaredField(prop).type
+            if (cls.isEnum()) {
+                val = Enum.valueOf(cls, val.toString())
+                //println "val is ${val} and raw val is ${rawValue}"
+            } else if (mp.type.getSimpleName().equalsIgnoreCase("boolean")) {
+                val = val.toBoolean()
+            } else if (mp.type == Integer || mp.type == int) {
+                val = val.toInteger()
+            } else if (mp.type == Long || mp.type == long) {
+                val = val.toLong()
+            } else if (mp.type == Double || mp.type == double) {
+                val = val.toDouble()
+            } else if (mp.type == Float || mp.type == float) {
+                val = val.toFloat()
+            } else if (mp.type == Short || mp.type == short) {
+                val = val.toShort()
+            } else if (mp.type == BigDecimal) {
+                val = val.toBigDecimal()
+            } else if (mp.type == BigInteger) {
+                val = val.toBigInteger()
+            } else if (java.util.Date.isAssignableFrom(mp.type)) {
+                val = FilterUtils.parseDateFromDatePickerParams(paramName, params)
+            }
+        }
+        //println "== Parsing value ${rawValue} from param ${paramName}. type is ${mp.type}.  Final value ${val}. Type ${val?.class}"
+        return val
+    }
+
+
+
+def params=[condiciones:["ilike","eq",""],campos:["sector.nombre","expo.nombre",""],searchString:["art","2010",""]]
+def i
+def criteriaorden = OrdenReserva.createCriteria()
+def propnames
+
+   
+def closureorden = {
+    def campo
+    def condicion
+    def searchString
+    def valorSearch
+    def domainBean
+    def domainProp
+    DefaultGrailsDomainClass dc = new DefaultGrailsDomainClass(OrdenReserva);
+    for(i=0;i<params.campos.size()-1;i++){
+        campo=params.campos[i]
+        condicion=params.condiciones[i]
+        searchString=params.searchString[i]
+        if(!campo.trim().equals("") && !condicion.trim().equals("")){
+            propnames = campo.tokenize(".")            
+            if(propnames.size()>1){
+                if(propnames[0].equals("sector") || propnames[0].equals("lote")){
+                        criteriaorden."detalle"(){
+                            criteriaorden."${propnames[0]}"(){
+                                    
+                                    criteriaorden."$condicion"("${propnames[propnames.size()-1]}","%${searchString}%")
+                            }
+                        }
+                }else{
+                    domainBean=dc.getPropertyByName(propnames[0])
+                    valorSearch = domainBean.referencedDomainClass.getPropertyByName(propnames[1])
+                    
+                }            
+            }else{//end del if de size de propnames
+                
+            }//end del else de size de propnames
+        }//end del if de validacion de campo vacio y condicion vacia
+    }//end del for
+}
+
+/*
+                        domainProp = domainBean.getPropertyByName(parts[0])
+                        domainProp = domainProp.referencedDomainClass.getPropertyByName(parts[1])
+                    } else {
+                        domainProp = domainBean.getPropertyByName(prop)
+
+*/
+
+//criteriaorden.list(closureorden)
+def value="12"
+def valor = parseValue("id", "id",value , Sector.getMetaClass(), params) 
+
+//System.out.println(grailsApplication.getDomainClass("com.rural.OrdenReserva"))
+
+def domainbean=grailsApplication.getDomainClass("com.rural.OrdenReserva")
+domainProp=domainbean.getPropertyByName("detalle")
+//System.out.println(domainProp.referencedDomainClass.getPropertyByName("sector"))
+def domainbean2 = domainProp.referencedDomainClass.getPropertyByName("sector")
+
+//System.out.println(domainbean2.getPropertyByName("nombre"))
+
+
+
