@@ -346,6 +346,16 @@ class OrdenReservaController {
 		DefaultGrailsDomainClass dc = new DefaultGrailsDomainClass(OrdenReserva);
 		def flagnot=false
 		log.debug "CANTIDAD DE CAMPOS: "+params.campos.size()
+		
+		def co = OrdenReserva.createCriteria()
+		
+		def closureOrden = {
+			for(i=0;i<params.campos.size()-1;i++){
+				co.isEmpty("detalle")
+				
+			}	
+		}
+		
 		ordenes=OrdenReserva.createCriteria().list(){
 			for(i = 0; i<params.campos.size()-1;i++){
 				condicion = params.condiciones[i]
