@@ -14,6 +14,7 @@ import com.rural.utils.NumeroOrdenComparator
 import com.rural.utils.SectorComparator
 import com.rural.utils.GUtilDomainClass
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass;
+import com.rural.utils.FilterUtils;
 
 import jxl.*
 import jxl.write.Label
@@ -332,6 +333,45 @@ class OrdenReservaController {
     	}
     }
 	
+	private def parseValue(def prop, def paramName, def rawValue, MetaClass mc, def params) {
+    	def mp = FilterUtils.getNestedMetaProperty(mc, prop)
+        //log.debug("prop is ${prop}")
+        //log.debug("mc is ${mc}, mc class is ${mc.theClass.name}")
+        //log.debug("mp is ${mp}, name is ${mp.name} and type is ${mp.type} and is enum is ${mp.type.isEnum()}")
+    	def val = rawValue
+        //log.debug("cls is ${cls}")
+
+        if (val) {
+            Class cls = mc.theClass.getDeclaredField(prop).type
+            if (cls.isEnum()) {
+                val = Enum.valueOf(cls, val.toString())
+                //println "val is ${val} and raw val is ${rawValue}"
+            } else if (mp.type.getSimpleName().equalsIgnoreCase("boolean")) {
+                val = val.toBoolean()
+            } else if (mp.type == Integer || mp.type == int) {
+                val = val.toInteger()
+            } else if (mp.type == Long || mp.type == long) {
+                val = val.toLong()
+            } else if (mp.type == Double || mp.type == double) {
+                val = val.toDouble()
+            } else if (mp.type == Float || mp.type == float) {
+                val = val.toFloat()
+            } else if (mp.type == Short || mp.type == short) {
+                val = val.toShort()
+            } else if (mp.type == BigDecimal) {
+                val = val.toBigDecimal()
+            } else if (mp.type == BigInteger) {
+                val = val.toBigInteger()
+            } else if (java.util.Date.isAssignableFrom(mp.type)) {
+                val = FilterUtils.parseDateFromDatePickerParams(paramName, params)
+            }else
+				val= "%${val}"
+        }
+    	//println "== Parsing value ${rawValue} from param ${paramName}. type is ${mp.type}.  Final value ${val}. Type ${val?.class}"
+    	return val
+    }
+
+	
 	List consultar2(params){
 		def ordenes=null
 		def detalles=null
@@ -339,239 +379,127 @@ class OrdenReservaController {
 		def valorSearch
 		String condicion
 		String campo
-		ArrayList list = new ArrayList()
+		def campoToken
+		ArrayList listgral = new ArrayList()
+		MetaClass metaClass
 		/*consulto las ordenes que no tienen detalle*/
 		java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy")
 		Date fecha
-		DefaultGrailsDomainClass dc = new DefaultGrailsDomainClass(OrdenReserva);
 		def flagnot=false
 		log.debug "CANTIDAD DE CAMPOS: "+params.campos.size()
 		
 		def co = OrdenReserva.createCriteria()
-		
+		/*
 		def closureOrden = {
+			log.debug "INGRESANDO AL CLOSURE INTERNO closureOrden"
 			for(i=0;i<params.campos.size()-1;i++){
-				co.isEmpty("detalle")
-				
-			}	
-		}
-		
-		ordenes=OrdenReserva.createCriteria().list(){
-			for(i = 0; i<params.campos.size()-1;i++){
-				condicion = params.condiciones[i]
-				campo = params.campos[i]
-				valorSearch	= params.searchString[i]			
-				log.debug "campo"	
-				if(!campo.equals("")){
-						if(!campo.equals("sector") && !campo.equals("lote") && !campo.equals("exponombre") && dc.getPropertyByName(campo).getType()==Date){
-											try{
-												log.debug "fecha a parsear: $valorSearch"
-												valorSearch = df.parse(valorSearch)
-											}catch(Exception e){
-												log.error "Error en fecha"
-												valorSearch = new Date() 
-											}
-						}else{
-							try{
-								valorSearch = dc.getPropertyByName(campo).getType().newInstance(params.searchString[i])
-							}catch(org.codehaus.groovy.grails.exceptions.InvalidPropertyException e){
-								valorSearch = params.searchString[i]	
-							}
-						}
-				}
-				
-				if(condicion.trim().equals("ilike2")){
-					condicion="ilike"
-					flagnot=true
-				}
-				
-				/*
-				 * 
-				 * def c = OrdenReserva.createCriteria()
-def criteriaclosure ={
-    c.eq("expo.id",new Long(4))
-}
-
-				 * 
-				 * */
-				
-				if(!campo.equals("sector") && !campo.equals("lote")&& !campo.equals("exponombre") && !campo.equals("") && dc.getPropertyByName(campo).getType()==String)
-						valorSearch="%"+valorSearch+"%"
-						
-				if(!campo.trim().equals("")&&!condicion.trim().equals("") && !valorSearch.equals("")){			
-					and{
-						
-						if(campo.trim().equals("lote")|| campo.trim().equals("sector")){
-						     
-									if(campo.trim().equals("lote")){
-										detalle{
-											lote{
-												if(flagnot){
-													"not{"
-												}
-												ilike("nombre",valorSearch)
-												if(flagnot){
-													"}"
-												}
-												
-											}
-										}
-									}else{
-										if(campo.trim().equals("sector")){
-																detalle{
-																	sector{
-																		if (flagnot)
-																			"not{"
-																		 ilike ("nombre",valorSearch)
-																		if (flagnot)
-																			"}"
-																	}
-																}
-										}
-									}
-							
-									
-						}else{
-							if(!campo.equals("exponombre")){
-									if(flagnot)
-										"not{"	
-									"$condicion"(campo,valorSearch)
-									if(flagnot)
-										"}"
-							}else{
-								expo{
-									if(flagnot)
-										"not{"
-									ilike("nombre",valorSearch)
-									if(flagnot)
-										"}"
+				campo=params.campos[i]
+				condicion=params.condicion[i]
+				valorSearch=params.searchString[i]
+				and{
+					co.isEmpty("detalle")
+					co.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
+					if(campo.contains(".")){
+						campoToken=campo.tokenize(".")
+						metaClass=FilterUtils.getNestedMetaProperty(OrdenReserva.getMetaClass(),campo)
+						log.debug "METACLASS DERIVADA: "+metaClass
+						if(!metaClass){
+							metaClass=FilterUtils.getNestedMetaProperty(DetalleServicioContratado.getMetaClass(),campo)
+							valorSearch=parseValue(campoToken[1], campoToken[1], valorSearch,metaClass, params)
+							co.detalle(){
+								co."${campoToken[0]}"(){
+									co."${condicion}"(campoToken[1],valorSearch)
 								}
 							}
-									
-						}		
-						eq("anulada", Boolean.parseBoolean(params.soloanuladas) )		
-						isEmpty("detalle")					
-						}//cierre del and
-				}//cierre del if donde se pregunta is está vacío el campo y la condicion
-			}//cierre del for
-
-			}//cierre del list de la consulta
-		
-		list.addAll(ordenes)
-	
-		def detalle=DetalleServicioContratado.createCriteria().list(){
-			for(i = 0; i<params.campos.size()-1;i++){
-				condicion = params.condiciones[i]
-				campo = params.campos[i]
-				valorSearch	= params.searchString[i]
-				log.debug "campo"
-				if(!campo.equals("")){
-					if(!campo.equals("sector") && !campo.equals("lote")&&!campo.equals("exponombre") &&  dc.getPropertyByName(campo).getType()==Date){
-						try{
-							log.debug "fecha a parsear: $valorSearch"
-							valorSearch = df.parse(valorSearch)
-						}catch(Exception e){
-							log.error "Error en fecha"
-							valorSearch = new Date()
-						}
-					}else
-							try{
-								valorSearch = dc.getPropertyByName(campo).getType().newInstance(params.searchString[i])
-							}catch(org.codehaus.groovy.grails.exceptions.InvalidPropertyException e){
-								valorSearch = params.searchString[i]	
-							}
-				}
-
-				if(condicion.trim().equals("ilike2")){
-					condicion="ilike"
-					flagnot=true
-				}
-				
-				if(!campo.equals("sector") && !campo.equals("lote")&&!campo.equals("exponombre")&& !campo.equals("") && dc.getPropertyByName(campo).getType()==String)
-						valorSearch="%"+valorSearch+"%"
-						
-				if(!campo.trim().equals("")&&!condicion.trim().equals("") && !valorSearch.equals("")){
-					and{
-						if(campo.trim().equals("lote")|| campo.trim().equals("sector")){
-							
-									if(campo.trim().equals("lote")){
-											lote{
-												if(flagnot)
-													"not{"
-												"$condicion"("nombre","%"+valorSearch+"%")
-												if(flagnot)
-													"}"
-											}
-									}else{
-										if(campo.trim().equals("sector")){
-																	sector{
-																		if(flagnot)
-																			"not{"	
-																		"$condicion" ("nombre","%"+valorSearch+"%")
-																		if(flagnot)
-																			"}"
-																		
-																	}
-										}
-									}
-							
-									
 						}else{
-							ordenReserva{
-								
-								if(!campo.equals("exponombre")){
-										if(flagnot)
-											"not{"
-										"$condicion"(campo,valorSearch)
-										if(flagnot)
-											"}"
-								}else{
-									expo{
-										if(true)
-											"not{"
-										ilike("nombre",valorSearch)
-										if(true)
-											"}"
-									}
-								}
-								eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
+							metaClass=FilterUtils.getNestedMetaProperty(OrdenReserva.getMetaClass(),campo)
+							valorSearch=parseValue(campoToken[1],campoToken[1],valorSearch,metaClass,params)
+							co."${campoToken[0]}"(){
+								co."${condicion}"(campoToken[1],valorSearch)
 							}
 						}
-						
-
-						}//cierre del and
-				}//cierre del if donde se pregunta is está vacío el campo y la condicion
-			}//cierre del for
-
-			}//cierre del list de la consulta
-
-		list.addAll(detalle)	
+					}else{
+						valorSearch=parseValue(campo,campo,valorSearch,OrdenReserva.getMetaClass,params)
+						co."${condicion}"(campo,valorSearch)
+					}
+					
+				}//end del and
+			}//end del for
+				
+		}//end del closure de orden
+		
+		*/
+		log.debug "CRITERIA "+co
+		ordenes=co.list()
+		listgral.addAll(ordenes)
+		
+		def cd=DetalleServicioContratado.createCriteria()
+		def closureDetalle={
+		 
+			for(i=0;i<params.campos.size()-1;i++){
+				campo=params.campos[i]
+				condicion=params.condicion[i]
+				valorSearch=params.searchString[i]
+				and{
+					cd.ordenReserva(){
+						cd.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
+					}
+					if(campo.contains(".")){
+						campoToken=campo.tokenize(".")
+						metaClass=FilterUtils.getNestedMetaProperty(DetalleServicioContratado.getMetaClass(),campo)
+						if(!metaClass){
+							metaClass=FilterUtils.getNestedMetaProperty(OrdenReserva.class.getMetaClass(),campo)
+							valorSearch=parseValue(campoToken[1], campoToken[1], valorSearch,metaClass, params)
+							cd.ordenReserva(){
+								cd."${campoToken[0]}"(){
+									cd."${condicion}"(campoToken[1],valorSearch)
+								}
+							}
+						}else{
+							metaClass=FilterUtils.getNestedMetaProperty(DetalleServicioContrado.getMetaClass(),campo)
+							valorSearch=parseValue(campoToken[1],campoToken[1],valorSearch,metaClass,params)
+							cd."${campoToken[0]}"(){
+								cd."${condicion}"(campoToken[1],valorSearch)
+							}
+						}
+					}else{
+						valorSearch=parseValue(campo,campo,valorSearch,OrdenReserva.getMetaClass,params)
+						cd."${condicion}"(campo,valorSearch)
+					}
+					
+				}//end del and
+			}//end del for
+			
+		}//end del closureDetalle
+		
+		detalle=cd.list(closureDetalle)
+		listgrail.addAll(detalle)	
 
 		if(params.sort){
 			if(params.sort=="nombre"){
-				   Collections.sort(list,new EmpresaNombreComparator())
+				   Collections.sort(listgral,new EmpresaNombreComparator())
 			}
 			if(params.sort=="fechaAlta"){
-				Collections.sort(list,new FechaOrdenComparator())
+				Collections.sort(listgral,new FechaOrdenComparator())
 			}
 			if(params.sort=="lote"){
-				Collections.sort(list,new LoteComparator())
+				Collections.sort(listgral,new LoteComparator())
 			}
 			if(params.sort=="numero"){
-				Collections.sort(list,new NumeroOrdenComparator())
+				Collections.sort(listgral,new NumeroOrdenComparator())
 			}
 			if(params.sort=="sector"){
-				Collections.sort(list,new SectorComparator())
+				Collections.sort(listgral,new SectorComparator())
 			}
 			if(params.dir=="DESC"){
-				Collections.reverse(list)
+				Collections.reverse(listgral)
 				log.debug("Orden inverso aplicado")
 			}
 		}
 
 		
 				
-		return list
+		return listgral
 	}//cierre del closure principal
 
 	
@@ -863,6 +791,23 @@ def criteriaclosure ={
     					sheet.addCell(new Number(7,fil,it.anio))
     					sheet.addCell(new Number(8,fil,it.numero))
     					sheet.addCell(new DateTime (9,fil,it.fechaAlta,dateFormat))
+						sheet.addCell(new Label(10,fil,it.razonSocial))
+						sheet.addCell(new Label(11,fil,it.cuit))
+						sheet.addCell(new Label(12,fil,it.direccion))
+						sheet.addCell(new Label(13,fil,it.email))
+						sheet.addCell(new Label(14,fil,it.nombreRepresentante))
+						sheet.addCell(new Label(15,fil,it.dniRep))
+						sheet.addCell(new Label(16,fil,it.telefonoRepresentante1))
+						sheet.addCell(new Label(17,fil,it.telefonoRepresentante2))
+						sheet.addCell(new Label(18,fil,it.telefonoRepresentante3))
+						sheet.addCell(new Label(19,fil,it.sitioWeb))
+						sheet.addCell(new Label(20,fil,it.empresa.subrubro?.rubro?.nombreRubro))
+						sheet.addCell(new Label(21,fil,it.empresa.subrubro?.nombreSubrubro))
+						sheet.addCell(new Label(22,fil,it.empresa.vendedor.nombre))
+						sheet.addCell(new Label(23,fil,it.empresa.localidad?.provincia?.nombre))
+						sheet.addCell(new Label(24,fil,it.empresa.localidad?.nombreLoc))
+						sheet.addCell(new Label(25,fil,it.observacion))
+
     					fil=fil+1    					    					    					    					    					    					    					
     				}
     				
