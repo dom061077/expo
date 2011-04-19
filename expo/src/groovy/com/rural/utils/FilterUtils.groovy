@@ -8,20 +8,28 @@ class FilterUtils {
 	private static Logger log = Logger.getLogger(FilterUtils.class)
 	
 
-	static def getNestedMetaProperty(MetaClass mc, String propertyName) {
+	static def getNestedMetaProperty(groovy.lang.MetaClass mc, String propertyName) {
+		log.info "INGRESANDO AL METODO ESTATICO getNestedMetaProperty DE LA CLASE FilterUtils"
+		log.info " propertyName: ${propertyName}, mc metaclass: ${mc}"
 		def nest = propertyName.tokenize('.')
-		MetaClass currMc = mc
+		//groovy.lang.MetaClass currMc = mc
 		def mp = null
 		if (log.isDebugEnabled())
 			log.debug("Getting nested meta properties for mc ${mc} and prop ${propertyName}.  Nest is ${nest}")
 		nest.each() {egg ->
-			mp = currMc.getMetaProperty(egg)
+			try{
+				log.info "TRATANDO DE DEVOLVER UNA PROPIEDAD"
+				mp = mc.getMetaProperty(egg)
+			}catch(Exception e){
+				log.info "Exception al obtener getMetaProperty: "+e.getMessage()
+			}
 			log.debug("${egg} mp is ${mp}")
 			if (mp != null) {
-				currMc = mp.type.getMetaClass()
-				//println "${egg} mp is ${mp}. type is ${mp.type.name} metaclass is ${mp.type.metaClass}"
+				mc = mp.type.getMetaClass()
+				log.info "${egg} mp is ${mp}. type is ${mp.type.name} metaclass is ${mp.type.metaClass}"
 			}
 		}
+		log.info "ESTA RETORNANDO UNA METACLASS: "+mc
 		return mp
 	}
 

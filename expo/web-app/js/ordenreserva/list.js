@@ -243,7 +243,7 @@ Ext.onReady(function(){
 	var camposStore= new Ext.data.SimpleStore({
 									id:0,
 									fields:['idcampo','labelcampo'],
-									data:[['nombre','Nom.Empresa'],['fechaAlta','Fecha Alta'],['sector','Sector'],['lote','Lote'],['anio','Año Exposición'],['exponombre','Nombre Exposición'],['numero','Número']]
+									data:[['nombre','Nom.Empresa'],['fechaAlta','Fecha Alta'],['sector.nombre','Sector'],['lote.nombre','Lote'],['anio','Año Exposición'],['expo.nombre','Nombre Exposición'],['numero','Número']]
 								})
 	var condicionesStore=new Ext.data.SimpleStore({
 									id:0,

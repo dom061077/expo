@@ -334,6 +334,9 @@ class OrdenReservaController {
     }
 	
 	private def parseValue(def prop, def paramName, def rawValue, MetaClass mc, def params) {
+		log.info "INGRESANDO AL METODO parseValue"
+		log.debug "NOMBRE DE LA PROPIEDAD: "+prop
+		log.debug "METACLASS: "+mc
     	def mp = FilterUtils.getNestedMetaProperty(mc, prop)
         //log.debug("prop is ${prop}")
         //log.debug("mc is ${mc}, mc class is ${mc.theClass.name}")
@@ -372,26 +375,9 @@ class OrdenReservaController {
     }
 
 	
-	List consultar2(params){
-		def ordenes=null
-		def detalles=null
-		def i
-		def valorSearch
-		String condicion
-		String campo
-		def campoToken
-		ArrayList listgral = new ArrayList()
-		MetaClass metaClass
-		/*consulto las ordenes que no tienen detalle*/
-		java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy")
-		Date fecha
-		def flagnot=false
-		log.debug "CANTIDAD DE CAMPOS: "+params.campos.size()
-		
-		def co = OrdenReserva.createCriteria()
-		/*
-		def closureOrden = {
-			log.debug "INGRESANDO AL CLOSURE INTERNO closureOrden"
+	def closureOrden = {
+	//log.debug "INGRESANDO AL CLOSURE INTERNO closureOrden"
+			MetaClass metaClass
 			for(i=0;i<params.campos.size()-1;i++){
 				campo=params.campos[i]
 				condicion=params.condicion[i]
@@ -425,55 +411,122 @@ class OrdenReservaController {
 					
 				}//end del and
 			}//end del for
-				
-		}//end del closure de orden
 		
-		*/
-		log.debug "CRITERIA "+co
-		ordenes=co.list()
+	}//end del closure de orden
+
+	
+	
+	List consultar2(params){
+		def ordenes=null
+		def detalles=null
+		def i
+		def valorSearch
+		String condicion
+		String campo
+		def campoToken
+		ArrayList listgral = new ArrayList()
+		
+		/*consulto las ordenes que no tienen detalle*/
+		java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy")
+		Date fecha
+		def flagnot=false
+		log.debug "CANTIDAD DE CAMPOS: "+params.campos.size()
+		
+		def co = OrdenReserva.createCriteria()
+		
+		
+				
+		ordenes=co.list({
+					def metaProperty
+					for(i=0;i<params.campos.size()-1;i++){
+						campo=params.campos[i]
+						log.debug "Condiciones: "+params.condiciones
+						condicion=params.condiciones[i]
+						valorSearch=params.searchString[i]
+						if(!campo?.trim().equals("") && !condicion.trim().equals("")){
+								and{
+									co.isEmpty("detalle")
+									co.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
+									if(campo?.contains(".")){
+										campoToken=campo?.tokenize(".")
+										metaProperty=FilterUtils.getNestedMetaProperty(OrdenReserva.getMetaClass(),campoToken[0])
+										//log.debug "METACLASS DERIVADA: "+metaClass
+										if(metaProperty){
+											log.debug "INGRESANDO AL IF DE campo?.contains(.), valor de campo: ${campo} metaclass retornada: "+metaclass
+											metaProperty=FilterUtils.getNestedMetaProperty(DetalleServicioContratado.getMetaClass(),campoToken[0])
+											valorSearch=parseValue(campoToken[1],campoToken[1],valorSearch,DetalleServicioContratado.getMetaClass(),params)
+											co."${campoToken[0]}"(){
+												co."${condicion}"(campoToken[1],valorSearch)
+											}
+										}else{
+											log.debug "MetaClass detalleserviciocontratado: "+DetalleServicioContratado.getMetaClass()
+											metaclass=FilterUtils.getNestedMetaProperty(DetalleServicioContratado.getMetaClass(),campoToken[0])
+											log.debug "METACLASS ANTES del parseValue DEL ELSE"
+											valorSearch=parseValue(campoToken[1], campoToken[1], valorSearch,metaclass.type.getMetaClass(), params)
+											co.detalle(){
+												co."${campoToken[0]}"(){
+													co."${condicion}"(campoToken[1],valorSearch)
+												}
+											}
+										}
+									}else{
+										log.debug "INGRESA POR EL ELSE DEBIDO A QUE EL CAMPO NO ES ANIDADO: campo: ${campo}, condicion: ${condicion}"
+										valorSearch=parseValue(campo,campo,valorSearch,OrdenReserva.getMetaClass(),params)
+										co."${condicion}"(campo,valorSearch)
+									}
+									
+								}//end del and
+						}
+					}//end del for
+			})
 		listgral.addAll(ordenes)
 		
 		def cd=DetalleServicioContratado.createCriteria()
 		def closureDetalle={
-		 
+			MetaClass metaclass
 			for(i=0;i<params.campos.size()-1;i++){
 				campo=params.campos[i]
-				condicion=params.condicion[i]
+				condicion=params.condiciones[i]
 				valorSearch=params.searchString[i]
-				and{
-					cd.ordenReserva(){
-						cd.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
-					}
-					if(campo.contains(".")){
-						campoToken=campo.tokenize(".")
-						metaClass=FilterUtils.getNestedMetaProperty(DetalleServicioContratado.getMetaClass(),campo)
-						if(!metaClass){
-							metaClass=FilterUtils.getNestedMetaProperty(OrdenReserva.class.getMetaClass(),campo)
-							valorSearch=parseValue(campoToken[1], campoToken[1], valorSearch,metaClass, params)
+				if(!campo.trim().equals("") &&  !condicion.trim().equals("")){
+					
+						and{
 							cd.ordenReserva(){
-								cd."${campoToken[0]}"(){
-									cd."${condicion}"(campoToken[1],valorSearch)
+								cd.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
+							}
+							if(campo?.contains(".")){
+								campoToken=campo.tokenize(".")
+								metaclass=FilterUtils.getNestedMetaProperty(DetalleServicioContratado.getMetaClass(),campo)
+								if(!metaclass){
+									metaclass=FilterUtils.getNestedMetaProperty(OrdenReserva.getMetaClass(),campo)
+									valorSearch=parseValue(campoToken[1], campoToken[1], valorSearch,metaclass, params)
+									cd.ordenReserva(){
+										cd."${campoToken[0]}"(){
+											cd."${condicion}"(campoToken[1],valorSearch)
+										}
+									}
+								}else{
+									//metaclass=FilterUtils.getNestedMetaProperty(DetalleServicioContrado.getMetaClass(),campo)
+									valorSearch=parseValue(campoToken[1],campoToken[1],valorSearch,metaclass,params)
+									cd."${campoToken[0]}"(){
+										cd."${condicion}"(campoToken[1],valorSearch)
+									}
+								}
+							}else{
+								valorSearch=parseValue(campo,campo,valorSearch,OrdenReserva.getMetaClass(),params)
+								cd.ordenReserva(){
+									cd."${condicion}"(campo,valorSearch)
 								}
 							}
-						}else{
-							metaClass=FilterUtils.getNestedMetaProperty(DetalleServicioContrado.getMetaClass(),campo)
-							valorSearch=parseValue(campoToken[1],campoToken[1],valorSearch,metaClass,params)
-							cd."${campoToken[0]}"(){
-								cd."${condicion}"(campoToken[1],valorSearch)
-							}
-						}
-					}else{
-						valorSearch=parseValue(campo,campo,valorSearch,OrdenReserva.getMetaClass,params)
-						cd."${condicion}"(campo,valorSearch)
-					}
-					
-				}//end del and
+							
+						}//end del and
+				}
 			}//end del for
 			
 		}//end del closureDetalle
 		
-		detalle=cd.list(closureDetalle)
-		listgrail.addAll(detalle)	
+		detalles=cd.list(closureDetalle)
+		listgral.addAll(detalles)	
 
 		if(params.sort){
 			if(params.sort=="nombre"){
@@ -800,7 +853,7 @@ class OrdenReservaController {
 						sheet.addCell(new Label(16,fil,it.telefonoRepresentante1))
 						sheet.addCell(new Label(17,fil,it.telefonoRepresentante2))
 						sheet.addCell(new Label(18,fil,it.telefonoRepresentante3))
-						sheet.addCell(new Label(19,fil,it.sitioWeb))
+						sheet.addCell(new Label(19,fil,it.empresa.sitioWeb))
 						sheet.addCell(new Label(20,fil,it.empresa.subrubro?.rubro?.nombreRubro))
 						sheet.addCell(new Label(21,fil,it.empresa.subrubro?.nombreSubrubro))
 						sheet.addCell(new Label(22,fil,it.empresa.vendedor.nombre))
