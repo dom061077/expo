@@ -30,6 +30,7 @@ import jxl.write.WritableSheet
 class OrdenReservaController {
     def ordenReservaService
     def authenticateService
+	def grailsApplication
     
     def index = { redirect(action:list,params:params) }
     	
@@ -333,11 +334,9 @@ class OrdenReservaController {
     	}
     }
 	
-	def parseValue(def prop, def paramName, def rawValue, groovy.lang.MetaClass mc, def params) {
-		log.info "INGRESANDO AL METODO parseValue"
-		log.debug "NOMBRE DE LA PROPIEDAD: "+prop
-		log.debug "METACLASS: "+mc
-    	def mp = FilterUtils.getNestedMetaProperty(mc, prop)
+	def parseValue(/*def prop, def paramName,*/ def rawValue, def mp, def params) {
+    	//def mp = FilterUtils.getNestedMetaProperty(mc, prop)
+		
         //log.debug("prop is ${prop}")
         //log.debug("mc is ${mc}, mc class is ${mc.theClass.name}")
         //log.debug("mp is ${mp}, name is ${mp.name} and type is ${mp.type} and is enum is ${mp.type.isEnum()}")
@@ -368,7 +367,7 @@ class OrdenReservaController {
             } else if (java.util.Date.isAssignableFrom(mp.type)) {
                 val = FilterUtils.parseDateFromDatePickerParams(paramName, params)
             }else
-				val= "%${val}"
+				val= "%${val}%"
         }
     	//println "== Parsing value ${rawValue} from param ${paramName}. type is ${mp.type}.  Final value ${val}. Type ${val?.class}"
     	return val
@@ -400,6 +399,7 @@ class OrdenReservaController {
 		
 				
 		ordenes=co.list({
+					log.debug "CLOSURE DE CABECERA DE ORDEN"
 					def metaProperty
 					for(i=0;i<params.campos.size()-1;i++){
 						campo=params.campos[i]
@@ -410,15 +410,14 @@ class OrdenReservaController {
 								and{
 									co.isEmpty("detalle")
 									co.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
+									metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,OrdenReserva,campo)
 									if(campo?.contains(".")){
 										campoToken=campo?.tokenize(".")
-										metaProperty=FilterUtils.getNestedMetaProperty(OrdenReserva.getMetaClass(),campo)
 										log.debug "POR QUE ESTA TRAYENDO ALGO QUE PARECE NULL: ${metaProperty}"
 										if(!metaProperty){
 											
-											metaProperty=FilterUtils.getNestedMetaProperty(DetalleServicioContratado.getMetaClass(),campo)
-											if(metaProperty)
-												valorSearch=parseValue(campo,campo,valorSearch,DetalleServicioContratado.getMetaClass(),params)
+											metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,DetalleServicioContratado,campo)
+											valorSearch=parseValue(valorSearch,metaProperty,params)
 											co.detalle(){	
 												co."${campoToken[0]}"(){
 													co."${condicion}"(campoToken[1],valorSearch)
@@ -426,15 +425,15 @@ class OrdenReservaController {
 											}
 										}else{
 											log.debug "META PROPERTY ENCONTRADA ${metaProperty}"
-											valorSearch=parseValue(campo, campo, valorSearch,OrdenReserva.getMetaClass(), params)
-											log.debug "CampoToken: ${campoToken[1]}, valorSearch:${valorSearch}"
+											valorSearch=parseValue(valorSearch,metaProperty, params)
+											log.debug "CampoToken[0]: ${campoToken[0]} CampoToken[1]: ${campoToken[1]}, valorSearch:${valorSearch}"
 											co."${campoToken[0]}"(){
 													co."${condicion}"(campoToken[1],valorSearch)
 											}
 										}
 									}else{
 										log.debug "INGRESA POR EL ELSE DEBIDO A QUE EL CAMPO NO ES ANIDADO: campo: ${campo}, condicion: ${condicion}"
-										valorSearch=parseValue(campo,campo,valorSearch,OrdenReserva.getMetaClass(),params)
+										valorSearch=parseValue(valorSearch,metaProperty,params)
 										co."${condicion}"(campo,valorSearch)
 									}
 									
@@ -446,25 +445,26 @@ class OrdenReservaController {
 		
 		def cd=DetalleServicioContratado.createCriteria()
 		def closureDetalle={
+			log.debug "CLOSURE DE DETALLE"
 			def metaProperty
 			for(i=0;i<params.campos.size()-1;i++){
 				campo=params.campos[i]
 				condicion=params.condiciones[i]
 				valorSearch=params.searchString[i]
 				if(!campo.trim().equals("") &&  !condicion.trim().equals("")){
-					
+						log.debug "ESTA INGRESANDO "
 						and{
 							cd.ordenReserva(){
 								cd.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
 							}
 							if(campo?.contains(".")){
 								campoToken=campo.tokenize(".")
-								metaProperty=FilterUtils.getNestedMetaProperty(DetalleServicioContratado.getMetaClass(),campo)
+								metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,DetalleServicioContratado,campo)
 								log.debug "metaProperty en el closure detalle: ${metaProperty} campo utilizado: ${campo}"
 								if(!metaProperty){
-									metaProperty=FilterUtils.getNestedMetaProperty(OrdenReserva.getMetaClass(),campo)
+									metaProperty=FilterUtils.getNestedMetaProperty(grailApplication,OrdenReserva,campo)
 									if(metaProperty)
-									valorSearch=parseValue(campo, campo, valorSearch,OrdenReserva.getMetaClass(), params)
+									valorSearch=parseValue(campo, campo, valorSearch,OrdenReserva, params)
 									cd.ordenReserva(){
 										cd."${campoToken[0]}"(){
 											cd."${condicion}"(campoToken[1],valorSearch)
@@ -488,8 +488,8 @@ class OrdenReservaController {
 			
 		}//end del closureDetalle
 		
-		detalles=cd.list(closureDetalle)
-		listgral.addAll(detalles)	
+		//detalles=cd.list()
+		//listgral.addAll(detalles)	
 
 		if(params.sort){
 			if(params.sort=="nombre"){
