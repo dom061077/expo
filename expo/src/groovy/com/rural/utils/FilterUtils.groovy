@@ -6,29 +6,23 @@ import org.apache.log4j.Logger
 
 class FilterUtils {
 	private static Logger log = Logger.getLogger(FilterUtils.class)
-	
 
-	static def getNestedMetaProperty(groovy.lang.MetaClass mc, String propertyName) {
-		def nest = propertyName.tokenize('.')
-		//groovy.lang.MetaClass currMc = mc
-		def mp = null
-		if (log.isDebugEnabled())
-			log.debug("Getting nested meta properties for mc ${mc} and prop ${propertyName}.  Nest is ${nest}")
-		nest.each() {egg ->
-			try{
-				log.debug "TRATANDO DE DEVOLVER UNA PROPIEDAD"
-				mp = mc.getMetaProperty(egg)
-			}catch(Exception e){
-				log.debug "Exception al obtener getMetaProperty: "+e.getMessage()
-			}
-			log.debug("${egg} mp is ${mp}")
-			if (mp != null) {
-				mc = mp.type.getMetaClass()
-				log.debug "${egg} mp is ${mp}. type is ${mp.type.name} metaclass is ${mp.type.metaClass}"
-			}else
-				return null
-		}
-		return mp
+	static def getNestedMetaProperty(def grailsApplication,def domainClass, String propertyName) {
+        def nest = propertyName.tokenize('.')
+        def thisDomainClass = grailsApplication.getDomainClass(domainClass.name)
+        def thisDomainProp = null
+        
+        nest.each() {egg ->
+            if(thisDomainClass){
+                thisDomainProp =thisDomainClass.persistentProperties.find {
+                    System.out.println "Propiedad: "+it
+                    it.name == egg
+                }
+                thisDomainClass = thisDomainProp?.referencedDomainClass
+            }
+     
+        }
+        return thisDomainProp
 	}
 
 	static java.util.Date parseDateFromDatePickerParams(def paramProperty, def params) {
