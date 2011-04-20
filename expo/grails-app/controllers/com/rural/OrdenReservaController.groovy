@@ -333,7 +333,7 @@ class OrdenReservaController {
     	}
     }
 	
-	private def parseValue(def prop, def paramName, def rawValue, MetaClass mc, def params) {
+	def parseValue(def prop, def paramName, def rawValue, groovy.lang.MetaClass mc, def params) {
 		log.info "INGRESANDO AL METODO parseValue"
 		log.debug "NOMBRE DE LA PROPIEDAD: "+prop
 		log.debug "METACLASS: "+mc
@@ -345,7 +345,7 @@ class OrdenReservaController {
         //log.debug("cls is ${cls}")
 
         if (val) {
-            Class cls = mc.theClass.getDeclaredField(prop).type
+            Class cls = mp.type //mc.theClass.getDeclaredField(prop).type
             if (cls.isEnum()) {
                 val = Enum.valueOf(cls, val.toString())
                 //println "val is ${val} and raw val is ${rawValue}"
@@ -375,44 +375,7 @@ class OrdenReservaController {
     }
 
 	
-	def closureOrden = {
-	//log.debug "INGRESANDO AL CLOSURE INTERNO closureOrden"
-			MetaClass metaClass
-			for(i=0;i<params.campos.size()-1;i++){
-				campo=params.campos[i]
-				condicion=params.condicion[i]
-				valorSearch=params.searchString[i]
-				and{
-					co.isEmpty("detalle")
-					co.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
-					if(campo.contains(".")){
-						campoToken=campo.tokenize(".")
-						metaClass=FilterUtils.getNestedMetaProperty(OrdenReserva.getMetaClass(),campo)
-						log.debug "METACLASS DERIVADA: "+metaClass
-						if(!metaClass){
-							metaClass=FilterUtils.getNestedMetaProperty(DetalleServicioContratado.getMetaClass(),campo)
-							valorSearch=parseValue(campoToken[1], campoToken[1], valorSearch,metaClass, params)
-							co.detalle(){
-								co."${campoToken[0]}"(){
-									co."${condicion}"(campoToken[1],valorSearch)
-								}
-							}
-						}else{
-							metaClass=FilterUtils.getNestedMetaProperty(OrdenReserva.getMetaClass(),campo)
-							valorSearch=parseValue(campoToken[1],campoToken[1],valorSearch,metaClass,params)
-							co."${campoToken[0]}"(){
-								co."${condicion}"(campoToken[1],valorSearch)
-							}
-						}
-					}else{
-						valorSearch=parseValue(campo,campo,valorSearch,OrdenReserva.getMetaClass,params)
-						co."${condicion}"(campo,valorSearch)
-					}
-					
-				}//end del and
-			}//end del for
-		
-	}//end del closure de orden
+
 
 	
 	
@@ -449,24 +412,24 @@ class OrdenReservaController {
 									co.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
 									if(campo?.contains(".")){
 										campoToken=campo?.tokenize(".")
-										metaProperty=FilterUtils.getNestedMetaProperty(OrdenReserva.getMetaClass(),campoToken[0])
-										//log.debug "METACLASS DERIVADA: "+metaClass
-										if(metaProperty){
-											log.debug "INGRESANDO AL IF DE campo?.contains(.), valor de campo: ${campo} metaclass retornada: "+metaclass
-											metaProperty=FilterUtils.getNestedMetaProperty(DetalleServicioContratado.getMetaClass(),campoToken[0])
-											valorSearch=parseValue(campoToken[1],campoToken[1],valorSearch,DetalleServicioContratado.getMetaClass(),params)
-											co."${campoToken[0]}"(){
-												co."${condicion}"(campoToken[1],valorSearch)
-											}
-										}else{
-											log.debug "MetaClass detalleserviciocontratado: "+DetalleServicioContratado.getMetaClass()
-											metaclass=FilterUtils.getNestedMetaProperty(DetalleServicioContratado.getMetaClass(),campoToken[0])
-											log.debug "METACLASS ANTES del parseValue DEL ELSE"
-											valorSearch=parseValue(campoToken[1], campoToken[1], valorSearch,metaclass.type.getMetaClass(), params)
-											co.detalle(){
+										metaProperty=FilterUtils.getNestedMetaProperty(OrdenReserva.getMetaClass(),campo)
+										log.debug "POR QUE ESTA TRAYENDO ALGO QUE PARECE NULL: ${metaProperty}"
+										if(!metaProperty){
+											
+											metaProperty=FilterUtils.getNestedMetaProperty(DetalleServicioContratado.getMetaClass(),campo)
+											if(metaProperty)
+												valorSearch=parseValue(campo,campo,valorSearch,DetalleServicioContratado.getMetaClass(),params)
+											co.detalle(){	
 												co."${campoToken[0]}"(){
 													co."${condicion}"(campoToken[1],valorSearch)
 												}
+											}
+										}else{
+											log.debug "META PROPERTY ENCONTRADA ${metaProperty}"
+											valorSearch=parseValue(campo, campo, valorSearch,OrdenReserva.getMetaClass(), params)
+											log.debug "CampoToken: ${campoToken[1]}, valorSearch:${valorSearch}"
+											co."${campoToken[0]}"(){
+													co."${condicion}"(campoToken[1],valorSearch)
 											}
 										}
 									}else{
@@ -483,7 +446,7 @@ class OrdenReservaController {
 		
 		def cd=DetalleServicioContratado.createCriteria()
 		def closureDetalle={
-			MetaClass metaclass
+			def metaProperty
 			for(i=0;i<params.campos.size()-1;i++){
 				campo=params.campos[i]
 				condicion=params.condiciones[i]
@@ -496,10 +459,12 @@ class OrdenReservaController {
 							}
 							if(campo?.contains(".")){
 								campoToken=campo.tokenize(".")
-								metaclass=FilterUtils.getNestedMetaProperty(DetalleServicioContratado.getMetaClass(),campo)
-								if(!metaclass){
-									metaclass=FilterUtils.getNestedMetaProperty(OrdenReserva.getMetaClass(),campo)
-									valorSearch=parseValue(campoToken[1], campoToken[1], valorSearch,metaclass, params)
+								metaProperty=FilterUtils.getNestedMetaProperty(DetalleServicioContratado.getMetaClass(),campo)
+								log.debug "metaProperty en el closure detalle: ${metaProperty} campo utilizado: ${campo}"
+								if(!metaProperty){
+									metaProperty=FilterUtils.getNestedMetaProperty(OrdenReserva.getMetaClass(),campo)
+									if(metaProperty)
+									valorSearch=parseValue(campo, campo, valorSearch,OrdenReserva.getMetaClass(), params)
 									cd.ordenReserva(){
 										cd."${campoToken[0]}"(){
 											cd."${condicion}"(campoToken[1],valorSearch)
@@ -514,9 +479,7 @@ class OrdenReservaController {
 								}
 							}else{
 								valorSearch=parseValue(campo,campo,valorSearch,OrdenReserva.getMetaClass(),params)
-								cd.ordenReserva(){
-									cd."${condicion}"(campo,valorSearch)
-								}
+								cd."${condicion}"(campo,valorSearch)
 							}
 							
 						}//end del and
