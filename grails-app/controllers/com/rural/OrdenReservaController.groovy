@@ -464,7 +464,7 @@ class OrdenReservaController {
 								if(!metaProperty){
 									metaProperty=FilterUtils.getNestedMetaProperty(grailApplication,OrdenReserva,campo)
 									if(metaProperty)
-									valorSearch=parseValue(campo, campo, valorSearch,OrdenReserva, params)
+									valorSearch=parseValue(valorSearch,metaProperty, params)
 									cd.ordenReserva(){
 										cd."${campoToken[0]}"(){
 											cd."${condicion}"(campoToken[1],valorSearch)
@@ -472,13 +472,13 @@ class OrdenReservaController {
 									}
 								}else{
 									//metaclass=FilterUtils.getNestedMetaProperty(DetalleServicioContrado.getMetaClass(),campo)
-									valorSearch=parseValue(campoToken[1],campoToken[1],valorSearch,metaclass,params)
+									valorSearch=parseValue(valorSearch,metaProperty,params)
 									cd."${campoToken[0]}"(){
 										cd."${condicion}"(campoToken[1],valorSearch)
 									}
 								}
 							}else{
-								valorSearch=parseValue(campo,campo,valorSearch,OrdenReserva.getMetaClass(),params)
+								valorSearch=parseValue(valorSearch,metaProperty,params)
 								cd."${condicion}"(campo,valorSearch)
 							}
 							
@@ -488,8 +488,8 @@ class OrdenReservaController {
 			
 		}//end del closureDetalle
 		
-		//detalles=cd.list()
-		//listgral.addAll(detalles)	
+		detalles=cd.list(closureDetalle)
+		listgral.addAll(detalles)	
 
 		if(params.sort){
 			if(params.sort=="nombre"){
