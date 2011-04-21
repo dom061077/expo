@@ -218,7 +218,7 @@ Ext.onReady(function(){
     					+'&searchString='+Ext.getCmp('searchStringIdFiltro1').getValue()
     					+'&searchString='+Ext.getCmp('searchStringIdFiltro2').getValue()
     					+'&searchString='+Ext.getCmp('searchStringIdFiltro3').getValue()
-    					+'&anulada='+Ext.getCmp('soloanuladasId').getValue()
+    					+'&soloanuladas='+Ext.getCmp('soloanuladasId').getValue()
     					+'&sort='+sort+'&dir='+dir
     					,'_blank')
             	}

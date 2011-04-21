@@ -399,47 +399,49 @@ class OrdenReservaController {
 		
 				
 		ordenes=co.list({
-					log.debug "CLOSURE DE CABECERA DE ORDEN"
 					def metaProperty
 					for(i=0;i<params.campos.size()-1;i++){
 						campo=params.campos[i]
 						log.debug "Condiciones: "+params.condiciones
 						condicion=params.condiciones[i]
 						valorSearch=params.searchString[i]
-						if(!campo?.trim().equals("") && !condicion.trim().equals("")){
-								and{
-									co.isEmpty("detalle")
-									co.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
-									metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,OrdenReserva,campo)
-									if(campo?.contains(".")){
-										campoToken=campo?.tokenize(".")
-										log.debug "POR QUE ESTA TRAYENDO ALGO QUE PARECE NULL: ${metaProperty}"
-										if(!metaProperty){
-											
-											metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,DetalleServicioContratado,campo)
-											valorSearch=parseValue(valorSearch,metaProperty,params)
-											co.detalle(){	
+						and{
+							co.isEmpty("detalle")
+							co.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
+
+							if(!campo?.trim().equals("") && !condicion.trim().equals("")){
+										metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,OrdenReserva,campo)
+										if(campo?.contains(".")){
+											campoToken=campo?.tokenize(".")
+											log.debug "POR QUE ESTA TRAYENDO ALGO QUE PARECE NULL: ${metaProperty}"
+											if(!metaProperty){
+												
+												metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,DetalleServicioContratado,campo)
+												valorSearch=parseValue(valorSearch,metaProperty,params)
+												co.detalle(){	
+													co."${campoToken[0]}"(){
+														co."${condicion}"(campoToken[1],valorSearch)
+													}
+												}
+											}else{
+												log.debug "META PROPERTY ENCONTRADA ${metaProperty}"
+												valorSearch=parseValue(valorSearch,metaProperty, params)
+												log.debug "CampoToken[0]: ${campoToken[0]} CampoToken[1]: ${campoToken[1]}, valorSearch:${valorSearch}"
 												co."${campoToken[0]}"(){
-													co."${condicion}"(campoToken[1],valorSearch)
+														co."${condicion}"(campoToken[1],valorSearch)
 												}
 											}
 										}else{
-											log.debug "META PROPERTY ENCONTRADA ${metaProperty}"
-											valorSearch=parseValue(valorSearch,metaProperty, params)
-											log.debug "CampoToken[0]: ${campoToken[0]} CampoToken[1]: ${campoToken[1]}, valorSearch:${valorSearch}"
-											co."${campoToken[0]}"(){
-													co."${condicion}"(campoToken[1],valorSearch)
-											}
+											log.debug "INGRESA POR EL ELSE DEBIDO A QUE EL CAMPO NO ES ANIDADO: campo: ${campo}, condicion: ${condicion}"
+											valorSearch=parseValue(valorSearch,metaProperty,params)
+											co."${condicion}"(campo,valorSearch)
 										}
-									}else{
-										log.debug "INGRESA POR EL ELSE DEBIDO A QUE EL CAMPO NO ES ANIDADO: campo: ${campo}, condicion: ${condicion}"
-										valorSearch=parseValue(valorSearch,metaProperty,params)
-										co."${condicion}"(campo,valorSearch)
-									}
-									
-								}//end del and
-						}
+										
+							}
+						}//end del and
 					}//end del for
+					
+					
 			})
 		listgral.addAll(ordenes)
 		
@@ -451,39 +453,45 @@ class OrdenReservaController {
 				campo=params.campos[i]
 				condicion=params.condiciones[i]
 				valorSearch=params.searchString[i]
-				if(!campo.trim().equals("") &&  !condicion.trim().equals("")){
-						log.debug "ESTA INGRESANDO "
-						and{
-							cd.ordenReserva(){
-								cd.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
-							}
-							if(campo?.contains(".")){
-								campoToken=campo.tokenize(".")
+				and{
+					cd.ordenReserva(){
+						cd.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
+					}
+					if(!campo.trim().equals("") &&  !condicion.trim().equals("")){
 								metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,DetalleServicioContratado,campo)
-								log.debug "metaProperty en el closure detalle: ${metaProperty} campo utilizado: ${campo}"
-								if(!metaProperty){
-									metaProperty=FilterUtils.getNestedMetaProperty(grailApplication,OrdenReserva,campo)
-									if(metaProperty)
-									valorSearch=parseValue(valorSearch,metaProperty, params)
-									cd.ordenReserva(){
+								if(campo?.contains(".")){
+									campoToken=campo.tokenize(".")
+									log.debug "metaProperty en el closure detalle: ${metaProperty} campo utilizado: ${campo}"
+									if(!metaProperty){
+										metaProperty=FilterUtils.getNestedMetaProperty(grailApplication,OrdenReserva,campo)
+										if(metaProperty)
+										valorSearch=parseValue(valorSearch,metaProperty, params)
+										cd.ordenReserva(){
+											cd."${campoToken[0]}"(){
+												cd."${condicion}"(campoToken[1],valorSearch)
+											}
+										}
+									}else{
+										//metaclass=FilterUtils.getNestedMetaProperty(DetalleServicioContrado.getMetaClass(),campo)
+										valorSearch=parseValue(valorSearch,metaProperty,params)
 										cd."${campoToken[0]}"(){
 											cd."${condicion}"(campoToken[1],valorSearch)
 										}
 									}
 								}else{
-									//metaclass=FilterUtils.getNestedMetaProperty(DetalleServicioContrado.getMetaClass(),campo)
-									valorSearch=parseValue(valorSearch,metaProperty,params)
-									cd."${campoToken[0]}"(){
-										cd."${condicion}"(campoToken[1],valorSearch)
+									if(metaProperty){
+										valorSearch=parseValue(valorSearch,metaProperty,params)
+										cd."${condicion}"(campo,valorSearch)
+									}else{
+										metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,OrdenReserva,campo)
+										valorSearch=parseValue(valorSearch,metaProperty,params)
+										cd.ordenReserva{
+											cd."${condicion}"(campo,valorSearch)
+										}
 									}
 								}
-							}else{
-								valorSearch=parseValue(valorSearch,metaProperty,params)
-								cd."${condicion}"(campo,valorSearch)
-							}
-							
-						}//end del and
-				}
+					}
+				}//end del and
 			}//end del for
 			
 		}//end del closureDetalle
@@ -514,7 +522,7 @@ class OrdenReservaController {
 		}
 
 		
-				
+		log.debug "TOTAL DE REGISTROS DE listgral: "+listgral.size()	
 		return listgral
 	}//cierre del closure principal
 
