@@ -15,7 +15,7 @@ class FilterUtils {
         nest.each() {egg ->
             if(thisDomainClass){
                 thisDomainProp =thisDomainClass.persistentProperties.find {
-                    System.out.println "Propiedad: "+it
+                    
                     it.name == egg
                 }
                 thisDomainClass = thisDomainProp?.referencedDomainClass
