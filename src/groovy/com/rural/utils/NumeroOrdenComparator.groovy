@@ -10,11 +10,11 @@ class NumeroOrdenComparator implements Comparator{
 		if (o1 instanceof DetalleServicioContratado)
 			numero1=o1.ordenReserva.numero
 		else
-			numero1=o1.numero[0]
+			numero1=o1.numero
 		if (o2 instanceof DetalleServicioContratado)
 			numero2=o2.ordenReserva.numero
 		else
-			numero2=o2.numero[0]
+			numero2=o2.numero
 		return numero1.compareTo(numero2)
 	}
 }
