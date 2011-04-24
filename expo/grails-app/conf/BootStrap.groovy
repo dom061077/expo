@@ -108,7 +108,7 @@ class BootStrap {
 				new Requestmap(url:"/person/updatepsswJson",configAttribute:"IS_AUTHENTICATED_REMEMBERED").save()
 				
 				new Requestmap(url:"/person/**",configAttribute:"ROLE_ADMIN").save()
-				new Requestmap(url:"/authority/**",configAttribute:"ROLE_A DMIN").save()
+				new Requestmap(url:"/authority",configAttribute:"ROLE_A DMIN").save()
 				new Requestmap(url:"/requestmap/**",configAttribute:"ROLE_ADMIN").save()
 				new Requestmap(url:"/vendedor/**",configAttribute:"IS_AUTHENTICATED_REMEMBERED").save()
 				new Requestmap(url:"/vendedor/create",configAttribute:"ROLE_ADMIN").save()
