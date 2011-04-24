@@ -349,21 +349,53 @@ class OrdenReservaController {
                 val = Enum.valueOf(cls, val.toString())
                 //println "val is ${val} and raw val is ${rawValue}"
             } else if (mp.type.getSimpleName().equalsIgnoreCase("boolean")) {
-                val = val.toBoolean()
+				try{
+					val = val.toBoolean()
+				}catch(Exception e){
+					val = false
+				}
             } else if (mp.type == Integer || mp.type == int) {
-                val = val.toInteger()
+				try{
+					val = val.toInteger()
+				}catch(Exception e){
+					val = 0
+				}
             } else if (mp.type == Long || mp.type == long) {
-                val = val.toLong()
+				try{
+					val = val.toLong()
+				}catch(Exception e){
+					val = 0
+				}
             } else if (mp.type == Double || mp.type == double) {
-                val = val.toDouble()
+				try{
+					val = val.toDouble()
+				}catch(Exception e){
+					val = 0
+				}
             } else if (mp.type == Float || mp.type == float) {
-                val = val.toFloat()
+				try{
+					val = val.toFloat()
+				}catch(Exception e){
+					val = 0
+				}
             } else if (mp.type == Short || mp.type == short) {
-                val = val.toShort()
+				try{
+					val = val.toShort()
+				}catch(Exception e){
+					val = 0
+				}
             } else if (mp.type == BigDecimal) {
-                val = val.toBigDecimal()
+				try{
+					val = val.toBigDecimal()
+				}catch(Exception e){
+					val = 0
+				}
             } else if (mp.type == BigInteger) {
-                val = val.toBigInteger()
+				try{
+					val = val.toBigInteger()
+				}catch(Exception e){
+					val = 0
+				}
             } else if (java.util.Date.isAssignableFrom(mp.type)) {
                 val = FilterUtils.parseDateFromDatePickerParams(paramName, params)
             }else
