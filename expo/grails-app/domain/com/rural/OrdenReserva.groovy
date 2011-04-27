@@ -6,6 +6,8 @@ import java.util.Date;
 import com.rural.seguridad.*
 
 class OrdenReserva {
+	static auditable = true
+	
 	Empresa empresa
 	Person usuario
 	Exposicion expo
