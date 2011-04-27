@@ -452,7 +452,12 @@ class OrdenReservaController {
 												valorSearch=parseValue(valorSearch,metaProperty,params)
 												co.detalle(){	
 													co."${campoToken[0]}"(){
-														co."${condicion}"(campoToken[1],valorSearch)
+														if(condicion.equals("ilike2"))
+															co.not{
+																co.ilike(campoToken[1],valorSearch)	
+															}
+														else
+															co."${condicion}"(campoToken[1],valorSearch)
 													}
 												}
 											}else{
@@ -460,13 +465,23 @@ class OrdenReservaController {
 												valorSearch=parseValue(valorSearch,metaProperty, params)
 												log.debug "CampoToken[0]: ${campoToken[0]} CampoToken[1]: ${campoToken[1]}, valorSearch:${valorSearch}"
 												co."${campoToken[0]}"(){
+													if(condicion.equals("ilike2"))
+														co.not{
+															co.ilike(campoToken[1],valorSearch)
+														}
+													else
 														co."${condicion}"(campoToken[1],valorSearch)
 												}
 											}
 										}else{
 											log.debug "INGRESA POR EL ELSE DEBIDO A QUE EL CAMPO NO ES ANIDADO: campo: ${campo}, condicion: ${condicion}"
 											valorSearch=parseValue(valorSearch,metaProperty,params)
-											co."${condicion}"(campo,valorSearch)
+											if(condicion.equals("ilike2"))
+												co.not{
+														co.ilike campo, valorSearch
+													}
+											else
+												co."${condicion}"(campo,valorSearch)
 										}
 										
 							}
@@ -500,25 +515,45 @@ class OrdenReservaController {
 										valorSearch=parseValue(valorSearch,metaProperty, params)
 										cd.ordenReserva(){
 											cd."${campoToken[0]}"(){
-												cd."${condicion}"(campoToken[1],valorSearch)
+												if(condicion.equals("ilike2"))
+													cd.not{
+														cd.ilike (campoToken[1],valorSearch)
+													}
+												else
+													cd."${condicion}"(campoToken[1],valorSearch)
 											}
 										}
 									}else{
 										//metaclass=FilterUtils.getNestedMetaProperty(DetalleServicioContrado.getMetaClass(),campo)
 										valorSearch=parseValue(valorSearch,metaProperty,params)
 										cd."${campoToken[0]}"(){
-											cd."${condicion}"(campoToken[1],valorSearch)
+											if(condicion.equals("ilike2"))
+												cd.not{
+													cd.ilike (campoToken[1],valorSearch)
+												}
+											else
+												cd."${condicion}"(campoToken[1],valorSearch)
 										}
 									}
 								}else{
 									if(metaProperty){
 										valorSearch=parseValue(valorSearch,metaProperty,params)
-										cd."${condicion}"(campo,valorSearch)
+										if(condicion.equals("ilike2"))
+											cd.not{
+												cd.ilike (campo,valorSearch)
+											}
+										else
+											cd."${condicion}"(campo,valorSearch)
 									}else{
 										metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,OrdenReserva,campo)
 										valorSearch=parseValue(valorSearch,metaProperty,params)
 										cd.ordenReserva{
-											cd."${condicion}"(campo,valorSearch)
+											if(condicion.equals("ilike2"))
+												cd.not{
+													cd.ilike(campo,valorSearch)
+												}
+											else
+												cd."${condicion}"(campo,valorSearch)
 										}
 									}
 								}

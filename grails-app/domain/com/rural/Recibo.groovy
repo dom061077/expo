@@ -3,6 +3,7 @@ package com.rural
 import com.rural.seguridad.Person
 
 class Recibo {
+	static auditable = true
 	Integer puntoVenta
 	Long numero
 	Date fechaAlta
