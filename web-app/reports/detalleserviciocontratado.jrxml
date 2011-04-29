@@ -41,7 +41,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[($F{sector}==null?"":$F{sector.nombre})]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{sector.nombre}==null?"":$F{sector.nombre})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="251" y="0" width="114" height="13"/>

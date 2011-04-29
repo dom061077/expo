@@ -358,43 +358,43 @@ class OrdenReservaController {
 				try{
 					val = val.toInteger()
 				}catch(Exception e){
-					val = 0
+					val = "0".toInteger()
 				}
             } else if (mp.type == Long || mp.type == long) {
 				try{
 					val = val.toLong()
 				}catch(Exception e){
-					val = 0
+					val = "0".toLong()
 				}
             } else if (mp.type == Double || mp.type == double) {
 				try{
 					val = val.toDouble()
 				}catch(Exception e){
-					val = 0
+					val = "0".toDouble()
 				}
             } else if (mp.type == Float || mp.type == float) {
 				try{
 					val = val.toFloat()
 				}catch(Exception e){
-					val = 0
+					val = "0".toFloat()
 				}
             } else if (mp.type == Short || mp.type == short) {
 				try{
 					val = val.toShort()
 				}catch(Exception e){
-					val = 0
+					val = "0".toShort()
 				}
             } else if (mp.type == BigDecimal) {
 				try{
 					val = val.toBigDecimal()
 				}catch(Exception e){
-					val = 0
+					val = "0".toBigDecimal()
 				}
             } else if (mp.type == BigInteger) {
 				try{
 					val = val.toBigInteger()
 				}catch(Exception e){
-					val = 0
+					val = "0".toBigInteger()
 				}
             } else if (java.util.Date.isAssignableFrom(mp.type)) {
                 val = FilterUtils.parseDateFromDatePickerParams(paramName, params)
@@ -441,7 +441,7 @@ class OrdenReservaController {
 							co.isEmpty("detalle")
 							co.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
 
-							if(!campo?.trim().equals("") && !condicion.trim().equals("")){
+							if(!campo?.trim().equals("") && !condicion.trim().equals("") && !valorSearch.trim().equals("")){
 										metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,OrdenReserva,campo)
 										if(campo?.contains(".")){
 											campoToken=campo?.tokenize(".")
@@ -458,6 +458,7 @@ class OrdenReservaController {
 															}
 														else
 															co."${condicion}"(campoToken[1],valorSearch)
+															
 													}
 												}
 											}else{
@@ -470,7 +471,7 @@ class OrdenReservaController {
 															co.ilike(campoToken[1],valorSearch)
 														}
 													else
-														co."${condicion}"(campoToken[1],valorSearch)
+														co."${condicion}"(campoToken[1],valorSearch) 
 												}
 											}
 										}else{
@@ -504,7 +505,7 @@ class OrdenReservaController {
 					cd.ordenReserva(){
 						cd.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
 					}
-					if(!campo.trim().equals("") &&  !condicion.trim().equals("")){
+					if(!campo.trim().equals("") &&  !condicion.trim().equals("") && !valorSearch.trim().equals("")){
 								metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,DetalleServicioContratado,campo)
 								if(campo?.contains(".")){
 									campoToken=campo.tokenize(".")
