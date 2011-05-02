@@ -15,6 +15,7 @@ import com.rural.utils.SectorComparator
 import com.rural.utils.GUtilDomainClass
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass;
 import com.rural.utils.FilterUtils;
+import java.text.SimpleDateFormat
 
 import jxl.*
 import jxl.write.Label
@@ -397,7 +398,16 @@ class OrdenReservaController {
 					val = "0".toBigInteger()
 				}
             } else if (java.util.Date.isAssignableFrom(mp.type)) {
-                val = FilterUtils.parseDateFromDatePickerParams(paramName, params)
+          		def df
+				try{
+					df=new SimpleDateFormat("dd/MM/yyyy")
+					val= df.parse(val)
+					log.debug "FECHA PARSEADA: "+val
+				}catch(Exception e){
+					log.debug "LA FECHA NO SE PUDO PARSEAR"
+					log.debug "ERROR DE FECHA: "+e.message
+					val=new Date()
+				}
             }else
 				val= "%${val}%"
         }
