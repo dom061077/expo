@@ -2,6 +2,7 @@ package com.rural.utils
 
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.apache.log4j.Logger
+import java.text.SimpleDateFormat;
 
 
 class FilterUtils {
@@ -25,7 +26,15 @@ class FilterUtils {
         return thisDomainProp
 	}
 
-	static java.util.Date parseDateFromDatePickerParams(def paramProperty, def params) {
+	static java.util.Date parseDateFromDatePickerParams(/*def paramProperty, def params*/def fecha) {
+		def df
+		try{
+			df=new SimpleDateFormat("dd/MM/yyyy")
+			return df.parse(fecha)
+		}catch(Exception e){
+			return null
+		}
+		/*
 		try {
 			def year = params["${paramProperty}_year"]
 			def month = params["${paramProperty}_month"]
@@ -76,7 +85,7 @@ class FilterUtils {
 		} catch (Exception ex) {
 			log.error("${ex.getClass().simpleName} parsing date for property ${paramProperty}: ${ex.message}")
 			return null
-		}
+		}*/
 	}
 
 		

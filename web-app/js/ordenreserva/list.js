@@ -256,8 +256,34 @@ Ext.onReady(function(){
 										  ,['le','Menor o igual que']
 										  ,['ilike','Contiene']
 										  ,['ilike2','No Contiene']]
-								});									
-	
+								});
+	var condicionesStoreLimitada=new Ext.data.SimpleStore({
+									id:0,
+									fields:['idcond','nombrecond'],
+									data:[['eq','Igual a']
+										  ,['ne','No es igual a']
+										  ,['gt','Mayor que']
+										  ,['lt','Menor que']
+										  ,['ge','Mayor o igual que']
+										  ,['le','Menor o igual que']]
+								});								
+	function campocombofn(combo,record,index){
+		/*Ext.getCmp('condicionesIdFiltro1').clearValue();		
+		Ext.getCmp('condicionesIdFiltro2').clearValue();
+		Ext.getCmp('condicionesIdFiltro3').clearValue();			
+
+		if (record.data.idcampo=="fechaAlta" || record.data.idcampo=="nombre"){
+			Ext.getCmp('condicionesIdFiltro1').store=condicionesStoreLimitada;		
+			Ext.getCmp('condicionesIdFiltro2').store=condicionesStoreLimitada;
+			Ext.getCmp('condicionesIdFiltro3').store=condicionesStoreLimitada;			
+		}else{
+			Ext.getCmp('condicionesIdFiltro1').store=condicionesStore;		
+			Ext.getCmp('condicionesIdFiltro2').store=condicionesStore;
+			Ext.getCmp('condicionesIdFiltro3').store=condicionesStore;			
+			
+		}*/
+		
+	}
 	
 	var formSearch = new  Ext.form.FormPanel({
 		url:'search',
@@ -286,7 +312,10 @@ Ext.onReady(function(){
 								valueField:'idcampo',
 								displayField:'labelcampo',
 								store: camposStore,
-								anchor:'95%'
+								anchor:'95%',
+								listeners:{
+									select:campocombofn
+								}
 							}
 						},{
 							columnWidth: .2,
@@ -362,7 +391,8 @@ Ext.onReady(function(){
 								valueField:'idcampo',
 								displayField:'labelcampo',
 								store: camposStore,
-								anchor:'95%'
+								anchor:'95%',
+								select:campocombofn
 							}
 						},{
 							columnWidth: .2,
@@ -422,7 +452,8 @@ Ext.onReady(function(){
 								valueField:'idcampo',
 								displayField:'labelcampo',
 								store: camposStore,
-								anchor:'95%'
+								anchor:'95%',
+								select:campocombofn
 							}
 						},{
 							columnWidth: .2,

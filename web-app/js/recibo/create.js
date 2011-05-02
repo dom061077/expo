@@ -219,7 +219,7 @@ Ext.onReady(function (){
 			 			if(saldo<0){
 			 				Ext.MessageBox.show({
 			 					title:'Error',
-			 					msg:'El efectivo mís la suma de importes de los cheques es mayor que el saldo de la orden',
+			 					msg:'El efectivo sumado a los importes de los cheques es mayor que el saldo de la orden',
 			 					icon: Ext.MessageBox.ERROR,
 			 					button: Ext.MessageBox.OK
 			 				});	
