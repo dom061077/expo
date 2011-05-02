@@ -521,7 +521,7 @@ class OrdenReservaController {
 									campoToken=campo.tokenize(".")
 									log.debug "metaProperty en el closure detalle: ${metaProperty} campo utilizado: ${campo}"
 									if(!metaProperty){
-										metaProperty=FilterUtils.getNestedMetaProperty(grailApplication,OrdenReserva,campo)
+										metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,OrdenReserva,campo)
 										if(metaProperty)
 										valorSearch=parseValue(valorSearch,metaProperty, params)
 										cd.ordenReserva(){
