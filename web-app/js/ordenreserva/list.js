@@ -61,7 +61,7 @@ Ext.onReady(function(){
 					{header:"Total",dataIndex:'total',width:80,renderer:currencyRender,sortable:false},
 					{header:"Total Cancelado",dataIndex:'totalCancelado',width:100,renderer:currencyRender},
 					{header:"Saldo",dataIndex:'saldo',width:80,renderer:currencyRender},					
-					{header:"Exposición",dataIndex:'expoNombre',width:200},
+					{header:"Exposición",dataIndex:'expoNombre',width:200,sortable:true},
 					{header:"Año",dataIndex:'anio',width:80},					
 					{header:"id",dataIndex:"id",hidden:true},
 					{header:"Número Orden",dataIndex:"numero",width:80,renderer:ordenRender,sortable:true},
@@ -314,7 +314,7 @@ Ext.onReady(function(){
 								store: camposStore,
 								anchor:'95%',
 								listeners:{
-									select:campocombofn
+									
 								}
 							}
 						},{
@@ -391,8 +391,8 @@ Ext.onReady(function(){
 								valueField:'idcampo',
 								displayField:'labelcampo',
 								store: camposStore,
-								anchor:'95%',
-								select:campocombofn
+								anchor:'95%'
+								
 							}
 						},{
 							columnWidth: .2,
@@ -452,8 +452,8 @@ Ext.onReady(function(){
 								valueField:'idcampo',
 								displayField:'labelcampo',
 								store: camposStore,
-								anchor:'95%',
-								select:campocombofn
+								anchor:'95%'
+								
 							}
 						},{
 							columnWidth: .2,

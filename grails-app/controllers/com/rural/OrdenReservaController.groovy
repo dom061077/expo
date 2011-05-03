@@ -12,10 +12,11 @@ import com.rural.utils.FechaOrdenComparator
 import com.rural.utils.LoteComparator
 import com.rural.utils.NumeroOrdenComparator
 import com.rural.utils.SectorComparator
+import com.rural.utils.ExpoNombreComparator
 import com.rural.utils.GUtilDomainClass
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass;
 import com.rural.utils.FilterUtils;
-import java.text.SimpleDateFormat
+import java.text.SimpleDateFormat 
 
 import jxl.*
 import jxl.write.Label
@@ -593,10 +594,16 @@ class OrdenReservaController {
 			if(params.sort=="sector"){
 				Collections.sort(listgral,new SectorComparator())
 			}
+			
+			if(params.sort=="expoNombre")
+				Collections.sort(listgral,new ExpoNombreComparator())
+
 			if(params.dir=="DESC"){
 				Collections.reverse(listgral)
 				log.debug("Orden inverso aplicado")
 			}
+			
+			
 		}
 
 		
