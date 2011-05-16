@@ -1,19 +1,16 @@
 <html>
     <head>
         <title><g:layoutTitle default="Grails" /></title>
-		<META HTTP-EQUIV="Cache-Control" CONTENT ="no-cache">        
+		<META HTTP-EQUIV="Cache-Control" CONTENT ="no-cache"/>
+
         <link rel="stylesheet" href="${resource(dir:'css',file:'style.css')}" />
+        <link rel="stylesheet" href="${resource(dir:'js/ext/3.3.1/resources/css',file:'ext-all.css')}" />
+        <link rel="stylesheet" href="${resource(dir:'js/ext/3.3.1/resources/css',file:'tabs.css')}" />        
         <link rel="shortcut icon" href="${resource(dir:'images',file:'srt.ico')}" type="image/x-icon" />
-        <g:javascript library="ext"  />
-        	
-        <ext:javascript dir="" file="ext-all.js"/>
-        <ext:javascript dir="build/locale" file="ext-lang-es.js"/>
-        <ext:stylesheet dir="resources/css" file="ext-all.css"/>
-        <ext:stylesheet dir="resources/css" file="tabs.css"/>
-        <ext:javascript dir="build/locale" file="ext-lang-es.js"/>
-        
-        
-        <g:layoutHead />
+
+		<script type="text/javascript" src="${resource(dir:'js/ext/3.3.1/adapter/ext',file:'ext-base.js')}"></script>
+        <script type="text/javascript" src="${resource(dir:'js/ext/3.3.1',file:'ext-all.js')}"></script>        
+        <script type="text/javascript" src="${resource(dir:'js/ext/3.3.1/src/locale',file:'ext-lang-es.js')}"></script>
         
         <script type="text/javascript">
 			<%
@@ -24,11 +21,16 @@
 				out << "var blankimagePath='"+"${resource(dir:'js')}';";
 				
 			%>   			
-				Ext.BLANK_IMAGE_URL =blankimagePath+ '/ext/2.0.2/resources/images/default/s.gif'; 
-        </script>
+				//Ext.BLANK_IMAGE_URL =blankimagePath+ '/ext/2.0.2/resources/images/default/s.gif'; 
+				Ext.BLANK_IMAGE_URL =blankimagePath+ '/ext/3.3.1/resources/images/default/s.gif';
+        </script>        
+        <g:layoutHead />        
+
+        
+
         			
 
-</head>
+	</head>
 <body>
 <div id="wrap">
 
