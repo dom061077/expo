@@ -336,7 +336,7 @@ class OrdenReservaController {
     	}
     }
 	
-	def parseValue(/*def prop, def paramName,*/ def rawValue, def mp, def params) {
+	def parseValue(/*def prop, def paramName,*/ def rawValue, def mp, def params, def condicion) {
     	//def mp = FilterUtils.getNestedMetaProperty(mc, prop)
 		
         //log.debug("prop is ${prop}")
@@ -409,8 +409,10 @@ class OrdenReservaController {
 					log.debug "ERROR DE FECHA: "+e.message
 					val=new Date()
 				}
-            }else
-				val= "%${val}%"
+            }else{
+				if(condicion.equals("ilike") || condicion.equals("ilike2"))
+					val= "%${val}%"
+            }
         }
     	//println "== Parsing value ${rawValue} from param ${paramName}. type is ${mp.type}.  Final value ${val}. Type ${val?.class}"
     	return val
@@ -460,7 +462,7 @@ class OrdenReservaController {
 											if(!metaProperty){
 												
 												metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,DetalleServicioContratado,campo)
-												valorSearch=parseValue(valorSearch,metaProperty,params)
+												valorSearch=parseValue(valorSearch,metaProperty,params,condicion)
 												co.detalle(){	
 													co."${campoToken[0]}"(){
 														if(condicion.equals("ilike2"))
@@ -474,7 +476,7 @@ class OrdenReservaController {
 												}
 											}else{
 												log.debug "META PROPERTY ENCONTRADA ${metaProperty}"
-												valorSearch=parseValue(valorSearch,metaProperty, params)
+												valorSearch=parseValue(valorSearch,metaProperty, params,condicion)
 												log.debug "CampoToken[0]: ${campoToken[0]} CampoToken[1]: ${campoToken[1]}, valorSearch:${valorSearch}"
 												co."${campoToken[0]}"(){
 													if(condicion.equals("ilike2"))
@@ -487,7 +489,7 @@ class OrdenReservaController {
 											}
 										}else{
 											log.debug "INGRESA POR EL ELSE DEBIDO A QUE EL CAMPO NO ES ANIDADO: campo: ${campo}, condicion: ${condicion}"
-											valorSearch=parseValue(valorSearch,metaProperty,params)
+											valorSearch=parseValue(valorSearch,metaProperty,params,condicion)
 											if(condicion.equals("ilike2"))
 												co.not{
 														co.ilike campo, valorSearch
@@ -524,7 +526,7 @@ class OrdenReservaController {
 									if(!metaProperty){
 										metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,OrdenReserva,campo)
 										if(metaProperty)
-										valorSearch=parseValue(valorSearch,metaProperty, params)
+										valorSearch=parseValue(valorSearch,metaProperty, params,condicion)
 										cd.ordenReserva(){
 											cd."${campoToken[0]}"(){
 												if(condicion.equals("ilike2"))
@@ -537,7 +539,7 @@ class OrdenReservaController {
 										}
 									}else{
 										//metaclass=FilterUtils.getNestedMetaProperty(DetalleServicioContrado.getMetaClass(),campo)
-										valorSearch=parseValue(valorSearch,metaProperty,params)
+										valorSearch=parseValue(valorSearch,metaProperty,params,condicion)
 										cd."${campoToken[0]}"(){
 											if(condicion.equals("ilike2"))
 												cd.not{
@@ -549,7 +551,7 @@ class OrdenReservaController {
 									}
 								}else{
 									if(metaProperty){
-										valorSearch=parseValue(valorSearch,metaProperty,params)
+										valorSearch=parseValue(valorSearch,metaProperty,params,condicion)
 										if(condicion.equals("ilike2"))
 											cd.not{
 												cd.ilike (campo,valorSearch)
@@ -558,7 +560,7 @@ class OrdenReservaController {
 											cd."${condicion}"(campo,valorSearch)
 									}else{
 										metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,OrdenReserva,campo)
-										valorSearch=parseValue(valorSearch,metaProperty,params)
+										valorSearch=parseValue(valorSearch,metaProperty,params,condicion)
 										cd.ordenReserva{
 											if(condicion.equals("ilike2"))
 												cd.not{
