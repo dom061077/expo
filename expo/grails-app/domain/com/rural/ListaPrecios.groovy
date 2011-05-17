@@ -7,9 +7,11 @@ class ListaPrecios {
 	Date vigencia
 	Sector sector
 	Lote lote
+	Exposicion expo
     static constraints = {
 		sector(nullable:true,blank:false)
 		lote(nullable:true,blank:false)
+		expo(nullable:false,blank:false)
     }
 	
 	
