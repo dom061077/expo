@@ -8,6 +8,10 @@
         <link rel="stylesheet" href="${resource(dir:'js/ext/3.3.1/resources/css',file:'tabs.css')}" />        
         <link rel="shortcut icon" href="${resource(dir:'images',file:'srt.ico')}" type="image/x-icon" />
 
+        <script type="text/javascript" src="${resource(dir:'js/jquery',file:'jquery-1.5.1.min.js')}"></script>         
+        <script type="text/javascript" src="${resource(dir:'js/jquery',file:'jquery.maphilight.min.js')}"></script>
+        <script type="text/javascript" src="${resource(dir:'js/ext/3.3.1/adapter/jquery',file:'ext-jquery-adapter.js')}"></script>
+
 		<script type="text/javascript" src="${resource(dir:'js/ext/3.3.1/adapter/ext',file:'ext-base.js')}"></script>
         <script type="text/javascript" src="${resource(dir:'js/ext/3.3.1',file:'ext-all.js')}"></script>        
         <script type="text/javascript" src="${resource(dir:'js/ext/3.3.1/src/locale',file:'ext-lang-es.js')}"></script>
