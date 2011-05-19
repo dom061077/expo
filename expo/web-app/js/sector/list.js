@@ -233,6 +233,17 @@ Ext.onReady(function(){
 				}
 			},{
 				text:'Lista de precios'
+				,handler: function(){
+					var sm = gridprecios.getSelectionModel();
+					var sel = sm.getSelected();
+					if(sm.hasSelection()){
+						listapreciosStore.load({
+							//params:{'sector_id':sel.data.id,'expo_id':}
+						});
+					}else{
+						
+					}
+				}
 			}
 		],
 		bbar: new Ext.PagingToolbar({
@@ -291,6 +302,7 @@ Ext.onReady(function(){
 	);
 	
 	//roweditor para la lista de precios
+	
 	var ListaPrecioSector = Ext.data.Record.create([{
 			name: 'id',
 			type: 'int'
@@ -311,8 +323,8 @@ Ext.onReady(function(){
 			autoLoad:true,
 			totalProperty:'total',
 			root:'rows',
-			url:'listjson',
-			fields:['id','nombre','exposicion'],
+			url:'../listaPrecios/listjson',
+			fields:['id','vigencia','precio'],
 			listeners: {
 	            loadexception: function(proxy, store, response, e) {
 		                     var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -333,6 +345,26 @@ Ext.onReady(function(){
 		});
 	
 	var gridprecios = new Ext.grid.GridPanel({
+		id:'gridpreciosId',
+		plugins: [editor],
+		header:true,
+		footer:true,
+		selModel: new Ext.grid.RowSelectionModel(),
+		stripeRows:true,
+		store:listapreciosStore,
+		width:400,
+		height:400,
+		tbar:[{
+				text:'Eliminar'
+			},{
+				text:'Agregar'
+			}
+		],
+		columns:[
+		    {header:'id',dataIndex:'id',hidden:true},
+		    {header:'Vigencia',dataIndex:'vigencia',width:150},
+		    {header:'Precio',dataIndex:'precio',width:150}
+        ]
 	
 	});
 	
@@ -350,6 +382,6 @@ Ext.onReady(function(){
 	});
 	
 	 
-	
+
 	
 });

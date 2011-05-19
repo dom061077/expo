@@ -98,4 +98,38 @@ class ListaPreciosController {
             render(view:'create',model:[listaPreciosInstance:listaPreciosInstance])
         }
     }
+	
+	def listjson = {
+		log.info "INGRESANDO AL CLOSURE listjson DEL CONTROLLER ListaPreciosController"
+		log.info "PARAMETROS: ${params}"
+		def pagingConfig = [
+			max: params.limit as Integer ?: 10,
+			offset: params.start as Integer ?: 0
+		]
+		
+		def totalPrecios = ListaPrecios.createCriteria().count(){
+			expo{
+				eq("id", params.expoId.toLong())
+			}
+			sector{
+				eq("id", params.sectorId.toLong())
+			}
+		}
+		def list = ListaPrecios.createCriteria().list(pagingConfig){
+			expo{
+				eq("id", params.expoId.toLong())
+			}
+			sector{
+				eq("id", params.sectorId.toLong())
+			}
+		}
+		render(contextType:"text/json"){
+			total totalPrecios
+			rows{
+				list.each{
+					row(id:it.id,vigencia:it.vigencia,precio:it.precio)
+				}
+			}
+		}
+	}
 }
