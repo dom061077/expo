@@ -231,6 +231,8 @@ Ext.onReady(function(){
 						});
 					}
 				}
+			},{
+				text:'Lista de precios'
 			}
 		],
 		bbar: new Ext.PagingToolbar({
@@ -287,5 +289,67 @@ Ext.onReady(function(){
 
 		}
 	);
+	
+	//roweditor para la lista de precios
+	var ListaPrecioSector = Ext.data.Record.create([{
+			name: 'id',
+			type: 'int'
+		},{
+			name: 'vigencia',
+			type: 'date',
+			dateFormat:'d/m/Y'
+		},{
+			name:'expo',
+			type:'string'
+	}]);
+	
+	var editor = new Ext.ux.grid.RowEditor({
+		saveText:'Guardar'
+	});
+	
+	var listapreciosStore = new Ext.data.JsonStore({
+			autoLoad:true,
+			totalProperty:'total',
+			root:'rows',
+			url:'listjson',
+			fields:['id','nombre','exposicion'],
+			listeners: {
+	            loadexception: function(proxy, store, response, e) {
+		                     var jsonObject = Ext.util.JSON.decode(response.responseText);
+		                   if (response.status==0)
+		                    	Ext.MessageBox.show({
+		                    		title:'Error',
+		                    		msg:'Error de comunicación con el servidor',
+		                    		icon:Ext.MessageBox.ERROR,
+		                    		buttons:Ext.MessageBox.OK
+		                    	});
+		                    else{
+			                    if (jsonObject.loginredirect == true)
+			                    		window.location='../logout/index';
+		                    }
+		                   } 
+				}							
+		
+		});
+	
+	var gridprecios = new Ext.grid.GridPanel({
+	
+	});
+	
+	var sectorlistapreciowin = new Ext.Window({
+		applyTo:'listaprecios_extjs',
+		title:'Tarifario',
+		resizable:true,
+		closeAction:'hide',
+		modal:true,
+		formPanel:null,
+		resizable:false,
+		width:450,
+		height:280,
+		items:[gridprecios]
+	});
+	
+	 
+	
 	
 });
