@@ -299,8 +299,8 @@ Ext.onReady(function(){
 			type: 'date',
 			dateFormat:'d/m/Y'
 		},{
-			name:'expo',
-			type:'string'
+			name:'precio',
+			type:'float'
 	}]);
 	
 	var editor = new Ext.ux.grid.RowEditor({
