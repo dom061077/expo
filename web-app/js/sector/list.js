@@ -325,6 +325,7 @@ Ext.onReady(function(){
 			root:'rows',
 			url:'../listaPrecios/listjson',
 			fields:['id','vigencia','precio'],
+			baseParams:{expoId:1,sectorId:2},
 			listeners: {
 	            loadexception: function(proxy, store, response, e) {
 		                     var jsonObject = Ext.util.JSON.decode(response.responseText);
