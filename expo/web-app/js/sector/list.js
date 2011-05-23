@@ -1,6 +1,7 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
-	
+	var sectorId;
+	var expoId;
 	var dslotemodel= Ext.data.Record.create([
 		'id',
 		'nombre'
@@ -238,8 +239,10 @@ Ext.onReady(function(){
 					var sm = gridsectores.getSelectionModel();
 					var sel = sm.getSelected();
 					if(sm.hasSelection()){
+						expoId=sel.data.expoId;
+						sectorId=sel.data.id;
 						listapreciosStore.load({
-							//params:{'sector_id':sel.data.id,'expo_id':}
+							params:{'sectorId':sectorId,'expoId':expoId}
 						});
 						sectorlistapreciowin.show();
 					}else{
@@ -322,12 +325,11 @@ Ext.onReady(function(){
 	});
 	
 	var listapreciosStore = new Ext.data.JsonStore({
-			autoLoad:true,
+			autoLoad:false,
 			totalProperty:'total',
 			root:'rows',
 			url:'../listaPrecios/listjson',
 			fields:['id','vigencia','precio'],
-			baseParams:{expoId:1,sectorId:2},
 			listeners: {
 	            loadexception: function(proxy, store, response, e) {
 		                     var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -354,9 +356,11 @@ Ext.onReady(function(){
 				params:{
 					'precio':records[0].data.precio,
 					'vigencia':records[0].data.vigencia,
-					'sector.id':records[0].data.
+					'sector.id':sectorId,
+					'expo.id':expoId
 				},
 				success:function(resp,opt){
+						var respuesta=Ext.decode(resp.responseText);
 						if(respuesta.result){
 							if(respuesta.result.loginredirect==true)
 								Ext.MessageBox.show({
@@ -367,6 +371,21 @@ Ext.onReady(function(){
 										window.location='../logout/index';
 									}
 								});
+						}else{
+							if(respuesta.success){
+								
+							}else{
+								var msg="";
+								for(var i=0;i<respuesta.errors.length;i++){
+									msg=msg+respuesta.errors[i].title+'\r\n';
+								}
+								Ext.MessageBox.show({
+									title:'Error',
+									msg:msg,
+									icon:Ext.MessageBox.ERROR,
+									buttons:Ext.MessageBox.OK
+								});
+							}
 						}					
 				},
 				failure:function(resp,opt){
@@ -384,7 +403,7 @@ Ext.onReady(function(){
 						}else{
 							Ext.MessageBox.show({
 								title:'Error',
-								msg:'Se produjo un error al intentar generar la orden de reserva'
+								msg:'Se produjo al intentar guardar el registro'
 								,buttons:Ext.MessageBox.OK
 								,fn:function(btn){
 								}
@@ -396,11 +415,132 @@ Ext.onReady(function(){
 	});
 	
 	listapreciosStore.on('update',function(store,records,index){
+		var conn = new Ext.data.Connection();
+		conn.request({
+			url:'../listaPrecios/updatejson',
+			method:'POST',
+			params:{
+				'id':records.data.id,
+				'vigencia':records.data.vigencia,
+				'precio':records.data.precio
+			},
+			success:function(resp,opt){
+					var respuesta=Ext.decode(resp.responseText);
+					if(respuesta.result){
+						if(respuesta.result.loginredirect==true)
+							Ext.MessageBox.show({
+								title:'Mensaje',
+								icon:Ext.MessageBox.INFO,
+								buttons:Ext.MessageBox.OK,
+								fn:function(btn){
+									window.location='../logout/index';
+								}
+							});
+					}else{
+						if(respuesta.success){
+							
+						}else{
+							var msg="";
+							for(var i=0;i<respuesta.errors.length;i++){
+								msg=msg+respuesta.errors[i].title+'\r\n';
+							}
+							Ext.MessageBox.show({
+								title:'Error',
+								msg:msg,
+								icon:Ext.MessageBox.ERROR,
+								buttons:Ext.MessageBox.OK
+							});
+						}
+					}					
+			},
+			failure:function(resp,opt){
+					var respuesta = Ext.decode(resp.responseText);
+					if(respuesta.result){
+						if(respuesta.result.loginredirect==true)
+							Ext.MessageBox.show({
+								title:'Mensaje',
+								icon:Ext.MessageBox.INFO,
+								buttons:Ext.MessageBox.OK,
+								fn:function(btn){
+									window.location='../logout/index';
+								}
+							});
+					}else{
+						Ext.MessageBox.show({
+							title:'Error',
+							msg:'Se produjo un error al intentar modificar el registro'
+							,buttons:Ext.MessageBox.OK
+							,fn:function(btn){
+							}
+						});
+					}
+				
+			}
+		});
 		
 	});
 	
 	listapreciosStore.on('remove',function(store,records,index){
-	
+		var conn = new Ext.data.Connection();
+		conn.request({
+			url:'../listaPrecios/deletejson',
+			method:'POST',
+			params:{
+				'id':records.data.id
+			},
+			success:function(resp,opt){
+					var respuesta=Ext.decode(resp.responseText);
+					if(respuesta.result){
+						if(respuesta.result.loginredirect==true)
+							Ext.MessageBox.show({
+								title:'Mensaje',
+								icon:Ext.MessageBox.INFO,
+								buttons:Ext.MessageBox.OK,
+								fn:function(btn){
+									window.location='../logout/index';
+								}
+							});
+					}else{
+						if(respuesta.success){
+							
+						}else{
+							var msg="";
+							for(var i=0;i<respuesta.errors.length;i++){
+								msg=msg+respuesta.errors[i].title+'\r\n';
+							}
+							Ext.MessageBox.show({
+								title:'Error',
+								msg:msg,
+								icon:Ext.MessageBox.ERROR,
+								buttons:Ext.MessageBox.OK
+							});
+						}
+					}					
+			},
+			failure:function(resp,opt){
+					var respuesta = Ext.decode(resp.responseText);
+					if(respuesta.result){
+						if(respuesta.result.loginredirect==true)
+							Ext.MessageBox.show({
+								title:'Mensaje',
+								icon:Ext.MessageBox.INFO,
+								buttons:Ext.MessageBox.OK,
+								fn:function(btn){
+									window.location='../logout/index';
+								}
+							});
+					}else{
+						Ext.MessageBox.show({
+							title:'Error',
+							msg:'Se produjo un error al intentar eliminar el registro'
+							,buttons:Ext.MessageBox.OK
+							,fn:function(btn){
+							}
+						});
+					}
+				
+			}
+		});
 	});
 		
 	var gridprecios = new Ext.grid.GridPanel({

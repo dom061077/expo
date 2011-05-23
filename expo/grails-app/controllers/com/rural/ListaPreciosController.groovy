@@ -2,6 +2,10 @@
 
 package com.rural
 
+import java.text.SimpleDateFormat
+import java.text.ParseException
+import java.util.Calendar
+
 class ListaPreciosController {
     
     def index = { redirect(action:list,params:params) }
@@ -145,31 +149,128 @@ class ListaPreciosController {
 	def savejson={
 		log.info "INGRESANDO AL CLOSURE savejson DEL CONTROLLER ListaPreciosController"
 		log.info "PARAMETROS ${params}"
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd")
+		Date vigencia
+		def flagdate=false
+		
+		
+		try{
+			log.debug("VENCIMIENTO A PARSEAR: "+params.vigencia.substring(0,10))
+			vigencia = df.parse(params.vigencia.substring(0,10))
+			def gc = Calendar.getInstance()
+			gc.setTime(vigencia)
+			params.vigencia_year = gc.get(Calendar.YEAR).toString()
+			params.vigencia_month = (gc.get(Calendar.MONTH)+1).toString()
+			params.vigencia_day = gc.get(Calendar.DATE).toString()
+		}catch(Parse){
+			log.debug("ERROR AL PARSEAR LA VIGENCIA")
+			flagdate=true
+		}
 		def listaPreciosInstance= new ListaPrecios(params)
-		if(listaPreciosInstance.hasErrors() && listaPreciosInstance.save()){
+		if(flagdate)
+			listaPreciosInstance.errors.rejectValue("vigencia","typeMismatch.java.util.Date")
+
+			
+
+		if(!listaPreciosInstance.hasErrors() && listaPreciosInstance.save()){ 
 			render(contentType:"text/json") {
 				success true
 				id listaPreciosInstance.id
 			}
 		}else{
-			listaPreciosInstance.errors.allErrors.each{
-				it.arguments.each{arg->
-					log.debug("Argumento: "+arg)
-				}
-				it.codes.each{cod->
-					log.debug("Codigos: "+cod)
-				}
+			g.eachError(bean:listaPreciosInstance){
+				log.debug "ERROR: ${it}"
 			}
-			render(contentType:"text/json") {
-					success false
-					errors {
-						listaPreciosInstance.errors.allErrors.each {
-							 title it.defaultMessage
-							 }
+			log.debug "ERRORES ENCONTRADOS: "+listaPreciosInstance.errors.allErrors
+			render(contentType:"text/json"){
+				success false
+				errors{
+					g.eachError(bean:listaPreciosInstance){
+						title g.message(error:it)
 					}
 				}
+			}
 	
 		}
 		
+	}
+	
+	def deletejson={
+		log.info "INGRESANDO AL CLOSURE deletejson DEL CONTROLLER ListaPreciosController"
+		log.info "PARAMETROS: ${params}"
+		def listaPreciosInstance = ListaPrecios.get(params.id)
+		if(listaPreciosInstance){
+			try{
+				listaPreciosInstance.delete(flush:true)	
+				render(contentType:"text/json"){
+					success true 
+					title	"El registro se eliminó correctamente"
+					
+				}
+			}catch(org.springframework.dao.DataIntegrityViolationException e){
+				render(contentType:"text/json"){
+					success false
+					title: "No se puede eliminar el precio del tarifario porque es referenciado por otros datos"
+				}
+			}	
+		}else{
+			render(contentType:"text/json"){
+				success false
+				errors{
+					title "La lista de precios con id ${params.id} no existe"
+				}
+			}
+		}
+		
+	}
+	
+	def updatejson = {
+		log.info "INGRESANDO AL CLOSURE updatejson DEL CONTROLLER ListaPreciosController"
+		log.info "PARAMETROS: ${params}"
+		def listaPreciosInstance = ListaPrecios.get(params.id)
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd")
+		Date vigencia
+		def flagdate=false
+		
+		
+		try{
+			log.debug("VENCIMIENTO A PARSEAR: "+params.vigencia.substring(0,10))
+			vigencia = df.parse(params.vigencia.substring(0,10))
+			def gc = Calendar.getInstance()
+			gc.setTime(vigencia)
+			params.vigencia_year = gc.get(Calendar.YEAR).toString()
+			params.vigencia_month = (gc.get(Calendar.MONTH)+1).toString()
+			params.vigencia_day = gc.get(Calendar.DATE).toString()
+		}catch(Parse){
+			log.debug("ERROR AL PARSEAR LA VIGENCIA")
+			flagdate=true
+		}
+
+		if(listaPreciosInstance){
+			listaPreciosInstance.properties = params
+			if(!listaPreciosInstance.hasErrors() && listaPreciosInstance.save()){
+				render(contentType:"text/json"){
+					success true
+					
+				}
+			}else{
+				render(contentType:"text/json"){
+					success false
+					errors{
+						g.eachError(bean:listaPreciosInstance){
+							title g.message(error:it)
+						}
+					}
+				}
+			}
+		}else{
+			render(contentType:"text/json"){
+				success false
+				errors{
+					title "La lista de precios con id ${params.id} no existe"
+				}
+			}
+
+		}
 	}
 }
