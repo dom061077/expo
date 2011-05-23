@@ -107,6 +107,7 @@ class ListaPreciosController {
 			offset: params.start as Integer ?: 0
 		]
 		
+		
 		def totalPrecios = ListaPrecios.createCriteria().count(){
 			expo{
 				eq("id", params.expoId.toLong())
@@ -115,6 +116,9 @@ class ListaPreciosController {
 				eq("id", params.sectorId.toLong())
 			}
 		}
+		
+		log.debug "TOTAL REGISTROS DE LISTA DE PRECIOS: ${totalPrecios}"
+		
 		def list = ListaPrecios.createCriteria().list(pagingConfig){
 			expo{
 				eq("id", params.expoId.toLong())
@@ -123,7 +127,10 @@ class ListaPreciosController {
 				eq("id", params.sectorId.toLong())
 			}
 		}
-		render(contextType:"text/json"){
+		
+		log.debug "LISTA DE PRECIOS: ${list}"
+		
+		render(contentType:"text/json"){
 			total totalPrecios
 			rows{
 				list.each{
@@ -131,5 +138,38 @@ class ListaPreciosController {
 				}
 			}
 		}
+		
+		
+	}
+	
+	def savejson={
+		log.info "INGRESANDO AL CLOSURE savejson DEL CONTROLLER ListaPreciosController"
+		log.info "PARAMETROS ${params}"
+		def listaPreciosInstance= new ListaPrecios(params)
+		if(listaPreciosInstance.hasErrors() && listaPreciosInstance.save()){
+			render(contentType:"text/json") {
+				success true
+				id listaPreciosInstance.id
+			}
+		}else{
+			listaPreciosInstance.errors.allErrors.each{
+				it.arguments.each{arg->
+					log.debug("Argumento: "+arg)
+				}
+				it.codes.each{cod->
+					log.debug("Codigos: "+cod)
+				}
+			}
+			render(contentType:"text/json") {
+					success false
+					errors {
+						listaPreciosInstance.errors.allErrors.each {
+							 title it.defaultMessage
+							 }
+					}
+				}
+	
+		}
+		
 	}
 }
