@@ -25,7 +25,7 @@ class SectorController {
     		total sectores.size()
     		rows{
     			sectores.each{
-    				row(id:it.id,nombre:it.nombre,exposicion:it.expo.nombre)
+    				row(id:it.id,nombre:it.nombre,expoId:it.expo.id,exposicion:it.expo.nombre)
     			}
     		}
     	}
