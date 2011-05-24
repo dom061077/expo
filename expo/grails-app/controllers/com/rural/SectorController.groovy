@@ -40,8 +40,14 @@ class SectorController {
     			eq('id',new Long(params.exposicion_id))
     		}
     	}
+		def totalSectores = Sector.createCriteria().count(){
+    		expo{
+    			eq('id',new Long(params.exposicion_id))
+    		}
+
+		}
     	render(contentType:"text/json"){
-    		total sectores.size()
+    		total totalSectores
     		rows{
     			sectores.each{
     				row(id:it.id,nombre:it.nombre)

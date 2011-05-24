@@ -67,6 +67,8 @@
 						<li class='controller'><g:link controller="empresa" action="uploadFile">Subir Archivos Excel</g:link></li>
 					</g:ifAllGranted>
 					<g:ifAllGranted role="ROLE_ADMIN">
+						<li class='controller'><g:link controller="notaDC">Notas Débito/Crédito</g:link> </li>
+						
 						<li class='controller'><g:link controller="sector">Sectores</g:link> </li>
 						<li class='controller'><g:link controller="vendedor">Vendedores </g:link> </li>
 						<li class='controller'><g:link controller="rubro">Rubro </g:link> </li>

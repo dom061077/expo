@@ -69,7 +69,7 @@ class OrdenReserva {
 	
 	static belongsTo = [empresa:Empresa,usuario:Person,expo:Exposicion] 
 
-	static hasMany = [detalle:DetalleServicioContratado,otrosconceptos:OtrosConceptos,productos:ProductoExpuesto,recibos:Recibo]
+	static hasMany = [detalle:DetalleServicioContratado,otrosconceptos:OtrosConceptos,productos:ProductoExpuesto,recibos:Recibo,notas:NotaDC]
 	
     static constraints = {
     	numero(blank:true,nullable:true)
