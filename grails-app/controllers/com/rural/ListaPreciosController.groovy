@@ -273,4 +273,32 @@ class ListaPreciosController {
 
 		}
 	}
+	
+	def getprecio = {
+		log.info "INGRESANDO AL CLOSURE  getprecio DEL CONTROLLER ListaPreciosController"
+		log.info "PARAMETROS ${params}"
+		// para recuperar un precio necesito: exposición, año y sector
+		
+		def list = ListaPrecios.createCriteria().list{
+			and{
+				expo{
+					eq("id",params.expoId.toLong())
+				}
+				sector{
+					eq("id",params.sectorId.toLong())
+				}
+				isNull("lote")
+				le("vigencia",new java.sql.Date())
+			}
+		}
+		
+		def precioVigente = 0
+		list.each { precioVigente = it.precio }
+		render(contentType:"text/json"){
+			success true
+			precio precioVigente
+		}
+		
+	}
+	
 }
