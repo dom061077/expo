@@ -405,6 +405,39 @@ Ext.onReady(function(){
 					}
 				});
 				comboboxLote.hiddenField.value=1;
+				var sm = gridDetalleServicioContratado.getSelectionModel();
+			 	var sel = sm.getSelected();
+			 	if(sm.hasSelection()){
+ 					//gridDetalleServicioContratado.getStore().remove(sel);//a seguir
+			 		//gridDetalleServicioContratado.startEditing(gridDetalleServicioContratado.getStore().getCount()-1,2);
+			 		var conn = new Ext.data.Connection();
+			 		conn.request({
+			 			url:'../listaPrecios/getprecio',
+			 			method:'POST',
+			 			params:{
+			 				expoId:expoId,
+			 				sectorId:sectorId
+			 			},
+			 			success: function(resp,opt){
+			 				var respuesta=Ext.decode(resp.responseText);
+			 				if(respuesta){
+			 					if(respuesta.loginredirect)
+			 						window.location='../logout/index';
+			 					else{
+			 						if(respuesta.success){
+			 							sel.data.subTotal=respuesta.precio;
+			 						}
+			 					}
+			 							
+			 				}
+			 			}
+			 			
+			 		});
+			 		
+			 		
+			 		sel.commit();
+			 		//gridDetalleServicioContratado.stopEditing();
+			 	}
 			}
 		}
 	});
@@ -458,6 +491,7 @@ Ext.onReady(function(){
 			cm:cmdetalle,
 			height:200,
 			width:500,
+			singleSelect:true,
 			store:storeDetalle,
 			selModel: new Ext.grid.RowSelectionModel(),
 			tbar:[
@@ -474,6 +508,7 @@ Ext.onReady(function(){
 							(gridDetalleServicioContratado.getStore().getCount()-1>=0?gridDetalleServicioContratado.getStore().getCount():0)
 							,d);
 						gridDetalleServicioContratado.startEditing(gridDetalleServicioContratado.getStore().getCount()-1,0);
+						gridDetalleServicioContratado.getSelectionModel().selectLastRow();
 				 	}else{
 				 		Ext.MessageBox.show({
 				 			title:'Advertencia',
@@ -1289,6 +1324,7 @@ Ext.onReady(function(){
 												 displayField:'descripcion',
 												 valueField:'id',
 												 mode:'local',
+												 width:100,
 												 forceSelection:true,
 												 allowBlank:false,
 												 msgTarget:'under',
