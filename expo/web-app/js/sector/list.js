@@ -199,14 +199,19 @@ Ext.onReady(function(){
 		
 	});
 	
-	
+	sectorStore.on("beforeload",function(){
+		
+		sectorStore.baseParams={
+				searchCriteria:Ext.getCmp('searchCriteriaId').getValue()
+		}
+	});
 	
 	var gridsectores = new Ext.grid.GridPanel({
 		store:sectorStore,
 		columns:[
 			{header:"id",dataIndex:"id",hidden:true},
 			{header:"Nombre",dataIndex:"nombre",width:200},
-			{header:"Id Expo",dataIndex:"expoId",width:200},
+			{header:"Id Expo",dataIndex:"expoId",width:200,hidden:true},
 			{header:"Exposición",dataIndex:"exposicion",width:200}			
 		],
 		stripRows:true,
@@ -288,7 +293,7 @@ Ext.onReady(function(){
 								click:function(){
 									
 									sectorStore.load({
-										params:{'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()}
+										params:{'start':0,'limit':10}
 									});									
 								}
 							}
@@ -386,7 +391,10 @@ Ext.onReady(function(){
 									buttons:Ext.MessageBox.OK
 								});
 							}
-						}					
+						}			
+						listapreciosStore.load({
+							params:{'sectorId':sectorId,'expoId':expoId}
+						});
 				},
 				failure:function(resp,opt){
 						var respuesta = Ext.decode(resp.responseText);
@@ -500,6 +508,7 @@ Ext.onReady(function(){
 									window.location='../logout/index';
 								}
 							});
+												
 					}else{
 						if(respuesta.success){
 							

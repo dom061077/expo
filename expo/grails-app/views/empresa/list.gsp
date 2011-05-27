@@ -101,7 +101,7 @@
 																success: function(f,a){
 																	document.getElementById('searchCriteriaJasperId').value=a.result.searchCriteria;
 																	store.load({
-																		params: {'start':0,'limit':10,'searchCriteria':a.result.searchCriteria}
+																		params: {'start':0,'limit':10}
 																	});
 							        	          				},
 							        	          				failure: function(form,action){

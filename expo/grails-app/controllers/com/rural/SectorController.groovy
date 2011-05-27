@@ -12,8 +12,15 @@ class SectorController {
     def listtodosjson = {
     	log.info("INGRESANDO AL METODO listtodosjson DEL CONTROLLER SectorController")
     	log.debug("PARAMETROS INGRESADOS: $params")
+		def pagingConfig = [
+			max: params.limit as Integer ?: 10,
+			offset: params.start as Integer ?: 0,
+			sort: 'nombre',
+			order: 'asc'
+		]
+		
     	def c = Sector.createCriteria()
-    	def sectores = c.list(sort:'nombre',order:'asc'){
+    	def sectores = c.list(pagingConfig){
     		or{
     			expo{
     				like('nombre','%'+params.searchCriteria+'%')
@@ -21,8 +28,20 @@ class SectorController {
     			like('nombre','%'+params.searchCriteria+'%')
     		}
     	}
+		def totalSectores = Sector.createCriteria().get{
+					projections{
+						rowCount()
+					}
+					or{
+						expo{
+							like('nombre','%'+params.searchCriteria+'%')
+						}
+						like('nombre','%'+params.searchCriteria+'%')
+					}
+				}
+		log.debug("TOTAL SECTORES: "+totalSectores)
     	render(contentType:"text/json"){
-    		total sectores.size()
+    		total totalSectores
     		rows{
     			sectores.each{
     				row(id:it.id,nombre:it.nombre,expoId:it.expo.id,exposicion:it.expo.nombre)
