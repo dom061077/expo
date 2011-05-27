@@ -415,8 +415,8 @@ Ext.onReady(function(){
 			 			url:'../listaPrecios/getprecio',
 			 			method:'POST',
 			 			params:{
-			 				expoId:expoId,
-			 				sectorId:sectorId
+			 				expoId:Ext.getCmp('exposicionCombo').hiddenField.value,
+			 				sectorId:Ext.getCmp('comboboxSectorId').hiddenField.value
 			 			},
 			 			success: function(resp,opt){
 			 				var respuesta=Ext.decode(resp.responseText);

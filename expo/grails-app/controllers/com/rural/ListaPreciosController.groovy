@@ -288,7 +288,7 @@ class ListaPreciosController {
 					eq("id",params.sectorId.toLong())
 				}
 				isNull("lote")
-				le("vigencia",new java.sql.Date())
+				ge("vigencia",new java.sql.Date(new java.util.Date().time))
 			}
 		}
 		
