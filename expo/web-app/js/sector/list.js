@@ -152,6 +152,23 @@ Ext.onReady(function(){
 						});
 					}
 				}
+			},{
+				text:'Lista de Precios',
+				handler: function(){
+					var sm = gridlote.getSelectionModel();
+					var sel = sm.getSelected();
+					if(sm.hasSelection()){
+						
+					}else{
+						Ext.MessageBox.show({
+                    		title:'Mensaje',
+                    		msg:'Seleccione un lote para cargar los precios',
+                    		icon:Ext.MessageBox.INFORMATION,
+                    		buttons:Ext.MessageBox.OK
+                    	});
+					}
+				}
+				
 			}
 		],
 		columns:[
@@ -579,11 +596,11 @@ Ext.onReady(function(){
 		                vigencia:(new Date()).clearTime(),
 		                precio:0
 		            });
-	                editor.stopEditing();
+	                //editor.stopEditing();
 	                listapreciosStore.insert(0, e);
 	                //grid.getView().refresh();
 	                //grid.getSelectionModel().selectRow(0);
-	                editor.startEditing(0);
+	                //editor.startEditing(0);
 				}
 			}
 		],
@@ -607,8 +624,7 @@ Ext.onReady(function(){
 	
 	var sectorlistapreciowin = new Ext.Window({
 		applyTo:'listaprecios_extjs',
-		title:'Tarifario',
-		resizable:true,
+		title:'Tarifario de Sectores',
 		closeAction:'hide',
 		modal:true,
 		formPanel:null,
@@ -618,7 +634,21 @@ Ext.onReady(function(){
 		items:[gridprecios]
 	});
 	
-	 
+	/*-------------LISTA DE PRECIOS DE LOS LOTES-----------------*/
+	var gridprecioslotes = new Ext.grid.GridPanel({
+	s});
+	
+	var lotelistapreciowin = new Ext.Window({
+		applyTo:'listaprecioslote_extjs',
+		title:'Tarifario de Lotes',
+		resiable:false,
+		modal:true,
+		formPanel:null,
+		width:450,
+		height:280,
+		items:[gridprecioslotes]
+		
+	});
 
 	
 });
