@@ -395,35 +395,8 @@ Ext.onReady(function(){
 										hideLabel:true,
 										id:'searchStringIdFiltro1',
 										anchor:'95%'
-										/*,
-										listeners:{
-											click: function(){
-												ordenStore.load({
-														params:{'fieldSearch':Ext.getCmp('combocriteriosId').getValue(),'start':0,'limit':10
-															,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
-															,'anulada':Ext.getCmp('soloanuladasId').getValue()
-															}
-													});
-											}
-										}*/
 							}
-						}/*,{
-							columnWidth: .3,
-							layout:'form',
-							items:{
-										xtype:'button',
-										listeners:{
-											click: function(){
-												ordenStore.load({
-														params:{'fieldSearch':Ext.getCmp('combocriteriosId').getValue(),'start':0,'limit':10
-															,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
-															,'anulada':Ext.getCmp('soloanuladasId').getValue()
-															}
-													});
-											}
-										}
-							}
-						}*/
+						}
 						
 					]
 				},{
@@ -472,17 +445,6 @@ Ext.onReady(function(){
 										hideLabel:true,
 										id:'searchStringIdFiltro2',
 										anchor:'95%'
-										/*,
-										listeners:{
-											click: function(){
-												ordenStore.load({
-														params:{'fieldSearch':Ext.getCmp('combocriteriosId').getValue(),'start':0,'limit':10
-															,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
-															,'anulada':Ext.getCmp('soloanuladasId').getValue()
-															}
-													});
-											}
-										}*/
 							}
 						}
 
@@ -533,17 +495,6 @@ Ext.onReady(function(){
 										hideLabel:true,
 										id:'searchStringIdFiltro3',
 										anchor:'95%'
-										/*,
-										listeners:{
-											click: function(){
-												ordenStore.load({
-														params:{'fieldSearch':Ext.getCmp('combocriteriosId').getValue(),'start':0,'limit':10
-															,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
-															,'anulada':Ext.getCmp('soloanuladasId').getValue()
-															}
-													});
-											}
-										}*/
 							}
 						}
 
