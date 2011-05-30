@@ -460,7 +460,7 @@ class OrdenReservaController {
 					//def metaProperty
 					and{
 						co.isEmpty("detalle")
-						//co.eq("anulada",Boolean.parseBoolean(params.soloanuladas))
+						co.eq("anulada",/*Boolean.parseBoolean(params.soloanuladas*/new Boolean(false))
 						filtros.each{filtro->
 							log.debug "FILTRO: ${filtro["field"]}"
 							//[field:nombre, value:oooo, type:string]
@@ -552,13 +552,15 @@ class OrdenReservaController {
 			log.debug "CLOSURE DE DETALLE"
 			def metaProperty
 			and{
-				
+				cd.ordenReserva{
+					cd.eq("anulada",Boolean.parseBoolean(params.soloanuladas))
+				}
 				filtros.each{filtro->
 					log.debug "FILTRO: ${filtro}"
 					//[field:nombre, value:oooo, type:string]
 					
 					cd.ordenReserva{
-						//cd.eq("anulada",Boolean.parseBoolean(params.soloanuladas))
+						
 						if(filtro["field"].equals("nombre")){
 							cd.ilike(filtro["field"],"%"+filtro["value"]+"%")
 						}
