@@ -2,6 +2,7 @@ Ext.onReady(function(){
 	Ext.QuickTips.init();
 	var sectorId;
 	var expoId;
+	var loteId;
 	var dslotemodel= Ext.data.Record.create([
 		'id',
 		'nombre'
@@ -158,7 +159,12 @@ Ext.onReady(function(){
 					var sm = gridlote.getSelectionModel();
 					var sel = sm.getSelected();
 					if(sm.hasSelection()){
-						
+						loteId=sel.data.id;
+						listapreciosStore.load({
+							params:{'loteId':loteId,'expoId':expoId}
+						});
+						sectorlistapreciowin.title='Tarifario de Lotes';
+						sectorlistapreciowin.show();
 					}else{
 						Ext.MessageBox.show({
                     		title:'Mensaje',
@@ -245,6 +251,8 @@ Ext.onReady(function(){
 						loteStore.load({
 							params:{'sector_id':sel.data.id}
 						});
+						expoId = sel.data.expoId;
+						loteId = null;
 						lotewin.show();
 					}else{
 						Ext.MessageBox.show({
@@ -258,6 +266,7 @@ Ext.onReady(function(){
 			},{
 				text:'Lista de precios'
 				,handler: function(){
+					loteId=null;
 					var sm = gridsectores.getSelectionModel();
 					var sel = sm.getSelected();
 					if(sm.hasSelection()){
@@ -379,6 +388,7 @@ Ext.onReady(function(){
 					'precio':records[0].data.precio,
 					'vigencia':records[0].data.vigencia,
 					'sector.id':sectorId,
+					'lote.id':loteId,
 					'expo.id':expoId
 				},
 				success:function(resp,opt){
@@ -634,21 +644,6 @@ Ext.onReady(function(){
 		items:[gridprecios]
 	});
 	
-	/*-------------LISTA DE PRECIOS DE LOS LOTES-----------------*/
-	var gridprecioslotes = new Ext.grid.GridPanel({
-	s});
-	
-	var lotelistapreciowin = new Ext.Window({
-		applyTo:'listaprecioslote_extjs',
-		title:'Tarifario de Lotes',
-		resiable:false,
-		modal:true,
-		formPanel:null,
-		width:450,
-		height:280,
-		items:[gridprecioslotes]
-		
-	});
 
 	
 });

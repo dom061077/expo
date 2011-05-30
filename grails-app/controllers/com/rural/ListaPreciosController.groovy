@@ -113,22 +113,40 @@ class ListaPreciosController {
 		
 		
 		def totalPrecios = ListaPrecios.createCriteria().count(){
-			expo{
-				eq("id", params.expoId.toLong())
-			}
-			sector{
-				eq("id", params.sectorId.toLong())
+			and{
+				expo{
+					eq("id", params.expoId.toLong())
+				}
+				if(params.sectorId){
+					sector{
+						eq("id", params.sectorId.toLong())
+					}
+				}
+				if(params.loteId){
+					lote{
+						eq("id", params.loteId.toLong())
+					}
+				}
 			}
 		}
 		
 		log.debug "TOTAL REGISTROS DE LISTA DE PRECIOS: ${totalPrecios}"
 		
 		def list = ListaPrecios.createCriteria().list(pagingConfig){
-			expo{
-				eq("id", params.expoId.toLong())
-			}
-			sector{
-				eq("id", params.sectorId.toLong())
+			and{
+				expo{
+					eq("id", params.expoId.toLong())
+				}
+				if(params.sectorId){
+					sector{
+						eq("id", params.sectorId.toLong())
+					}
+				}
+				if(params.loteId){
+					lote{
+						eq("id", params.loteId.toLong())
+					}
+				}
 			}
 		}
 		
@@ -287,7 +305,8 @@ class ListaPreciosController {
 				sector{
 					eq("id",params.sectorId.toLong())
 				}
-				isNull("lote")
+				if(params.loteId)
+					eq("id",params.loteId.toLong())
 				ge("vigencia",new java.sql.Date(new java.util.Date().time))
 			}
 		}
