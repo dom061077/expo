@@ -436,16 +436,57 @@ class OrdenReservaController {
 		/*consulto las ordenes que no tienen detalle*/
 		java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy")
 		Date fecha
+		def gc
 		def flagnot=false
-		log.debug "CANTIDAD DE CAMPOS: "+params.campos.size()
+		
+		def filtros 
+		
+		try{
+			filtros = JSON.parse(params.filter)
+		}catch(Exception e){
+		
+		}
+		
+		filtros.each{
+			log.debug "FILTRO: ${it}"
+		}
+		
 		
 		def co = OrdenReserva.createCriteria()
 		
 		
 				
 		ordenes=co.list({
-					def metaProperty
-					for(i=0;i<params.campos.size()-1;i++){
+					//def metaProperty
+					and{
+						co.isEmpty("detalle")
+						//co.eq("anulada",Boolean.parseBoolean(params.soloanuladas))
+						filtros.each{filtro->
+							log.debug "FILTRO: ${filtro["field"]}"
+							//[field:nombre, value:oooo, type:string]
+							if(filtro["field"].equals("nombre")){
+								log.debug "LOGRO INGRESAR POR LA CONDICION DE NOMBRE"
+								co.ilike(filtro["field"],"%"+filtro["value"]+"%")
+							}
+							co.expo{
+								if(filtro["field"].equals("expoNombre")){
+									co.ilike(filtro["field"],"%"+filtro["value"]+"%")
+								}
+								if(filtro["field"].equals("numero")){
+									co."${filtro["comparison"]}"(filtro["field"],filtro["value"].toLong())
+								}
+								if(filtro.field.equals("anio")){
+									co."${filtro["comparison"]}"(filtro["field"],filtro["value"].toLong())
+								}
+								if(filtro["field"].equals("fechaAlta")){
+									fecha = df.parse(filtro["value"].substring(0,10)) 
+									co."${filtro.comparison}"(filtro["field"],fecha)
+								}
+							}
+						}
+				
+					}
+					/*for(i=0;i<params.campos?.size()-1;i++){
 						campo=params.campos[i]
 						log.debug "Condiciones: "+params.condiciones
 						condicion=params.condiciones[i]
@@ -501,16 +542,59 @@ class OrdenReservaController {
 							}
 						}//end del and
 					}//end del for
-					
+					*/
 					
 			})
 		listgral.addAll(ordenes)
-		
+		log.debug "CANTIDAD DE ORDENES DESDE LA CABECERA: ${ordenes.size()}"
 		def cd=DetalleServicioContratado.createCriteria()
 		def closureDetalle={
 			log.debug "CLOSURE DE DETALLE"
 			def metaProperty
-			for(i=0;i<params.campos.size()-1;i++){
+			and{
+				
+				filtros.each{filtro->
+					log.debug "FILTRO: ${filtro}"
+					//[field:nombre, value:oooo, type:string]
+					
+					cd.ordenReserva{
+						//cd.eq("anulada",Boolean.parseBoolean(params.soloanuladas))
+						if(filtro["field"].equals("nombre")){
+							cd.ilike(filtro["field"],"%"+filtro["value"]+"%")
+						}
+						if(filtro["field"].equals("numero")){
+							cd."${filtro["comparison"]}"(filtro["field"],filtro["value"].toLong())
+						}
+						if(filtro["field"].equals("anio")){
+							cd."${filtro["comparison"]}"(filtro["field"],filtro["value"].toLong())
+						}
+						if(filtro["field"].equals("fechaAlta")){
+							fecha = df.parse(filtro["value"].substring(0,10))
+							cd."${filtro["comparison"]}"(filtro["field"],fecha)
+						}
+
+						cd.expo{
+							if(filtro["field"].equals("expoNombre")){
+								cd.ilike(filtro["field"],"%"+filtro["value"]+"%")
+							}
+						}
+					}
+					if(filtro["field"].equals("sector")){
+						cd.sector{
+							cd.ilike("nombre","%"+filtro["value"]+"%")
+						}
+					}
+
+					if(filtro["field"].equals("lote")){
+						cd.lote{
+							cd.ilike("nombre","%"+filtro["value"]+"%")
+						}
+					}
+
+					
+				}
+			}
+			/*for(i=0;i<params.campos?.size()-1;i++){
 				campo=params.campos[i]
 				condicion=params.condiciones[i]
 				valorSearch=params.searchString[i]
@@ -573,32 +657,40 @@ class OrdenReservaController {
 								}
 					}
 				}//end del and
-			}//end del for
+			}//end del for*/
 			
 		}//end del closureDetalle
 		
 		detalles=cd.list(closureDetalle)
+		log.debug "CANTIDAD DE ORDENES DESDE EL DETALLE: ${detalles.size()}"
 		listgral.addAll(detalles)	
 
 		if(params.sort){
 			if(params.sort=="nombre"){
 				   Collections.sort(listgral,new EmpresaNombreComparator())
+				   log.debug "ORDENAMIENTO SOBRE NOMBRE DE EMPRESA"
 			}
 			if(params.sort=="fechaAlta"){
 				Collections.sort(listgral,new FechaOrdenComparator())
+				log.debug "ORDENEAMIENTO SOBRE FECHA DE ALTA"
 			}
 			if(params.sort=="lote"){
 				Collections.sort(listgral,new LoteComparator())
+				log.debug "ORDENAMIENTO SOBRE LOTE"
 			}
 			if(params.sort=="numero"){
 				Collections.sort(listgral,new NumeroOrdenComparator())
+				log.debug "ORDENAMIENTO SOBRE NUMERO DE ORDEN"
 			}
 			if(params.sort=="sector"){
 				Collections.sort(listgral,new SectorComparator())
+				log.debug "ORDENAMIENTO SOBRE SECTOR"
 			}
 			
-			if(params.sort=="expoNombre")
+			if(params.sort=="expoNombre"){
 				Collections.sort(listgral,new ExpoNombreComparator())
+				log.debug "ORDENAMIENTO SOBRE EL NOMBRE DE EXPOSICION"
+			}
 
 			if(params.dir=="DESC"){
 				Collections.reverse(listgral)

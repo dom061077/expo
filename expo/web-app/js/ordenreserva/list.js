@@ -4,6 +4,7 @@ Ext.onReady(function(){
 	var dir;
 	var ordenStore = new Ext.data.JsonStore({
 		totalProperty: 'total',
+		autoLoad:true,
 		remoteSort:true,
 		root: 'rows',
 		url:'listjson',
@@ -28,7 +29,58 @@ Ext.onReady(function(){
 		
 	});
 	
-
+	var filters = new Ext.ux.grid.GridFilters({
+        // encode and local configuration options defined previously for easier reuse
+        encode: true, // json encode the filter query
+        local: false,   // defaults to false (remote filtering)
+        menuFilterText:'Filtro',
+        emptyText:'Ingrese Filtro...',
+        filters: [{
+            type: 'string',
+            dataIndex: 'nombre'
+        }, {
+            type: 'string',
+            dataIndex: 'sector',
+            disabled: false
+        }, {
+            type: 'string',
+            dataIndex: 'lote'
+        }, {
+            type: 'numeric',
+            dataIndex: 'subTotal'
+        }, {
+            type: 'numeric',
+            dataIndex: 'totalCancelado'
+        }, {
+            type: 'numeric',
+            dataIndex: 'saldo'
+            
+        },{
+        	type:'string',
+        	dataIndex:'expoNombre'
+        },{
+        	type:'numeric',
+        	dataIndex:'anio',
+        	menuItemCfgs:{
+        		emptyText:'Ingrese Filtro...'
+        	}
+        },{
+        	type:'numeric',
+        	dataIndex:'id'
+        },{
+        	type:'numeric',
+        	dataIndex:'numero',
+        	menuItemCfgs:{
+        		emptyText:'Ingrese Filtro...'
+        	}
+        },{
+        	type:'date',
+        	dataIndex:'fechaAlta',
+        	beforeText:'Antes de',
+        	afterText:'Después de ',
+        	onText:'en el día'
+        }]
+    });   
 	
 	function currencyRender(v,params,data){
 		/*num = num.toString().replace(/\$|\,/g, '');
@@ -53,6 +105,7 @@ Ext.onReady(function(){
 	
 	var grid = new Ext.grid.GridPanel({
 		store:ordenStore,
+		plugins:[filters],
 		columns:[
 					{header:"Empresa",dataIndex:'nombre',width:200,sortable:true},
 					{header:"Sector",dataIndex:'sector',width:200,sortable:true},
@@ -208,7 +261,7 @@ Ext.onReady(function(){
 														,Ext.getCmp('searchStringIdFiltro3').getValue()
 													],
 											'soloanuladas':Ext.getCmp('soloanuladasId').getValue()*/		
-            		
+            		alert(grid.filters.getFilterData());
             		
             		
     				open('export?campos='+Ext.getCmp('campoIdFiltro1').getValue()+'&campos='+Ext.getCmp('campoIdFiltro2').getValue()
