@@ -29,6 +29,12 @@ Ext.onReady(function(){
 		
 	});
 	
+	ordenStore.on("beforeload",function(){
+			ordenStore.baseParams={
+				soloanuladas:Ext.getCmp('soloanuladasId').getValue()
+			}
+	});
+	
 	var filters = new Ext.ux.grid.GridFilters({
         // encode and local configuration options defined previously for easier reuse
         encode: true, // json encode the filter query
@@ -347,185 +353,10 @@ Ext.onReady(function(){
 		frame:true,
 		items:[	
 				{
-					layout:'column',
-					
-					items:[
-						{
-							columnWidth: .4,
-							layout:'form',
-							width:50,
-							items:{
-								xtype:'combo',
-								mode:'local',
-								name:'campos',
-								id:'campoIdFiltro1',
-								hideLabel:false,
-								fieldLabel:'Filtro 1',
-								labelWidth:60,
-								valueField:'idcampo',
-								displayField:'labelcampo',
-								store: camposStore,
-								anchor:'95%',
-								listeners:{
-									
-								}
-							}
-						},{
-							columnWidth: .2,
-							layout:'form',
-							items:{
-								xtype:'combo',
-								mode:'local',
-								name:'condiciones',
-								id:'condicionesIdFiltro1',
-								valueField:'idcond',
-								displayField:'nombrecond',
-								store: condicionesStore,
-								boxMaxWidth:100,
-								msgTarget:'under',
-								hideLabel:true,
-								anchor:'95%'
-							}
-							
-						},{
-							columnWidth: .3,
-							layout:'form',
-							items:{
-										xtype:'textfield',
-										hideLabel:true,
-										id:'searchStringIdFiltro1',
-										anchor:'95%'
-							}
-						}
-						
-					]
-				},{
-					layout:'column',
-					items:[
-						{
-							columnWidth: .4,
-							layout:'form',
-							width:50,
-							items:{
-								xtype:'combo',
-								mode:'local',
-								name:'campos',
-								id:'campoIdFiltro2',
-								hideLabel:false,
-								fieldLabel:'Filtro 2',
-								labelWidth:60,
-								valueField:'idcampo',
-								displayField:'labelcampo',
-								store: camposStore,
-								anchor:'95%'
-								
-							}
-						},{
-							columnWidth: .2,
-							layout:'form',
-							items:{
-								xtype:'combo',
-								mode:'local',
-								name:'condiciones',
-								id:'condicionesIdFiltro2',
-								valueField:'idcond',
-								displayField:'nombrecond',
-								store: condicionesStore,
-								boxMaxWidth:100,
-								msgTarget:'under',
-								hideLabel:true,
-								anchor:'95%'
-							}
-							
-						},{
-							columnWidth: .3,
-							layout:'form',
-							items:{
-										xtype:'textfield',
-										hideLabel:true,
-										id:'searchStringIdFiltro2',
-										anchor:'95%'
-							}
-						}
-
-					]
-				},{
-					layout:'column',
-					items:[
-						{
-							columnWidth: .4,
-							layout:'form',
-							width:50,
-							items:{
-								xtype:'combo',
-								mode:'local',
-								name:'campos',
-								id:'campoIdFiltro3',
-								hideLabel:false,
-								fieldLabel:'Filtro 3',
-								labelWidth:60,
-								valueField:'idcampo',
-								displayField:'labelcampo',
-								store: camposStore,
-								anchor:'95%'
-								
-							}
-						},{
-							columnWidth: .2,
-							layout:'form',
-							items:{
-								xtype:'combo',
-								mode:'local',
-								name:'condiciones',
-								id:'condicionesIdFiltro3',
-								valueField:'idcond',
-								displayField:'nombrecond',
-								store: condicionesStore,
-								boxMaxWidth:100,
-								msgTarget:'under',
-								hideLabel:true,
-								anchor:'95%'
-							}
-							
-						},{
-							columnWidth: .3,
-							layout:'form',
-							items:{
-										xtype:'textfield',
-										hideLabel:true,
-										id:'searchStringIdFiltro3',
-										anchor:'95%'
-							}
-						}
-
-					]	
-				},{
 						xtype:'checkbox',
 						name:'soloanuladas',
 						id:'soloanuladasId',
 						fieldLabel:'Solo Anuladas'	
-				},{
-						xtype:'button',
-						text:'Buscar',
-						listeners:{
-							click: function(){
-								ordenStore.load({
-										params:{
-											'campos':[Ext.getCmp('campoIdFiltro1').getValue()
-														,Ext.getCmp('campoIdFiltro2').getValue()
-														,Ext.getCmp('campoIdFiltro3').getValue()],
-											'condiciones':[Ext.getCmp('condicionesIdFiltro1').getValue()
-														,Ext.getCmp('condicionesIdFiltro2').getValue()
-														,Ext.getCmp('condicionesIdFiltro3').getValue()],
-											'searchString':[Ext.getCmp('searchStringIdFiltro1').getValue()
-														,Ext.getCmp('searchStringIdFiltro2').getValue()
-														,Ext.getCmp('searchStringIdFiltro3').getValue()
-													],
-											'soloanuladas':Ext.getCmp('soloanuladasId').getValue()		
-										}
-								});
-							}
-						}
 				},grid
 		
 		]
