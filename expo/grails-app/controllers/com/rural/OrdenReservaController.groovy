@@ -817,7 +817,7 @@ class OrdenReservaController {
         						totalCancelado=totalCancelado+it.total
         				}
         				saldo=it.ordenReserva.total-totalCancelado
-    					row(id:it.ordenReserva.id,numero:it.ordenReserva.numero,fechaAlta:it.ordenReserva.fechaAlta,total:it.ordenReserva.total,anio:it.ordenReserva.anio
+    					row(id:it.id,ordenId:it.ordenReserva.id,numero:it.ordenReserva.numero,fechaAlta:it.ordenReserva.fechaAlta,total:it.ordenReserva.total,anio:it.ordenReserva.anio
     							,expoNombre:it.ordenReserva.expo.nombre
 								,subTotal:it.subTotal
         						,sector:it.sector?.nombre
@@ -831,7 +831,7 @@ class OrdenReservaController {
         					}
         				}
         				saldo=it.total-totalCancelado
-    					row(id:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre
+    					row(id:it.id,ordenId:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre
         						,sector:""
 								,subTotal:0
         						,lote:""
