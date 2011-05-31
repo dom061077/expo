@@ -2,13 +2,32 @@ Ext.onReady(function(){
 	Ext.QuickTips.init();
 	var sort;
 	var dir;
+	var reader = new Ext.data.ArrayReader({}, [
+       {name: 'id'},
+       {name: 'ordenId', type:'numeric'},
+       {name: 'numero', type: 'numeric'},
+       {name: 'fechaAlta', type: 'date'},
+       {name: 'subTotal', type: 'float'},
+       {name: 'total', type: 'float'},
+       {name: 'totalCancelado', type:'float'},
+       {name: 'saldo',type:'float'},
+       {name: 'anio',type:'numeric'},
+       {name: 'expoNombre',type:'string'},
+       {name: 'nombre',type:'string'},
+       {name: 'sector',type:'string'},
+       {name: 'lote',type:'string'}
+    ]);
+
+	
 	var ordenStore = new Ext.data.JsonStore({
 		totalProperty: 'total',
+		//reader:reader,
+		//groupField:'nombre',
 		autoLoad:true,
 		remoteSort:true,
 		root: 'rows',
 		url:'listjson',
-		fields:['id','numero','fechaAlta','subTotal','total','totalCancelado','saldo','anio','expoNombre','nombre','sector','lote'],
+		fields:['id','ordenId','numero','fechaAlta','subTotal','total','totalCancelado','saldo','anio','expoNombre','nombre','sector','lote'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -42,6 +61,10 @@ Ext.onReady(function(){
         menuFilterText:'Filtro',
         emptyText:'Ingrese Filtro...',
         filters: [{
+         	type: 'numeric',
+            dataIndex: 'ordenId'
+            
+        }, {	
             type: 'string',
             dataIndex: 'nombre'
         }, {
@@ -112,7 +135,11 @@ Ext.onReady(function(){
 	var grid = new Ext.grid.GridPanel({
 		store:ordenStore,
 		plugins:[filters],
+		//collapsible: true,
+        //animCollapse: false,
+		//view: new Ext.grid.GroupingView(),
 		columns:[
+					{header:"Id Orden",dataIndex:'ordenId',width:200,sortable:false,hidden:true},
 					{header:"Empresa",dataIndex:'nombre',width:200,sortable:true},
 					{header:"Sector",dataIndex:'sector',width:200,sortable:true},
 					{header:"Lote",dataIndex:'lote',width:100,hidden:false,sortable:true},
@@ -266,18 +293,22 @@ Ext.onReady(function(){
 														,Ext.getCmp('searchStringIdFiltro2').getValue()
 														,Ext.getCmp('searchStringIdFiltro3').getValue()
 													],
-											'soloanuladas':Ext.getCmp('soloanuladasId').getValue()*/		
-            		alert(grid.filters.getFilterData());
+											'soloanuladas':Ext.getCmp('soloanuladasId').getValue()*/
+            		
+            		var filters = grid.filters.getFilterData();
+            		var tmp = [];
+		            for (var i = 0; i < filters.length; i++) {
+		                f = filters[i];
+		                tmp.push(Ext.apply(
+		                    {},
+		                    {field: f.field},
+		                    f.data
+		                ));
+		            }
             		
             		
-    				open('export?campos='+Ext.getCmp('campoIdFiltro1').getValue()+'&campos='+Ext.getCmp('campoIdFiltro2').getValue()
-    					+'&campos='+Ext.getCmp('campoIdFiltro3').getValue()
-    					+"&condiciones="+Ext.getCmp('condicionesIdFiltro1').getValue()+'&condiciones='+Ext.getCmp('condicionesIdFiltro2').getValue()
-    					+'&condiciones='+Ext.getCmp('condicionesIdFiltro3').getValue()
-    					+'&searchString='+Ext.getCmp('searchStringIdFiltro1').getValue()
-    					+'&searchString='+Ext.getCmp('searchStringIdFiltro2').getValue()
-    					+'&searchString='+Ext.getCmp('searchStringIdFiltro3').getValue()
-    					+'&soloanuladas='+Ext.getCmp('soloanuladasId').getValue()
+    				open('export?soloanuladas='+Ext.getCmp('soloanuladasId').getValue()
+    					+'&filter='+Ext.util.JSON.encode(tmp)
     					+'&sort='+sort+'&dir='+dir
     					,'_blank')
             	}
