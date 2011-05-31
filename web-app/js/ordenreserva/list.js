@@ -104,6 +104,7 @@ Ext.onReady(function(){
         	}
         },{
         	type:'date',
+        	dateFormat:'d/m/Y',
         	dataIndex:'fechaAlta',
         	beforeText:'Antes de',
         	afterText:'Después de ',
@@ -167,7 +168,7 @@ Ext.onReady(function(){
         				var sel = sm.getSelected();
         				if (sm.hasSelection()){
         					
-							open('ordenreservareporte?tipo=ORIGINAL&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.id
+							open('ordenreservareporte?tipo=ORIGINAL&_format=PDF&_name=ordenReservaInstance&_file=OrdenReserva&id='+sel.data.ordenId
 							,'_blank')
         				}
 							
@@ -387,7 +388,12 @@ Ext.onReady(function(){
 						xtype:'checkbox',
 						name:'soloanuladas',
 						id:'soloanuladasId',
-						fieldLabel:'Solo Anuladas'	
+						fieldLabel:'Solo Anuladas',
+						listeners:{
+							check: function(check,checked){
+								ordenStore.load();
+							}
+						}	
 				},grid
 		
 		]

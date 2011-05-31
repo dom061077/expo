@@ -12,13 +12,11 @@ class SectorComparator implements Comparator{
 			nombre1=o1.sector?.nombre 
 		if(o2 instanceof DetalleServicioContratado)
 			nombre2=o2.sector?.nombre
-		if(nombre1==null || nombre2==null){
-			if(nombre1==null)
-				return -1	
-			if(nombre2==null)
-				return 1
-		}else
-			return nombre1.compareTo(nombre2)
+		if(nombre1==null)
+			nombre1=""	
+		if(nombre2==null)
+			nombre2=""
+		return nombre1.compareTo(nombre2)
 		
 	}
 }

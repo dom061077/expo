@@ -460,27 +460,33 @@ class OrdenReservaController {
 					//def metaProperty
 					and{
 						co.isEmpty("detalle")
-						co.eq("anulada",/*Boolean.parseBoolean(params.soloanuladas*/new Boolean(false))
+						co.eq("anulada",Boolean.parseBoolean(params.soloanuladas))
 						filtros.each{filtro->
 							log.debug "FILTRO: ${filtro["field"]}"
 							//[field:nombre, value:oooo, type:string]
+							if(filtro["field"].equals("sector") || filtro["field"].equals("lote")){
+								co.isNotEmpty("detalle")
+							}
 							if(filtro["field"].equals("nombre")){
 								log.debug "LOGRO INGRESAR POR LA CONDICION DE NOMBRE"
 								co.ilike(filtro["field"],"%"+filtro["value"]+"%")
 							}
+							
+							if(filtro["field"].equals("numero")){
+								co."${filtro["comparison"]}"(filtro["field"],filtro["value"].toLong())
+							}
+							if(filtro.field.equals("anio")){
+								co."${filtro["comparison"]}"(filtro["field"],filtro["value"].toInteger())
+							}
+							if(filtro["field"].equals("fechaAlta")){
+								fecha = df.parse(filtro["value"])
+								log.debug "FECHA FORMATEADA: ${fecha} desde ${filtro["value"]}"
+								co."${filtro.comparison}"(filtro["field"],fecha)
+							}
+
 							co.expo{
 								if(filtro["field"].equals("expoNombre")){
-									co.ilike(filtro["field"],"%"+filtro["value"]+"%")
-								}
-								if(filtro["field"].equals("numero")){
-									co."${filtro["comparison"]}"(filtro["field"],filtro["value"].toLong())
-								}
-								if(filtro.field.equals("anio")){
-									co."${filtro["comparison"]}"(filtro["field"],filtro["value"].toLong())
-								}
-								if(filtro["field"].equals("fechaAlta")){
-									fecha = df.parse(filtro["value"].substring(0,10)) 
-									co."${filtro.comparison}"(filtro["field"],fecha)
+									co.ilike("nombre","%"+filtro["value"]+"%")
 								}
 							}
 						}
@@ -568,16 +574,17 @@ class OrdenReservaController {
 							cd."${filtro["comparison"]}"(filtro["field"],filtro["value"].toLong())
 						}
 						if(filtro["field"].equals("anio")){
-							cd."${filtro["comparison"]}"(filtro["field"],filtro["value"].toLong())
+							cd."${filtro["comparison"]}"(filtro["field"],filtro["value"].toInteger())
 						}
 						if(filtro["field"].equals("fechaAlta")){
-							fecha = df.parse(filtro["value"].substring(0,10))
+							fecha = df.parse(filtro["value"])
+							log.debug "FECHA FORMATEADA: ${fecha} desde ${filtro["value"]}"
 							cd."${filtro["comparison"]}"(filtro["field"],fecha)
 						}
 
 						cd.expo{
 							if(filtro["field"].equals("expoNombre")){
-								cd.ilike(filtro["field"],"%"+filtro["value"]+"%")
+								cd.ilike("nombre","%"+filtro["value"]+"%")
 							}
 						}
 					}
@@ -817,11 +824,11 @@ class OrdenReservaController {
         						totalCancelado=totalCancelado+it.total
         				}
         				saldo=it.ordenReserva.total-totalCancelado
-    					row(id:it.id,ordenId:it.ordenReserva.id,numero:it.ordenReserva.numero,fechaAlta:it.ordenReserva.fechaAlta,total:it.ordenReserva.total,anio:it.ordenReserva.anio
+    					row(id:it.id+1000,ordenId:it.ordenReserva.id,numero:it.ordenReserva.numero,fechaAlta:it.ordenReserva.fechaAlta,total:it.ordenReserva.total,anio:it.ordenReserva.anio
     							,expoNombre:it.ordenReserva.expo.nombre
 								,subTotal:it.subTotal
-        						,sector:it.sector?.nombre
-        						,lote:it.lote?.nombre
+        						,sector:(it.sector==null?'-':it.sector.nombre)
+        						,lote: (it.lote==null?'-':it.lote.nombre)
         						,nombre:it.ordenReserva.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
         				
     				}else{
@@ -832,9 +839,9 @@ class OrdenReservaController {
         				}
         				saldo=it.total-totalCancelado
     					row(id:it.id,ordenId:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre
-        						,sector:""
+        						,sector:"-"
 								,subTotal:0
-        						,lote:""
+        						,lote:"-"
         						,nombre:it.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)        				
     				}
     				
