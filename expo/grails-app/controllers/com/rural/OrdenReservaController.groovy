@@ -472,6 +472,12 @@ class OrdenReservaController {
 								co.ilike(filtro["field"],"%"+filtro["value"]+"%")
 							}
 							
+							if(filtro["field"].equals("razonSocial")){
+								log.debug "LOGRO INGRESAR POR LA CONDICION DE NOMBRE"
+								co.ilike(filtro["field"],"%"+filtro["value"]+"%")
+							}
+
+							
 							if(filtro["field"].equals("numero")){
 								co."${filtro["comparison"]}"(filtro["field"],filtro["value"].toLong())
 							}
@@ -570,6 +576,11 @@ class OrdenReservaController {
 						if(filtro["field"].equals("nombre")){
 							cd.ilike(filtro["field"],"%"+filtro["value"]+"%")
 						}
+						if(filtro["field"].equals("razonSocial")){
+							log.debug "LOGRO INGRESAR POR LA CONDICION DE NOMBRE"
+							cd.ilike(filtro["field"],"%"+filtro["value"]+"%")
+						}
+
 						if(filtro["field"].equals("numero")){
 							cd."${filtro["comparison"]}"(filtro["field"],filtro["value"].toLong())
 						}
@@ -829,7 +840,9 @@ class OrdenReservaController {
 								,subTotal:it.subTotal
         						,sector:(it.sector==null?'':it.sector.nombre)
         						,lote: (it.lote==null?'':it.lote.nombre)
-        						,nombre:it.ordenReserva.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
+        						,nombre:it.ordenReserva.nombre
+								,razonSocial:it.ordenReserva.razonSocial
+								,totalCancelado:totalCancelado,saldo:saldo)
         				
     				}else{
         				it.recibos.each{r-> 
@@ -842,7 +855,9 @@ class OrdenReservaController {
         						,sector:""
 								,subTotal:0
         						,lote:""
-        						,nombre:it.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)        				
+        						,nombre:it.nombre
+								,razonSocial:it.razonSocial
+								,totalCancelado:totalCancelado,saldo:saldo)        				
     				}
     				
 

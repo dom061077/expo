@@ -302,11 +302,16 @@ class ListaPreciosController {
 				expo{
 					eq("id",params.expoId.toLong())
 				}
-				sector{
-					eq("id",params.sectorId.toLong())
+				if(params.sectorId){
+					sector{
+						eq("id",params.sectorId.toLong())
+					}
 				}
-				if(params.loteId)
-					eq("id",params.loteId.toLong())
+				if(params.loteId){
+					lote{
+						eq("id",params.loteId.toLong())
+					}
+				}
 				ge("vigencia",new java.sql.Date(new java.util.Date().time))
 			}
 		}

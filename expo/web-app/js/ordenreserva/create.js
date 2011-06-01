@@ -383,7 +383,43 @@ Ext.onReady(function(){
 		valueField:'id',
 		hiddenName:'lote_id',
 		hiddenField:'id',
-		startValue:'Seleccione un Lote'
+		startValue:'Seleccione un Lote',
+		listeners:{
+					'select':function(cmb,rec,idx){
+						var sm = gridDetalleServicioContratado.getSelectionModel();
+					 	var sel = sm.getSelected();
+					 	if(sm.hasSelection()){
+					 		var conn = new Ext.data.Connection();
+					 		conn.request({
+					 			url:'../listaPrecios/getprecio',
+					 			method:'POST',
+					 			params:{
+					 				expoId:Ext.getCmp('exposicionCombo').hiddenField.value,
+					 				loteId:Ext.getCmp('comboboxLoteId').hiddenField.value
+					 			},
+					 			success: function(resp,opt){
+					 				var respuesta=Ext.decode(resp.responseText);
+					 				if(respuesta){
+					 					if(respuesta.loginredirect)
+					 						window.location='../logout/index';
+					 					else{
+					 						if(respuesta.success){
+					 							sel.data.subTotal=respuesta.precio;
+					 						}
+					 					}
+					 							
+					 				}
+					 			}
+					 			
+					 		});
+					 		
+					 		
+					 		sel.commit();
+					 		//gridDetalleServicioContratado.stopEditing();
+					 	}
+			}
+				
+		}
 	});
 	
 	var comboboxSector = new Ext.form.ComboBox({
