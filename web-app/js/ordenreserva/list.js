@@ -27,7 +27,7 @@ Ext.onReady(function(){
 		remoteSort:true,
 		root: 'rows',
 		url:'listjson',
-		fields:['id','ordenId','numero','fechaAlta','subTotal','total','totalCancelado','saldo','anio','expoNombre','nombre','sector','lote'],
+		fields:['id','ordenId','numero','fechaAlta','subTotal','total','totalCancelado','saldo','anio','expoNombre','nombre','razonSocial','sector','lote'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
