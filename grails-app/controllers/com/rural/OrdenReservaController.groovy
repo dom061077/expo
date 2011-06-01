@@ -827,8 +827,8 @@ class OrdenReservaController {
     					row(id:it.id+1000,ordenId:it.ordenReserva.id,numero:it.ordenReserva.numero,fechaAlta:it.ordenReserva.fechaAlta,total:it.ordenReserva.total,anio:it.ordenReserva.anio
     							,expoNombre:it.ordenReserva.expo.nombre
 								,subTotal:it.subTotal
-        						,sector:(it.sector==null?'-':it.sector.nombre)
-        						,lote: (it.lote==null?'-':it.lote.nombre)
+        						,sector:(it.sector==null?'':it.sector.nombre)
+        						,lote: (it.lote==null?'':it.lote.nombre)
         						,nombre:it.ordenReserva.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)
         				
     				}else{
@@ -839,9 +839,9 @@ class OrdenReservaController {
         				}
         				saldo=it.total-totalCancelado
     					row(id:it.id,ordenId:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre
-        						,sector:"-"
+        						,sector:""
 								,subTotal:0
-        						,lote:"-"
+        						,lote:""
         						,nombre:it.empresa.nombre,totalCancelado:totalCancelado,saldo:saldo)        				
     				}
     				

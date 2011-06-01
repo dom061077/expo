@@ -67,6 +67,9 @@ Ext.onReady(function(){
         }, {	
             type: 'string',
             dataIndex: 'nombre'
+        }, {	
+            type: 'string',
+            dataIndex: 'razonSocial'
         }, {
             type: 'string',
             dataIndex: 'sector',
@@ -76,13 +79,16 @@ Ext.onReady(function(){
             dataIndex: 'lote'
         }, {
             type: 'numeric',
-            dataIndex: 'subTotal'
+            dataIndex: 'subTotal',
+            disabled:true
         }, {
             type: 'numeric',
-            dataIndex: 'totalCancelado'
+            dataIndex: 'totalCancelado',
+            disabled:true
         }, {
             type: 'numeric',
-            dataIndex: 'saldo'
+            dataIndex: 'saldo',
+            disabled:true
             
         },{
         	type:'string',
@@ -95,7 +101,8 @@ Ext.onReady(function(){
         	}
         },{
         	type:'numeric',
-        	dataIndex:'id'
+        	dataIndex:'id',
+        	disabled:true
         },{
         	type:'numeric',
         	dataIndex:'numero',
@@ -142,6 +149,7 @@ Ext.onReady(function(){
 		columns:[
 					{header:"Id Orden",dataIndex:'ordenId',width:200,sortable:false,hidden:true},
 					{header:"Empresa",dataIndex:'nombre',width:200,sortable:true},
+					{header:"Razón Social",dataIndex:'razonSocial',width:200,sortable:true},
 					{header:"Sector",dataIndex:'sector',width:200,sortable:true},
 					{header:"Lote",dataIndex:'lote',width:100,hidden:false,sortable:true},
 					{header:"Sub Total",dataIndex:'subTotal',width:100,renderer:currencyRender},					
@@ -313,6 +321,11 @@ Ext.onReady(function(){
     					+'&sort='+sort+'&dir='+dir
     					,'_blank')
             	}
+			},{
+				text:'Quitar Filtros'
+				,handler: function(){
+					grid.filters.clearFilters();
+				}
         		
         }]/*,
         bbar: new Ext.PagingToolbar({
