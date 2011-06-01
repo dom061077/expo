@@ -160,6 +160,7 @@ Ext.onReady(function(){
 					var sel = sm.getSelected();
 					if(sm.hasSelection()){
 						loteId=sel.data.id;
+						sectorId=null;
 						listapreciosStore.load({
 							params:{'loteId':loteId,'expoId':expoId}
 						});
@@ -272,6 +273,7 @@ Ext.onReady(function(){
 					if(sm.hasSelection()){
 						expoId=sel.data.expoId;
 						sectorId=sel.data.id;
+						loteId=null;
 						listapreciosStore.load({
 							params:{'sectorId':sectorId,'expoId':expoId}
 						});
@@ -420,7 +422,7 @@ Ext.onReady(function(){
 							}
 						}			
 						listapreciosStore.load({
-							params:{'sectorId':sectorId,'expoId':expoId}
+							params:{'sectorId':sectorId,'loteId':loteId,'expoId':expoId}
 						});
 				},
 				failure:function(resp,opt){
