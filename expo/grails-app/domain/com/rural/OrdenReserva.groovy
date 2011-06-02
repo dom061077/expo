@@ -27,6 +27,7 @@ class OrdenReserva {
 	Float porcentajeResNoIns=0
 	String observacion
 	Double subtotalDetalle
+	Double subtotalOtrosConceptos
 	
 	Long numero
 	Date fechaAlta
@@ -105,6 +106,7 @@ class OrdenReserva {
     
     static mapping = {
     	subtotalDetalle formula:"(select sum(d.sub_total) from detalle_servicio_contratado d where d.orden_reserva_id=id)"
+		subtotalOtrosConceptos formula:"(select sum(o.sub_total) from otros_conceptos o where o.orden_reserva_id=id)"
     }
     
     def sigNumero(){

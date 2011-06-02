@@ -27,7 +27,7 @@ Ext.onReady(function(){
 		remoteSort:true,
 		root: 'rows',
 		url:'listjson',
-		fields:['id','ordenId','numero','fechaAlta','subTotal','total','totalCancelado','saldo','anio','expoNombre','nombre','razonSocial','sector','lote'],
+		fields:['id','ordenId','numero','fechaAlta','subTotal','subTotalOtrosConceptos','total','totalCancelado','saldo','anio','expoNombre','nombre','razonSocial','sector','lote'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -80,6 +80,10 @@ Ext.onReady(function(){
         }, {
             type: 'numeric',
             dataIndex: 'subTotal',
+            disabled:true
+        }, {
+            type: 'numeric',
+            dataIndex: 'subTotalOtrosConceptos',
             disabled:true
         }, {
             type: 'numeric',
@@ -153,6 +157,7 @@ Ext.onReady(function(){
 					{header:"Sector",dataIndex:'sector',width:200,sortable:true},
 					{header:"Lote",dataIndex:'lote',width:100,hidden:false,sortable:true},
 					{header:"Sub Total",dataIndex:'subTotal',width:100,renderer:currencyRender},					
+					{header:"$Otros Concep.",dataIndex:'subTotalOtrosConceptos',width:100,renderer:currencyRender},					
 					{header:"Total",dataIndex:'total',width:80,renderer:currencyRender,sortable:false},
 					{header:"Total Cancelado",dataIndex:'totalCancelado',width:100,renderer:currencyRender},
 					{header:"Saldo",dataIndex:'saldo',width:80,renderer:currencyRender},					
