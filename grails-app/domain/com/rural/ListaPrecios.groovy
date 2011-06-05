@@ -4,7 +4,7 @@ import java.sql.Date
 
 class ListaPrecios {
 	Double precio
-	Date vigencia
+	Integer anio
 	Sector sector
 	Lote lote
 	Exposicion expo
