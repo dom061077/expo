@@ -110,13 +110,18 @@ class ListaPreciosController {
 			max: params.limit as Integer ?: 10,
 			offset: params.start as Integer ?: 0
 		]
+
+		def filtros
 		
+		try{
+			filtros = JSON.parse(params.filter)
+		}catch(Exception e){
+		
+		}
+
 		
 		def totalPrecios = ListaPrecios.createCriteria().count(){
 			and{
-				expo{
-					eq("id", params.expoId.toLong())
-				}
 				if(params.sectorId){
 					sector{
 						eq("id", params.sectorId.toLong())
