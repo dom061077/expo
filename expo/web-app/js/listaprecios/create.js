@@ -1,6 +1,34 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
+	var editor = new Ext.ux.grid.RowEditor({
+		saveText:'Guardar'
+	});
 
+	var listapreciosStore = new Ext.data.JsonStore({
+			autoLoad:true,
+			totalProperty:'total',
+			root:'rows',
+			url:'../listaPrecios/listjson',
+			fields:['id','vigencia','precio'],
+			listeners: {
+	            loadexception: function(proxy, store, response, e) {
+		                     var jsonObject = Ext.util.JSON.decode(response.responseText);
+		                   if (response.status==0)
+		                    	Ext.MessageBox.show({
+		                    		title:'Error',
+		                    		msg:'Error de comunicación con el servidor',
+		                    		icon:Ext.MessageBox.ERROR,
+		                    		buttons:Ext.MessageBox.OK
+		                    	});
+		                    else{
+			                    if (jsonObject.loginredirect == true)
+			                    		window.location='../logout/index';
+		                    }
+		                   } 
+				}							
+		});
+	
+	
 		listapreciosStore.on('add',function(store,records,index){
 			var conn = new Ext.data.Connection();
 			conn.request({
@@ -254,5 +282,11 @@ Ext.onReady(function(){
         ]
 	
 	});
+	
+	var form = new Ext.form.FormPanel({
+		renderTo:'listaprecios_extjs',
+		items:gridprecios
+	});
+	
 	
 });
