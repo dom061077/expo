@@ -11,7 +11,7 @@ class ListaPrecios {
     static constraints = {
 		sector(nullable:true,blank:true)
 		lote(nullable:true,blank:true)
-		expo(nullable:false,blank:false)
+		expo(nullable:true,blank:true)
     }
 	
 	
