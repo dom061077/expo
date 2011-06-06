@@ -112,16 +112,17 @@ class ListaPreciosController {
 		]
 
 		def filtros
-		
+
 		try{
 			filtros = JSON.parse(params.filter)
 		}catch(Exception e){
 		
 		}
+		
 
 		
 		def totalPrecios = ListaPrecios.createCriteria().count(){
-			and{
+			/*and{
 				if(params.sectorId){
 					sector{
 						eq("id", params.sectorId.toLong())
@@ -132,13 +133,13 @@ class ListaPreciosController {
 						eq("id", params.loteId.toLong())
 					}
 				}
-			}
+			}*/
 		}
 		
 		log.debug "TOTAL REGISTROS DE LISTA DE PRECIOS: ${totalPrecios}"
 		
 		def list = ListaPrecios.createCriteria().list(pagingConfig){
-			and{
+			/*and{
 				expo{
 					eq("id", params.expoId.toLong())
 				}
@@ -152,7 +153,7 @@ class ListaPreciosController {
 						eq("id", params.loteId.toLong())
 					}
 				}
-			}
+			}*/
 		}
 		
 		log.debug "LISTA DE PRECIOS: ${list}"
@@ -161,7 +162,7 @@ class ListaPreciosController {
 			total totalPrecios
 			rows{
 				list.each{
-					row(id:it.id,vigencia:it.vigencia,precio:it.precio)
+					row(id:it.id,expo:it.expo.id,sector:it.sector?.id,lote:it.lote?.id,anio:it.anio,precio:it.precio)
 				}
 			}
 		}
@@ -172,28 +173,23 @@ class ListaPreciosController {
 	def savejson={
 		log.info "INGRESANDO AL CLOSURE savejson DEL CONTROLLER ListaPreciosController"
 		log.info "PARAMETROS ${params}"
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd")
-		Date vigencia
-		def flagdate=false
 		
-		
-		try{
-			log.debug("VENCIMIENTO A PARSEAR: "+params.vigencia.substring(0,10))
-			vigencia = df.parse(params.vigencia.substring(0,10))
-			def gc = Calendar.getInstance()
-			gc.setTime(vigencia)
-			params.vigencia_year = gc.get(Calendar.YEAR).toString()
-			params.vigencia_month = (gc.get(Calendar.MONTH)+1).toString()
-			params.vigencia_day = gc.get(Calendar.DATE).toString()
-		}catch(Parse){
-			log.debug("ERROR AL PARSEAR LA VIGENCIA")
-			flagdate=true
-		}
+		def c = Calendar.getInstance()
+		c.setTime(new Date())
+		params.anio = c.get(Calendar.YEAR).toString()
+ 
 		def listaPreciosInstance= new ListaPrecios(params)
-		if(flagdate)
-			listaPreciosInstance.errors.rejectValue("vigencia","typeMismatch.java.util.Date")
+		
+		def listExpo = Exposicion.createCriteria().list(){
+			order("id","DESC")
+		}
+		
+		def expo = listExpo[0] 
+		
+		//if(flagdate)
+		//	listaPreciosInstance.errors.rejectValue("vigencia","typeMismatch.java.util.Date")
 
-			
+		listaPreciosInstance.expo = expo	
 
 		if(!listaPreciosInstance.hasErrors() && listaPreciosInstance.save()){ 
 			render(contentType:"text/json") {

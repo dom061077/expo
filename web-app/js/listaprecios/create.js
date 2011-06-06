@@ -1,15 +1,78 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
 	var editor = new Ext.ux.grid.RowEditor({
-		saveText:'Guardar'
+		saveText:'Guardar',
+		errorSumary:false
 	});
 
+
+	var expoStore = new Ext.data.JsonStore({
+		autoLoad:true,
+		root:'rows',
+		url:'../exposicion/listjson',
+		fields:['id','nombre'],
+		listeners: {
+            loadexception: function(proxy, store, response, e) {
+	                     var jsonObject = Ext.util.JSON.decode(response.responseText);
+	                   if (response.status==0)
+	                    	Ext.MessageBox.show({
+	                    		title:'Error',
+	                    		msg:'Error de comunicación con el servidor',
+	                    		icon:Ext.MessageBox.ERROR,
+	                    		buttons:Ext.MessageBox.OK
+	                    	});
+	                    else{
+		                    if (jsonObject.loginredirect == true)
+		                    		window.location='../logout/index';
+	                    }
+	                   } 
+			}			
+		
+	});
+	
+	var comboExpo = new Ext.form.ComboBox({
+		store:expoStore,
+		id:'comboExpoId',
+		displayField:'nombre',
+		msgTarget:'under',
+		valueField:'id',
+		mode:'local',
+		hiddenName:'expo',
+		allowBlank:false
+		,listeners:{
+			'select':function(){
+				alert('SELECCION EXPO');
+			}
+		}
+	});
+	
+	var ListaPrecioSector = Ext.data.Record.create([{
+			name: 'id',
+			type: 'integer'
+		},{
+			name: 'anio',
+			type: 'integer'
+		},{
+			name:'precio',
+			type:'float'
+		},{
+			name:'lote',
+			type:'integer'
+		},{
+			name:'sector',
+			type:'integer'
+		},{
+			name:'expo',
+			type:'integer'
+				
+		}]);
+	
 	var listapreciosStore = new Ext.data.JsonStore({
 			autoLoad:true,
 			totalProperty:'total',
 			root:'rows',
 			url:'../listaPrecios/listjson',
-			fields:['id','vigencia','precio'],
+			fields:['id','expo','sector','lote','anio','precio'],
 			listeners: {
 	            loadexception: function(proxy, store, response, e) {
 		                     var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -36,10 +99,10 @@ Ext.onReady(function(){
 				method:'POST',
 				params:{
 					'precio':records[0].data.precio,
-					'vigencia':records[0].data.vigencia,
-					'sector.id':sectorId,
-					'lote.id':loteId,
-					'expo.id':expoId
+					'anio':records[0].data.anio,
+					'lote.id':records[0].data.lote,
+					'sector.id':records[0].data.sector,
+					'expo.id':records[0].data.expo
 				},
 				success:function(resp,opt){
 						var respuesta=Ext.decode(resp.responseText);
@@ -106,7 +169,10 @@ Ext.onReady(function(){
 			method:'POST',
 			params:{
 				'id':records.data.id,
-				'vigencia':records.data.vigencia,
+				'expo.id':records.data.expo,
+				'sector.id':records.data.sector,
+				'lote.id':records.data.lote,
+				'anio':records.data.anio,
 				'precio':records.data.precio
 			},
 			success:function(resp,opt){
@@ -238,7 +304,7 @@ Ext.onReady(function(){
 		selModel: new Ext.grid.RowSelectionModel(),
 		stripeRows:true,
 		store:listapreciosStore,
-		width:400,
+		width:550,
 		height:400,
 		tbar:[{
 				text:'Eliminar',
@@ -251,6 +317,7 @@ Ext.onReady(function(){
 				}
 			},{
 				text:'Agregar',
+				msgTarget:'under',
 				handler:function(){
 					var e = new ListaPrecioSector({
 						id:0,
@@ -267,15 +334,33 @@ Ext.onReady(function(){
 		],
 		columns:[
 		    {header:'id',dataIndex:'id',hidden:true},
-		    //{header:"Fecha",dataIndex:'fechaAlta',width:80,renderer: Ext.util.Format.dateRenderer('d/m/y'),sortable:true}
-		    {header:'Vigencia',dataIndex:'vigencia',width:150,renderer: Ext.util.Format.dateRenderer('d/m/y')
+		    {header:'Expo',dataIndex:'expo',width:100
+		    	,msgTarget:'under'
+			    ,editor:comboExpo,sortable:false
+			    ,renderer:function(value, p, record){return 'Hola';}},
+		    {header:'Sector',dataIndex:'sector',width:150
+			    ,editor:{
+			    	xtype: 'numberfield',
+			    	msgTarget:'under',
+			    	allowBlank:true
+			    },sortable:false},
+		    {header:'Lote',dataIndex:'lote',width:100
 				    ,editor:{
-				    	xtype: 'datefield',
+			    	xtype: 'numberfield',
+			    	msgTarget:'under',
+			    	allowBlank:true
+			    },sortable:false},
+			    
+		    {header:'Año',dataIndex:'anio',width:80
+				    ,editor:{
+				    	xtype: 'numberfield',
+				    	msgTarget:'under',
 				    	allowBlank:false
 				    },sortable:false},
-		    {header:'Precio',dataIndex:'precio',width:150
+		    {header:'Precio',dataIndex:'precio',width:80
 		    		,editor:{
-		    			xtype:'textfield',
+		    			xtype:'numberfield',
+		    			msgTarget:'under',
 		    			allowBlank:false
 		    		}
 		    }
@@ -285,6 +370,7 @@ Ext.onReady(function(){
 	
 	var form = new Ext.form.FormPanel({
 		renderTo:'listaprecios_extjs',
+		frame:true,
 		items:gridprecios
 	});
 	
