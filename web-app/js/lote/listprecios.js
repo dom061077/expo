@@ -152,7 +152,7 @@ Ext.onReady(function(){
 		    {header:'Lote',dataIndex:'nombre',width:100,sortable:true},
 		    {header:'Precio',dataIndex:'precio',width:80,type:'float'
 		    	,editor:{
-			    	xtype: 'numericfield',
+			    	xtype: 'numberfield',
 			    	msgTarget:'under',
 			    	allowBlank:false
 			    }

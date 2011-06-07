@@ -228,6 +228,8 @@ class LoteController {
     	log.info("INGRESANDO AL METODO updatejson DEL CONTROLLER LoteController")
     	log.debug("PARAMETROS: $params")
     	def loteInstance = Lote.get(params.id)
+		params.precio=params.precio?.replace(".",",")
+		
     	loteInstance.properties=params
     	if(!loteInstance.hasErrors()&& loteInstance.save()){
     		log.debug("Lote modificado con exito")
