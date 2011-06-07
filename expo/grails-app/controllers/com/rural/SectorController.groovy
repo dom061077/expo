@@ -2,13 +2,68 @@
 
 package com.rural
 
+import grails.converters.JSON
+
 class SectorController {
     
     def index = { redirect(action:list,params:params) }
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
-    
+
+	
+	def listdescuentos= {
+		log.info "INGRESANDO AL CLOSURE listprecios DEL CONTROLLER SectorController"
+	}
+	
+	def listjsondescuentos = {
+		log.info "INGRESANDO AL CLOSURE listjsonprecios DEL CONTROLLER SectorController"
+		log.info "PARAMETROS $params"
+		def filtros
+		
+		try{
+			filtros = JSON.parse(params.filter)
+			log.debug "FILTROS CONVERTIDO EN JSON"
+		}catch(Exception e){
+			log.debug "ERROR EN CONVERSION DE FILTRO: ${e.message}"
+		}
+
+		def sectores = Sector.createCriteria().list(){
+			filtros.each{filtro->
+				
+				if(filtro["field"].equals("expoNombre")){
+					log.debug "INGRESANDO POR EL FILTRO expoNombre"
+					expo{
+							ilike("nombre","%${filtro["value"]}%")
+						}
+				}
+				if(filtro["field"].equals("nombre")){
+					log.debug "INGRESANDO POR EL FILTRO nombre DE SECTOR"
+					ilike("nombre","%${filtro["value"]}%")
+				}
+			}
+			if(params.sort.equals("expoNombre")){
+					expo{
+						order("nombre",params.dir)
+					}
+			}
+
+			if(params.sort.equals("nombre")){
+				order("nombre",params.dir)
+			}
+
+		}
+		render(contentType:"text/json"){
+			total sectores.size()
+			rows{
+				sectores.each{
+					row(id:it.id,expoNombre:it.expo.nombre,nombre:it.nombre,precio:it.precio)
+				}
+			}
+		}
+
+	}
+	    
     def listtodosjson = {
     	log.info("INGRESANDO AL METODO listtodosjson DEL CONTROLLER SectorController")
     	log.debug("PARAMETROS INGRESADOS: $params")
@@ -212,6 +267,7 @@ class SectorController {
     	log.info("INGRESANDO AL METODO updatejson DEL CONTROLLER SectorController")
     	log.debug("PARAMETROS $params")
     	def sectorInstance=Sector.get(params.id)
+		params.precio = params.precio
     	sectorInstance.properties=params
     	if(!sectorInstance.hasErrors() && sectorInstance.save()){
     		render(contentType:"text/json"){
