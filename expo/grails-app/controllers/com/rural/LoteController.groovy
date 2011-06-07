@@ -2,6 +2,8 @@
 
 package com.rural
 
+import grails.converters.JSON
+
 class LoteController {
     
     def index = { redirect(action:list,params:params) }
@@ -22,36 +24,41 @@ class LoteController {
 		
 		try{
 			filtros = JSON.parse(params.filter)
+			log.debug "FILTROS CONVERTIDO EN JSON"
 		}catch(Exception e){
-		
+			log.debug "ERROR EN CONVERSION DE FILTRO: ${e.message}"
 		}
 
 		def lotes = Lote.createCriteria().list(){
 			filtros.each{filtro->
 				
 				if(filtro["field"].equals("expoNombre")){
+					log.debug "INGRESANDO POR EL FILTRO expoNombre"
 					sector{
 						expo{
-							ilike("nombre","%${filtro[]}%")
+							ilike("nombre","%${filtro["value"]}%")
 						}
 					}
 				}
-				if(params.sectorNombre){
+				if(filtro["field"].equals("sectorNombre")){
+					log.debug "INGRESANDO POR EL FILTRO sectorNombre"
 					sector{
-						ilike("nombre","%${params.sectorNombre}%")
+						ilike("nombre","%${filtro["value"]}%")
 					}
 				}
-				if(params.nombre){
-					ilike("nombre","%${params.loteNombre}%")
-				}
-				if(params.sort.equals("expoNombre")){
-					sector{
-						expo{
-							order("nombre",params.dir)
-						}
-					}
+				if(filtro["field"].equals("nombre")){
+					log.debug "INGRESANDO POR EL FILTRO nombre DE LOTE"
+					ilike("nombre","%${filtro["value"]}%")
 				}
 			}	
+			if(params.sort.equals("expoNombre")){
+				sector{
+					expo{
+						order("nombre",params.dir)
+					}
+				}
+			}
+
 			if(params.sort.equals("sectorNombre")){
 				sector{
 					order("nombre",params.dir)

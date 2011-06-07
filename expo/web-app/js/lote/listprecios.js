@@ -150,9 +150,9 @@ Ext.onReady(function(){
 		    {header:'Expo',dataIndex:'expoNombre',width:150,sortable:true},
 			{header:'Sector',dataIndex:'sectorNombre',width:100,sortable:true},
 		    {header:'Lote',dataIndex:'nombre',width:100,sortable:true},
-		    {header:'Precio',dataIndex:'precio',width:80
+		    {header:'Precio',dataIndex:'precio',width:80,type:'float'
 		    	,editor:{
-			    	xtype: 'numberfield',
+			    	xtype: 'numericfield',
 			    	msgTarget:'under',
 			    	allowBlank:false
 			    }
