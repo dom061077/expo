@@ -2,6 +2,8 @@ Ext.onReady(function(){
 	Ext.QuickTips.init();
 	var editor = new Ext.ux.grid.RowEditor({
 		saveText:'Guardar',
+		cancelText:'Cancelar',
+		errorText:'Errores',
 		errorSumary:false
 	});
 
@@ -41,16 +43,12 @@ Ext.onReady(function(){
 		allowBlank:false
 		,listeners:{
 			'select':function(){
-				alert('SELECCION EXPO');
 			}
 		}
 	});
 	
 	var ListaPrecioSector = Ext.data.Record.create([{
 			name: 'id',
-			type: 'integer'
-		},{
-			name: 'anio',
 			type: 'integer'
 		},{
 			name:'precio',
@@ -62,6 +60,9 @@ Ext.onReady(function(){
 			name:'sector',
 			type:'integer'
 		},{
+			name:'exponombre',
+			type:'string'
+		},{
 			name:'expo',
 			type:'integer'
 				
@@ -72,7 +73,7 @@ Ext.onReady(function(){
 			totalProperty:'total',
 			root:'rows',
 			url:'../listaPrecios/listjson',
-			fields:['id','expo','sector','lote','anio','precio'],
+			fields:['id','expo','exponombre','sector','lote','precio'],
 			listeners: {
 	            loadexception: function(proxy, store, response, e) {
 		                     var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -99,7 +100,6 @@ Ext.onReady(function(){
 				method:'POST',
 				params:{
 					'precio':records[0].data.precio,
-					'anio':records[0].data.anio,
 					'lote.id':records[0].data.lote,
 					'sector.id':records[0].data.sector,
 					'expo.id':records[0].data.expo
@@ -133,7 +133,7 @@ Ext.onReady(function(){
 							}
 						}			
 						listapreciosStore.load({
-							params:{'sectorId':sectorId,'loteId':loteId,'expoId':expoId}
+							//params:{'sectorId':sectorId,'loteId':loteId,'expoId':expoId}
 						});
 				},
 				failure:function(resp,opt){
@@ -172,7 +172,6 @@ Ext.onReady(function(){
 				'expo.id':records.data.expo,
 				'sector.id':records.data.sector,
 				'lote.id':records.data.lote,
-				'anio':records.data.anio,
 				'precio':records.data.precio
 			},
 			success:function(resp,opt){
@@ -334,10 +333,19 @@ Ext.onReady(function(){
 		],
 		columns:[
 		    {header:'id',dataIndex:'id',hidden:true},
-		    {header:'Expo',dataIndex:'expo',width:100
+		    {header:'Expo',dataIndex:'expo',width:150
 		    	,msgTarget:'under'
 			    ,editor:comboExpo,sortable:false
-			    ,renderer:function(value, p, record){return 'Hola';}},
+			    ,renderer:function(value, p, record)
+			    	{
+			    		return record.data.exponombre;
+			    	}
+			    },
+			{header:'Expo nombre'
+				,dataIndex:'exponombre'
+				,width:100
+				,hidden:true
+			},
 		    {header:'Sector',dataIndex:'sector',width:150
 			    ,editor:{
 			    	xtype: 'numberfield',
@@ -351,12 +359,6 @@ Ext.onReady(function(){
 			    	allowBlank:true
 			    },sortable:false},
 			    
-		    {header:'Año',dataIndex:'anio',width:80
-				    ,editor:{
-				    	xtype: 'numberfield',
-				    	msgTarget:'under',
-				    	allowBlank:false
-				    },sortable:false},
 		    {header:'Precio',dataIndex:'precio',width:80
 		    		,editor:{
 		    			xtype:'numberfield',

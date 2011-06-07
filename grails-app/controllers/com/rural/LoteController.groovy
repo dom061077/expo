@@ -8,6 +8,71 @@ class LoteController {
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
+	
+	def listprecios = {
+		log.info "INGRESANDO AL CLOSURE listprecios DEL CONTROLLER LoteController"
+		log.info "PARAMETROS: ${params}"
+		
+	}
+	
+	def listjsonprecios = {
+		log.info ("INGRESANDO AL METODO listjsonprecios DEL CONTROLLER LoteController")
+		log.info ("PARAMETROS: $params")
+		def filtros
+		
+		try{
+			filtros = JSON.parse(params.filter)
+		}catch(Exception e){
+		
+		}
+
+		def lotes = Lote.createCriteria().list(){
+			filtros.each{filtro->
+				
+				if(filtro["field"].equals("expoNombre")){
+					sector{
+						expo{
+							ilike("nombre","%${filtro[]}%")
+						}
+					}
+				}
+				if(params.sectorNombre){
+					sector{
+						ilike("nombre","%${params.sectorNombre}%")
+					}
+				}
+				if(params.nombre){
+					ilike("nombre","%${params.loteNombre}%")
+				}
+				if(params.sort.equals("expoNombre")){
+					sector{
+						expo{
+							order("nombre",params.dir)
+						}
+					}
+				}
+			}	
+			if(params.sort.equals("sectorNombre")){
+				sector{
+					order("nombre",params.dir)
+				}
+			}
+
+			if(params.sort.equals("loteNombre")){
+				order("nombre",params.dir)
+		}
+
+		}
+		render(contentType:"text/json"){
+			total lotes.size()
+			rows{
+				lotes.each{
+					row(id:it.id,expoNombre:it.sector.expo.nombre,sectorNombre:it.sector.nombre,nombre:it.nombre,precio:it.precio)
+				}
+			}
+		}
+		
+	}
 
 	def listjson = {
 		log.info("INGRESANDO AL METODO listjson DEL CONTROLLER LoteController")
@@ -17,6 +82,7 @@ class LoteController {
 			sector{
 				eq('id', new Long(params.sector_id))
 			}
+				
 		} 
 		render(contentType:"text/json"){
 			total lotes.size()
