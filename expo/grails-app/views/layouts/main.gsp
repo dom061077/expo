@@ -68,7 +68,7 @@
 					</g:ifAllGranted>
 					<g:ifAllGranted role="ROLE_ADMIN">
 						<!-- li class='controller'><g:link controller="notaDC">Notas Débito/Crédito</g:link> </li -->
-						<li class='controller'><g:link controller="listaPrecios" action="create">Lista de precios</g:link>
+						<li class='controller'><g:link controller="lote" action="listprecios">Lista de precios</g:link>
 						<li class='controller'><g:link controller="sector">Sectores</g:link> </li>
 						<li class='controller'><g:link controller="vendedor">Vendedores </g:link> </li>
 						<li class='controller'><g:link controller="rubro">Rubro </g:link> </li>

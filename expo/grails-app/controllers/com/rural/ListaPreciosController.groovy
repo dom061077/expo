@@ -162,7 +162,7 @@ class ListaPreciosController {
 			total totalPrecios
 			rows{
 				list.each{
-					row(id:it.id,expo:it.expo.id,sector:it.sector?.id,lote:it.lote?.id,anio:it.anio,precio:it.precio)
+					row(id:it.id,expo:it.expo?.id,exponombre:it.expo?.nombre,sector:it.sector?.id,lote:it.lote?.id,precio:it.precio)
 				}
 			}
 		}
@@ -174,22 +174,22 @@ class ListaPreciosController {
 		log.info "INGRESANDO AL CLOSURE savejson DEL CONTROLLER ListaPreciosController"
 		log.info "PARAMETROS ${params}"
 		
-		def c = Calendar.getInstance()
-		c.setTime(new Date())
-		params.anio = c.get(Calendar.YEAR).toString()
+//		def c = Calendar.getInstance()
+//		c.setTime(new Date())
+//		params.anio = c.get(Calendar.YEAR).toString()
  
 		def listaPreciosInstance= new ListaPrecios(params)
 		
-		def listExpo = Exposicion.createCriteria().list(){
-			order("id","DESC")
-		}
-		
-		def expo = listExpo[0] 
+//		def listExpo = Exposicion.createCriteria().list(){
+//			order("id","DESC")
+//		}
+//		
+//		def expo = listExpo[0] 
 		
 		//if(flagdate)
 		//	listaPreciosInstance.errors.rejectValue("vigencia","typeMismatch.java.util.Date")
 
-		listaPreciosInstance.expo = expo	
+//		listaPreciosInstance.expo = expo	
 
 		if(!listaPreciosInstance.hasErrors() && listaPreciosInstance.save()){ 
 			render(contentType:"text/json") {
