@@ -164,7 +164,8 @@ Ext.onReady(function(){
 	var form = new Ext.form.FormPanel({
 		renderTo:'listaprecios_extjs',
 		frame:true,
-		items:gridprecios
+		items:gridprecios,
+		title:'Precios de Lotes'
 	});
 	
 	

@@ -16,7 +16,8 @@ import com.rural.utils.ExpoNombreComparator
 import com.rural.utils.GUtilDomainClass
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass;
 import com.rural.utils.FilterUtils;
-import java.text.SimpleDateFormat 
+import java.text.SimpleDateFormat
+import java.sql.Date 
 
 import jxl.*
 import jxl.write.Label
@@ -398,7 +399,7 @@ class OrdenReservaController {
 				}catch(Exception e){
 					val = "0".toBigInteger()
 				}
-            } else if (java.util.Date.isAssignableFrom(mp.type)) {
+            } else if (java.sql.Date.isAssignableFrom(mp.type)) {
           		def df
 				try{
 					df=new SimpleDateFormat("dd/MM/yyyy")
@@ -435,7 +436,8 @@ class OrdenReservaController {
 		
 		/*consulto las ordenes que no tienen detalle*/
 		java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy")
-		Date fecha
+		java.util.Date fecha
+		java.sql.Date fechasql
 		def gc
 		def flagnot=false
 		
@@ -486,6 +488,8 @@ class OrdenReservaController {
 							}
 							if(filtro["field"].equals("fechaAlta")){
 								fecha = df.parse(filtro["value"])
+								fechasql = new java.sql.Date(fecha.getTime())
+								
 								log.debug "FECHA FORMATEADA: ${fecha} desde ${filtro["value"]}"
 								co."${filtro.comparison}"(filtro["field"],fecha)
 							}

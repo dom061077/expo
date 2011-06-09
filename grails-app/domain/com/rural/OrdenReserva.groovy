@@ -2,8 +2,9 @@ package com.rural
 
 
 
-import java.util.Date;
+
 import com.rural.seguridad.*
+import java.sql.Date
 
 class OrdenReserva {
 	static auditable = true
@@ -16,7 +17,9 @@ class OrdenReserva {
 	Double ivaRni=0/*es el resultado subtotal neto + ivaGral*/
 	Double ivaSujNoCateg=0 /*es mayor a cero cuando la condicion de IVA es ivaRniCheck true*/
 	Double subTotal=0
+	Double subTotalsindesc=0
 	Double total=0
+	Double totalsindesc=0
 	Integer anio
 	Boolean ivaGralCheck = false
 	Boolean ivaRniCheck = false
@@ -31,6 +34,7 @@ class OrdenReserva {
 	
 	Long numero
 	Date fechaAlta
+	Date fechaVencimiento
 	
 	Integer puntoVenta
 	
@@ -101,6 +105,8 @@ class OrdenReserva {
 		telefonoRepresentante1(blank:true,nullable:true)
 		telefonoRepresentante2(blank:true,nullable:true)
 		telefonoRepresentante3(blank:true,nullable:true)
+		/*--propiedades agregadas para aplicar los descuentos y el tarifario--*/
+		subTotalsindesc(blank:true,nullable:true)
     }
     
     

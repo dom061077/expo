@@ -1,5 +1,6 @@
 package com.rural
 import com.rural.seguridad.Person
+import com.rural.enums.TipoNotaEnum
 
 class ReciboException extends RuntimeException{
 	String message
@@ -56,5 +57,10 @@ class ReciboService {
     		throw new ReciboException("No se pudo anular el recibo. Recibo inexistente, $id",reciboInstance)
     	
     }    
+	
+	private def verificarVencimiento(def orden){
+		def notad = new NotaDC(ordenReserva:orden,tipo:TipoNotaEnum.NOTA_DEBITO)
+			
+	}
     
 }
