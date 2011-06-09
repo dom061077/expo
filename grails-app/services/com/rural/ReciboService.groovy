@@ -72,9 +72,9 @@ class ReciboService {
 				 notad.subTotal = notad.subTotal + it.notadDetalle.subTotal  
 			}
 			if(notad.save()){
-			
+				orden.addToNotas(notad)
 			}else{
-			
+				throw new ReciboException("Se produjo un error al generar una nota de débito, operación cancelada")
 			}
 		}
 	

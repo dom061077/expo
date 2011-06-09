@@ -107,8 +107,9 @@ class OrdenReserva {
 		telefonoRepresentante3(blank:true,nullable:true)
 		/*--propiedades agregadas para aplicar los descuentos y el tarifario--*/
 		subTotalsindesc(blank:true,nullable:true)
+		fechaVencimiento(blank:true,nullable:true)
     }
-    
+		   
     
     static mapping = {
     	subtotalDetalle formula:"(select sum(d.sub_total) from detalle_servicio_contratado d where d.orden_reserva_id=id)"

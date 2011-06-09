@@ -2,8 +2,8 @@ package com.rural
 // http://www.grails.org/doc/1.0.x/guide/17.%20Deployment.html
 import java.util.Locale
 
-
 class OrdenReservaException extends RuntimeException{
+	
 	String message
 	OrdenReserva ordenReserva
 	
@@ -17,7 +17,6 @@ class OrdenReservaException extends RuntimeException{
 
 class OrdenReservaService {
 	boolean transactional = true
-	
 	
 	def messageSource
 	
@@ -56,13 +55,14 @@ class OrdenReservaService {
     	ord.total=ord.subTotal+ord.ivaGral+ord.ivaSujNoCateg
     	ord.total=Math.round(ord.total*Math.pow(10,2))/Math.pow(10,2);
 		ord.empresa=empresaInstance
-		ord.fechaAlta=new java.sql.Date((new java.util.Date()).getTime())	
+		ord.fechaAlta=new java.sql.Date((new java.util.Date()).getTime())
     	if(ord.validate()){
-    		ord = ord.save(); 
+    		ord = ord.save() 
     		return ord
     		
     	}else{
-    	
+    		log.debug "ORDEN CON ERRORES "+ord.errors.allErrors
+			
     		def message=''
     		/*ord.errors.allErrors.each{
     			message+=it.toString()

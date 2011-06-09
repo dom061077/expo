@@ -10,7 +10,11 @@ import org.springframework.security.providers.UsernamePasswordAuthenticationToke
 import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUserImpl 
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken
 
+import org.apache.commons.logging.LogFactory
+
+
 class ReciboControllerTests extends GrailsUnitTestCase {
+	def log = LogFactory.getLog(getClass())
 	def ordenReservaService
 	def authenticateService
 	def reciboService
@@ -40,11 +44,13 @@ class ReciboControllerTests extends GrailsUnitTestCase {
         
         empresa = new Empresa(nombre:"empresa de prueba",usuario:usuario).save(flush:true)
         sector = new Sector(nombre:"EMPRENDIMIENTOS PRODUCTIVOS")
-        lote = new Lote(nombre:"LOTE 8")
+        lote = new Lote(nombre:"LOTE 8",precio:10.5)
         sector.addToLotes(lote)
         exposicion = new Exposicion(nombre:"Expo 2010")
+		if(!exposicion.validate())
+			fail("ERROR EN VALIDACION DE exposicion, "+exposicion.errors.allErrors)
         exposicion.addToSectores(sector)
-        exposicion.save()
+        exposicion = exposicion.save(flush:true)
         
         tipoconcepto=new TipoConcepto(nombre:"descuento").save(flush:true)              
     }
@@ -54,18 +60,22 @@ class ReciboControllerTests extends GrailsUnitTestCase {
     }
 
     void testCreateJson() {
-    	def ordenReserva = new OrdenReserva(usuario:usuario,expo:exposicion,fechaAlta:new Date()
+		
+		assertNotNull(exposicion)
+    	def ordenReserva = new OrdenReserva(usuario:usuario,expo:exposicion,fechaAlta:new java.sql.Date((new Date()).getTime())
     		,observacion:"TEXTO DE PRUEBA"
 	    	,anio:2010,porcentajeResIns:21,porcentajeResNoIns:0)
+		//log.debug "VALIDACION: ${ordenReserva.validate().toString()}" 
     	ordenReserva.addToDetalle(new DetalleServicioContratado(subTotal:1900.20,lote:lote))
     	ordenReserva.addToOtrosconceptos(new OtrosConceptos(descripcion:"DESCUENTO",tipo:tipoconcepto,subTotal:500))
     	ordenReserva.addToProductos(new ProductoExpuesto(descripcion:'Producto Expuesto'))
     	ordenReserva=ordenReservaService.generarOrdenReserva(ordenReserva,empresa)
     	assertNotNull(ordenReserva)
-    	//fail("IVA GRAL DE LA ORDEN DE RESERVA: "+ordenReserva.porcentajeResIns+" IVA EN PESOS: "+ordenReserva.ivaGral)
+		
+		assertTrue(ordenReserva.nombre.equals("empresa de prueba".toUpperCase()))
     	assertTrue(ordenReserva.detalle.size()==1)
     	assertTrue(ordenReserva.otrosconceptos.size()==1)
-    	assertTrue(ordenReserva.empresa.nombre.equals("empresa de prueba"))
+    	assertTrue(ordenReserva.empresa.nombre.equals("empresa de prueba".toUpperCase()))
     	//fail("TOTAL DE LA ORDEN: "+ordenReserva.total)
     	assertTrue(ordenReserva.total==2904.24)	
     	def reciboController = new ReciboController()
@@ -73,7 +83,7 @@ class ReciboControllerTests extends GrailsUnitTestCase {
     	reciboController.params.ordenreservaid=ordenReserva.id
     	reciboController.params.concepto=''
     	reciboController.params.efectivo=4
-    	reciboController.params.chequesjson="[{numero:'0000789',banco:'BANCO DEL TUCUMAN',importe:2000},{numero:'0123456',banco:'BANCO DE LA NACION ARGENTINA',importe:900.24}]"
+    	reciboController.params.chequesjson="[{numero:'0000789',banco:'BANCO DEL TUCUMAN',importe:2000,vencimiento:'2012-10-10'},{numero:'0123456',banco:'BANCO DE LA NACION ARGENTINA',importe:900.24,vecimiento:'2012-10-10'}]"
     	reciboController.createjson()
     	def respuesta = reciboController.response.contentAsString
     	def respuestaJson = grails.converters.JSON.parse(respuesta)
