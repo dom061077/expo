@@ -11,6 +11,7 @@ class NotaDC {
 	Double monto
 	Date fechaAlta
 	
+	Double subTotal
 	Double ivaGral=0
 	Double ivaRni=0/*es el resultado subtotal neto + ivaGral*/
 	Double ivaSujNoCateg=0 /*es mayor a cero cuando la condicion de IVA es ivaRniCheck true*/
