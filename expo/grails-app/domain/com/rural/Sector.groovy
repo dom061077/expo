@@ -7,6 +7,6 @@ class Sector {
 	static belongsTo = [expo:Exposicion]
 	static hasMany = [lotes:Lote]
     static constraints = {
-		precio(nullable:true,blank:true)
+		porcentaje(nullable:true,blank:true)
     }
 }
