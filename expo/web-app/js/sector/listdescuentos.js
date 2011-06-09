@@ -144,7 +144,7 @@ Ext.onReady(function(){
 		    {header:'id',dataIndex:'id',hidden:true},
 		    {header:'Expo',dataIndex:'expoNombre',width:150,sortable:true},
 			{header:'Sector',dataIndex:'nombre',width:100,sortable:true},
-		    {header:'Precio',dataIndex:'precio',width:80,type:'float'
+		    {header:'Descuentos',dataIndex:'precio',width:80,type:'float'
 		    	,editor:{
 			    	xtype: 'numberfield',
 			    	msgTarget:'under',
@@ -158,7 +158,8 @@ Ext.onReady(function(){
 	var form = new Ext.form.FormPanel({
 		renderTo:'listaprecios_extjs',
 		frame:true,
-		items:gridprecios
+		items:gridprecios,
+		title:'Descuentos por Sector'
 	});
 	 
 });
