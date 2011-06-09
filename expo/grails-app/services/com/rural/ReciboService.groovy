@@ -59,8 +59,25 @@ class ReciboService {
     }    
 	
 	private def verificarVencimiento(def orden){
-		def notad = new NotaDC(ordenReserva:orden,tipo:TipoNotaEnum.NOTA_DEBITO)
+		def notad
+		def notadDetalle 
+		
+		//= new NotaDC(ordenReserva:orden,tipo:TipoNotaEnum.NOTA_DEBITO)
+		if(orden.fechaVencimiento){
+			notad = new NotaDC(ordenReserva:orden,tipo:TipoNotaEnum.NOTA_DEBITO,monto:"0".toDouble()
+				,subTotal:"0".toDouble(),ivaGral:"0".toDouble(),ivaRni:"0".toDouble(),ivaSujNoCateg:"0".toDouble())
+			orden.detalle.each {
+				 notadDetalle = new NotadcDetalle(descripcion:"Quita de Descuento del ${it.sector.porcentaje} por Sector ${it.sector.nombre}",subTotal:it.subTotalsindesc-it.subTotal)
+				 notad.addToDetalle(notadDetalle)
+				 notad.subTotal = notad.subTotal + it.notadDetalle.subTotal  
+			}
+			if(notad.save()){
 			
+			}else{
+			
+			}
+		}
+	
 	}
     
 }

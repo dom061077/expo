@@ -267,7 +267,7 @@ class SectorController {
     	log.info("INGRESANDO AL METODO updatejson DEL CONTROLLER SectorController")
     	log.debug("PARAMETROS $params")
     	def sectorInstance=Sector.get(params.id)
-		params.precio = params.precio?.replace(".",",")
+		params.porcentaje = params.porcentaje?.replace(".",",")
     	sectorInstance.properties=params
     	if(!sectorInstance.hasErrors() && sectorInstance.save()){
     		render(contentType:"text/json"){

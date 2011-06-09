@@ -3,7 +3,7 @@ package com.rural
 class Sector {
 	String nombre
 	Exposicion expo
-	Double precio
+	Double porcentaje
 	static belongsTo = [expo:Exposicion]
 	static hasMany = [lotes:Lote]
     static constraints = {
