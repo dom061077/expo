@@ -5,6 +5,7 @@ package com.rural
 class DetalleServicioContratado {
 
 	Double subTotal=0
+	Double subTotalsindesc
 	Lote lote
 	Sector sector
 	OrdenReserva ordenReserva
@@ -13,5 +14,6 @@ class DetalleServicioContratado {
     static constraints = {
     	lote(blank:true,nullable:true)
     	sector(blank:true,nullable:true)
+		subTotalsindesc(blank:true,nullable:true)
     }
 }

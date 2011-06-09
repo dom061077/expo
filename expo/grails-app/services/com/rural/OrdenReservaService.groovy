@@ -56,7 +56,7 @@ class OrdenReservaService {
     	ord.total=ord.subTotal+ord.ivaGral+ord.ivaSujNoCateg
     	ord.total=Math.round(ord.total*Math.pow(10,2))/Math.pow(10,2);
 		ord.empresa=empresaInstance
-		ord.fechaAlta=new Date()	
+		ord.fechaAlta=new java.sql.Date((new java.util.Date()).getTime())	
     	if(ord.validate()){
     		ord = ord.save(); 
     		return ord

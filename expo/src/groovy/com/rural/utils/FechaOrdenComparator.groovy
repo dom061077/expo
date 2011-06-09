@@ -3,6 +3,7 @@ package com.rural.utils
 import com.rural.OrdenReserva
 import com.rural.DetalleServicioContratado
 import java.util.Comparator
+import java.sql.Date
 
 class FechaOrdenComparator implements Comparator{
 	public int compare(Object o1, Object o2){
