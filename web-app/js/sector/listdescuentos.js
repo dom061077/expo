@@ -34,7 +34,7 @@ Ext.onReady(function(){
 			totalProperty:'total',
 			root:'rows',
 			url:'../sector/listjsondescuentos',
-			fields:['id','expoNombre','nombre','precio'],
+			fields:['id','expoNombre','nombre','porcentaje'],
 			listeners: {
 	            loadexception: function(proxy, store, response, e) {
 		                     var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -62,7 +62,7 @@ Ext.onReady(function(){
 			method:'POST',
 			params:{
 				'id':records.data.id,
-				'precio':records.data.precio
+				'porcentaje':records.data.porcentaje
 			},
 			success:function(resp,opt){
 					var respuesta=Ext.decode(resp.responseText);
@@ -144,7 +144,7 @@ Ext.onReady(function(){
 		    {header:'id',dataIndex:'id',hidden:true},
 		    {header:'Expo',dataIndex:'expoNombre',width:150,sortable:true},
 			{header:'Sector',dataIndex:'nombre',width:100,sortable:true},
-		    {header:'Descuentos',dataIndex:'precio',width:80,type:'float'
+		    {header:'Descuentos',dataIndex:'porcentaje',width:80,type:'float'
 		    	,editor:{
 			    	xtype: 'numberfield',
 			    	msgTarget:'under',
