@@ -39,6 +39,7 @@ class ReciboService {
     			if ((recibo.total+totalCancelado)>ord.total)
     				throw new ReciboException('El total ('+recibo.total+') de recibo supera el total ('+ord.total+') pendiente de pago de la orden de reserva',recibo)
     			if(recibo.save()){
+					verificarVencimiento(ord)
     				return recibo
     			}else{
     				throw new ReciboException('El recibo no se pudo crear por un error de validacion',recibo)
@@ -58,26 +59,41 @@ class ReciboService {
     	
     }    
 	
-	private def verificarVencimiento(def orden){
+	private void verificarVencimiento(def orden){
 		def notad
 		def notadDetalle 
+		def today = new Date()
+		def todaysql = new java.sql.Date(today.getTime())
+		
 		
 		//= new NotaDC(ordenReserva:orden,tipo:TipoNotaEnum.NOTA_DEBITO)
+		log.info "INGRESANDO AL METODO PRIVADO verificarVencimiento"
 		if(orden.fechaVencimiento){
-			notad = new NotaDC(ordenReserva:orden,tipo:TipoNotaEnum.NOTA_DEBITO,monto:"0".toDouble()
-				,subTotal:"0".toDouble(),ivaGral:"0".toDouble(),ivaRni:"0".toDouble(),ivaSujNoCateg:"0".toDouble())
-			orden.detalle.each {
-				 notadDetalle = new NotadcDetalle(descripcion:"Quita de Descuento del ${it.sector.porcentaje} por Sector ${it.sector.nombre}",subTotal:it.subTotalsindesc-it.subTotal)
-				 notad.addToDetalle(notadDetalle)
-				 notad.subTotal = notad.subTotal + it.notadDetalle.subTotal  
-			}
-			if(notad.save()){
-				orden.addToNotas(notad)
-			}else{
-				throw new ReciboException("Se produjo un error al generar una nota de débito, operación cancelada")
+			if(orden.fechaVencimiento<todaysql){
+					notad = new NotaDC(ordenReserva:orden,tipo:TipoNotaEnum.NOTA_DEBITO,monto:"0".toDouble()
+						,subTotal:"0".toDouble(),ivaGral:"0".toDouble(),ivaRni:"0".toDouble(),ivaSujNoCateg:"0".toDouble())
+					orden.detalle.each {
+						 notadDetalle = new NotadcDetalle(descripcion:"Quita de Descuento del ${it.sector.porcentaje} por Sector ${it.sector.nombre}",subTotal:it.subTotalsindesc-it.subTotal)
+						 notad.addToDetalle(notadDetalle)
+						 notad.subTotal = notad.subTotal + it.notadDetalle.subTotal
+					}
+					notad.ivaGral =  notad.subTotal*(orden.porcentajeResIns > 0 ? orden.porcentajeResIns : orden.porcentajeResNoIns)/100
+					if(orden.ivaRniCheck)
+						notad.ivaSujNoCateg=notad.ivaRni*10.5/100
+					notad.total=notad.subTotal+notad.ivaGral+notad.ivaSujNoCateg
+					notad.total=Math.round(notad.total*Math.pow(10,2))/Math.pow(10,2)
+					if(notad.save()){
+						orden.addToNotas(notad)
+						if(orden.save())
+							log.info "SE GENERO UNA NOTA DE DEBITO de ${notad.total} PARA LA ORDEN CON ID: ${orden.id}"
+						else
+							throw new ReciboException("Se produjo un error al agregar una nota como detalle de la orden de reserva")	
+					}else{
+						throw new ReciboException("Se produjo un error al generar una nota de débito, operación cancelada")
+					}
 			}
 		}
-	
+		log.info "VERIFICACION CONCLUIDA CORRECTAMENTE"
 	}
     
 }

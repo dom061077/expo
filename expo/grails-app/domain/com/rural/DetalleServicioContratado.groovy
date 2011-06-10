@@ -5,7 +5,7 @@ package com.rural
 class DetalleServicioContratado {
 
 	Double subTotal=0
-	Double subTotalsindesc
+	Double subTotalsindesc=0
 	Lote lote
 	Sector sector
 	OrdenReserva ordenReserva

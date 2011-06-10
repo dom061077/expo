@@ -23,7 +23,9 @@ class OrdenReservaService {
 	
 
     OrdenReserva generarOrdenReserva(OrdenReserva ord,Empresa empresa) {
-		
+		log.info "INGRESANDO AL METODO generaOrdenReserva DE OrdenReservaService"
+		log.info "PARAMETROS: $ord, $empresa"
+		log.debug "CANTIDAD DETALLES SERVICIO CONTRATADO: ${ord.detalle?.size()}"
     	ord.otrosconceptos.each{
     		ord.subTotal+=it.subTotal
     	}
@@ -40,9 +42,15 @@ class OrdenReservaService {
     	//	throw new OrdenReservaException("Error al guardar el subrubro",ord)
     	
 	    ord.detalle.each{
-    			ord.subTotal=ord.subTotal+it.subTotal 
-    			//if (ord.expo!=it.lote?.sector?.expo)
-	    		//		throw new OrdenReservaException("Sector asignado no pertenece a la Exposición",ord)
+				log.debug "DETALLE SERVICIO CONTRATADO "
+				log.debug "PORCENTAJE DE DESCUENTO DEL SECTOR: "+it.sector.porcentaje
+				ord.subTotalsindesc=ord.subTotalsindesc+it.subTotalsindesc
+				if(ord.fechaVencimiento)
+					it.subTotal = it.subTotal - it.subTotal * it.sector?.porcentaje/100
+				else
+					it.subTotalsindesc = 		
+				ord.subTotal = ord.subTotal + it.subTotal
+				
     		}
     		
     	log.debug("PORCENTAJE ResIns ANTES DEL CALCULO")
@@ -58,6 +66,7 @@ class OrdenReservaService {
 		ord.fechaAlta=new java.sql.Date((new java.util.Date()).getTime())
     	if(ord.validate()){
     		ord = ord.save() 
+			log.debug "TOTAL DE ORDEN DE RESERVA: "+ord.total
     		return ord
     		
     	}else{
