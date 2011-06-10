@@ -9,6 +9,7 @@ import org.springframework.security.context.SecurityContextHolder as SCH
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken
 import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUserImpl 
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken
+import java.text.SimpleDateFormat
 
 import org.apache.commons.logging.LogFactory
 
@@ -43,8 +44,8 @@ class ReciboControllerTests extends GrailsUnitTestCase {
 		}
         
         empresa = new Empresa(nombre:"empresa de prueba",usuario:usuario).save(flush:true)
-        sector = new Sector(nombre:"EMPRENDIMIENTOS PRODUCTIVOS")
-        lote = new Lote(nombre:"LOTE 8",precio:10.5)
+        sector = new Sector(nombre:"EMPRENDIMIENTOS PRODUCTIVOS",porcentaje:15)
+        lote = new Lote(nombre:"LOTE 8",precio:4000)
         sector.addToLotes(lote)
         exposicion = new Exposicion(nombre:"Expo 2010")
 		if(!exposicion.validate())
@@ -62,11 +63,16 @@ class ReciboControllerTests extends GrailsUnitTestCase {
     void testCreateJson() {
 		
 		assertNotNull(exposicion)
+		assertNotNull(sector)
+		assertNotNull(lote)
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd")
+		
+		java.sql.Date fechavence = new java.sql.Date((df.parse("2011-12-25")).getTime()) 
     	def ordenReserva = new OrdenReserva(usuario:usuario,expo:exposicion,fechaAlta:new java.sql.Date((new Date()).getTime())
-    		,observacion:"TEXTO DE PRUEBA"
+    		,observacion:"TEXTO DE PRUEBA",fechaVencimiento:null
 	    	,anio:2010,porcentajeResIns:21,porcentajeResNoIns:0)
 		//log.debug "VALIDACION: ${ordenReserva.validate().toString()}" 
-    	ordenReserva.addToDetalle(new DetalleServicioContratado(subTotal:1900.20,lote:lote))
+    	ordenReserva.addToDetalle(new DetalleServicioContratado(subTotal:lote.precio,sector:sector,lote:lote))
     	ordenReserva.addToOtrosconceptos(new OtrosConceptos(descripcion:"DESCUENTO",tipo:tipoconcepto,subTotal:500))
     	ordenReserva.addToProductos(new ProductoExpuesto(descripcion:'Producto Expuesto'))
     	ordenReserva=ordenReservaService.generarOrdenReserva(ordenReserva,empresa)
@@ -77,16 +83,18 @@ class ReciboControllerTests extends GrailsUnitTestCase {
     	assertTrue(ordenReserva.otrosconceptos.size()==1)
     	assertTrue(ordenReserva.empresa.nombre.equals("empresa de prueba".toUpperCase()))
     	//fail("TOTAL DE LA ORDEN: "+ordenReserva.total)
-    	assertTrue(ordenReserva.total==2904.24)	
+    	assertTrue(ordenReserva.total==5445)	
     	def reciboController = new ReciboController()
     	reciboController.reciboService = reciboService
     	reciboController.params.ordenreservaid=ordenReserva.id
     	reciboController.params.concepto=''
     	reciboController.params.efectivo=4
-    	reciboController.params.chequesjson="[{numero:'0000789',banco:'BANCO DEL TUCUMAN',importe:2000,vencimiento:'2012-10-10'},{numero:'0123456',banco:'BANCO DE LA NACION ARGENTINA',importe:900.24,vecimiento:'2012-10-10'}]"
+    	reciboController.params.chequesjson="[{numero:'0000789',banco:'BANCO DEL TUCUMAN',importe:2000,vencimiento:'2012-10-26'},{numero:'0123456',banco:'BANCO DE LA NACION ARGENTINA',importe:900.24,vencimiento:'2011-12-30'}]"
     	reciboController.createjson()
     	def respuesta = reciboController.response.contentAsString
     	def respuestaJson = grails.converters.JSON.parse(respuesta)
+		def ordenPos = OrdenReserva.load(ordenReserva.id)
+		assertTrue(ordenPos.notas.size()==0)
     	assertTrue(respuestaJson.success)
     	//fail("TOTAL EN PESOS ES: "+respuestaJson.totalletras+", numero de recibo: "+respuestaJson.numero+", nombre empresa: "+respuestaJson.empresa_nombre+", importe: "+respuestaJson.total)
     }

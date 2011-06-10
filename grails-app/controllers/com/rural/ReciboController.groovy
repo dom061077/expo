@@ -168,7 +168,7 @@ class ReciboController {
 				fechaVence = df.parse(it.vencimiento.substring(0,10))
 				log.debug("Fecha convertida correctamente "+it.vencimiento.substring(0,10))
 			}catch(ParseException e){
-				log.debug("Error al convertir la fecha")
+				log.debug("Error al convertir la fecha: "+e.message)
 			} 
 			
 			log.debug("Vence convertido: "+fechaVence.toString())

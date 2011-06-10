@@ -8,7 +8,7 @@ class NotaDC {
 	Long numero
 	TipoNotaEnum tipo
 	OrdenReserva ordenReserva
-	Double monto
+	Double total
 	Date fechaAlta
 	
 	Double subTotal
