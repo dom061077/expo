@@ -6,5 +6,6 @@ class Lote {
 	Double precio
 	static belongsTo = [sector:Sector]
     static constraints = {
+		precio(blank:true,nullable:true)
     }
 }

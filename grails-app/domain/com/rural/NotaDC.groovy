@@ -20,7 +20,8 @@ class NotaDC {
 	static hasMany = [detalle:NotadcDetalle]
     static constraints = {
 		tipo(blank:true,nullable:true)
-		monto(blank:true,nullable:true)
+		total(blank:true,nullable:true)
+		numero(blank:true,nullable:true)
     }
 	def sigNumero(){
 		/*def c = OrdenReserva.createCriteria()
