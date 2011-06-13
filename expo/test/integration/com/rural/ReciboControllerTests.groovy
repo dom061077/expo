@@ -60,7 +60,7 @@ class ReciboControllerTests extends GrailsUnitTestCase {
         super.tearDown()
     }
 
-    void testCreateJson() {
+    void testCreateJsonSinDebito() {
 		
 		assertNotNull(exposicion)
 		assertNotNull(sector)
@@ -69,7 +69,7 @@ class ReciboControllerTests extends GrailsUnitTestCase {
 		
 		java.sql.Date fechavence = new java.sql.Date((df.parse("2011-12-25")).getTime()) 
     	def ordenReserva = new OrdenReserva(usuario:usuario,expo:exposicion,fechaAlta:new java.sql.Date((new Date()).getTime())
-    		,observacion:"TEXTO DE PRUEBA",fechaVencimiento:null
+    		,observacion:"TEXTO DE PRUEBA",fechaVencimiento:fechavence
 	    	,anio:2010,porcentajeResIns:21,porcentajeResNoIns:0)
 		//log.debug "VALIDACION: ${ordenReserva.validate().toString()}" 
     	ordenReserva.addToDetalle(new DetalleServicioContratado(subTotal:lote.precio,sector:sector,lote:lote))
@@ -83,7 +83,15 @@ class ReciboControllerTests extends GrailsUnitTestCase {
     	assertTrue(ordenReserva.otrosconceptos.size()==1)
     	assertTrue(ordenReserva.empresa.nombre.equals("empresa de prueba".toUpperCase()))
     	//fail("TOTAL DE LA ORDEN: "+ordenReserva.total)
-    	assertTrue(ordenReserva.total==5445)	
+		if (ordenReserva.total==4719)	
+   	       assertTrue(true)
+		else
+			fail("ERROR EN EL CALCULO DEL TOTAL DE ORDEN DE RESERVA: "+ordenReserva.total)
+		if (ordenReserva.totalsindesc==5445)	
+   	       assertTrue(true)
+		else
+			fail("ERROR EN EL CALCULO DEL TOTAL DE ORDEN DE RESERVA sin descuento: "+ordenReserva.totalsindesc)
+		  
     	def reciboController = new ReciboController()
     	reciboController.reciboService = reciboService
     	reciboController.params.ordenreservaid=ordenReserva.id
@@ -93,9 +101,62 @@ class ReciboControllerTests extends GrailsUnitTestCase {
     	reciboController.createjson()
     	def respuesta = reciboController.response.contentAsString
     	def respuestaJson = grails.converters.JSON.parse(respuesta)
-		def ordenPos = OrdenReserva.load(ordenReserva.id)
-		assertTrue(ordenPos.notas.size()==0)
+		def ordenPos = OrdenReserva.get(ordenReserva.id)
+		assertNull(ordenPos.notas)
+		assertTrue(NotaDC.count()==0)
     	assertTrue(respuestaJson.success)
     	//fail("TOTAL EN PESOS ES: "+respuestaJson.totalletras+", numero de recibo: "+respuestaJson.numero+", nombre empresa: "+respuestaJson.empresa_nombre+", importe: "+respuestaJson.total)
     }
+	
+	void testCreateJsonConDebito() {
+		
+		assertNotNull(exposicion)
+		assertNotNull(sector)
+		assertNotNull(lote)
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd")
+		
+		java.sql.Date fechavence = new java.sql.Date((df.parse("2011-06-11")).getTime())
+		def ordenReserva = new OrdenReserva(usuario:usuario,expo:exposicion,fechaAlta:new java.sql.Date((new Date()).getTime())
+			,observacion:"TEXTO DE PRUEBA",fechaVencimiento:fechavence
+			,anio:2010,porcentajeResIns:21,porcentajeResNoIns:0)
+		//log.debug "VALIDACION: ${ordenReserva.validate().toString()}"
+		ordenReserva.addToDetalle(new DetalleServicioContratado(subTotal:lote.precio,sector:sector,lote:lote))
+		ordenReserva.addToOtrosconceptos(new OtrosConceptos(descripcion:"DESCUENTO",tipo:tipoconcepto,subTotal:500))
+		ordenReserva.addToProductos(new ProductoExpuesto(descripcion:'Producto Expuesto'))
+		ordenReserva=ordenReservaService.generarOrdenReserva(ordenReserva,empresa)
+		assertNotNull(ordenReserva)
+		
+		assertTrue(ordenReserva.nombre.equals("empresa de prueba".toUpperCase()))
+		assertTrue(ordenReserva.detalle.size()==1)
+		assertTrue(ordenReserva.otrosconceptos.size()==1)
+		assertTrue(ordenReserva.empresa.nombre.equals("empresa de prueba".toUpperCase()))
+		//fail("TOTAL DE LA ORDEN: "+ordenReserva.total)
+		if (ordenReserva.total==4719)	
+   	       assertTrue(true)
+		else
+			fail("ERROR EN EL CALCULO DEL TOTAL DE ORDEN DE RESERVA: "+ordenReserva.total)
+		if (ordenReserva.totalsindesc==5445)	
+   	       assertTrue(true)
+		else
+			fail("ERROR EN EL CALCULO DEL TOTAL DE ORDEN DE RESERVA sin descuento: "+ordenReserva.totalsindesc)
+
+		def reciboController = new ReciboController()
+		reciboController.reciboService = reciboService
+		reciboController.params.ordenreservaid=ordenReserva.id
+		reciboController.params.concepto=''
+		reciboController.params.efectivo=4
+		reciboController.params.chequesjson="[{numero:'0000789',banco:'BANCO DEL TUCUMAN',importe:2000,vencimiento:'2012-10-26'},{numero:'0123456',banco:'BANCO DE LA NACION ARGENTINA',importe:900.24,vencimiento:'2011-12-30'}]"
+		reciboController.createjson()
+		assertTrue(respuestaJson.success)
+		
+		def respuesta = reciboController.response.contentAsString
+		def respuestaJson = grails.converters.JSON.parse(respuesta)
+		def ordenPos = OrdenReserva.get(ordenReserva.id)
+		
+		assertNotNull(ordenPos.notas)
+		assertTrue(NotaDC.count()>=0)
+		assertTrue(ordenPos.notas.size()==1)
+		//fail("TOTAL EN PESOS ES: "+respuestaJson.totalletras+", numero de recibo: "+respuestaJson.numero+", nombre empresa: "+respuestaJson.empresa_nombre+", importe: "+respuestaJson.total)
+	}
+
 }

@@ -28,6 +28,7 @@ class OrdenReservaService {
 		log.debug "CANTIDAD DETALLES SERVICIO CONTRATADO: ${ord.detalle?.size()}"
     	ord.otrosconceptos.each{
     		ord.subTotal+=it.subTotal
+			ord.subTotalsindesc+=it.subTotal
     	}
     	if (!empresa.validate()){
     		throw new OrdenReservaException("Ocurrio un error al tratar de salvar los datos de la empresa. "
@@ -40,28 +41,34 @@ class OrdenReservaService {
     	
     	//if(!empresaInstance.subrubro.save())
     	//	throw new OrdenReservaException("Error al guardar el subrubro",ord)
-    	
+    	log.debug "SUBTOTAL DE ORDE DE RESERVA ANTES DE ITERAR EL DETALLE: "+ord.subTotal+" Y SUBTOTALSININTERES: "+ord.subTotalsindesc
 	    ord.detalle.each{
 				log.debug "DETALLE SERVICIO CONTRATADO "
 				log.debug "PORCENTAJE DE DESCUENTO DEL SECTOR: "+it.sector.porcentaje
-				ord.subTotalsindesc=ord.subTotalsindesc+it.subTotalsindesc
-				if(ord.fechaVencimiento)
-					it.subTotal = it.subTotal - it.subTotal * it.sector?.porcentaje/100
-				else
-					it.subTotalsindesc = 		
+				log.debug "PRECIO DEL LOTE: "+it.lote.nombre+" "+it.lote.precio
+				log.debug "TIENE VENCIMIENTO"
+				it.subTotal = it.lote.precio - it.lote.precio * it.sector?.porcentaje/100
+				it.subTotalsindesc=it.lote.precio
 				ord.subTotal = ord.subTotal + it.subTotal
-				
+				ord.subTotalsindesc=ord.subTotalsindesc+it.subTotalsindesc
     		}
-    		
-    	log.debug("PORCENTAJE ResIns ANTES DEL CALCULO")
-    	log.debug("PROCENTAJE ResNoIns ANTES DEL CALCULO")
+    	log.debug "DESPUES DE ITERAR EL DETALLE EL SUBTOTAL ES:"+ord.subTotal	
     	ord.ivaGral = ord.subTotal*(ord.porcentajeResIns > 0 ? ord.porcentajeResIns : ord.porcentajeResNoIns)/100
+		log.debug "IVA GRAL: "+ord.ivaGral
     	//ord.ivaRni = ord.subTotal*ord.porcentajeResNoIns/100	
     	ord.ivaRni=ord.subTotal+ord.ivaGral
     	if(ord.ivaRniCheck)
     		ord.ivaSujNoCateg=ord.ivaRni*10.5/100
+		log.debug "TOTAL GRAL FORMADO POR subTotal: "+ord.subTotal+", ivaGral: "+ord.ivaGral+" ivaSujNoCateg: "+ord.ivaSujNoCateg
+		log.debug "TOTAL GRAL SIN DESCUENTOS FORMADO POR subTotalsindesc: "+ord.subTotalsindesc+", ivaGral: "+ord.ivaGral+" ivaSujNoCateg: "+ord.ivaSujNoCateg	
     	ord.total=ord.subTotal+ord.ivaGral+ord.ivaSujNoCateg
+		def ivaGralSindesc = ord.subTotalsindesc*21/100
+		def ivaSujNoCategSindesc= 0
+		if(ord.ivaRniCheck)
+			ivaSujNoCategSindesc = ord.ivaRni*10.5/100 
+		ord.totalsindesc = ord.subTotalsindesc+ivaGralSindesc+ivaSujNoCategSindesc
     	ord.total=Math.round(ord.total*Math.pow(10,2))/Math.pow(10,2);
+		ord.totalsindesc = Math.round(ord.totalsindesc*Math.pow(10,2))/Math.pow(10,2);
 		ord.empresa=empresaInstance
 		ord.fechaAlta=new java.sql.Date((new java.util.Date()).getTime())
     	if(ord.validate()){
