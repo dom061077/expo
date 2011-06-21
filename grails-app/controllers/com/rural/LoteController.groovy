@@ -272,4 +272,16 @@ class LoteController {
     		}
     	}
     }
+	
+	def getprecio= {
+		log.info("INGRESANDO AL METODO CLOSURE getprecio CONTROLLER LoteController")
+		log.info("PARAMETROS: $params")
+		def loteInstance = Lote.load(params.id.toLong())
+		def precioLote = (loteInstance.precio!=null?loteInstance.precio:0)
+		render(contentType:"text/json"){
+			success true
+			precio precioLote
+		}
+	}
+	
 }

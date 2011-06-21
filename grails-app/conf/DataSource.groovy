@@ -13,13 +13,13 @@ hibernate {
 environments {
 	development {
 		dataSource {
-			dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://localhost/expo"
+			dbCreate = "update"// one of 'create', 'create-drop','update'
+			url = "jdbc:mysql://localhost/expoant"
 		}
 	}
 	test {
 		dataSource {
-			dbCreate = "update"
+			dbCreate = "create-drop"
 			url = "jdbc:mysql://localhost/expo"
 		}
 	}
@@ -27,6 +27,12 @@ environments {
 		dataSource {
 			dbCreate = "update"
 			url = "jdbc:mysql://localhost/expo"
+		}
+	}
+	
+	dbdiff{
+		dataSource{
+			url = "jdbc:mysql://localhost/expoant"
 		}
 	}
 }

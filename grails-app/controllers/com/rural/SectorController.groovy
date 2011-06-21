@@ -57,7 +57,7 @@ class SectorController {
 			total sectores.size()
 			rows{
 				sectores.each{
-					row(id:it.id,expoNombre:it.expo.nombre,nombre:it.nombre,precio:it.precio)
+					row(id:it.id,expoNombre:it.expo.nombre,nombre:it.nombre,porcentaje:it.porcentaje)
 				}
 			}
 		}
@@ -265,7 +265,7 @@ class SectorController {
     
     def updatejson = {
     	log.info("INGRESANDO AL METODO updatejson DEL CONTROLLER SectorController")
-    	log.debug("PARAMETROS $params")
+    	log.info("PARAMETROS $params")
     	def sectorInstance=Sector.get(params.id)
 		params.porcentaje = params.porcentaje?.replace(".",",")
     	sectorInstance.properties=params
@@ -279,4 +279,15 @@ class SectorController {
     		}
     	}
     }
+	
+	def getdescuento = {
+		log.info("INGRESANDO AL CLOSURE getdescuento DEL CONTROLLER SectorController")
+		log.info("PARAMETROS $params") 
+		def sectorInstance = Sector.load(params.id.toLong())
+		def porc = (sectorInstance.porcentaje!=null?sectorInstance.porcentaje:0)
+		render(contentType:"text/json"){
+			success true
+			porcentaje porc
+		}
+	}
 }

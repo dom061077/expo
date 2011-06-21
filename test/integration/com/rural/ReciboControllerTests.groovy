@@ -147,10 +147,11 @@ class ReciboControllerTests extends GrailsUnitTestCase {
 		reciboController.params.efectivo=4
 		reciboController.params.chequesjson="[{numero:'0000789',banco:'BANCO DEL TUCUMAN',importe:2000,vencimiento:'2012-10-26'},{numero:'0123456',banco:'BANCO DE LA NACION ARGENTINA',importe:900.24,vencimiento:'2011-12-30'}]"
 		reciboController.createjson()
-		assertTrue(respuestaJson.success)
+		
 		
 		def respuesta = reciboController.response.contentAsString
 		def respuestaJson = grails.converters.JSON.parse(respuesta)
+		assertTrue(respuestaJson.success)
 		def ordenPos = OrdenReserva.get(ordenReserva.id)
 		
 		assertNotNull(ordenPos.notas)

@@ -9,7 +9,7 @@
         this is the default page, feel free to modify it to either redirect to a controller or display whatever
         content you may choose. Below is a list of controllers that are currently deployed in this application,
         click on each to execute its default action:</p -->
-        <div class="dialog" style="margin-left:20px;width:60%;">
+        <div class="dialog" style="margin-left:20px;height:400px;width:60%;">
 
         </div>
     </body>

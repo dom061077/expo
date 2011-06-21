@@ -5,6 +5,9 @@ package com.rural
 
 import com.rural.seguridad.*
 import java.sql.Date
+import com.rural.enums.TipoNotaEnum
+
+
 
 class OrdenReserva {
 	static auditable = true
@@ -31,6 +34,7 @@ class OrdenReserva {
 	String observacion
 	Double subtotalDetalle
 	Double subtotalOtrosConceptos
+	Double debito
 	
 	Long numero
 	Date fechaAlta
@@ -114,6 +118,7 @@ class OrdenReserva {
     static mapping = {
     	subtotalDetalle formula:"(select sum(d.sub_total) from detalle_servicio_contratado d where d.orden_reserva_id=id)"
 		subtotalOtrosConceptos formula:"(select sum(o.sub_total) from otros_conceptos o where o.orden_reserva_id=id)"
+		debito formula:"(select sum(ndc.total) from notadc ndc where ndc.orden_reserva_id=id and ndc.tipo='"+TipoNotaEnum.NOTA_DEBITO+"')"
     }
     
     def sigNumero(){
