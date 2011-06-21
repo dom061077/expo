@@ -1,6 +1,7 @@
 package com.rural
 import com.rural.seguridad.Person
 import com.rural.enums.TipoNotaEnum
+import com.rural.enums.TipoGeneracionEnum
 
 class ReciboException extends RuntimeException{
 	String message
@@ -70,27 +71,31 @@ class ReciboService {
 		log.info "INGRESANDO AL METODO PRIVADO verificarVencimiento"
 		if(orden.fechaVencimiento){
 			if(orden.fechaVencimiento<todaysql && orden.detalle.size()){
-					notad = new NotaDC(fechaAlta:todaysql, ordenReserva:orden,tipo:TipoNotaEnum.NOTA_DEBITO,monto:"0".toDouble()
+					notad = new NotaDC(fechaAlta:todaysql, ordenReserva:orden,tipoGen:TipoGeneracionEnum.TIPOGEN_AUTOMATICA,tipo:TipoNotaEnum.NOTA_DEBITO,monto:"0".toDouble()
 						,subTotal:"0".toDouble(),ivaGral:"0".toDouble(),ivaRni:"0".toDouble(),ivaSujNoCateg:"0".toDouble())
 					orden.detalle.each {
-						 notadDetalle = new NotadcDetalle(descripcion:"Quita de Descuento del ${it.sector.porcentaje} por Sector ${it.sector.nombre}",subTotal:it.subTotalsindesc-it.subTotal)
-						 notad.addToDetalle(notadDetalle)
-						 notad.subTotal = notad.subTotal + notadDetalle.subTotal
+						if(it.subTotalsindesc-it.subTotal >0){
+							 notadDetalle = new NotadcDetalle(descripcion:"Quita de Descuento del ${it.sector.porcentaje} por Sector ${it.sector.nombre}",subTotal:it.subTotalsindesc-it.subTotal)
+							 notad.addToDetalle(notadDetalle)
+							 notad.subTotal = notad.subTotal + notadDetalle.subTotal
+						}
 					}
 					notad.ivaGral =  notad.subTotal*(orden.porcentajeResIns > 0 ? orden.porcentajeResIns : orden.porcentajeResNoIns)/100
 					if(orden.ivaRniCheck)
 						notad.ivaSujNoCateg=notad.ivaRni*10.5/100
 					notad.total=notad.subTotal+notad.ivaGral+notad.ivaSujNoCateg
 					notad.total=Math.round(notad.total*Math.pow(10,2))/Math.pow(10,2)
-					if(notad.save()){
-						orden.addToNotas(notad)
-						if(orden.save())
-							log.info "SE GENERO UNA NOTA DE DEBITO de ${notad.total} PARA LA ORDEN CON ID: ${orden.id}"
-						else
-							throw new ReciboException("Se produjo un error al agregar una nota como detalle de la orden de reserva",recibo)	
-					}else{
-						log.info "ERRORES DE RECIBO: "+notad.errors.allErrors
-						throw new ReciboException("Se produjo un error al generar una nota de débito, operación cancelada",recibo)
+					if(notad.subTotal>0){
+						if(notad.save()){
+							orden.addToNotas(notad)
+							if(orden.save())
+								log.info "SE GENERO UNA NOTA DE DEBITO de ${notad.total} PARA LA ORDEN CON ID: ${orden.id}"
+							else
+								throw new ReciboException("Se produjo un error al agregar una nota como detalle de la orden de reserva",recibo)	
+						}else{
+							log.info "ERRORES DE RECIBO: "+notad.errors.allErrors
+							throw new ReciboException("Se produjo un error al generar una nota de débito, operación cancelada",recibo)
+						}
 					}
 			}
 		}

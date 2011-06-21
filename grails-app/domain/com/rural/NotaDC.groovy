@@ -1,15 +1,18 @@
 package com.rural
 
 import com.rural.enums.TipoNotaEnum
+import com.rural.enums.TipoGeneracionEnum
 
 import java.sql.Date
 
 class NotaDC {
 	Long numero
 	TipoNotaEnum tipo
+	TipoGeneracionEnum tipoGen
 	OrdenReserva ordenReserva
 	Double total
 	Date fechaAlta
+	Boolean anulada = false
 	
 	Double subTotal
 	Double ivaGral=0
