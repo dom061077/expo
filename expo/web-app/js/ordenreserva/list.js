@@ -27,7 +27,7 @@ Ext.onReady(function(){
 		remoteSort:true,
 		root: 'rows',
 		url:'listjson',
-		fields:['id','ordenId','numero','fechaAlta','subTotal','subTotalOtrosConceptos','total','totalCancelado','saldo','anio','expoNombre','nombre','razonSocial','sector','lote'],
+		fields:['id','ordenId','numero','fechaAlta','subTotal','subTotalOtrosConceptos','total','totalCancelado','debito','saldo','anio','expoNombre','nombre','razonSocial','sector','lote'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -160,6 +160,7 @@ Ext.onReady(function(){
 					{header:"$Otros Concep.",dataIndex:'subTotalOtrosConceptos',width:100,renderer:currencyRender},					
 					{header:"Total",dataIndex:'total',width:80,renderer:currencyRender,sortable:false},
 					{header:"Total Cancelado",dataIndex:'totalCancelado',width:100,renderer:currencyRender},
+					{header:"Débitos",dataIndex:'debito',width:100,renderer:currencyRender},
 					{header:"Saldo",dataIndex:'saldo',width:80,renderer:currencyRender},					
 					{header:"Exposición",dataIndex:'expoNombre',width:200,sortable:true},
 					{header:"Año",dataIndex:'anio',width:80},					
@@ -170,7 +171,7 @@ Ext.onReady(function(){
 		stripeRows: true,
 		loadMask:true,
 		height:250,
-		width:600,
+		width:800,
 		title:'Ordenes de Reserva',
         tbar:[{
         		icon: imagePath+'/pdf.gif'
@@ -399,7 +400,7 @@ Ext.onReady(function(){
 		renderTo:'ordenreserva_form',
 		id:'formSearchId',
 		title:'Ordenes de Reserva',
-		width:650,
+		width:800,
 		frame:true,
 		items:[	
 				{

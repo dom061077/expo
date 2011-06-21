@@ -269,7 +269,7 @@ Ext.onReady(function(){
                           		],
                         stripeRows: true,
                         height:250,
-                        width:440,
+                        width:600,
                         loadMask:true,
                         title:'Empresas',
                         iconCls: 'icon-grid', 
@@ -369,6 +369,9 @@ Ext.onReady(function(){
 			fields:[
 				{name: 'sector_id',type:'string'},
 				{name: 'lote_id',type:'string'},
+				{name: 'precio',type:'float'},
+				
+				{name: 'descuento',type:'float'},
 				{name: 'subTotal', type: 'float'}
 			]
 		})
@@ -391,11 +394,10 @@ Ext.onReady(function(){
 					 	if(sm.hasSelection()){
 					 		var conn = new Ext.data.Connection();
 					 		conn.request({
-					 			url:'../listaPrecios/getprecio',
+					 			url:'../lote/getprecio',
 					 			method:'POST',
 					 			params:{
-					 				expoId:Ext.getCmp('exposicionCombo').hiddenField.value,
-					 				loteId:Ext.getCmp('comboboxLoteId').hiddenField.value
+					 				id:Ext.getCmp('comboboxLoteId').hiddenField.value
 					 			},
 					 			success: function(resp,opt){
 					 				var respuesta=Ext.decode(resp.responseText);
@@ -404,7 +406,12 @@ Ext.onReady(function(){
 					 						window.location='../logout/index';
 					 					else{
 					 						if(respuesta.success){
-					 							sel.data.subTotal=respuesta.precio;
+					 							if(sel.data.descuento>0){
+					 								sel.data.precio=respuesta.precio
+					 								sel.data.subTotal=sel.data.precio-respuesta.precio*sel.data.descuento/100;
+					 							}else
+					 								sel.data.subTotal=respuesta.precio
+					 							
 					 						}
 					 					}
 					 							
@@ -448,11 +455,10 @@ Ext.onReady(function(){
 			 		//gridDetalleServicioContratado.startEditing(gridDetalleServicioContratado.getStore().getCount()-1,2);
 			 		var conn = new Ext.data.Connection();
 			 		conn.request({
-			 			url:'../listaPrecios/getprecio',
+			 			url:'../sector/getdescuento',
 			 			method:'POST',
 			 			params:{
-			 				expoId:Ext.getCmp('exposicionCombo').hiddenField.value,
-			 				sectorId:Ext.getCmp('comboboxSectorId').hiddenField.value
+			 				id:Ext.getCmp('comboboxSectorId').hiddenField.value
 			 			},
 			 			success: function(resp,opt){
 			 				var respuesta=Ext.decode(resp.responseText);
@@ -461,7 +467,7 @@ Ext.onReady(function(){
 			 						window.location='../logout/index';
 			 					else{
 			 						if(respuesta.success){
-			 							sel.data.subTotal=respuesta.precio;
+			 							sel.data.descuento=respuesta.porcentaje;
 			 						}
 			 					}
 			 							
@@ -472,6 +478,7 @@ Ext.onReady(function(){
 			 		
 			 		
 			 		sel.commit();
+			 		
 			 		//gridDetalleServicioContratado.stopEditing();
 			 	}
 			}
@@ -493,12 +500,22 @@ Ext.onReady(function(){
 				editor: comboboxLote,
 				renderer:lote_nombre
 			},{
-				header:'Importe',
-				dataIndex:'subTotal',
+				header:'Precio $',
+				dataIndex:'precio',
+				width:80
+				//editor: new Ext.form.NumberField({
+				//	allowBlank:false
+				//})
+			},{
+				header:'Descuento %',
+				dataIndex:'descuento',
 				width:80,
-				editor: new Ext.form.NumberField({
-					allowBlank:false
-				})
+				editor: new Ext.form.NumberField()
+			},{
+				header:'Sub-Total',
+				dataIndex:'subTotal',
+				width:80
+				
 			}
 		]
 		
@@ -538,6 +555,8 @@ Ext.onReady(function(){
 				 		var d = new Detalle({
 				 			sector_id:'',
 				 			lote_id:'',
+				 			precio:0,
+				 			descuento:0,
 				 			subTotal:0
 				 		});
 						gridDetalleServicioContratado.getStore().insert(
@@ -571,6 +590,7 @@ Ext.onReady(function(){
 				{header:'Importe',dataIndex:'subTotal',editor:subtotal_edit}
 			]*/
 	});
+	
         			
 	
 //------------------------------------------------------------------------------------        			
@@ -894,7 +914,7 @@ Ext.onReady(function(){
 		nextButtonText:'Siguiente',
 		cancelButtonText:'Cancelar',
 		finishButtonText:'Finalizar',
-		width:680,
+		width:750,
 		headerConfig:{
 			title:'Alta de Orden de Reserva',
 			stepText : "Paso {0} de {1}: {2}"
@@ -1382,7 +1402,18 @@ Ext.onReady(function(){
 				title:'Datos del Servicio Contratado',
 				id:'datosserviciocontratadoId',
 				monitorValid:true,
-				items:[gridDetalleServicioContratado]
+				width:600,
+				items:[gridDetalleServicioContratado
+						,{
+							xtype:'datefield',
+							fieldLabel:'Fecha vencimiento',
+							allowBlank:false,
+							msgTarget:'under',
+							width:150,
+							name:'fechaVencimiento',
+							id:'fechaVencimientoId'
+						}
+				]
 			}),
 			new Ext.ux.Wiz.Card({
 				title:'Otros Conceptos',

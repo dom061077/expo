@@ -69,7 +69,7 @@ class ReciboService {
 		//= new NotaDC(ordenReserva:orden,tipo:TipoNotaEnum.NOTA_DEBITO)
 		log.info "INGRESANDO AL METODO PRIVADO verificarVencimiento"
 		if(orden.fechaVencimiento){
-			if(orden.fechaVencimiento<todaysql){
+			if(orden.fechaVencimiento<todaysql && orden.detalle.size()){
 					notad = new NotaDC(fechaAlta:todaysql, ordenReserva:orden,tipo:TipoNotaEnum.NOTA_DEBITO,monto:"0".toDouble()
 						,subTotal:"0".toDouble(),ivaGral:"0".toDouble(),ivaRni:"0".toDouble(),ivaSujNoCateg:"0".toDouble())
 					orden.detalle.each {
