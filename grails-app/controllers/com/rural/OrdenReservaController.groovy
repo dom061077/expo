@@ -844,6 +844,7 @@ class OrdenReservaController {
 								,subTotal:it.subTotal
 								,subTotalOtrosConceptos:it.ordenReserva.subtotalOtrosConceptos
 								,debito:it.ordenReserva.debito
+								,credito:it.ordenReserva.credito
         						,sector:(it.sector==null?'':it.sector.nombre)
         						,lote: (it.lote==null?'':it.lote.nombre)
         						,nombre:it.ordenReserva.nombre
@@ -862,6 +863,7 @@ class OrdenReservaController {
 								,subTotal:0
 								,subTotalOtrosConceptos:it.subtotalOtrosConceptos
 								,debito:it.debito
+								,credito:it.credito
         						,lote:""
         						,nombre:it.nombre
 								,razonSocial:it.razonSocial

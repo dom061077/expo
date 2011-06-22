@@ -120,6 +120,8 @@ class ReciboControllerTests extends GrailsUnitTestCase {
     	def respuesta = reciboController.response.contentAsString
     	def respuestaJson = grails.converters.JSON.parse(respuesta)
 		def ordenPos = OrdenReserva.get(ordenReserva.id)
+		if(ordenPos.saldo != 1814.76)
+			fail("EL SALDO QUE ${ordenPos.saldo} ARROJA LA ORDEN DE RESERVA ES INCORRECTO")
 		assertNull(ordenPos.notas)
 		assertTrue(NotaDC.count()==0)
     	assertTrue(respuestaJson.success)
@@ -173,9 +175,15 @@ class ReciboControllerTests extends GrailsUnitTestCase {
 		def respuestaJson = grails.converters.JSON.parse(respuesta)
 		assertTrue(respuestaJson.success)
 		def ordenPos = OrdenReserva.get(ordenReserva.id)
-		
 		assertNotNull(ordenPos.notas)
-		assertTrue(NotaDC.count()>=0)
+
+		reciboController.createjson()
+		respuesta = reciboController.response.contentAsString
+		respuestaJson = grails.converters.JSON.parse(respuesta)
+		assertTrue(respuestaJson.success)
+
+		
+		assertTrue(NotaDC.count()==1)
 		assertTrue(ordenPos.notas.size()==1)
 		//fail("TOTAL EN PESOS ES: "+respuestaJson.totalletras+", numero de recibo: "+respuestaJson.numero+", nombre empresa: "+respuestaJson.empresa_nombre+", importe: "+respuestaJson.total)
 	}

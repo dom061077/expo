@@ -1,3 +1,5 @@
+//import com.lowagie.text.pdf.AcroFields.Item;
+
 package com.rural
 import com.rural.seguridad.Person
 import com.rural.enums.TipoNotaEnum
@@ -65,12 +67,16 @@ class ReciboService {
 		def notadDetalle 
 		def today = new Date()
 		def todaysql = new java.sql.Date(today.getTime())
-		
+		boolean debitoCreado = false
 		
 		//= new NotaDC(ordenReserva:orden,tipo:TipoNotaEnum.NOTA_DEBITO)
 		log.info "INGRESANDO AL METODO PRIVADO verificarVencimiento"
 		if(orden.fechaVencimiento){
-			if(orden.fechaVencimiento<todaysql && orden.detalle.size()){
+			orden.notas.each{
+				if(it.tipo==TipoNotaEnum.NOTA_DEBITO && it.tipoGen== TipoGeneracionEnum.TIPOGEN_AUTOMATICA )
+					debitoCreado=true
+			}
+			if(orden.fechaVencimiento<todaysql && orden.detalle.size() && debitoCreado==false){
 					notad = new NotaDC(fechaAlta:todaysql, ordenReserva:orden,tipoGen:TipoGeneracionEnum.TIPOGEN_AUTOMATICA,tipo:TipoNotaEnum.NOTA_DEBITO,monto:"0".toDouble()
 						,subTotal:"0".toDouble(),ivaGral:"0".toDouble(),ivaRni:"0".toDouble(),ivaSujNoCateg:"0".toDouble())
 					orden.detalle.each {

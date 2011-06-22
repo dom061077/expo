@@ -36,6 +36,7 @@ class OrdenReserva {
 	Double subtotalOtrosConceptos
 	Double debito
 	Double credito
+	//Double saldo
 	
 	Long numero
 	Date fechaAlta
@@ -119,8 +120,10 @@ class OrdenReserva {
     static mapping = {
     	subtotalDetalle formula:"(select sum(d.sub_total) from detalle_servicio_contratado d where d.orden_reserva_id=id)"
 		subtotalOtrosConceptos formula:"(select sum(o.sub_total) from otros_conceptos o where o.orden_reserva_id=id)"
-		debito formula:"(select sum(ndc.total) from notadc ndc where ndc.orden_reserva_id=id and ndc.anulada=false and ndc.tipo='"+TipoNotaEnum.NOTA_DEBITO+"')"
-		credito formula:"(select sum(ndc.total) from notadc ndc where ndc.orden_reserva_id=id and ndc.anulada=false and ndc.tipo='"+TipoNotaEnum.NOTA_CREDITO+"')"
+		debito formula:"(select sum(ndc.total) from notadc ndc where ndc.orden_reserva_id=id and ndc.anulada=0 and ndc.tipo='"+TipoNotaEnum.NOTA_DEBITO+"')"
+		credito formula:"(select sum(ndc.total) from notadc ndc where ndc.orden_reserva_id=id and ndc.anulada=0 and ndc.tipo='"+TipoNotaEnum.NOTA_CREDITO+"')"
+		recibo formula:"(select sum(r.total) from recibo r where r.orden_reserva_id=id"
+		//saldo formula:"(total - credito + debito - recibo)"
     }
     
     def sigNumero(){
