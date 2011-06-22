@@ -27,7 +27,7 @@ Ext.onReady(function(){
 		remoteSort:true,
 		root: 'rows',
 		url:'listjson',
-		fields:['id','ordenId','numero','fechaAlta','subTotal','subTotalOtrosConceptos','total','totalCancelado','debito','saldo','anio','expoNombre','nombre','razonSocial','sector','lote'],
+		fields:['id','ordenId','numero','fechaAlta','subTotal','subTotalOtrosConceptos','total','totalCancelado','debito','credito','saldo','anio','expoNombre','nombre','razonSocial','sector','lote'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -161,6 +161,7 @@ Ext.onReady(function(){
 					{header:"Total",dataIndex:'total',width:80,renderer:currencyRender,sortable:false},
 					{header:"Total Cancelado",dataIndex:'totalCancelado',width:100,renderer:currencyRender},
 					{header:"Débitos",dataIndex:'debito',width:100,renderer:currencyRender},
+					{header:"Créditos",dataIndex:'debito',width:100,renderer:currencyRender},					
 					{header:"Saldo",dataIndex:'saldo',width:80,renderer:currencyRender},					
 					{header:"Exposición",dataIndex:'expoNombre',width:200,sortable:true},
 					{header:"Año",dataIndex:'anio',width:80},					
@@ -282,7 +283,7 @@ Ext.onReady(function(){
         						buttons:Ext.MessageBox.OK
         					});
         				else 
-        					window.location='../recibo/create?ordenreservaId='+sel.data.id;	
+        					window.location='../recibo/create?ordenreservaId='+sel.data.ordenId;	
         			}else{
         				Ext.MessageBox.show({
         					title:'Advertencia',
@@ -400,7 +401,7 @@ Ext.onReady(function(){
 		renderTo:'ordenreserva_form',
 		id:'formSearchId',
 		title:'Ordenes de Reserva',
-		width:800,
+		width:850,
 		frame:true,
 		items:[	
 				{
