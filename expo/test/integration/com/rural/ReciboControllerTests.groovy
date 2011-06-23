@@ -121,7 +121,7 @@ class ReciboControllerTests extends GrailsUnitTestCase {
     	def respuestaJson = grails.converters.JSON.parse(respuesta)
 		def ordenPos = OrdenReserva.get(ordenReserva.id)
 		if(ordenPos.saldo != 1814.76)
-			fail("EL SALDO QUE ${ordenPos.saldo} ARROJA LA ORDEN DE RESERVA ES INCORRECTO")
+			fail("EL SALDO QUE ${ordenPos.saldo} ARROJA LA ORDEN DE RESERVA ES INCORRECTO, ${ordenPos.debito},${ordenPos.credito}, ${ordenPos.recibo} ")
 		assertNull(ordenPos.notas)
 		assertTrue(NotaDC.count()==0)
     	assertTrue(respuestaJson.success)
