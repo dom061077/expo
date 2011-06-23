@@ -36,7 +36,8 @@ class OrdenReserva {
 	Double subtotalOtrosConceptos
 	Double debito
 	Double credito
-	//Double saldo
+	Double saldo
+	Double recibo
 	
 	Long numero
 	Date fechaAlta
@@ -123,7 +124,7 @@ class OrdenReserva {
 		debito formula:"(select sum(ndc.total) from notadc ndc where ndc.orden_reserva_id=id and ndc.anulada=0 and ndc.tipo='"+TipoNotaEnum.NOTA_DEBITO+"')"
 		credito formula:"(select sum(ndc.total) from notadc ndc where ndc.orden_reserva_id=id and ndc.anulada=0 and ndc.tipo='"+TipoNotaEnum.NOTA_CREDITO+"')"
 		recibo formula:"(select sum(r.total) from recibo r where r.orden_reserva_id=id"
-		//saldo formula:"(total - credito + debito - recibo)"
+		saldo formula:"(total - credito + debito - recibo)"
     }
     
     def sigNumero(){
