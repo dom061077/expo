@@ -23,6 +23,9 @@
         <script type="text/javascript" src="${resource(dir:'js/ext/3.3.1/src/locale',file:'ext-lang-es.js')}"></script>
         
         <script type="text/javascript">
+	        function customCurrency(val,meta,record){
+				return Ext.util.Format.number(val,'0.000,00/i');
+			} 
 			<%
 				out << "var imagePath='"+"${resource(dir:'images')}';";
 				

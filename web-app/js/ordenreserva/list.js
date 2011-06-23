@@ -2,21 +2,7 @@ Ext.onReady(function(){
 	Ext.QuickTips.init();
 	var sort;
 	var dir;
-	var reader = new Ext.data.ArrayReader({}, [
-       {name: 'id'},
-       {name: 'ordenId', type:'numeric'},
-       {name: 'numero', type: 'numeric'},
-       {name: 'fechaAlta', type: 'date'},
-       {name: 'subTotal', type: 'float'},
-       {name: 'total', type: 'float'},
-       {name: 'totalCancelado', type:'float'},
-       {name: 'saldo',type:'float'},
-       {name: 'anio',type:'numeric'},
-       {name: 'expoNombre',type:'string'},
-       {name: 'nombre',type:'string'},
-       {name: 'sector',type:'string'},
-       {name: 'lote',type:'string'}
-    ]);
+
 
 	
 	var ordenStore = new Ext.data.JsonStore({
@@ -27,7 +13,7 @@ Ext.onReady(function(){
 		remoteSort:true,
 		root: 'rows',
 		url:'listjson',
-		fields:['id','ordenId','numero','fechaAlta','subTotal','subTotalOtrosConceptos','total','totalCancelado','debito','credito','saldo','anio','expoNombre','nombre','razonSocial','sector','lote'],
+		fields:['id','ordenId','numero','fechaAlta','subTotal','subTotalOtrosConceptos','total','debito','credito','recibo','saldo','anio','expoNombre','nombre','razonSocial','sector','lote'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -156,13 +142,16 @@ Ext.onReady(function(){
 					{header:"Razón Social",dataIndex:'razonSocial',width:200,sortable:true},
 					{header:"Sector",dataIndex:'sector',width:200,sortable:true},
 					{header:"Lote",dataIndex:'lote',width:100,hidden:false,sortable:true},
-					{header:"Sub Total",dataIndex:'subTotal',width:100,renderer:currencyRender},					
-					{header:"$Otros Concep.",dataIndex:'subTotalOtrosConceptos',width:100,renderer:currencyRender},					
-					{header:"Total",dataIndex:'total',width:80,renderer:currencyRender,sortable:false},
-					{header:"Total Cancelado",dataIndex:'totalCancelado',width:100,renderer:currencyRender},
-					{header:"Débitos",dataIndex:'debito',width:100,renderer:currencyRender},
-					{header:"Créditos",dataIndex:'debito',width:100,renderer:currencyRender},					
-					{header:"Saldo",dataIndex:'saldo',width:80,renderer:currencyRender},					
+					{header:"Sub Total",dataIndex:'subTotal',width:100,renderer:customCurrency},					
+					{header:"$Otros Concep.",dataIndex:'subTotalOtrosConceptos',width:100,renderer:customCurrency},					
+					{header:"Total",dataIndex:'total',width:80,renderer:customCurrency,sortable:false},
+					{header:"Débitos",dataIndex:'debito',width:100,renderer:customCurrency},
+					{header:"Créditos",dataIndex:'credito',width:100,renderer:customCurrency},					
+					{header:"Recibos",dataIndex:'recibo',width:100,renderer:customCurrency},					
+					{header:"Saldo",dataIndex:'saldo',width:80,renderer:function(val,meta,record){
+						var saldo = record.data.total - record.data.credito - record.data.recibo + record.data.debito
+						return Ext.util.Format.number(saldo,'0.000,00/i');
+					}},					
 					{header:"Exposición",dataIndex:'expoNombre',width:200,sortable:true},
 					{header:"Año",dataIndex:'anio',width:80},					
 					{header:"id",dataIndex:"id",hidden:true},
@@ -195,7 +184,7 @@ Ext.onReady(function(){
 					var sm = grid.getSelectionModel();
 					var sel = sm.getSelected();
 					if(sm.hasSelection()){
-						if(sel.data.totalCancelado>0)
+						if(sel.data.recibo>0)
 							Ext.MessageBox.show({
 								title:"Error",
 								msg:"No se puede Anular una Orden que tiene recibos pagados",
@@ -276,7 +265,7 @@ Ext.onReady(function(){
         			var sm = grid.getSelectionModel();
         			var sel = sm.getSelected();
         			if (sm.hasSelection()){
-        				if(sel.data.saldo==0)
+        				if((sel.data.total-sel.data.credito-sel.data.recibo+sel.data.debito)==0)
         					Ext.MessageBox.show({
         						title:'Mensaje',
         						msg:'No puede generar un recibo de una Orden de Reserva con saldo Cero',

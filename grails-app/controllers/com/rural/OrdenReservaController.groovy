@@ -826,30 +826,31 @@ class OrdenReservaController {
     	def list = consultar2(params)
     	log.debug("Objecto list devuelo por el closure consultar: "+list.size())
     	Double totalCancelado=0
-    	Double saldo=0
+    	Double saldoOrd=0
     	def flagdetalle = false
     	render(contentType:"text/json"){
     		rows{
     			list.each{
     				totalCancelado=0
-    				saldo=0
+    				
     				if(it instanceof DetalleServicioContratado){
         				it.ordenReserva.recibos.each{ 
         					if(!it.anulado)
         						totalCancelado=totalCancelado+it.total
         				}
-        				saldo=it.ordenReserva.total-totalCancelado
+        				//saldoOrd = it.ordenReserva.total - it.ordenReserva.credito - it.ordenReserva.recibo + it.ordenReserva.debito
     					row(id:it.id+1000,ordenId:it.ordenReserva.id,numero:it.ordenReserva.numero,fechaAlta:it.ordenReserva.fechaAlta,total:it.ordenReserva.total,anio:it.ordenReserva.anio
     							,expoNombre:it.ordenReserva.expo.nombre
 								,subTotal:it.subTotal
 								,subTotalOtrosConceptos:it.ordenReserva.subtotalOtrosConceptos
 								,debito:it.ordenReserva.debito
 								,credito:it.ordenReserva.credito
+								,recibo:it.ordenReserva.recibo
+								,saldo:saldoOrd
         						,sector:(it.sector==null?'':it.sector.nombre)
         						,lote: (it.lote==null?'':it.lote.nombre)
         						,nombre:it.ordenReserva.nombre
-								,razonSocial:it.ordenReserva.razonSocial
-								,totalCancelado:totalCancelado,saldo:saldo)
+								,razonSocial:it.ordenReserva.razonSocial)
         				
     				}else{
         				it.recibos.each{r-> 
@@ -857,17 +858,19 @@ class OrdenReservaController {
         						totalCancelado=totalCancelado+r.total
         					}
         				}
-        				saldo=it.total-totalCancelado
+        				//saldoOrd=it.total - it.credito - it.recibo + it.debito
     					row(id:it.id,ordenId:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre
         						,sector:""
 								,subTotal:0
 								,subTotalOtrosConceptos:it.subtotalOtrosConceptos
 								,debito:it.debito
 								,credito:it.credito
+								,recibo:it.recibo
+								,saldo:saldoOrd
         						,lote:""
         						,nombre:it.nombre
-								,razonSocial:it.razonSocial
-								,totalCancelado:totalCancelado,saldo:saldo)        				
+								,razonSocial:it.razonSocial)
+								       				
     				}
     				
 
