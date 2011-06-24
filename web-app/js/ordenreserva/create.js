@@ -509,8 +509,8 @@ Ext.onReady(function(){
 			},{
 				header:'Descuento %',
 				dataIndex:'descuento',
-				width:80,
-				editor: new Ext.form.NumberField()
+				width:80/*,
+				editor: new Ext.form.NumberField()*/
 			},{
 				header:'Sub-Total',
 				dataIndex:'subTotal',

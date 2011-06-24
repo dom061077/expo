@@ -139,7 +139,7 @@ Ext.onReady(function(){
 		columns:[
 					{header:"Id Orden",dataIndex:'ordenId',width:200,sortable:false,hidden:true},
 					{header:"Empresa",dataIndex:'nombre',width:200,sortable:true},
-					{header:"Razón Social",dataIndex:'razonSocial',width:200,sortable:true},
+					{header:"Razón Social",dataIndex:'razonSocial',width:200,sortable:false},
 					{header:"Sector",dataIndex:'sector',width:200,sortable:true},
 					{header:"Lote",dataIndex:'lote',width:100,hidden:false,sortable:true},
 					{header:"Sub Total",dataIndex:'subTotal',width:100,renderer:customCurrency},					
@@ -160,7 +160,7 @@ Ext.onReady(function(){
 			],
 		stripeRows: true,
 		loadMask:true,
-		height:250,
+		height:400,
 		width:800,
 		title:'Ordenes de Reserva',
         tbar:[{
