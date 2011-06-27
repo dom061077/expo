@@ -1,6 +1,10 @@
 package com.rural
 // http://www.grails.org/doc/1.0.x/guide/17.%20Deployment.html
 import java.util.Locale
+import java.sql.Date
+import groovy.sql.Sql
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
+
 
 class OrdenReservaException extends RuntimeException{
 	
@@ -96,6 +100,22 @@ class OrdenReservaService {
     		
     }
     
+	void actualizarSaldos(){
+		log.info "INGRESANDO AL METODO actualizarSaldos DEL Service OrdenReservaService"
+		def sql = Sql.newInstance(ConfigurationHolder.config.dataSource.url,
+			ConfigurationHolder.config.dataSource.username,
+			ConfigurationHolder.config.dataSource.password,
+			ConfigurationHolder.config.dataSource.driverClassName)
+		def today = new Date()
+		def todaysql = new java.sql.Date(today.getTime())
+
+		sql.eachRow("""SELECT * from orden_reserva where anulada = 1 and """) { o ->
+			
+					
+			
+		 }
+	}
+	
     boolean anularOrdenReserva(Long id){
     	def ordenReservaInstance = OrdenReserva.get(id)
     	if (ordenReservaInstance){
