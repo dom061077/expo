@@ -14,7 +14,8 @@ import com.rural.seguridad.Authority
 import com.rural.seguridad.Requestmap
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
-import  org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FileUtils;
+import java.text.SimpleDateFormat
 
 /*   class BootStrap {
 esto es para fixear el error:
@@ -39,12 +40,10 @@ class BootStrap {
      		switch (Environment.current){
      				
      				case Environment.DEVELOPMENT:
-					 	vencimientoOrdenes()
      					createUserIfRequired()			 
      					createAdminUserIfRequired()
      					break;
      				case Environment.PRODUCTION:
-					 	vencimientoOrdenes()
      					createAdminUserIfRequired()
      					break;
      				//case Environment.TEST:
@@ -57,11 +56,12 @@ class BootStrap {
 	 
 	 void vencimientoOrdenes(){
 		 log.info "VERIFICANDO VENCIMIENTOS DE ORDENES DE RESERVA"
-		 def today = new Date()
-		 def todaysql = new java.sql.Date(today.getTime())
+		 java.util.Date today = new java.util.Date()
+		 def sdf = new SimpleDateFormat("yyyy-MM-dd")
+		 
 		 def ordenes = OrdenReserva.createCriteria().list(){
 			 and{
-				 lt("fechaVencimiento",todaysql)
+				 lt("fechaVencimiento",java.sql.Date.valueOf(sdf.format(today)))
 				 eq("anulada",Boolean.parseBoolean("false"))
 			 }
 		 }
