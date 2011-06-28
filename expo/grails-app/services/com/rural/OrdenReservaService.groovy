@@ -127,5 +127,55 @@ class OrdenReservaService {
     		throw new OrdenReservaException("No se pudo anular la orden de reserva. Orden inexistente, $id",ordenReservaInstance)
     	
     }
+	
+	
+	void verificarVencimiento(def orden){
+		def notad
+		def notadDetalle
+		def today = new Date()
+		def todaysql = new java.sql.Date(today.getTime())
+		boolean debitoCreado = false
+		
+		//= new NotaDC(ordenReserva:orden,tipo:TipoNotaEnum.NOTA_DEBITO)
+		log.info "INGRESANDO AL CLOSURE verificarVencimiento DEL SERVICE OrdenReservaService"
+		if(orden.fechaVencimiento){
+			orden.notas.each{
+				if(it.tipo==TipoNotaEnum.NOTA_DEBITO && it.tipoGen== TipoGeneracionEnum.TIPOGEN_AUTOMATICA )
+					debitoCreado=true
+			}
+			if(orden.fechaVencimiento<todaysql && orden.detalle.size() && debitoCreado==false){
+					notad = new NotaDC(fechaAlta:todaysql, ordenReserva:orden,tipoGen:TipoGeneracionEnum.TIPOGEN_AUTOMATICA,tipo:TipoNotaEnum.NOTA_DEBITO,monto:"0".toDouble()
+						,subTotal:"0".toDouble(),ivaGral:"0".toDouble(),ivaRni:"0".toDouble(),ivaSujNoCateg:"0".toDouble())
+					orden.detalle.each {
+						if(it.subTotalsindesc-it.subTotal >0){
+							 notadDetalle = new NotadcDetalle(descripcion:"Quita de Descuento del ${it.sector.porcentaje} por Sector ${it.sector.nombre}",subTotal:it.subTotalsindesc-it.subTotal)
+							 notad.addToDetalle(notadDetalle)
+							 notad.subTotal = notad.subTotal + notadDetalle.subTotal
+						}
+					}
+					notad.ivaGral =  notad.subTotal*(orden.porcentajeResIns > 0 ? orden.porcentajeResIns : orden.porcentajeResNoIns)/100
+					if(orden.ivaRniCheck)
+						notad.ivaSujNoCateg=notad.ivaRni*10.5/100
+					notad.total=notad.subTotal+notad.ivaGral+notad.ivaSujNoCateg
+					notad.total=Math.round(notad.total*Math.pow(10,2))/Math.pow(10,2)
+					if(notad.subTotal>0){
+						if(notad.save()){
+							orden.addToNotas(notad)
+							if(orden.save())
+								log.info "SE GENERO UNA NOTA DE DEBITO de ${notad.total} PARA LA ORDEN CON ID: ${orden.id}"
+							else
+								log.info "Se produjo un error al agregar una nota como detalle de la orden de reserva"
+							
+						}else{
+							log.info "ERRORES DE NOTA DE DEBITO: "+notad.errors.allErrors
+							
+						}
+					}
+			}
+		}
+		
+	}
+	
+	
 }
 
