@@ -4,6 +4,7 @@ import java.util.Locale
 import java.sql.Date
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import java.text.SimpleDateFormat
 
 
 class OrdenReservaException extends RuntimeException{
@@ -108,9 +109,10 @@ class OrdenReservaService {
 			ConfigurationHolder.config.dataSource.driverClassName)
 		def today = new Date()
 		def todaysql = new java.sql.Date(today.getTime())
-
-		sql.eachRow("""SELECT * from orden_reserva where anulada = 1 and """) { o ->
-			
+		def formatter = new SimpleDateFormat("yyyy-MM-dd")
+		dateFormated = formatter.format(todaysql)
+		sql.eachRow("""SELECT * from orden_reserva where anulada = 1 and fecha_Vencimiento<='${dateFormated}' """) { o ->
+			log.debug ""
 					
 			
 		 }
