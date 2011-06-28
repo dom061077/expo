@@ -133,7 +133,8 @@ class OrdenReservaService {
 		def notad
 		def notadDetalle
 		def today = new Date()
-		def todaysql = new java.sql.Date(today.getTime())
+		def sdf = new SimpleDateFormat("yyyy-MM-dd")
+		//def todaysql = java.sql.Date.valueOf(sdf.format(today)) //new java.sql.Date(today.getTime())
 		boolean debitoCreado = false
 		
 		//= new NotaDC(ordenReserva:orden,tipo:TipoNotaEnum.NOTA_DEBITO)
@@ -143,8 +144,8 @@ class OrdenReservaService {
 				if(it.tipo==TipoNotaEnum.NOTA_DEBITO && it.tipoGen== TipoGeneracionEnum.TIPOGEN_AUTOMATICA )
 					debitoCreado=true
 			}
-			if(orden.fechaVencimiento<todaysql && orden.detalle.size() && debitoCreado==false){
-					notad = new NotaDC(fechaAlta:todaysql, ordenReserva:orden,tipoGen:TipoGeneracionEnum.TIPOGEN_AUTOMATICA,tipo:TipoNotaEnum.NOTA_DEBITO,monto:"0".toDouble()
+			if(orden.fechaVencimiento<java.sql.Date.valueOf(sdf.format(today)) && orden.detalle.size() && debitoCreado==false){
+					notad = new NotaDC(fechaAlta:java.sql.Date.valueOf(sdf.format(today)), ordenReserva:orden,tipoGen:TipoGeneracionEnum.TIPOGEN_AUTOMATICA,tipo:TipoNotaEnum.NOTA_DEBITO,monto:"0".toDouble()
 						,subTotal:"0".toDouble(),ivaGral:"0".toDouble(),ivaRni:"0".toDouble(),ivaSujNoCateg:"0".toDouble())
 					orden.detalle.each {
 						if(it.subTotalsindesc-it.subTotal >0){
