@@ -8,6 +8,7 @@ import com.rural.Vendedor
 import com.rural.Rubro
 import com.rural.SubRubro
 import com.rural.Iva
+import com.rural.OrdenReserva
 import com.rural.seguridad.Person
 import com.rural.seguridad.Authority
 import com.rural.seguridad.Requestmap
@@ -32,15 +33,18 @@ groovy.lang.MissingPropertyException: No such property: save
 
 class BootStrap {
 	 def authenticateService
+	 def ordenReservaService
 	
      def init = { servletContext ->
      		switch (Environment.current){
      				
      				case Environment.DEVELOPMENT:
+					 	vencimientoOrdenes()
      					createUserIfRequired()			 
      					createAdminUserIfRequired()
      					break;
      				case Environment.PRODUCTION:
+					 	vencimientoOrdenes()
      					createAdminUserIfRequired()
      					break;
      				//case Environment.TEST:
@@ -50,6 +54,22 @@ class BootStrap {
      }
      def destroy = {
      }
+	 
+	 void vencimientoOrdenes(){
+		 log.info "VERIFICANDO VENCIMIENTOS DE ORDENES DE RESERVA"
+		 def today = new Date()
+		 def todaysql = new java.sql.Date(today.getTime())
+		 def ordenes = OrdenReserva.createCriteria().list(){
+			 and{
+				 lt("fechaVencimiento",todaysql)
+				 eq("anulada",Boolean.parseBoolean("false"))
+			 }
+		 }
+		 log.info "ORDENES DE RESERVA CON VECIMIENTOS: "+ordenes.size()
+		 ordenes.each { 
+		 	ordenReservaService.verificarVencimiento(it)
+		 }
+	 }
      
      void createUserIfRequired(){
      		if (!Person.findByUsername("usuario")){
