@@ -26,6 +26,8 @@ class FilterUtils {
         return thisDomainProp
 	}
 
+
+	
 	static java.util.Date parseDateFromDatePickerParams(/*def paramProperty, def params*/def fecha) {
 		def df
 		try{
