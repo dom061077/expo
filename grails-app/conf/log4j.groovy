@@ -1,6 +1,6 @@
 'log4j:configuration'("xmlns:log4j": "http://jakarta.apache.org/log4j/", debug: "false") {
 
-  /**
+  /**http://www.kromhouts.net/blog/?p=10
    * Appender: single entry - file
    */
   appender(name: "APP_LOG", 'class': "org.apache.log4j.DailyRollingFileAppender") {
@@ -54,7 +54,7 @@
   levels.'warn' = ['org.jgroups']
   levels.'info' = ['org.apache', 'org.quartz', 'org.jboss', 'org.springframework', 'org.codehaus', 'org.mortbay'] +
           ['groovy', 'grails']
-  levels.'debug' = []
+  levels.'debug' = ['org.quartz']
 
   levels.each {level, packages ->
     packages.each {
@@ -70,7 +70,7 @@
   def app = ['grails.app']
   app.each {
     'category'(name: it, additivity: 'true') {
-      'priority'(value: 'DEBUG'); 'appender-ref'('ref': "APP_LOG"); 'appender-ref'('ref': "CONSOLE")}
+      'priority'(value: 'TRACE'); 'appender-ref'('ref': "APP_LOG"); 'appender-ref'('ref': "CONSOLE")}
   }
 
   def orm = ['org.springframework.transaction', 'org.springframework.orm', 'org.apache.openjpa', 'openjpa', 'org.h2', 'h2database']
