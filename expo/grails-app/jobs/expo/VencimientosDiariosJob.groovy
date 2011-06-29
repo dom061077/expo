@@ -8,7 +8,7 @@ import com.rural.OrdenReservaService
 class VencimientosDiariosJob {
 	def ordenReservaService
     def timeout = 24 * 60 * 60 * 1000 // execute job once in 5 seconds
-	def startDelay = 60 * 1000
+	def startDelay = 30 * 1000
 
     def execute() {
 		def orden
@@ -27,11 +27,11 @@ class VencimientosDiariosJob {
 		 log.debug "ORDENES DE RESERVA CON VECIMIENTOS: "+ordenes.size()
 		 log.debug "ORDENES: $ordenes"
 		
-		 /*ordenes.each {
+		 ordenes.each {
 			  
-		 	retorno=ordenReservaService.verificarVencimiento(it)
-			log.info "SE EJECUTO EL SERVICIO: "+retorno
-		 }*/
+		 	ordenReservaService.verificarVencimiento(it)
+			log.info "SE EJECUTO EL SERVICIO... "
+		 }
 		 log.info "TERMINO LA EJECUCION"
     }
 }

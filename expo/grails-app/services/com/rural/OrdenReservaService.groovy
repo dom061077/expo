@@ -5,6 +5,9 @@ import java.sql.Date
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import java.text.SimpleDateFormat
+import com.rural.enums.TipoNotaEnum
+import com.rural.enums.TipoGeneracionEnum
+
 
 
 class OrdenReservaException extends RuntimeException{
@@ -130,37 +133,47 @@ class OrdenReservaService {
 	
 	
 	void verificarVencimiento(def orden){
+		log.info "INGRESANDO AL CLOSURE verificarVencimiento DEL SERVICE OrdenReservaService"
+		log.info "ORDEN: $orden"
+		
 		def notad
 		def notadDetalle
-		def today = new Date()
+		def today = new java.util.Date()
 		def sdf = new SimpleDateFormat("yyyy-MM-dd")
+		log.info "OPERACION CON FECHA: "+java.sql.Date.valueOf(sdf.format(today))
 		//def todaysql = java.sql.Date.valueOf(sdf.format(today)) //new java.sql.Date(today.getTime())
 		boolean debitoCreado = false
 		
-		//= new NotaDC(ordenReserva:orden,tipo:TipoNotaEnum.NOTA_DEBITO)
-		log.info "INGRESANDO AL CLOSURE verificarVencimiento DEL SERVICE OrdenReservaService"
+		log.debug "ANTES DEL IF orden.fechaVencimiento"
 		if(orden.fechaVencimiento){
 			orden.notas.each{
 				if(it.tipo==TipoNotaEnum.NOTA_DEBITO && it.tipoGen== TipoGeneracionEnum.TIPOGEN_AUTOMATICA )
 					debitoCreado=true
 			}
+			log.debug "ANTES DEL IF QUE COMPARA LA FECHA DE VENCIMIENTO CON LA FECHA DE HOY Y EL TAMAÑO DEL DETALLE"
 			if(orden.fechaVencimiento<java.sql.Date.valueOf(sdf.format(today)) && orden.detalle.size() && debitoCreado==false){
+					log.debug "DENTRO DEL IF QUE COMPARA LA FECHA DE VENCIMIENTO CON EL DIA DE HOY"
 					notad = new NotaDC(fechaAlta:java.sql.Date.valueOf(sdf.format(today)), ordenReserva:orden,tipoGen:TipoGeneracionEnum.TIPOGEN_AUTOMATICA,tipo:TipoNotaEnum.NOTA_DEBITO,monto:"0".toDouble()
 						,subTotal:"0".toDouble(),ivaGral:"0".toDouble(),ivaRni:"0".toDouble(),ivaSujNoCateg:"0".toDouble())
 					orden.detalle.each {
+						log.debug "DENTRO DEL EACH DEL DETALLE"
 						if(it.subTotalsindesc-it.subTotal >0){
 							 notadDetalle = new NotadcDetalle(descripcion:"Quita de Descuento del ${it.sector.porcentaje} por Sector ${it.sector.nombre}",subTotal:it.subTotalsindesc-it.subTotal)
 							 notad.addToDetalle(notadDetalle)
 							 notad.subTotal = notad.subTotal + notadDetalle.subTotal
 						}
 					}
+					log.debug "ANTES DEL CALCULO DE IVA GRAL"
 					notad.ivaGral =  notad.subTotal*(orden.porcentajeResIns > 0 ? orden.porcentajeResIns : orden.porcentajeResNoIns)/100
+					log.debug "CALCULO DE IVA GRAL: "+notad.ivaGral
 					if(orden.ivaRniCheck)
 						notad.ivaSujNoCateg=notad.ivaRni*10.5/100
 					notad.total=notad.subTotal+notad.ivaGral+notad.ivaSujNoCateg
 					notad.total=Math.round(notad.total*Math.pow(10,2))/Math.pow(10,2)
 					if(notad.subTotal>0){
+						log.info "SUBTOTAL MAYOR A CERO"
 						if(notad.save()){
+							log.info "NOTA DEBITO SALVADA" 
 							orden.addToNotas(notad)
 							if(orden.save())
 								log.info "SE GENERO UNA NOTA DE DEBITO de ${notad.total} PARA LA ORDEN CON ID: ${orden.id}"
@@ -173,10 +186,17 @@ class OrdenReservaService {
 						}
 					}
 			}
+		}else{
+			log.info "FECHA DE VENCIMIENTO NO VALIDA"
 		}
 		
 	}
+
 	
+	void tirarmensaje(){
+		log.info "MENSAJE DESDE METODO"
+	}
+
 	
 }
 
