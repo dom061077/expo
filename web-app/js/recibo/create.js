@@ -249,7 +249,7 @@ Ext.onReady(function (){
 			 					}else
 			 						Ext.MessageBox.show({
 			 							title:'Error',
-			 							msg:'Ocurrió un error al tratar de genera el recibo',
+			 							msg:a.result.message,
 			 							icon:Ext.MessageBox.ERROR,
 			 							buttons:Ext.MessageBox.OK
 			 						});

@@ -13,6 +13,7 @@ import jxl.write.DateFormat
 import jxl.write.DateTime
 import jxl.write.WritableCellFormat
 import jxl.write.WritableSheet
+import com.rural.ReciboException
 
 
 
@@ -177,7 +178,18 @@ class ReciboController {
 		
 		Double efectivo = new Double((params.efectivo)) 
 		
-		def recibo = reciboService.generarRecibo(new Long(params.ordenreservaid),params.concepto,efectivo,cheques,authenticateService.userDomain())
+		def recibo 
+		
+		try{
+			recibo = reciboService.generarRecibo(new Long(params.ordenreservaid),params.concepto,efectivo,cheques,authenticateService.userDomain())
+		}catch(ReciboException e){
+			log.error "ERROR: "+g.message(code:"com.rural.Recibo.saldo.error")
+			render(contentType:"text/json"){
+				success false
+				message g.message(code:"com.rural.Recibo.saldo.error")
+			}
+			return
+		}
 		int entero = recibo.total.intValue()
 		Double totalaux = (recibo.total - entero)*100
 		int decimal = totalaux.intValue()
@@ -199,6 +211,7 @@ class ReciboController {
 		}else{
 			render(contentType:"text/json"){
 				success false
+				message "Error desconocido al crear el recibo"
 			}
 				 
 		}
