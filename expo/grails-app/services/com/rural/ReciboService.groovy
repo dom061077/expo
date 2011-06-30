@@ -23,12 +23,27 @@ class ReciboService {
 
     Recibo generarRecibo(Long ordId,String concepto,Double efectivo,cheques,Person user) {
     		def ord = OrdenReserva.get(ordId)
-    		
-    		Double totalCancelado = 0
+    		Double saldo=0
+			Double totalDebitos=0
+			Double totalCreditos=0
+			Double totalRecibos=0
+			
+			//-------obtengo total recibos---
     		ord.recibos.each{
     			if(it.anulado==false)
-    				totalCancelado = totalCancelado + it.total
+    				 totalRecibos = totalRecibos + it.total
     		}
+			
+			//--------obtengo total debitos y creditos----
+			ord.notas.each{
+				if(it.anulada==false){
+					if(it.tipo == TipoNotaEnum.NOTA_CREDITO)
+						totalCreditos = totalCreditos + it.total
+					if(it.tipo == TipoNotaEnum.NOTA_DEBITO)
+						totalDebitos = totalDebitos + it.total	
+				}
+			}
+			
     		
     		if(ord){
     			def recibo = new Recibo(fechaAlta:new Date(),ordenReserva:ord,efectivo:efectivo,concepto:concepto,total:0,usuario:user)
@@ -39,8 +54,11 @@ class ReciboService {
     			}
     			recibo.total=recibo.total+efectivo
     			recibo.total=Math.round(recibo.total*Math.pow(10,2))/Math.pow(10,2);
-    			if ((recibo.total+totalCancelado)>ord.total)
-    				throw new ReciboException('El total ('+recibo.total+') de recibo supera el total ('+ord.total+') pendiente de pago de la orden de reserva',recibo)
+				saldo = ord.total + totalDebitos - totalCreditos - totalRecibos 
+				
+				
+    			if (recibo.total>saldo)
+    				throw new ReciboException('El total ('+recibo.total+') de recibo supera el total ('+saldo+') pendiente de pago de la orden de reserva',recibo)
     			if(recibo.save()){
 					verificarVencimiento(ord,recibo)
     				return recibo

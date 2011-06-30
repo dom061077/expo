@@ -50,11 +50,11 @@ class OrdenReservaController {
     	log.info("INGRESANDO AL METODO showtorecbo DEL CONTROLADOR OrdenReservaController")
     	log.debug("PARAMETROS $params")
     	def ordenReserva = OrdenReserva.get(params.id)
-    	def saldo = ordenReserva.total
-    	ordenReserva.recibos.each{
+    	/*ordenReserva.recibos.each{
     		if(!it.anulado)
     			saldo = saldo - it.total
-    	}
+    	}*/
+		def saldo =ordenReserva.total - (ordenReserva.credito==null?0:ordenReserva.credito) - (ordenReserva.recibo==null?0:ordenReserva.recibo) + (ordenReserva.debito==null?0:ordenReserva.debito)
     	render(contentType : "text/json"){
     		success true
     		data(nombreempresa:ordenReserva.empresa.nombre,numero 	:		ordenReserva.numero,
