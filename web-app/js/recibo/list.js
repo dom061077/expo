@@ -2,6 +2,29 @@ Ext.onReady(function(){
 	Ext.QuickTips.init();
 	var sort;
 	var dir;
+	
+	var filters = new Ext.ux.grid.GridFilters({
+		encode:true,
+		local:false,
+		menuFilterText:'Filtro',
+		emptyText:'Ingrese Filtro...',
+		filters:[
+		         {	type:'string',
+		        	 dataIndex: 'nombre'
+		         },{
+		        	type:'string',
+		        	dataIndex:'razonSocial'
+		         },{
+		        	type:'numeric',
+		        	dataIndex:'numero'
+		         },{
+		        	type:'numeric',
+		        	dataIndex:'numeroordenreserva'
+		         }	 
+		]
+	});
+	
+	
 	var reciboStore = new Ext.data.JsonStore({
 		totalProperty:'total',
 		remoteSort:true,
@@ -40,6 +63,7 @@ Ext.onReady(function(){
 	
 	var grid=new Ext.grid.GridPanel({
 		store:reciboStore,
+		plugins:[filters],
 		columns:[
 			{header:"Id",dataIndex:'id',hidden:true},
 			{header:"Empresa",dataIndex:'nombre',width:250,sortable:true},
@@ -51,7 +75,7 @@ Ext.onReady(function(){
 		],
 		stripeRows:true,
 		height:450,
-		width:600,
+		width:750,
 		loadMask:true,
 		title:"Recibos",
         tbar:[{
@@ -161,14 +185,14 @@ Ext.onReady(function(){
             	}
         		
         }        	
-		]/*,
+		],
         bbar: new Ext.PagingToolbar({
-            	pageSize: 10,
+            	pageSize: 30,
             	store: reciboStore,
             	displayInfo:true,
             	displayMsg: 'Visualizando recibos {0} - {1} de {2}',
             	emptyMsg: 'No hay recibos para visualizar'
-			})*/
+			})
 		
 	});
 	
@@ -183,7 +207,7 @@ Ext.onReady(function(){
 		renderTo:'formulario_extjs',
 		id:'formSearchId',
 		title:'Recibos',
-		width:650,
+		width:800,
 		frame:true,
 		items:[
 					new Ext.form.ComboBox({
@@ -229,7 +253,7 @@ Ext.onReady(function(){
 							listeners:{
 								click:function(){
 									reciboStore.load({
-										params:{'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
+										params:{'start':0,'limit':30,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
 											,'fieldSearch':Ext.getCmp('combocriteriosId').getValue()
 											,'anulada':Ext.getCmp('soloanuladasId').getValue()}
 									});		
