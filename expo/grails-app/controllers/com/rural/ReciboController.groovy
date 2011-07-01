@@ -253,7 +253,7 @@ class ReciboController {
     	]
     	
 		
-		recibos = Recibo.createCriteria().list(){
+		/*recibos = Recibo.createCriteria().list(pagingconfig){
 			and{
 				if(params.fieldSearch=='empresa.nombre'){
 					ordenReserva{ 
@@ -283,8 +283,26 @@ class ReciboController {
 			if(params.sort=="numero"){
 				order("numero",params.dir.toLowerCase())
 			}
-		} 		
+		}*/
+		def criteria = Recibo.createCriteria()
 		
+		def criteriacount = Recibo.createCriteria()
+		
+		def closure = {
+			firstResult(params.start.toInteger())
+			maxResults(params.limit.toInteger())
+			//if(params.sidx && params.sord)
+			//	order(params.sidx,params.sord)
+
+		}
+		
+		def closurecount = {
+			criteriacount.projections{
+				rowCount()
+			}
+		}
+		totalRecibos = criteriacount.get(closurecount)
+		recibos = criteria.list(closure)
 		log.debug("Cantidad de recibos consultados: $totalRecibos")
 		int entero
 		Double totalaux

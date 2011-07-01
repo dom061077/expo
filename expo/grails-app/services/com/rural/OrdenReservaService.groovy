@@ -125,6 +125,10 @@ class OrdenReservaService {
     	def ordenReservaInstance = OrdenReserva.get(id)
     	if (ordenReservaInstance){
     		ordenReservaInstance.anulada = true
+			ordenReservaInstance.notas.each { 
+				it.anulada = true	
+			}
+			
     		ordenReservaInstance.save()
     	}else
     		throw new OrdenReservaException("No se pudo anular la orden de reserva. Orden inexistente, $id",ordenReservaInstance)
