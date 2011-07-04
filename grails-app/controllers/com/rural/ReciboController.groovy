@@ -254,37 +254,6 @@ class ReciboController {
     	]
     	
 		
-		/*recibos = Recibo.createCriteria().list(pagingconfig){
-			and{
-				if(params.fieldSearch=='empresa.nombre'){
-					ordenReserva{ 
-						empresa{
-							like('nombre','%'+params.searchCriteria+'%')
-						}
-					}
-				}
-				if(params.fieldSearch=='numero'){
-						eq('numero',new Long(params.searchCriteria))
-				}
-				eq('anulado',Boolean.parseBoolean(params.anulada))
-			}
-			ordenReserva{
-				if(params.sort=="nombre"){
-						empresa{
-							order("nombre",params.dir.toLowerCase())
-						}
-				}
-				if(params.sort=="numeroordenreserva"){
-						order("numero",params.dir.toLowerCase())
-				}
-			}
-			if(params.sort=="fechaAlta"){
-				order("fechaAlta",params.dir.toLowerCase())
-			}
-			if(params.sort=="numero"){
-				order("numero",params.dir.toLowerCase())
-			}
-		}*/
 		
 		def filtros
 		
@@ -398,7 +367,7 @@ class ReciboController {
 		log.debug("PARAMETROS: $params")
 	     response.setHeader("Content-disposition", "attachment")
 	     response.contentType = "application/vnd.ms-excel"		
-		def recibos = Recibo.createCriteria().list(){
+		/*def recibos = Recibo.createCriteria().list(){
 			and{
 				if(params.fieldSearch=='empresa.nombre'){
 					ordenReserva{ 
@@ -428,7 +397,45 @@ class ReciboController {
 			if(params.sort=="numero"){
 				order("numero",params.dir.toLowerCase())
 			}
-		} 		
+		}*/
+		def filtros
+		 
+		try{
+			 filtros = JSON.parse(params.filter)
+		}catch(Exception e){
+		 
+		}
+		def criteria = Recibo.createCriteria()
+		def closure = {
+			criteria.eq("anulado",Boolean.parseBoolean(params.soloanuladas))
+			filtros.each{filtro->
+				if(filtro["field"].equals("numero"))
+					criteria.eq("numero",filtro["value"].toLong())
+				else{
+					criteria.ordenReserva(){
+						if(filtro["field"].equals("numeroordenreserva"))
+							criteria.eq("numero",filtro["value"].toLong())
+						else
+							criteria.ilike(filtro["field"],"%${filtro["value"]}%")
+					}
+				}
+			}
+			if(params.sort && params.dir){
+				log.debug "DIRECCION DEL ORDEN: "+params.dir
+				if(params.sort.equals("nombre") || params.sort.equals("razonSocial")||
+					params.sort.equals("numeroordenreserva")){
+					criteria.ordenReserva(){
+						if(params.sort.equals("numeroordenreserva"))
+							params.sort="numero"
+						criteria.order(params.sort,params.dir.toLowerCase())
+					}
+				}else{
+					criteria.order(params.sort,params.dir.toLowerCase())
+				}
+			}
+		}
+		
+		def recibos = criteria.list(closure)
 
 		def workbook = Workbook.createWorkbook(response.outputStream)
     	 def sheet = workbook.createSheet("Request",0)
@@ -447,7 +454,7 @@ class ReciboController {
 	 	 sheet.addCell(new Label(4, fil, "Nro.Orden de Reserva"))
 	 	 fil=fil+1
 	 	 recibos.each{
-	 		 sheet.addCell(new Label(0,fil,it.ordenReserva.empresa.nombre))
+	 		 sheet.addCell(new Label(0,fil,it.ordenReserva.nombre))
 	 		 sheet.addCell(new DateTime(1,fil,it.fechaAlta,dateFormat))
 	 		 sheet.addCell(new Number(2,fil,it.numero))
 	 		 sheet.addCell(new Number(3,fil,it.total))
