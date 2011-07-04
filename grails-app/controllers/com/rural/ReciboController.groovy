@@ -14,6 +14,7 @@ import jxl.write.DateTime
 import jxl.write.WritableCellFormat
 import jxl.write.WritableSheet
 import com.rural.ReciboException
+import grails.converters.JSON;
 
 
 
@@ -284,6 +285,17 @@ class ReciboController {
 				order("numero",params.dir.toLowerCase())
 			}
 		}*/
+		
+		def filtros
+		
+		try{
+			filtros = JSON.parse(params.filter)
+		}catch(Exception e){
+			log.debug "ERROR EN PARSEO DE FILTROS: "+e.message
+		}
+
+		log.debug "Filtros: ${filtros}"
+		
 		def criteria = Recibo.createCriteria()
 		
 		def criteriacount = Recibo.createCriteria()
@@ -291,12 +303,48 @@ class ReciboController {
 		def closure = {
 			firstResult(params.start.toInteger())
 			maxResults(params.limit.toInteger())
-			//if(params.sidx && params.sord)
-			//	order(params.sidx,params.sord)
-
+			criteria.eq("anulado",Boolean.parseBoolean(params.soloanuladas))
+			filtros.each{filtro->
+				if(filtro["field"].equals("numero"))
+					criteria.eq("numero",filtro["value"].toLong())
+				else{
+					criteria.ordenReserva(){
+						if(filtro["field"].equals("numeroordenreserva"))
+							criteria.eq("numero",filtro["value"].toLong())
+						else
+							criteria.ilike(filtro["field"],"%${filtro["value"]}%")
+					}
+				}
+			}
+			if(params.sort && params.dir){
+				log.debug "DIRECCION DEL ORDEN: "+params.dir
+				if(params.sort.equals("nombre") || params.sort.equals("razonSocial")||
+					params.sort.equals("numeroordenreserva")){
+					criteria.ordenReserva(){
+						if(params.sort.equals("numeroordenreserva"))
+							params.sort="numero"
+						criteria.order(params.sort,params.dir.toLowerCase())
+					}
+				}else{
+					criteria.order(params.sort,params.dir.toLowerCase())
+				}
+			}
 		}
 		
 		def closurecount = {
+			criteriacount.eq("anulado",Boolean.parseBoolean(params.soloanuladas))
+			filtros.each{filtro->
+				if(filtro["field"].equals("numero"))
+					criteriacount.eq("numero",filtro["value"].toLong())
+				else{
+					criteriacount.ordenReserva(){
+						if(filtro["field"].equals("numeroordenreserva"))
+							criteriacount.eq("numero",filtro["value"].toLong())
+						else
+							criteriacount.ilike(filtro["field"],"%${filtro["value"]}%")
+					}
+				}
+			}
 			criteriacount.projections{
 				rowCount()
 			}
