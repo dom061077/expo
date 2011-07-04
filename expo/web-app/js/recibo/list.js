@@ -26,6 +26,7 @@ Ext.onReady(function(){
 	
 	
 	var reciboStore = new Ext.data.JsonStore({
+		autoLoad:true,
 		totalProperty:'total',
 		remoteSort:true,
 		root:'rows',
@@ -184,7 +185,12 @@ Ext.onReady(function(){
 						,'_blank')    					
             	}
         		
-        }        	
+        	},{
+        		text:'Quitar Filtros'
+				,handler: function(){
+					grid.filters.clearFilters();
+				}
+        	}
 		],
         bbar: new Ext.PagingToolbar({
             	pageSize: 30,
@@ -202,6 +208,7 @@ Ext.onReady(function(){
 		
 	});	
 	
+	
 	var formSearch = new Ext.form.FormPanel({
 		url:'search',
 		renderTo:'formulario_extjs',
@@ -210,60 +217,27 @@ Ext.onReady(function(){
 		width:800,
 		frame:true,
 		items:[
-					new Ext.form.ComboBox({
-										mode:'local',
-										valueField:'myId',
-										displayField:'displayText',
-										store: new Ext.data.SimpleStore({
-											id: 0,
-											fields:['myId','displayText'],
-											data:[['empresa.nombre','Nombre Empresa'],['numero','Por Num.Recibo']]
-										}),
-										id:'combocriteriosId',
-										name:'criterios',
-										boxMaxWidth:100,
-										allowBlank:false,
-										msgTarget:'under',
-										value:'empresa.nombre',
-										fieldLabel:'Criterios',
-										forceSelection:true
-										}),
 			{
 				xtype:'checkbox',
 				name:'soloanuladas',
 				id:'soloanuladasId',
-				fieldLabel:'Solo Recibos Anulados'
-			},{
-				layout:'column',
-				items:[
-					{	columnWidth: .42,
-						layout:'form',
-						items:{
-							xtype:'textfield',
-							name:'searchCriteria',
-							id:'searchCriteriaId',
-							width:160,
-							fieldLabel:'Empresa o Nro de Recibo'
-						}
-					},{
-						layout:'form',
-						items:{
-							xtype:'button',
-							text:'Buscar',
-							listeners:{
-								click:function(){
-									reciboStore.load({
-										params:{'start':0,'limit':30,'searchCriteria':Ext.getCmp('searchCriteriaId').getValue()
-											,'fieldSearch':Ext.getCmp('combocriteriosId').getValue()
-											,'anulada':Ext.getCmp('soloanuladasId').getValue()}
-									});		
-								}
+				fieldLabel:'Solo Recibos Anulados',
+				listeners:{
+							check: function(check,checked){
+								reciboStore.load();
 							}
 						}
-					}
-				]
 			},grid
 		]
 	});
+
+	reciboStore.on("beforeload",function(){
+			reciboStore.baseParams={
+				soloanuladas:Ext.getCmp('soloanuladasId').getValue(),
+				start:0,
+				limit:30
+			}
+	});
+	
 	
 });
