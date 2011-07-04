@@ -34,10 +34,10 @@ class OrdenReserva {
 	String observacion
 	Double subtotalDetalle
 	Double subtotalOtrosConceptos
-	Double debito
-	Double credito
+	Double debito=0
+	Double credito=0
 	//Double saldo
-	Double recibo
+	Double recibo=0
 	
 	Long numero
 	Date fechaAlta

@@ -1,7 +1,7 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
-	var sort;
-	var dir;
+	var sort='';
+	var dir='';
 	
 	var filters = new Ext.ux.grid.GridFilters({
 		encode:true,
@@ -179,10 +179,26 @@ Ext.onReady(function(){
             	,text:'Exportar'
             	,cls:'x-btn-text-icon'
             	,handler: function(){
-    				open('excel?searchCriteria='+Ext.getCmp('searchCriteriaId').getValue()+'&fieldSearch='
+            		var filters = grid.filters.getFilterData();
+            		var tmp = [];
+		            for (var i = 0; i < filters.length; i++) {
+		                f = filters[i];
+		                tmp.push(Ext.apply(
+		                    {},
+		                    {field: f.field},
+		                    f.data
+		                ));
+		            }
+		            
+		            open('excel?soloanuladas='+Ext.getCmp('soloanuladasId').getValue()
+	    					+'&filter='+Ext.util.JSON.encode(tmp)
+	    					+'&sort='+sort+'&dir='+dir
+	    					,'_blank')
+            		
+    				/*open('excel?searchCriteria='+Ext.getCmp('searchCriteriaId').getValue()+'&fieldSearch='
     					+Ext.getCmp('combocriteriosId').getValue()+'&anulada='+Ext.getCmp('soloanuladasId').getValue()
     					+'&sort='+sort+'&dir='+dir    					
-						,'_blank')    					
+						,'_blank')*/					
             	}
         		
         	},{

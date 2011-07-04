@@ -196,6 +196,18 @@ class OrdenReservaService {
 		
 	}
 
+	def generarnota(Long ordenId,NotaDC nota){
+		log.info "INGRESANDO AL PROCEDIMIENTO generarnota DEL SERVICIO OrdenReservaService"
+		log.info "PARAMETROS, orden: $ordenId, tipo: $tipo"
+		def ordenReservaInstance = OrdenReserva.get(ordenId)
+		if(!ordenReservaInstance)
+			return null
+		ordenReservaInstance.addToNotas(nota)
+		if(!ordenReservaInstance.validate() && ordenReservaInstance.save())
+			return nota.id
+		else
+			return ordenReservaInstance	
+	}
 	
 	void tirarmensaje(){
 		log.info "MENSAJE DESDE METODO"

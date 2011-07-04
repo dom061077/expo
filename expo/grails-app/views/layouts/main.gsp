@@ -67,6 +67,7 @@
 							<ul>
 								<li><g:link controller="ordenReserva" action="list">Orden de Reserva </g:link></li>
 								<li><g:link controller="recibo" action="list">Recibo </g:link></li>					
+								<li><g:link controller="notaDC" action="list">Notas </g:link></li>
 							</ul>
 						</li>
 						<g:ifAllGranted role="ROLE_ADMIN">

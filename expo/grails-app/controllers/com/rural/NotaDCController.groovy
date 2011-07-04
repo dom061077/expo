@@ -3,7 +3,8 @@
 package com.rural
 
 class NotaDCController {
-    
+	def ordenReservaService
+	    
     def index = { redirect(action:list,params:params) }
 
     // the delete, save and update actions only accept POST requests
@@ -102,12 +103,26 @@ class NotaDCController {
 	def savejson = {
 		log.info "INGRESANDO AL CLOSURE savejson DEL CONTROLLER NotaDCController"
 		log.info "PARAMETROS ${params}"
+		def retorno = ordenReservaService(params.ordenReservaId.toLong(),Enum.valueOf(TipoNotaEnum,params.tipo))
+		if(retorno instanceof OrdenReserva){
+			render(contentType:"text/json"){
+				success false
+				errors{
+					retorno.
+				}	
+			}
+		}else{
+			render(contentType:"text/json"){
+				success true
+				notaId retorno
+			}
+		}
 	}
 	
 	def showjson = {
 		log.info "INGRESANDO AL CLOSURE showjson DEL CONTROLLER NotaDCController"
 		log.info "PARAMETROS ${params}"
-
+	
 	}
 	
 	def listjson = {
