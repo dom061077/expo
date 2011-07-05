@@ -1,5 +1,3 @@
-
-
 package com.rural
 
 class NotaDCController {
@@ -105,12 +103,13 @@ class NotaDCController {
 		log.info "PARAMETROS ${params}"
 		def retorno = ordenReservaService(params.ordenReservaId.toLong(),Enum.valueOf(TipoNotaEnum,params.tipo))
 		if(retorno instanceof OrdenReserva){
-			render(contentType:"text/json"){
-				success false
-				errors{
-					retorno.
-				}	
-			}
+			
+//			response.status = 500
+//			render myGormObject.errors.allErrors.collect {
+//				message(error:it,encodeAs:'HTML')
+//			} as JSON
+			
+			
 		}else{
 			render(contentType:"text/json"){
 				success true
