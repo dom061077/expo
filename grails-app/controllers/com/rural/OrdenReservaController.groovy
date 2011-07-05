@@ -990,7 +990,8 @@ class OrdenReservaController {
 	    					if(!it.anulado)
 	    						totalCancelado=totalCancelado+it.total
 	    				}*/
-	    				saldo=it.ordenReserva.total-it.recibo-it.credito+it.debito
+	    				saldo=it.ordenReserva.total-it.ordenReserva.recibo-it.ordenReserva.credito+it.ordenReserva.debito
+						
     					sheet.addCell(new Label(0,fil,it.ordenReserva.empresa.nombre))
     					sheet.addCell(new Label(1,fil,it.sector?.nombre))    					
     					sheet.addCell(new Label(2,fil,it.lote?.nombre)) 
@@ -1029,6 +1030,7 @@ class OrdenReservaController {
     							totalCancelado=totalCancelado+r.total
     					}*/
     					saldo=it.total-it.recibo-it.credito+it.debito
+						
     					sheet.addCell(new Label(0,fil,it.nombre))
     					sheet.addCell(new Label(1,fil,""))    					
     					sheet.addCell(new Label(2,fil,""))
