@@ -269,7 +269,7 @@ class ReciboController {
 		
 		def criteriacount = Recibo.createCriteria()
 		
-		def closure = {
+		def closurerecibo = {
 			firstResult(params.start.toInteger())
 			maxResults(params.limit.toInteger())
 			criteria.eq("anulado",Boolean.parseBoolean(params.soloanuladas))
@@ -280,19 +280,31 @@ class ReciboController {
 					criteria.ordenReserva(){
 						if(filtro["field"].equals("numeroordenreserva"))
 							criteria.eq("numero",filtro["value"].toLong())
-						else
-							criteria.ilike(filtro["field"],"%${filtro["value"]}%")
+						else{
+							if(filtro["field"].equals("expo")){
+								criteria.expo(){
+									criteria.ilike("nombre","%${filtro["value"]}%")
+								}
+							}else{
+								criteria.ilike(filtro["field"],"%${filtro["value"]}%")
+							}
+						}
 					}
 				}
 			}
 			if(params.sort && params.dir){
-				log.debug "DIRECCION DEL ORDEN: "+params.dir
 				if(params.sort.equals("nombre") || params.sort.equals("razonSocial")||
-					params.sort.equals("numeroordenreserva")){
+					params.sort.equals("numeroordenreserva") || params.sort.equals("expo")){
 					criteria.ordenReserva(){
 						if(params.sort.equals("numeroordenreserva"))
 							params.sort="numero"
-						criteria.order(params.sort,params.dir.toLowerCase())
+						if(params.sort.equals("expo")){
+							criteria.expo(){
+								criteria.order("nombre",params.dir.toLowerCase())
+							}
+						}else{		
+							criteria.order(params.sort,params.dir.toLowerCase())
+						}
 					}
 				}else{
 					criteria.order(params.sort,params.dir.toLowerCase())
@@ -309,8 +321,15 @@ class ReciboController {
 					criteriacount.ordenReserva(){
 						if(filtro["field"].equals("numeroordenreserva"))
 							criteriacount.eq("numero",filtro["value"].toLong())
-						else
-							criteriacount.ilike(filtro["field"],"%${filtro["value"]}%")
+						else{
+							if(filtro["field"].equals("expo")){
+								criteriacount.expo(){
+									criteriacount.ilike("nombre","%${filtro["value"]}%")
+								}
+							}else{
+								criteriacount.ilike(filtro["field"],"%${filtro["value"]}%")
+							}
+						}
 					}
 				}
 			}
@@ -319,7 +338,7 @@ class ReciboController {
 			}
 		}
 		totalRecibos = criteriacount.get(closurecount)
-		recibos = criteria.list(closure)
+		recibos = criteria.list(closurerecibo)
 		log.debug("Cantidad de recibos consultados: $totalRecibos")
 		int entero
 		Double totalaux
@@ -337,7 +356,7 @@ class ReciboController {
 					
 					totalenletras= num2letra.convertirLetras(entero)+" CON "+decimal+"/100"
 					totalenletras = totalenletras.toUpperCase()
-					row(id:it.id,fechaAlta:it.fechaAlta,nombre:it.ordenReserva.empresa.nombre,numero:it.numero,total:it.total,numeroordenreserva:it.ordenReserva.numero,totalletras:totalenletras)
+					row(id:it.id,fechaAlta:it.fechaAlta,nombre:it.ordenReserva.empresa.nombre,numero:it.numero,total:it.total,numeroordenreserva:it.ordenReserva.numero,expo:it.ordenReserva.expo.nombre,totalletras:totalenletras)
 				}
 			}
 		}

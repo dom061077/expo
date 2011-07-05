@@ -131,44 +131,19 @@ class NotaDCController {
 			max: params.limit as Integer ?:10,
 			offset: params.start as Integer ?:0
 		]
-		def totalNotas = NotaDC.createCriteria().count(){
-			and{
-				if(params.fieldSearch.equals('empresa.nombre')){
-					ordenReserva{
-						ilike("nombre","%"+params.searchCriteria+"%")
-					}
-				}else{
-					eq("numero",new Long(params.searchCriteria))
-				}
-				eq("anulada",Boolean.parseBoolean(params.anulada))
-			}
-		}
 		
-		def notas = NotaDC.createCriteria().list(pagingconfig){
-			and{
-				if(params.fieldSearch.equals('empresa.nombre')){
-					ordenReserva{
-						ilike("nombre","%"+params.searchCriteria+"%")
-					}
-				}else{
-					eq("numero",new Long(params.searchCriteria))
-				}
-				eq("anulada",Boolean.parseBoolean(params.anulada))
-			}
-			
-			if(params.sort.equals("fechaAlta")){
-				order("fechaAlta",params.dir.toLowerCase())
-			}
-			if(params.sort.equals("numero")){
-				order("numero",params.dir.toLowerCase())
-			}
-		}
+		def notas = NotaDC.list(pagingconfig)
+		
+		
+		//fields:['id','fechaAlta','numero','nombre','total','numeroordenreserva','expo'],
+		
+		def totalNotas = notas.size()
 		
 		render(contentType:"text/json"){
 			total	totalNotas
 			rows{
 				notas.each{
-					row(id:it.id,fechaAlta:it.fechaAlta,nombre:it.ordenReserva.nombre,numero:it.numero,monto:it.monto)
+					row(id:it.id,fechaAlta:it.fechaAlta,nombre:it.ordenReserva.nombre,numero:it.numero,total:it.total,tipo:it.tipo,tipoGen:it.tipoGen.name,numeroordenreserva:it.ordenReserva.numero,expo:it.ordenReserva.expo.nombre)
 				}
 			} 
 		}
