@@ -1,5 +1,6 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
+	
 	var sort='';
 	var dir='';
 	
@@ -20,61 +21,57 @@ Ext.onReady(function(){
 		         },{
 		        	type:'numeric',
 		        	dataIndex:'numeroordenreserva'
-		         },{
-		        	type:'string',
-		        	dataIndex:'expo'
 		         }	 
 		]
 	});
 	
-	
-	var reciboStore = new Ext.data.JsonStore({
+	var notaStore = new Ext.data.JsonStore({
 		autoLoad:true,
 		totalProperty:'total',
 		remoteSort:true,
 		root:'rows',
 		url:'listjson',
-		fields:['id','fechaAlta','numero','nombre','total','numeroordenreserva','expo','totalletras'],
+		fields:['id','nombre','fechaAlta','numero','total','tipo','tipoGen','numeroordenreserva','expo','totalletras'],
 		listeners: {
-            loadexception: function(proxy, store, response, e) {
-	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
-	                    if (response.status==0)
-	                    	Ext.MessageBox.show({
-	                    		title:'Error',
-	                    		msg:'Error de comunicación con el servidor',
-	                    		icon:Ext.MessageBox.ERROR,
-	                    		buttons:Ext.MessageBox.OK
-	                    	});
-	                    else{
-		                    if (jsonObject.loginredirect == true)
-		                    		window.location='../logout/index';
-	                    }
-	                   }
-				
-			}							
-		
+			loadexception: function(proxy, store, response, e) {
+                    var jsonObject = Ext.util.JSON.decode(response.responseText);
+                    if (response.status==0)
+                    	Ext.MessageBox.show({
+                    		title:'Error',
+                    		msg:'Error de comunicación con el servidor',
+                    		icon:Ext.MessageBox.ERROR,
+                    		buttons:Ext.MessageBox.OK
+                    	});
+                    else{
+	                    if (jsonObject.loginredirect == true)
+	                    		window.location='../logout/index';
+                    }
+           }
+		}		
 	});
 	
 	function currencyRender(v,params,data){
 		return Ext.util.Format.usMoney(v);
 	}
 	
-	function reciboRender(v,params,data){
+	function notaRender(v,params,data){
 		var numero = 100000000+v;
 		return numero.toString().substring(1,9);
 		//00000011
 	}
 	
 	var grid=new Ext.grid.GridPanel({
-		store:reciboStore,
+		store:notaStore,
 		plugins:[filters],
 		columns:[
 			{header:"Id",dataIndex:'id',hidden:true},
 			{header:"Empresa",dataIndex:'nombre',width:250,sortable:true},
 			{header:"Fecha Alta",dataIndex:'fechaAlta',width:90,renderer: Ext.util.Format.dateRenderer('d/m/y'),sortable:true},
-			{header:"Nro.Recibo",dataIndex:'numero',width:100,renderer:reciboRender,sortable:true},
+			{header:"Nro.Nota",dataIndex:'numero',width:100,renderer:notaRender,sortable:true},
 			{header:"Total",dataIndex:'total',width:90,renderer:currencyRender},
-			{header:"Nro.Orden de Reserva",dataIndex:'numeroordenreserva',width:100,renderer:reciboRender,sortable:true},
+			{header:"Tipo",dataIndex:'tipo',width:250,sortable:true},			
+			{header:"Creación",dataIndex:'tipoGen',width:250,sortable:true},			
+			{header:"Nro.Orden de Reserva",dataIndex:'numeroordenreserva',width:100,renderer:notaRender,sortable:true},
 			{header:"Exposición",dataIndex:'expo',width:100,sortable:true},			
 			{header:"Total Letras",dataIndex:'totalletras',width:100,hidden:true}
 		],
@@ -82,7 +79,7 @@ Ext.onReady(function(){
 		height:450,
 		width:750,
 		loadMask:true,
-		title:"Recibos",
+		title:"Notas",
         tbar:[{
         		icon: imagePath+'/pdf.gif'
         		,cls:'x-btn-text-icon'
@@ -92,8 +89,7 @@ Ext.onReady(function(){
         				var sel = sm.getSelected();
         				if (sm.hasSelection()){
 
-							//window.location='reporte?target=_blank&_format=PDF&_name=recibo&_file=recibo&id='+a.result.id+"&totalletras="+a.result.totalletras;        					
-							open('reporte?target=_blank&_format=PDF&_name=recibo&_file=recibo&id='+sel.data.id+"&totalletras="+sel.data.totalletras
+							open('reporte?target=_blank&_format=PDF&_name=recibo&_file=nota&id='+sel.data.id+"&totalletras="+sel.data.totalletras
     						+'&sort='+sort+'&dir='+dir							
 							,'_blank')
         				}
@@ -115,14 +111,14 @@ Ext.onReady(function(){
 						else{
 							Ext.MessageBox.show({
 								title:'Mensaje',
-								msg:'Desea Anular el Recibo?',
+								msg:'Desea Anular la Nota?',
 								icon: Ext.MessageBox.QUESTION,
 								buttons:Ext.MessageBox.YESNO,
 								fn: function(btn){
 									if(btn=='yes'){
 															var conn = new Ext.data.Connection();
 															conn.request({
-																url:'anularrecibo',
+																url:'anularnota',
 																method:'POST',
 																params:{
 																	id:sel.data.id
@@ -137,7 +133,7 @@ Ext.onReady(function(){
 																			if (respuesta.success)
 																				Ext.MessageBox.show({
 																					title:'Mensaje'
-																					,msg:'El Recibo fue Anulado correctamente'
+																					,msg:'La nota fue Anulada correctamente'
 																					,icon:Ext.MessageBox.INFO
 																					,buttons:Ext.MessageBox.OK
 																					,fn:function(btn){
@@ -214,10 +210,10 @@ Ext.onReady(function(){
 		],
         bbar: new Ext.PagingToolbar({
             	pageSize: 30,
-            	store: reciboStore,
+            	store: notaStore,
             	displayInfo:true,
-            	displayMsg: 'Visualizando recibos {0} - {1} de {2}',
-            	emptyMsg: 'No hay recibos para visualizar'
+            	displayMsg: 'Visualizando notas {0} - {1} de {2}',
+            	emptyMsg: 'No hay notas para visualizar'
 			})
 		
 	});
@@ -233,7 +229,7 @@ Ext.onReady(function(){
 		url:'search',
 		renderTo:'formulario_extjs',
 		id:'formSearchId',
-		title:'Recibos',
+		title:'Notas',
 		width:800,
 		frame:true,
 		items:[
@@ -241,23 +237,22 @@ Ext.onReady(function(){
 				xtype:'checkbox',
 				name:'soloanuladas',
 				id:'soloanuladasId',
-				fieldLabel:'Solo Recibos Anulados',
+				fieldLabel:'Solo Notas Anuladas',
 				listeners:{
 							check: function(check,checked){
-								reciboStore.load();
+								notaStore.load();
 							}
 						}
 			},grid
 		]
 	});
 
-	reciboStore.on("beforeload",function(){
-			reciboStore.baseParams={
+	notaStore.on("beforeload",function(){
+			notaStore.baseParams={
 				soloanuladas:Ext.getCmp('soloanuladasId').getValue(),
 				start:0,
 				limit:30
 			}
-	});
-	
+	});	
 	
 });

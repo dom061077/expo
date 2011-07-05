@@ -6,6 +6,7 @@ import com.rural.enums.TipoGeneracionEnum
 import java.sql.Date
 
 class NotaDC {
+	Integer puntoVenta
 	Long numero
 	TipoNotaEnum tipo
 	TipoGeneracionEnum tipoGen
@@ -46,6 +47,7 @@ class NotaDC {
 	
 	def beforeInsert={
 		numero = sigNumero()
+		puntoVenta = ordenReserva.puntoVenta
 	}
 	
 }

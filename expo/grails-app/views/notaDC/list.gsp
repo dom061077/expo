@@ -5,48 +5,29 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
         <title>NotaDC List</title>
+		<link rel="stylesheet" href="${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/css',file:'GridFilters.css')}" />				
+		<link rel="stylesheet" href="${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/css',file:'RangeMenu.css')}" />		
+		<script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/menu',file:'RangeMenu.js')}'></script>		
+		<script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/menu',file:'ListMenu.js')}'></script>		
+        
+        
+		<script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters',file:'GridFilters.js')}'></script>
+		<script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/filter',file:'Filter.js')}'></script>		
+		<script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/filter',file:'BooleanFilter.js')}'></script>		
+		<script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/filter',file:'DateFilter.js')}'></script>
+		
+		<script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/filter',file:'ListFilter.js')}'></script>
+		<script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/filter',file:'NumericFilter.js')}'></script>
+		<script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/filter',file:'StringFilter.js')}'></script>
+
+		<script type="text/javascript" src='${resource(dir:'js/notadc',file:'list.js')}'></script>
+        
     </head>
     <body>
-        <div class="nav">
-            <span class="menuButton"><a class="home" href="${resource(dir:'')}">Home</a></span>
-            <span class="menuButton"><g:link class="create" action="create">New NotaDC</g:link></span>
-        </div>
-        <div class="body">
-            <h1>NotaDC List</h1>
-            <g:if test="${flash.message}">
-            <div class="message">${flash.message}</div>
-            </g:if>
-            <div class="list">
-                <table>
-                    <thead>
-                        <tr>
-                        
-                   	        <g:sortableColumn property="id" title="Id" />
-                        
-                   	        <g:sortableColumn property="numero" title="Numero" />
-                        
-                   	        <g:sortableColumn property="tipo" title="Tipo" />
-                        
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <g:each in="${notaDCInstanceList}" status="i" var="notaDCInstance">
-                        <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-                        
-                            <td><g:link action="show" id="${notaDCInstance.id}">${fieldValue(bean:notaDCInstance, field:'id')}</g:link></td>
-                        
-                            <td>${fieldValue(bean:notaDCInstance, field:'numero')}</td>
-                        
-                            <td>${fieldValue(bean:notaDCInstance, field:'tipo')}</td>
-                        
-                        </tr>
-                    </g:each>
-                    </tbody>
-                </table>
-            </div>
-            <div class="paginateButtons">
-                <g:paginate total="${notaDCInstanceTotal}" />
-            </div>
-        </div>
+    	<div class='body'>
+    		<div id="formulario_extjs">
+    			
+    		</div>
+    	</div>
     </body>
 </html>

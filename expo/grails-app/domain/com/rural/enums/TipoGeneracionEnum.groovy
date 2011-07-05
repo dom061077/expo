@@ -1,8 +1,8 @@
 package com.rural.enums
 
 public enum TipoGeneracionEnum {
-	TIPOGEN_AUTOMATICA("Nota de Débito"),
-	TIPOGEN_MANUAL("Nota de Crédito")
+	TIPOGEN_AUTOMATICA("Automatica"),
+	TIPOGEN_MANUAL("Manual")
 	
 	String name
 	
