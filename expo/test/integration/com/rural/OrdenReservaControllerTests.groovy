@@ -29,10 +29,13 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	
     protected void setUp() {
         super.setUp()
-        
-        usuario = new Person(username:"admin2",userRealName:"Administrador",passwd:"sdjflasf",email:"admin@noexiste.com.ar")
-        usuario=usuario.save()
-        
+	   usuario = Person.findByUsername("admin2")
+       if(!usuario){
+		    usuario = new Person(username:"admin2",userRealName:"Administrador",passwd:"sdjflasf",email:"admin@noexiste.com.ar")
+			if(!usuario.validate())
+				fail("ERROR DE USUARIO: "+usuario.errors.allErrors)
+		    usuario=usuario.save()
+       }
 	   def authorities = usuario.authorities.collect { new GrantedAuthorityImpl(it.authority) }
 	   def userDetails = new GrailsUserImpl(usuario.username, usuario.passwd, usuario.enabled, usuario.enabled,
 	        usuario.enabled, usuario.enabled, authorities as GrantedAuthority[], usuario)
@@ -45,10 +48,10 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 		}
         
         empresa = new Empresa(nombre:"empresa de prueba",usuario:usuario).save(flush:true)
-        sector = new Sector(nombre:"EMPRENDIMIENTOS PRODUCTIVOS")
-        lote = new Lote(nombre:"LOTE 8")
-        sector.addToLotes(lote)
-        exposicion = new Exposicion(nombre:"Expo 2010")
+        sector = new Sector(nombre:"EMPRENDIMIENTOS PRODUCTIVOS",porcentaje:15)
+        lote = new Lote(nombre:"LOTE 8",precio:4000)
+        sector.addToLotes(lote,porcentaje:15)
+        exposicion = new Exposicion(nombre:"Expo 2010",puntoVenta:new Integer(1))
         exposicion.addToSectores(sector)
         exposicion.save()
         
@@ -78,9 +81,9 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.params.empresa.nombre="empresa nueva"
 	    	ordenreservaController.params.empresa.razonSocial="empresa nueva razon social"
 	    	ordenreservaController.params.detallejson="[{lote_id:$lote.id,sector_id:$sector.id,subTotal:1900}]"
-	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"
+	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'interes',subTotal:500,id:$tipoConcepto.id}]"
 	    	ordenreservaController.params.observacion="OBSERVACION" 
-	    	ordenreservaController.params.porcentajeResIns=iva.id
+	    	ordenreservaController.params.porcentajeResIns=21
 	    	ordenreservaController.params.porcentajeResNoIns=0
 	    	ordenreservaController.params.productosjson="[{descripcion:'QUESOS Y QUESILLOS'},{descripcion:'MEMBRILLO'}]"
 			
@@ -108,7 +111,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			assertTrue(ordenreservaInstance.otrosconceptos.size()==1)
 			assertTrue(ordenreservaInstance.empresa.razonSocial.equals("EMPRESA NUEVA RAZON SOCIAL"))
 			assertTrue(ordenreservaInstance.numero==1)
-			if(ordenreservaInstance.subTotal!=1805)
+			if(ordenreservaInstance.subTotal!=4719)
 				fail("SubTotal erroneo: deberia ser 1805 pero resultó en: $ordenreservaInstance.subTotal")
 		
 	}
@@ -131,6 +134,11 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"
 	    	ordenreservaController.params.observacion="OBSERVACION "
 	    	ordenreservaController.params.porcentajeResIns=iva.id
+			ordenreservaController.params.fechaVencimiento="10/10/2009"
+			ordenreservaController.params.fechaVencimiento_year="2009"
+			ordenreservaController.params.fechaVencimiento_month="10"
+			ordenreservaController.params.fechaVencimiento_day="10"
+						
 	    	
 	    	ordenreservaController.params.porcentajeResNoIns=0
 	    	ordenreservaController.params.observacion='NINGUNA'
@@ -199,7 +207,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
     }*/
     
     void testAnularOrden(){
-    	def ordenReservaInstance = new OrdenReserva(usuario:usuario,empresa:empresa,expo:exposicion,fechaAlta:new Date(),anio:2010,observacion:"OBSERVANDO")
+    	def ordenReservaInstance = new OrdenReserva(usuario:usuario,empresa:empresa,expo:exposicion,fechaAlta:new java.sql.Date((new java.util.Date()).getTime()),anio:2010,observacion:"OBSERVANDO")
     	if (ordenReservaInstance.validate())
     		ordenReservaInstance.save(flush:true)
     	else
@@ -227,7 +235,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
    }
    
    void testConsultaAvanzada(){
-    	def ordenReservaInstance = new OrdenReserva(usuario:usuario,empresa:empresa,expo:exposicion,fechaAlta:new Date(),anio:2010,observacion:"OBSERVANDO")
+    	def ordenReservaInstance = new OrdenReserva(usuario:usuario,empresa:empresa,expo:exposicion,fechaAlta:new java.sql.Date((new java.util.Date()).getTime()),anio:2010,observacion:"OBSERVANDO")
     	if (ordenReservaInstance.validate())
     		ordenReservaInstance.save(flush:true)
     	else

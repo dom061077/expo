@@ -2,11 +2,13 @@ package com.rural
 
 import com.rural.enums.TipoNotaEnum
 import com.rural.enums.TipoGeneracionEnum
+import com.rural.seguridad.Person
 
 import java.sql.Date
 
 class NotaDC {
 	Integer puntoVenta
+	Person usuario
 	Long numero
 	TipoNotaEnum tipo
 	TipoGeneracionEnum tipoGen
@@ -26,6 +28,8 @@ class NotaDC {
 		tipo(blank:true,nullable:true)
 		total(blank:true,nullable:true)
 		numero(blank:true,nullable:true)
+		usuario(blank:true,nullable:true)
+		puntoVenta(blank:true,nullable:true)
     }
 	def sigNumero(){
 		/*def c = OrdenReserva.createCriteria()

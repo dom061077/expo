@@ -63,7 +63,7 @@ class ReciboControllerTests extends GrailsUnitTestCase {
 		lote = new Lote(nombre:"LOTE 2",precio:3500)
 		sectorSinDesc.addToLotes(lote)
 		
-        exposicion = new Exposicion(nombre:"Expo 2010")
+        exposicion = new Exposicion(nombre:"Expo 2010",puntoVenta:new Integer(1))
 		if(!exposicion.validate())
 			fail("ERROR EN VALIDACION DE exposicion, "+exposicion.errors.allErrors)
         exposicion.addToSectores(sector)
@@ -80,6 +80,7 @@ class ReciboControllerTests extends GrailsUnitTestCase {
     void testCreateJsonSinDebito() {
 		
 		assertNotNull(exposicion)
+		
 		def sector = Sector.findByNombre("EMPRENDIMIENTOS PRODUCTIVOS")
 		def lote = Lote.findByNombre("LOTE 8")
 		
@@ -101,6 +102,8 @@ class ReciboControllerTests extends GrailsUnitTestCase {
     	assertTrue(ordenReserva.otrosconceptos.size()==1)
     	assertTrue(ordenReserva.empresa.nombre.equals("empresa de prueba".toUpperCase()))
     	//fail("TOTAL DE LA ORDEN: "+ordenReserva.total)
+		
+		
 		if (ordenReserva.total==4719)	
    	       assertTrue(true)
 		else
@@ -175,8 +178,8 @@ class ReciboControllerTests extends GrailsUnitTestCase {
 		assertNull(ordenPos.notas)
 		assertTrue(NotaDC.count()==0)
 		assertFalse(respuestaJson.success)
-		if(!respuestaJson.success)
-			fail(respuestaJson.message)
+		//if(!respuestaJson.success)
+		//	fail(respuestaJson.message)
 
 	}
 	

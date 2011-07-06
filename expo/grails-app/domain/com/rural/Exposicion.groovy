@@ -9,7 +9,7 @@ class Exposicion {
 
     static constraints = {
 		image(blank:true,nullable:true,maxSize:1024*30)
-		puntoVenta(nullable:true,blank:true)
+		//puntoVenta(nullable:true,blank:true)
     }
 	
 	static belongsTo = [Empresa]
