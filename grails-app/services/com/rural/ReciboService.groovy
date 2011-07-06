@@ -60,7 +60,7 @@ class ReciboService {
     			if (recibo.total>saldo)
     				throw new ReciboException('El total ('+recibo.total+') de recibo supera el total ('+saldo+') pendiente de pago de la orden de reserva',recibo)
     			if(recibo.save()){
-					verificarVencimiento(ord,recibo)
+					verificarVencimiento(ord,recibo,user)
     				return recibo
     			}else{
     				throw new ReciboException('El recibo no se pudo crear por un error de validacion',recibo)
@@ -80,7 +80,7 @@ class ReciboService {
     	
     }    
 	
-	private void verificarVencimiento(def orden,def recibo){
+	private void verificarVencimiento(def orden,def recibo,def user){
 		def notad
 		def notadDetalle 
 		def today = new Date()
@@ -96,7 +96,7 @@ class ReciboService {
 			}
 			if(orden.fechaVencimiento<todaysql && orden.detalle.size() && debitoCreado==false){
 					notad = new NotaDC(fechaAlta:todaysql, ordenReserva:orden,tipoGen:TipoGeneracionEnum.TIPOGEN_AUTOMATICA,tipo:TipoNotaEnum.NOTA_DEBITO,monto:"0".toDouble()
-						,subTotal:"0".toDouble(),ivaGral:"0".toDouble(),ivaRni:"0".toDouble(),ivaSujNoCateg:"0".toDouble())
+						,usuario:user,subTotal:"0".toDouble(),ivaGral:"0".toDouble(),ivaRni:"0".toDouble(),ivaSujNoCateg:"0".toDouble())
 					orden.detalle.each {
 						if(it.subTotalsindesc-it.subTotal >0){
 							 notadDetalle = new NotadcDetalle(descripcion:"Quita de Descuento del ${it.sector.porcentaje} por Sector ${it.sector.nombre}",subTotal:it.subTotalsindesc-it.subTotal)
