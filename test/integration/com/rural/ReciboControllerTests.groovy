@@ -25,6 +25,7 @@ class ReciboControllerTests extends GrailsUnitTestCase {
 	def exposicion = null
 	def sector = null
 	def sectorSinDesc = null
+	def iva = null
 	def lote = null
 	boolean transactional = true	
 	
@@ -59,7 +60,7 @@ class ReciboControllerTests extends GrailsUnitTestCase {
 		
         lote = new Lote(nombre:"LOTE 8",precio:4000)
         sector.addToLotes(lote)
-		
+		iva = new Iva(descripcion:"21 %",porcentaje:21).save(flush:true)
 		lote = new Lote(nombre:"LOTE 2",precio:3500)
 		sectorSinDesc.addToLotes(lote)
 		

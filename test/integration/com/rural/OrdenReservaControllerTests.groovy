@@ -50,7 +50,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
         empresa = new Empresa(nombre:"empresa de prueba",usuario:usuario).save(flush:true)
         sector = new Sector(nombre:"EMPRENDIMIENTOS PRODUCTIVOS",porcentaje:15)
         lote = new Lote(nombre:"LOTE 8",precio:4000)
-        sector.addToLotes(lote,porcentaje:15)
+        sector.addToLotes(lote)
         exposicion = new Exposicion(nombre:"Expo 2010",puntoVenta:new Integer(1))
         exposicion.addToSectores(sector)
         exposicion.save()
@@ -83,7 +83,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.params.detallejson="[{lote_id:$lote.id,sector_id:$sector.id,subTotal:1900}]"
 	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'interes',subTotal:500,id:$tipoConcepto.id}]"
 	    	ordenreservaController.params.observacion="OBSERVACION" 
-	    	ordenreservaController.params.porcentajeResIns=21
+	    	ordenreservaController.params.porcentajeResIns=iva.id
 	    	ordenreservaController.params.porcentajeResNoIns=0
 	    	ordenreservaController.params.productosjson="[{descripcion:'QUESOS Y QUESILLOS'},{descripcion:'MEMBRILLO'}]"
 			
@@ -111,7 +111,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			assertTrue(ordenreservaInstance.otrosconceptos.size()==1)
 			assertTrue(ordenreservaInstance.empresa.razonSocial.equals("EMPRESA NUEVA RAZON SOCIAL"))
 			assertTrue(ordenreservaInstance.numero==1)
-			if(ordenreservaInstance.subTotal!=4719)
+			if(ordenreservaInstance.total!=4719)
 				fail("SubTotal erroneo: deberia ser 1805 pero resultó en: $ordenreservaInstance.subTotal")
 		
 	}
@@ -134,6 +134,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"
 	    	ordenreservaController.params.observacion="OBSERVACION "
 	    	ordenreservaController.params.porcentajeResIns=iva.id
+			//ordenreservaController.params.ivaRniCheck=true
 			ordenreservaController.params.fechaVencimiento="10/10/2009"
 			ordenreservaController.params.fechaVencimiento_year="2009"
 			ordenreservaController.params.fechaVencimiento_month="10"
@@ -158,10 +159,10 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			assertTrue(ordenreservaInstance.empresa.nombre.equals("EMPRESA MODIFICADA"))
 			assertTrue(ordenreservaInstance.empresa.razonSocial.equals("EMPRESA MODIFICADA RAZON SOCIAL"))
 			assertTrue(ordenreservaInstance.numero==1)
-			if(ordenreservaInstance.subTotal!=1805)
-				fail("SubTotal erroneo: deberia ser 1805 pero resultó en: $ordenreservaInstance.subTotal")
-			
-    }
+			if(ordenreservaInstance.subTotal!=3305)
+				fail("SubTotal erroneo: deberia ser 3305 pero resultó en: $ordenreservaInstance.subTotal")
+			if(ordenreservaInstance.total!=3999.05)
+				fail("SubTotal erroneo: deberia ser 3999.05 pero resultó en: $ordenreservaInstance.total")    }		
     
     /*void testGenerarOrdenAddSubRubro(){
     		assertNotNull(authenticateService.userDomain())
