@@ -70,7 +70,9 @@ class OrdenReservaService {
 		log.debug "TOTAL GRAL FORMADO POR subTotal: "+ord.subTotal+", ivaGral: "+ord.ivaGral+" ivaSujNoCateg: "+ord.ivaSujNoCateg
 		log.debug "TOTAL GRAL SIN DESCUENTOS FORMADO POR subTotalsindesc: "+ord.subTotalsindesc+", ivaGral: "+ord.ivaGral+" ivaSujNoCateg: "+ord.ivaSujNoCateg	
     	ord.total=ord.subTotal+ord.ivaGral+ord.ivaSujNoCateg
-		def ivaGralSindesc = ord.subTotalsindesc*21/100
+		
+		def ivaGralSindesc = ord.subTotalsindesc*(ord.porcentajeResIns > 0 ? ord.porcentajeResIns : ord.porcentajeResNoIns)/100
+		
 		def ivaSujNoCategSindesc= 0
 		if(ord.ivaRniCheck)
 			ivaSujNoCategSindesc = ord.ivaRni*10.5/100 
