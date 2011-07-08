@@ -51,7 +51,7 @@ Ext.onReady(function(){
 		cm:cm,
 		width:500,
 		height:280,
-		title:'Pago Cheques',
+		title:'Detalle de Nota',
 		selModel: new Ext.grid.RowSelectionModel(),
 		tbar:[
 			{
@@ -111,19 +111,152 @@ Ext.onReady(function(){
 		    	   allowBlank:false,
 		    	   id:'montoId',
 		    	   fieldLabel:'Orden de reserva numero',
+		    	   disabled:true,
 		    	   msgTarget:'under'
 		       },{
 		    	   xtype:'textfield',
 		    	   name:'nombre',
 		    	   id:'nombreid',
+		    	   disabled:true,
 		    	   fieldLabel:'Nombre de Comercial'
 		       },{
 		    	   xtype:'textfield',
 		    	   name:'razonSocial',
+		    	   fieldLabel:'Razón Social',
+		    	   disabled:true,
 		    	   id:'razonSocialId'
-		    	   
-		       },grid
-		]
+		       },{
+		    	   xtype:'textfield',
+		    	   name:'saldo',
+		    	   fieldLabel:'Saldo',
+		    	   id:'saldoId',
+		    	   disabled:true
+		       },{
+		    	   xtype:'combo',
+		    	   fieldLabel:'Tipo de Nota',
+		    	   store: new Ext.data.JsonStore({
+		    		   		root:'rows',
+		    		   		autoLoad:true,
+		    		   		url:'listtiponotajson',
+		    		   		fields:['id','name']
+		    	   }),
+		    	   mode:'local',
+		    	   id:'tipoId',
+		    	   displayField:'name',
+		    	   valueField:'id',
+		    	   hiddenName:'tipo',
+		    	   hiddenField:'id'
+		       },{
+		    	   xtype:'hidden',
+		    	   allowBlank:true,
+		    	   name:'detallejson',
+		    	   id:'detallejsonId'
+		       },grid,
+		],
+	    buttons:[
+	             {
+	             	text:'Guardar',
+	             	id:'guardarId',
+	             	handler:function(){
+	 			 		var detallejsonArr=[];
+	 			 		var detallejsonStr = '';
+	 			 		var saldo=0;
+	 			 		var totalnota=0;
+	 			 		var flagerrordetalle=false;
+	 			 		store.data.each(
+	 			 			function(rec){
+	 			 				if(rec.data.descripcion.trim()=='' || !rec.data.cantidad>0
+	 			 						|| !rec.data.importe>0){
+	 			 					flagerrordetalle=true;
+	 			 					return false;
+	 			 				}
+	 			 				detallejsonArr.push(rec.data);
+	 			 				totalnota=totalnota+rec.data.importe;
+	 			 			}	
+	 			 		);
+	 			 		if(totalnota<=0){
+	 			 			Ext.MessageBox.show({
+	 			 				title:'Error',
+	 			 				msg:'No hay ninguna linea de detalle ingresada',
+				 					icon:Ext.MessageBox.ERROR,
+									buttons:Ext.MessageBox.OK	
+	 			 			});
+	 			 			return false;
+	 			 		}
+	 			 		if(flagerrordetalle){
+	 			 			Ext.MessageBox({
+	 			 				title:'Error',
+	 			 				msg:'Hay lineas de detalle con datos incompletos en la grilla',
+	 			 				icon:Ext.MessageBox.ERROR,
+	 			 				buttons: Ext.MessageBox.OK
+	 			 			});
+	 			 			return false;
+	 			 		}
+	 			 		
+	 			 		if(saldo<totalnota){
+	 			 			Ext.MessageBox.show({
+	 			 				title:'Error',
+	 			 				msg:'',
+	 			 				icon:Ext.MessageBox.ERROR,
+	 			 				buttons:Ext.MessageBox.OK
+	 			 			});
+	 			 		}else{
+	 			 			formNotadc.getForm().submit({
+	 			 				success: function(f,a){
+	 			 					if(a.result.success){
+	 			 						Ext.getCmp('guardarId').disable();
+	 			 						Ext.getCmp('cancelarId').setText('Salir');
+	 			 						Ext.MessageBox.show({
+	 			 							title:'Mensaje',
+	 			 							msg:'La Nota se generó correctamente',
+	 			 							buttons:Ext.MessageBox.OK,
+	 			 							icon:Ext.MessageBox.INFO,
+	 			 							fn:function(btn){
+	 			 								//window.location='../ordenReserva/list';
+	 			 							}
+	 			 						});
+	 			 						//window.location='reporte?target=_blank&_format=PDF&_name=nota&_file=nota&id='+a.result.id+"&totalletras="+a.result.totalletras;		    			 						
+	 			 					}else{
+	 			 						Ext.MessageBox.show({
+	 			 							title:'Error',
+	 			 							msg:a.result.message,
+	 			 							icon:Ext.MessageBox.ERROR,
+	 			 							buttons:Ext.MessageBox.OK
+	 			 						});
+	 			 					}
+	 			 				},
+	 			 				failure:function(f,a){
+	 			 					
+	 			 				}
+	 			 			});
+	 			 		}
+	 			 			
+	             	}	
+	             },{
+	             	text:'Cancelar',
+	             	id:'cancelarId',
+	             	handler:function(){
+	             		window.location='../notaDC/list';
+	             	}
+	             }
+	    ]	
 	});
+	
+	
+	formNotadc.load({
+		url:'createjson',
+		params:{
+			'id':ordenreservaId
+		},
+		success: function(f,a){
+			Ext.getCmp('nombreempresaId').setValue(a.result.data.nombreempresa);
+			Ext.getCmp('numeroordenId').setValue(a.result.data.numero);
+			Ext.getCmp('saldoordenId').setValue(a.result.data.saldoorden);
+		},
+		failure: function (thisform,action){
+   				alert(action);
+		}
+	});
+	
 	
 });

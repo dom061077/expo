@@ -1,5 +1,9 @@
 package com.rural
 
+import com.rural.enums.TipoNotaEnum
+import com.rural.enums.TipoGeneracionEnum
+import grails.converters.JSON
+
 class NotaDCController {
 	def ordenReservaService
 	    
@@ -101,13 +105,13 @@ class NotaDCController {
 	def savejson = {
 		log.info "INGRESANDO AL CLOSURE savejson DEL CONTROLLER NotaDCController"
 		log.info "PARAMETROS ${params}"
+		
 		def retorno = ordenReservaService(params.ordenReservaId.toLong(),Enum.valueOf(TipoNotaEnum,params.tipo))
 		if(retorno instanceof OrdenReserva){
-			
-//			response.status = 500
-//			render myGormObject.errors.allErrors.collect {
-//				message(error:it,encodeAs:'HTML')
-//			} as JSON
+
+			render retorno.errors.allErrors.collect {
+				message(error:it,encodeAs:'HTML')
+			} as JSON
 			
 			
 		}else{
@@ -155,4 +159,22 @@ class NotaDCController {
 		log.info "PARAMETROS ${params}"
 
 	}
+	
+	def listtiponotajson = {
+		log.info "INGRESANDO AL CLOSURE listtiponota"
+		log.info "PARAMETROS $params"
+		def tipoNotaList = TipoNotaEnum.list()
+		render(contentType:"text/json"){
+			success true
+			rows{
+				tipoNotaList.each {
+					row(id:it,name:it.name)	 
+				}
+			}
+		}
+	}
+	
+
+	
 }
+
