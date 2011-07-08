@@ -23,6 +23,14 @@
         <script type="text/javascript" src="${resource(dir:'js/ext/3.3.1/src/locale',file:'ext-lang-es.js')}"></script>
         
         <script type="text/javascript">
+			function serializeform(form){
+				var serial='',values=form.getValues();
+				for(var value in values){
+					serial+='&' + value + '=' + values[value];	
+				}
+				return serial.substr(1);
+			}
+        
 	        function customCurrency(val,meta,record){
 				return Ext.util.Format.number(val,'0.000,00/i');
 			} 
