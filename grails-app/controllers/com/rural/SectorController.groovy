@@ -12,11 +12,24 @@ class SectorController {
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
 	
-	def listdescuentos= {
-		log.info "INGRESANDO AL CLOSURE listprecios DEL CONTROLLER SectorController"
+	def listdescuentos = {
+		log.info "INGRESANDO AL CLOSURE listdescuentos DEL CONTROLLER SectorController"
 	}
 	
-	def listjsondescuentos = {
+	def listjsondescuentos= {
+		log.info "INGRESANDO AL CLOSURE listprecios DEL CONTROLLER SectorController"
+		log.info "PARAMETROS $params"
+		
+		
+		render(contentType:"text/json"){
+			total 0
+			rows{
+				
+			}
+		}
+	}
+	
+	def listjsonprecios = {
 		log.info "INGRESANDO AL CLOSURE listjsonprecios DEL CONTROLLER SectorController"
 		log.info "PARAMETROS $params"
 		def filtros
@@ -57,7 +70,7 @@ class SectorController {
 			total sectores.size()
 			rows{
 				sectores.each{
-					row(id:it.id,expoNombre:it.expo.nombre,nombre:it.nombre,porcentaje:it.porcentaje)
+					row(id:it.id,expoNombre:it.expo.nombre,nombre:it.nombre,porcentaje:it.porcentaje,precio:it.precio)
 				}
 			}
 		}
@@ -268,6 +281,7 @@ class SectorController {
     	log.info("PARAMETROS $params")
     	def sectorInstance=Sector.get(params.id)
 		params.porcentaje = params.porcentaje?.replace(".",",")
+		params.precio = params.precio?.replace(".",",")
     	sectorInstance.properties=params
     	if(!sectorInstance.hasErrors() && sectorInstance.save()){
     		render(contentType:"text/json"){

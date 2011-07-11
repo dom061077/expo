@@ -7,6 +7,13 @@ Ext.onReady(function(){
 		errorSumary:false
 	});
 	
+	var editorDescuentos = new Ext.ux.grid.RowEditor({
+		saveText:'Guardar',
+		cancelText:'Cancelar',
+		errorText:'Errores',
+		errorSymary:false
+	});
+	
 				  	
 	var filters = new Ext.ux.grid.GridFilters({
 		encode:true,
@@ -33,8 +40,8 @@ Ext.onReady(function(){
 			autoLoad:true,
 			totalProperty:'total',
 			root:'rows',
-			url:'../sector/listjsondescuentos',
-			fields:['id','expoNombre','nombre','porcentaje'],
+			url:'listjsonprecios',
+			fields:['id','expoNombre','nombre','porcentaje','precio'],
 			listeners: {
 	            loadexception: function(proxy, store, response, e) {
 		                     var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -62,7 +69,8 @@ Ext.onReady(function(){
 			method:'POST',
 			params:{
 				'id':records.data.id,
-				'porcentaje':records.data.porcentaje
+				'porcentaje':records.data.porcentaje,
+				'precio':records.data.precio
 			},
 			success:function(resp,opt){
 					var respuesta=Ext.decode(resp.responseText);
@@ -138,18 +146,48 @@ Ext.onReady(function(){
 				handler:function(){
 					gridprecios.filters.clearFilters();
 				}
+			},{
+				text:'Descuentos',
+				handler:function(){
+					var sm = gridprecios.getSelectionModel();
+					var sel = sm.getSelected();
+					if(sm.hasSelection()){
+						//loteId=sel.data.id;
+						//sectorId=null;
+						listdescuentosStore.load({
+							//params:{'loteId':loteId,'expoId':expoId}
+						});
+						descuentoswin.title='Tarifario de Lotes';
+						descuentoswin.show();
+					}else{
+						Ext.MessageBox.show({
+                    		title:'Mensaje',
+                    		msg:'Seleccione un sector para cargar los descuentos',
+                    		icon:Ext.MessageBox.INFORMATION,
+                    		buttons:Ext.MessageBox.OK
+                    	});
+					}
+					
+				}
 			}
 		],
 		columns:[
-		    {header:'id',dataIndex:'id',hidden:true},
-		    {header:'Expo',dataIndex:'expoNombre',width:150,sortable:true},
-			{header:'Sector',dataIndex:'nombre',width:100,sortable:true},
-		    {header:'Descuentos',dataIndex:'porcentaje',width:80,type:'float'
+		    {	header:'id',dataIndex:'id',hidden:true},
+		    {	header:'Expo',dataIndex:'expoNombre',width:150,sortable:true},
+			{	header:'Sector',dataIndex:'nombre',width:100,sortable:true},
+		    {	header:'Descuentos',dataIndex:'porcentaje',width:80,type:'float'
 		    	,editor:{
 			    	xtype: 'numberfield',
 			    	msgTarget:'under',
 			    	allowBlank:false
 			    }
+		    },{
+		    	header:'Tarifa',dataIndex:'precio',width:80,type:'float'
+		    	,editor:{
+		    		xtype:'numberfield',
+		    		msgTarget:'under',
+		    		allowBlank:false
+		    	}	
 		    }
         ]
 	
@@ -160,6 +198,103 @@ Ext.onReady(function(){
 		frame:true,
 		items:gridprecios,
 		title:'Descuentos por Sector'
+	});
+	//------------------componentes de descuento-----------------
+	
+	var listdescuentosStore = new Ext.data.JsonStore({
+		autoLoad:true,
+		totalProperty:'total',
+		root:'rows',
+		url:'listjsondescuentos',
+		fields:['id','porcentaje','fechaVencimiento'],
+		listeners:{
+			loadexception:function(proxy, store,response,e){
+				var jsonObject = Ext.util.JSON.decode(response.responseText);
+                if (response.status==0)
+                	Ext.MessageBox.show({
+                		title:'Error',
+                		msg:'Error de comunicación con el servidor',
+                		icon:Ext.MessageBox.ERROR,
+                		buttons:Ext.MessageBox.OK
+                	});
+                else{
+                    if (jsonObject.loginredirect == true)
+                    		window.location='../logout/index';
+                }
+               }					
+		}
+	});
+	
+	var griddescuentos = new Ext.grid.GridPanel({
+		columns:[
+		         {header:'id',dataIndex:'id',hidden:true},
+		         {header:'Porcentaje',dataIndex:'porcentaje',width:80,type:'float'
+		        	 ,editor:{
+		        		 xtype: 'numberfield',
+		        		 msgTarget:'under',
+		        		 allowBlank:false
+		        	 }
+		         },
+		         {header:'Fecha Vence',dataIndex:'fechaVencimiento',width:80,type:'float'
+		        	 ,editor:{
+		        		 xtype:'numberfield',
+		        		 msgTarget:'under',
+		        		 allowBlank:false
+		        	 }
+		         }
+		],
+		store:listdescuentosStore,
+		header:true,
+		footer:true,
+		selModel: new Ext.grid.RowSelectionModel(),
+		stripeRows:true,
+		loadMask:true,
+		tbar:[
+		      {
+		    	  text:'Agregar',
+		    	  handler:function(){
+						var e = new ListaPrecioSector({
+							id:0,
+			                porcentaje:0,
+			                fechaVencimiento:(new Date()).clearTime()
+			            });
+		                //editor.stopEditing();
+		                listapreciosStore.insert(0, e);
+		                //grid.getView().refresh();
+		                //grid.getSelectionModel().selectRow(0);
+		                //editor.startEditing(0);
+		    		  
+		    	  }
+		      },{
+		    	  text:'Eliminar',
+		    	  handler:function(){
+		    		  
+		    	  }
+		      }
+		],
+		plugins:[editorDescuentos]
+	});
+	
+	var formdescuentos = new Ext.form.FormPanel({
+		frame:true,
+		items:[
+		       {
+		    	   xtype:'textfield',
+		    	   disabled:true,
+		    	   fieldLabel:'Sector'
+		       },griddescuentos]
+	});
+	
+	var descuentoswin = new Ext.Window({
+		applyTo:'descuentoswin_extj',
+		title:'Descuentos por sector',
+		resizable:false,
+		closeAction:'hide',
+		modal:true,
+		formPanel:null,
+		width:450,
+		height:280,
+		items:[formdescuentos]
 	});
 	 
 });
