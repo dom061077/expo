@@ -3,6 +3,7 @@
 package com.rural
 
 import grails.converters.JSON
+import org.springframework.transaction.TransactionStatus
 
 class SectorController {
     
@@ -19,12 +20,60 @@ class SectorController {
 	def listjsondescuentos= {
 		log.info "INGRESANDO AL CLOSURE listprecios DEL CONTROLLER SectorController"
 		log.info "PARAMETROS $params"
-		
+		def list = ListaDescuentos.createCriteria().list(){
+			sector{
+				eq("id",params.sectorId?.toLong())
+			}
+		}
 		
 		render(contentType:"text/json"){
 			total 0
 			rows{
-				
+				list.each{
+					row(id:it.id,porcentaje:it.porcentaje,fechaVencimiento:it.fechaVencimiento)
+				}
+			}
+		}
+	}
+	
+	def addjsonprecios = {
+		log.info "INGRESANDO AL CLOSURE addjsonprecios DEL CONTROLLER SectorController"
+		log.info "PARAMEETROS $params"
+		def sectorInstance
+		def listaDescuentosInstance 
+		Sector.withTransaction(){TransactionStatus status ->
+			sectorInstance = Sector.get(params.sectorId)
+			if(sectorInstance){
+				listaDescuentosInstance = new ListaDescuentos(params)
+				sectorInstance.addToDescuentos(listaDescuentosInstance)
+				if(sectorInstance.validate()){
+					sectorInstance.save()
+					log.info "SE GUARDO CORRECTAMENTE EL SECTOR CON SU DESCUENTO"
+					render(contetType:"text/json"){
+						success true
+					}
+				}else{
+					status.setRollbackOnly()
+					log.info "NO SE PUDO GUARDAR EL SECTOR CON SU DESCUENTO"
+					log.debug "ERRORES DE VALIDACION: "+sectorInstance.errors.allErrors
+					render(contentType:"text/json"){
+						success false
+						errors{
+							g.eachError(bean:listaDescuentosInstance){
+								title g.message(error:it)
+							}
+						}
+					}
+				}
+			}else{
+				status.setRollbackOnly()
+				log.info "NO SE ENCONTRO EL SECTOR PARA GUARDAR EL DESCUENTO"
+				render(contentType:"text/json"){
+					success false
+					errors{
+						title g.message(code:"com.rural.sector.noexiste",args:[params.sectorId])
+					}
+				}
 			}
 		}
 	}
@@ -70,7 +119,7 @@ class SectorController {
 			total sectores.size()
 			rows{
 				sectores.each{
-					row(id:it.id,expoNombre:it.expo.nombre,nombre:it.nombre,porcentaje:it.porcentaje,precio:it.precio)
+					row(id:it.id,expoNombre:it.expo.nombre,nombre:it.nombre,precio:it.precio)
 				}
 			}
 		}
@@ -280,18 +329,27 @@ class SectorController {
     	log.info("INGRESANDO AL METODO updatejson DEL CONTROLLER SectorController")
     	log.info("PARAMETROS $params")
     	def sectorInstance=Sector.get(params.id)
-		params.porcentaje = params.porcentaje?.replace(".",",")
 		params.precio = params.precio?.replace(".",",")
-    	sectorInstance.properties=params
-    	if(!sectorInstance.hasErrors() && sectorInstance.save()){
-    		render(contentType:"text/json"){
-    			success true
-    		}
-    	}else{
-    		render(contentType:"text/json"){
-    			success false
-    		}
-    	}
+		if(sectorInstance){
+	    	sectorInstance.properties=params
+	    	if(!sectorInstance.hasErrors() && sectorInstance.save()){
+	    		render(contentType:"text/json"){
+	    			success true
+	    		}
+	    	}else{
+	    		render(contentType:"text/json"){
+	    			success false
+	    		}
+	    	}
+		}else{
+			render(contentType:"text/json"){
+				success false
+				errors{
+						title g.message(code:"",args:[])
+					}
+				
+			}
+		}
     }
 	
 	def getdescuento = {

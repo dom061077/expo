@@ -1,5 +1,6 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
+	var sectorId=0;
 	var editor = new Ext.ux.grid.RowEditor({
 		saveText:'Guardar',
 		cancelText:'Cancelar',
@@ -41,7 +42,7 @@ Ext.onReady(function(){
 			totalProperty:'total',
 			root:'rows',
 			url:'listjsonprecios',
-			fields:['id','expoNombre','nombre','porcentaje','precio'],
+			fields:['id','expoNombre','nombre','precio'],
 			listeners: {
 	            loadexception: function(proxy, store, response, e) {
 		                     var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -64,11 +65,10 @@ Ext.onReady(function(){
 	listapreciosStore.on('update',function(store,records,index){
 		var conn = new Ext.data.Connection();
 		conn.request({
-			url:'../sector/updatejson',
+			url:'updatejson',
 			method:'POST',
 			params:{
 				'id':records.data.id,
-				'porcentaje':records.data.porcentaje,
 				'precio':records.data.precio
 			},
 			success:function(resp,opt){
@@ -151,10 +151,9 @@ Ext.onReady(function(){
 					var sm = gridprecios.getSelectionModel();
 					var sel = sm.getSelected();
 					if(sm.hasSelection()){
-						//loteId=sel.data.id;
-						//sectorId=null;
+						sectorId=sel.data.id;
 						listdescuentosStore.load({
-							//params:{'loteId':loteId,'expoId':expoId}
+							params:{'sectorId':sectorId}
 						});
 						descuentoswin.title='Tarifario de Lotes';
 						descuentoswin.show();
@@ -174,17 +173,13 @@ Ext.onReady(function(){
 		    {	header:'id',dataIndex:'id',hidden:true},
 		    {	header:'Expo',dataIndex:'expoNombre',width:150,sortable:true},
 			{	header:'Sector',dataIndex:'nombre',width:100,sortable:true},
-		    {	header:'Descuentos',dataIndex:'porcentaje',width:80,type:'float'
-		    	,editor:{
-			    	xtype: 'numberfield',
-			    	msgTarget:'under',
-			    	allowBlank:false
-			    }
-		    },{
+			{
 		    	header:'Tarifa',dataIndex:'precio',width:80,type:'float'
 		    	,editor:{
 		    		xtype:'numberfield',
 		    		msgTarget:'under',
+		    		maxValue:100,
+		    		maxLength:3,
 		    		allowBlank:false
 		    	}	
 		    }
@@ -238,9 +233,122 @@ Ext.onReady(function(){
 	
 	listdescuentosStore.on('add',
 		function(store,records,index){
-			alert('evento add');
+			var conn = new Ext.data.Connection();
+			conn.request({
+				url:'addjsonprecios',
+				method:'POST',
+				params:{
+					'sectorId':sectorId,
+					'porcentaje':records[0].data.porcentaje,
+					'fechaVencimiento_year':records[0].data.fechaVencimiento.getFullYear(),
+					'fechaVencimiento_month':records[0].data.fechaVencimiento.getMonth(),
+					'fechaVencimiento_day':records[0].data.fechaVencimiento.getDate()
+				},
+				success:function(resp,opt){
+					var respuesta=Ext.decode(resp.responseText);
+					if(respuesta.result){
+						if(respuesta.result.loginredirect==true)
+							Ext.MessageBox.show({
+								title:'Mensaje',
+								icon:Ext.MessageBox.INFO,
+								buttons:Ext.MessageBox.OK,
+								fn:function(btn){
+									window.location='../logout/index';
+								}
+							});
+					}else{
+						if(respuesta.success){
+							
+						}else{
+							var msg="";
+							for(var i=0;i<respuesta.errors.length;i++){
+								msg=msg+respuesta.errors[i].title+'\r\n';
+							}
+							Ext.MessageBox.show({
+								title:'Error',
+								msg:msg,
+								icon:Ext.MessageBox.ERROR,
+								buttons:Ext.MessageBox.OK
+							});
+						}
+						listdescuentosStore.load();
+					}					
+				},
+				failure:function(resp,opt){
+					
+				}
+			});
+			
 		}
 	);
+	
+
+	listdescuentosStore.on('update',function(store,records,index){
+		var conn = new Ext.data.Connection();
+		conn.request({
+			url:'updatejson',
+			method:'POST',
+			params:{
+				'id':records.data.id,
+				'porcentaje':records.data.porcentaje,
+				'precio':records.data.precio
+			},
+			success:function(resp,opt){
+					var respuesta=Ext.decode(resp.responseText);
+					if(respuesta.result){
+						if(respuesta.result.loginredirect==true)
+							Ext.MessageBox.show({
+								title:'Mensaje',
+								icon:Ext.MessageBox.INFO,
+								buttons:Ext.MessageBox.OK,
+								fn:function(btn){
+									window.location='../logout/index';
+								}
+							});
+					}else{
+						if(respuesta.success){
+							
+						}else{
+							var msg="";
+							for(var i=0;i<respuesta.errors.length;i++){
+								msg=msg+respuesta.errors[i].title+'\r\n';
+							}
+							Ext.MessageBox.show({
+								title:'Error',
+								msg:msg,
+								icon:Ext.MessageBox.ERROR,
+								buttons:Ext.MessageBox.OK
+							});
+						}
+					}					
+			},
+			failure:function(resp,opt){
+					var respuesta = Ext.decode(resp.responseText);
+					if(respuesta.result){
+						if(respuesta.result.loginredirect==true)
+							Ext.MessageBox.show({
+								title:'Mensaje',
+								icon:Ext.MessageBox.INFO,
+								buttons:Ext.MessageBox.OK,
+								fn:function(btn){
+									window.location='../logout/index';
+								}
+							});
+					}else{
+						Ext.MessageBox.show({
+							title:'Error',
+							msg:'Se produjo un error al intentar modificar el registro'
+							,buttons:Ext.MessageBox.OK
+							,fn:function(btn){
+							}
+						});
+					}
+				
+			}
+		});
+		
+	});
+	
 	
 	var griddescuentos = new Ext.grid.GridPanel({
 		columns:[

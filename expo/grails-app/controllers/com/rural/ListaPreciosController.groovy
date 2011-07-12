@@ -205,7 +205,7 @@ class ListaPreciosController {
 				success false
 				errors{
 					g.eachError(bean:listaPreciosInstance){
-						title g.message(error:it)
+						title g.message(code:it)
 					}
 				}
 			}
