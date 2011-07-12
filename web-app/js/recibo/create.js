@@ -1,9 +1,7 @@
 Ext.onReady(function (){
 	Ext.QuickTips.init();
 	
-    function formatDate(value){
-        return value ? value.dateFormat('d/m/y') : '';
-    }
+    
 	
 	var cm = new Ext.grid.ColumnModel({
 		columns:[

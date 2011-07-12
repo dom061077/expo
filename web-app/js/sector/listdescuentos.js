@@ -60,8 +60,7 @@ Ext.onReady(function(){
 				}							
 		});
 	
-	
-	
+		
 	listapreciosStore.on('update',function(store,records,index){
 		var conn = new Ext.data.Connection();
 		conn.request({
@@ -201,6 +200,18 @@ Ext.onReady(function(){
 	});
 	//------------------componentes de descuento-----------------
 	
+	var DescuentoSector = Ext.data.Record.create([{
+			name: 'id',
+			type: 'integer'
+		},{
+			name:'porcentaje',
+			type:'float'
+		},{
+			name:'fechaVencimiento',
+			type:'date'
+		}]);	
+	
+	
 	var listdescuentosStore = new Ext.data.JsonStore({
 		autoLoad:true,
 		totalProperty:'total',
@@ -225,6 +236,12 @@ Ext.onReady(function(){
 		}
 	});
 	
+	listdescuentosStore.on('add',
+		function(store,records,index){
+			alert('evento add');
+		}
+	);
+	
 	var griddescuentos = new Ext.grid.GridPanel({
 		columns:[
 		         {header:'id',dataIndex:'id',hidden:true},
@@ -235,17 +252,19 @@ Ext.onReady(function(){
 		        		 allowBlank:false
 		        	 }
 		         },
-		         {header:'Fecha Vence',dataIndex:'fechaVencimiento',width:80,type:'float'
-		        	 ,editor:{
-		        		 xtype:'numberfield',
-		        		 msgTarget:'under',
-		        		 allowBlank:false
-		        	 }
+		         {header:'Fecha Vence',dataIndex:'fechaVencimiento',width:80,type:'date'
+		         	 ,renderer:formatDate
+		        	 ,editor: new Ext.form.DateField({
+						format:'d/m/y',
+						disabledDays:[0,6],
+						disabledDaysText: 'El vencimiento no puede ser un fin de semana'
+						})
 		         }
 		],
 		store:listdescuentosStore,
 		header:true,
 		footer:true,
+		height:300,
 		selModel: new Ext.grid.RowSelectionModel(),
 		stripeRows:true,
 		loadMask:true,
@@ -253,13 +272,13 @@ Ext.onReady(function(){
 		      {
 		    	  text:'Agregar',
 		    	  handler:function(){
-						var e = new ListaPrecioSector({
+						var e = new DescuentoSector({
 							id:0,
 			                porcentaje:0,
 			                fechaVencimiento:(new Date()).clearTime()
 			            });
 		                //editor.stopEditing();
-		                listapreciosStore.insert(0, e);
+		                listdescuentosStore.insert(0, e);
 		                //grid.getView().refresh();
 		                //grid.getSelectionModel().selectRow(0);
 		                //editor.startEditing(0);
@@ -268,7 +287,11 @@ Ext.onReady(function(){
 		      },{
 		    	  text:'Eliminar',
 		    	  handler:function(){
-		    		  
+		    		  editor.stopEditing();
+	                  var s = gridprecios.getSelectionModel().getSelections();
+    	              for(var i = 0, r; r = s[i]; i++){
+        	            listapreciosStore.remove(r);
+            	      }
 		    	  }
 		      }
 		],
@@ -293,7 +316,7 @@ Ext.onReady(function(){
 		modal:true,
 		formPanel:null,
 		width:450,
-		height:280,
+		height:450,
 		items:[formdescuentos]
 	});
 	 
