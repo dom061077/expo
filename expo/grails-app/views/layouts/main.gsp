@@ -30,7 +30,11 @@
 				}
 				return serial.substr(1);
 			}
-        
+
+			function formatDate(value){
+		        return value ? value.dateFormat('d/m/y') : '';
+		    }
+	        
 	        function customCurrency(val,meta,record){
 				return Ext.util.Format.number(val,'0.000,00/i');
 			} 
