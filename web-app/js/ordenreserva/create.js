@@ -1410,8 +1410,8 @@ Ext.onReady(function(){
 							allowBlank:false,
 							msgTarget:'under',
 							width:150,
-							name:'fechaVencimiento',
-							id:'fechaVencimientoId'
+							name:'fechaVencimientoOrden',
+							id:'fechaVencimientoOrdenId'
 						}
 				]
 			}),
@@ -1655,10 +1655,10 @@ Ext.onReady(function(){
 				otrosconceptosjson:otrosconceptosjsonStr,
 				productosjson:productosjsonStr,
 				anio:datos.datoscontactoId.anio,
-				fechaVencimiento:datos.fechaVencimiento,
-				fechaVencimiento_year:datos.fechaVencimiento.getDate().getFullYear(),
-				fechaVencimiento_month:datos.fechaVencimiento.getDate().getMonth(),
-				fechaVencimiento_day:datos.fechaVencimiento.getDate().getDate(),
+				fechaVencimiento:Ext.getCmp('fechaVencimientoOrdenId').getValue(),//datos.datosserviciocontratadoId.fechaVencimientoOrden,
+				fechaVencimiento_year:Ext.getCmp('fechaVencimientoOrdenId').getValue().getFullYear(),
+				fechaVencimiento_month:Ext.getCmp('fechaVencimientoOrdenId').getValue().getMonth(),
+				fechaVencimiento_day:Ext.getCmp('fechaVencimientoOrdenId').getValue().getDate(),
 				'expo.id':datos.datoscontactoId.exposicionid,
 				ivaGralCheck:(datos.exposicionId.resins=='on'?true:false),
 				ivaRniCheck:(datos.exposicionId.noins=='on'?true:false),

@@ -204,7 +204,7 @@ Ext.onReady(function(){
 																url:'anularordenreserva',
 																method:'POST',
 																params:{
-																	id:sel.data.id
+																	id:sel.data.ordenId
 																},
 																success: function(resp,opt){
 																	var respuesta = Ext.decode(resp.responseText);
