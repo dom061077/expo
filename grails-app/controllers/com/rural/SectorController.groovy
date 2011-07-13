@@ -36,7 +36,7 @@ class SectorController {
 		}
 	}
 	
-	def addjsonprecios = {
+	def addjsondescuentos = {
 		log.info "INGRESANDO AL CLOSURE addjsonprecios DEL CONTROLLER SectorController"
 		log.info "PARAMEETROS $params"
 		def sectorInstance
@@ -339,15 +339,19 @@ class SectorController {
 	    	}else{
 	    		render(contentType:"text/json"){
 	    			success false
+					errors{
+						g.eachError(bean:listaPreciosInstance){
+							title g.message(code:it)
+						}
+					}
 	    		}
 	    	}
 		}else{
 			render(contentType:"text/json"){
 				success false
 				errors{
-						title g.message(code:"",args:[])
-					}
-				
+					title g.message(code:"com.rural.sector.noexiste",args:[params.id])
+				}
 			}
 		}
     }
