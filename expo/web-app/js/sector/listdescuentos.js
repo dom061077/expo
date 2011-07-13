@@ -235,7 +235,7 @@ Ext.onReady(function(){
 		function(store,records,index){
 			var conn = new Ext.data.Connection();
 			conn.request({
-				url:'addjsonprecios',
+				url:'addjsondescuentos',
 				method:'POST',
 				params:{
 					'sectorId':sectorId,

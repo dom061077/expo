@@ -10,6 +10,6 @@ class ListaDescuentos {
 	static belongsTo = [sector:Sector]
 	
     static constraints = {
-		fechaVencimiento(unique:true)
+		fechaVencimiento unique:'sector'
     }
 }
