@@ -174,23 +174,8 @@ class ListaPreciosController {
 		log.info "INGRESANDO AL CLOSURE savejson DEL CONTROLLER ListaPreciosController"
 		log.info "PARAMETROS ${params}"
 		
-//		def c = Calendar.getInstance()
-//		c.setTime(new Date())
-//		params.anio = c.get(Calendar.YEAR).toString()
- 
 		def listaPreciosInstance= new ListaPrecios(params)
 		
-//		def listExpo = Exposicion.createCriteria().list(){
-//			order("id","DESC")
-//		}
-//		
-//		def expo = listExpo[0] 
-		
-		//if(flagdate)
-		//	listaPreciosInstance.errors.rejectValue("vigencia","typeMismatch.java.util.Date")
-
-//		listaPreciosInstance.expo = expo	
-
 		if(!listaPreciosInstance.hasErrors() && listaPreciosInstance.save()){ 
 			render(contentType:"text/json") {
 				success true
@@ -211,7 +196,6 @@ class ListaPreciosController {
 			}
 	
 		}
-		
 	}
 	
 	def deletejson={

@@ -37,7 +37,7 @@ class SectorController {
 	}
 	
 	def addjsondescuentos = {
-		log.info "INGRESANDO AL CLOSURE addjsonprecios DEL CONTROLLER SectorController"
+		log.info "INGRESANDO AL CLOSURE addjsondescuentos DEL CONTROLLER SectorController"
 		log.info "PARAMEETROS $params"
 		def sectorInstance
 		def listaDescuentosInstance 
@@ -59,7 +59,8 @@ class SectorController {
 					render(contentType:"text/json"){
 						success false
 						errors{
-							g.eachError(bean:listaDescuentosInstance){
+							g.eachError(bean:sectorInstance){
+								log.debug "${it.class}"
 								title g.message(error:it)
 							}
 						}
