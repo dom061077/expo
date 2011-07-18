@@ -400,7 +400,12 @@ Ext.onReady(function(){
 		    	  text:'Eliminar',
 		    	  handler:function(){
 		    		  editor.stopEditing();
-	                  var s = gridprecios.getSelectionModel().getSelections();
+		    		  var sm = griddescuentos.getSelectionModel();
+		    		  var sel = sm.getSelected();
+		    		  if(sm.hasSelection()){
+		    		  	var conn = new 
+		    		  }
+	                  var s = griddescuentos.getSelectionModel().getSelections();
     	              for(var i = 0, r; r = s[i]; i++){
         	            listapreciosStore.remove(r);
             	      }

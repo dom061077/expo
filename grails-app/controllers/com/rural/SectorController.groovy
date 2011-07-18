@@ -326,6 +326,36 @@ class SectorController {
     	}
     }
 	
+	def deletejsondescuentos = {
+		log.info "INGRESANDO AL CLOSURE deletejsondescuentos DEL CONTROLLER SectorController"
+		log.info "PARAMETROS: $params"
+		def listaDescuentosInstance = ListaDescuentos.get(params.id)
+		if(listaDescuentosInstance){
+			try {
+				sectorInstance.delete(flush:true)
+				render(contentType:"text/json"){
+					success true
+					msg "El registro se eliminó correctamente"
+				}
+			}catch(org.springframework.dao.DataIntegrityViolationException e) {
+				render(contentType:"text/json"){
+					success false
+					errors{
+						title "Error de Integridad al eliminar el registro"
+					}
+				}
+			}
+		}else{
+			log.error (g.message(code:"com.rural.noexiste",args:["El Descuento",params.id]))
+			render(contentType:"text/json"){
+				success false
+				errors{
+					title g.message(code:"com.rural.noexiste",args["El Descuento",params.id])
+				}
+			}
+		}
+	}
+	
 	def updatejsondescuentos = {
 		log.info ("INGRESANDO AL CLOSURE updatejsondescuentos DEL CONTROLLER SectorController")
 		log.info "PARAMETROS: $params"
