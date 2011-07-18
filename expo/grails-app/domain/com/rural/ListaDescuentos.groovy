@@ -11,5 +11,6 @@ class ListaDescuentos {
 	
     static constraints = {
 		fechaVencimiento unique:'sector'
+		porcentaje (min:1d,max:100d)
     }
 }
