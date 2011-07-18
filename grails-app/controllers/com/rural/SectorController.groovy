@@ -325,12 +325,44 @@ class SectorController {
     		}
     	}
     }
+	
+	def updatejsondescuentos = {
+		log.info ("INGRESANDO AL CLOSURE updatejsondescuentos DEL CONTROLLER SectorController")
+		log.info "PARAMETROS: $params"
+		def listaDescuentosInstance = ListaDescuentos.get(params.id)
+		if(listaDescuentosInstance){
+			listaDescuentosInstance.properties = params
+			if(!listaDescuentosInstance.hasErrors() && listaDescuentosInstance.save()){
+				render(contentType:"text/json"){
+					success true
+				}	
+			}else{
+				render(contentType:"text/json"){
+					success false
+					errors{
+						g.eachError(bean:listaDescuentosInstance){
+							title g.message(error:it)
+						}
+					}
+				}
+			}
+		}else{
+			log.error g.message(code:"com.rural.noexiste",args:["El Descuento",params.id])
+			render(contentType:"text/json"){
+				success false
+				errors{
+					title g.message(code:"com.rural.noexiste",args:["El Descuento",params.id])
+				}
+			}
+		}
+	}
     
     def updatejson = {
     	log.info("INGRESANDO AL METODO updatejson DEL CONTROLLER SectorController")
     	log.info("PARAMETROS $params")
     	def sectorInstance=Sector.get(params.id)
 		params.precio = params.precio?.replace(".",",")
+		sectorInstance = null
 		if(sectorInstance){
 	    	sectorInstance.properties=params
 	    	if(!sectorInstance.hasErrors() && sectorInstance.save()){
@@ -341,8 +373,8 @@ class SectorController {
 	    		render(contentType:"text/json"){
 	    			success false
 					errors{
-						g.eachError(bean:listaPreciosInstance){
-							title g.message(code:it)
+						g.eachError(bean:sectorInstance){
+							title g.message(error:it)
 						}
 					}
 	    		}
@@ -351,7 +383,7 @@ class SectorController {
 			render(contentType:"text/json"){
 				success false
 				errors{
-					title g.message(code:"com.rural.sector.noexiste",args:[params.id])
+					title g.message(code:"com.rural.noexiste",args:["El Sector",params.id])
 				}
 			}
 		}

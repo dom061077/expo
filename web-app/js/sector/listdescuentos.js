@@ -239,7 +239,7 @@ Ext.onReady(function(){
 					'sectorId':sectorId,
 					'porcentaje':records[0].data.porcentaje,
 					'fechaVencimiento_year':records[0].data.fechaVencimiento.getFullYear(),
-					'fechaVencimiento_month':records[0].data.fechaVencimiento.getMonth(),
+					'fechaVencimiento_month':records[0].data.fechaVencimiento.getMonth()+1,
 					'fechaVencimiento_day':records[0].data.fechaVencimiento.getDate()
 				},
 				success:function(resp,opt){
@@ -286,12 +286,14 @@ Ext.onReady(function(){
 	listdescuentosStore.on('update',function(store,records,index){
 		var conn = new Ext.data.Connection();
 		conn.request({
-			url:'updatejson',
+			url:'updatejsondescuentos',
 			method:'POST',
 			params:{
 				'id':records.data.id,
 				'porcentaje':records.data.porcentaje,
-				'precio':records.data.precio
+				'fechaVencimiento_year':records.data.fechaVencimiento.getFullYear(),
+				'fechaVencimiento_month':records.data.fechaVencimiento.getMonth()+1,
+				'fechaVencimiento_day':records.data.fechaVencimiento.getDate()
 			},
 			success:function(resp,opt){
 					var respuesta=Ext.decode(resp.responseText);
@@ -357,8 +359,8 @@ Ext.onReady(function(){
 		        	 ,editor:{
 		        		 xtype: 'numberfield',
 		        		 msgTarget:'under',
-		        		 maxValue:100,
-		        		 maxLength:3,
+		        		 //maxValue:100,
+		        		 //maxLength:3,
 		        		 allowBlank:false
 		        	 }
 		         },
