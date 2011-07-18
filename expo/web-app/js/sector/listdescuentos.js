@@ -178,8 +178,6 @@ Ext.onReady(function(){
 		    	,editor:{
 		    		xtype:'numberfield',
 		    		msgTarget:'under',
-		    		maxValue:100,
-		    		maxLength:3,
 		    		allowBlank:false
 		    	}	
 		    }
@@ -271,7 +269,9 @@ Ext.onReady(function(){
 								buttons:Ext.MessageBox.OK
 							});
 						}
-						listdescuentosStore.load();
+						listdescuentosStore.load({
+							params:{'sectorId':sectorId}
+						});
 					}					
 				},
 				failure:function(resp,opt){
@@ -357,6 +357,8 @@ Ext.onReady(function(){
 		        	 ,editor:{
 		        		 xtype: 'numberfield',
 		        		 msgTarget:'under',
+		        		 maxValue:100,
+		        		 maxLength:3,
 		        		 allowBlank:false
 		        	 }
 		         },
