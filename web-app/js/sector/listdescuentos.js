@@ -256,7 +256,9 @@ Ext.onReady(function(){
 							});
 					}else{
 						if(respuesta.success){
-							
+							var record = listdescuentosStore.getAt(0);
+							record.set('id',respuesta.id);
+							record.commit();
 						}else{
 							var msg="";
 							for(var i=0;i<respuesta.errors.length;i++){
@@ -377,6 +379,7 @@ Ext.onReady(function(){
 		header:true,
 		footer:true,
 		height:300,
+		sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
 		selModel: new Ext.grid.RowSelectionModel(),
 		stripeRows:true,
 		loadMask:true,
@@ -386,7 +389,7 @@ Ext.onReady(function(){
 		    	  handler:function(){
 						var e = new DescuentoSector({
 							id:0,
-			                porcentaje:0,
+			                porcentaje:1,
 			                fechaVencimiento:(new Date()).clearTime()
 			            });
 		                //editor.stopEditing();
@@ -403,7 +406,20 @@ Ext.onReady(function(){
 		    		  var sm = griddescuentos.getSelectionModel();
 		    		  var sel = sm.getSelected();
 		    		  if(sm.hasSelection()){
-		    		  	var conn = new 
+		    		  	var conn = new Ext.data.Connection();
+		    		  	conn.request({
+		    		  		url:'deletejsondescuentos',
+		    		  		params:{
+		    		  			id:sel.data.id
+		    		  		},
+		    		  		success:function(resp,opt){
+		    		  			if(resp)
+		    		  				listdescuentosStore.remove(sel);
+		    		  		},
+		    		  		failure:function(resp,opt){
+		    		  			
+		    		  		}
+		    		  	});
 		    		  }
 	                  var s = griddescuentos.getSelectionModel().getSelections();
     	              for(var i = 0, r; r = s[i]; i++){

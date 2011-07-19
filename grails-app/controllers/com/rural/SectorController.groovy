@@ -45,21 +45,22 @@ class SectorController {
 			sectorInstance = Sector.get(params.sectorId)
 			if(sectorInstance){
 				listaDescuentosInstance = new ListaDescuentos(params)
-				sectorInstance.addToDescuentos(listaDescuentosInstance)
-				if(sectorInstance.validate()){
-					sectorInstance.save()
+				listaDescuentosInstance.sector = sectorInstance
+				if(listaDescuentosInstance.validate()){
+					listaDescuentosInstance=listaDescuentosInstance.save()
 					log.info "SE GUARDO CORRECTAMENTE EL SECTOR CON SU DESCUENTO"
-					render(contetType:"text/json"){
+					render(contentType:"text/json"){
 						success true
+						id listaDescuentosInstance.id
 					}
 				}else{
 					status.setRollbackOnly()
 					log.info "NO SE PUDO GUARDAR EL SECTOR CON SU DESCUENTO"
-					log.debug "ERRORES DE VALIDACION: "+sectorInstance.errors.allErrors
+					log.debug "ERRORES DE VALIDACION: "+listaDescuentosInstance.errors.allErrors
 					render(contentType:"text/json"){
 						success false
 						errors{
-							g.eachError(bean:sectorInstance){
+							g.eachError(bean:listaDescuentosInstance){
 								log.debug "${it.class}"
 								title g.message(error:it)
 							}
