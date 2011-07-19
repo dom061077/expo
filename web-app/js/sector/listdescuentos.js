@@ -97,6 +97,7 @@ Ext.onReady(function(){
 								icon:Ext.MessageBox.ERROR,
 								buttons:Ext.MessageBox.OK
 							});
+							
 						}
 					}					
 			},
@@ -156,6 +157,8 @@ Ext.onReady(function(){
 							params:{'sectorId':sectorId}
 						});
 						descuentoswin.title='Tarifario de Lotes';
+						formdescuentos.getForm().findField('expoNombre').setValue(sel.data.expoNombre);
+						formdescuentos.getForm().findField('sectorNombre').setValue(sel.data.nombre);
 						descuentoswin.show();
 					}else{
 						Ext.MessageBox.show({
@@ -323,6 +326,9 @@ Ext.onReady(function(){
 								icon:Ext.MessageBox.ERROR,
 								buttons:Ext.MessageBox.OK
 							});
+							listdescuentosStore.load({
+								params:{'sectorId':sectorId}
+							});
 						}
 					}					
 			},
@@ -433,12 +439,19 @@ Ext.onReady(function(){
 	
 	var formdescuentos = new Ext.form.FormPanel({
 		frame:true,
+		title:'Carga de Descuentos para...',
 		items:[
-		       {
+		       	{
+		       		xtype:'textfield',
+		       		name:'expoNombre',
+		       		disabled:true,
+		       		fieldLabel:'Exposición'
+				},{
 		    	   xtype:'textfield',
+		    	   name:'sectorNombre',
 		    	   disabled:true,
 		    	   fieldLabel:'Sector'
-		       },griddescuentos]
+				},griddescuentos]
 	});
 	
 	var descuentoswin = new Ext.Window({

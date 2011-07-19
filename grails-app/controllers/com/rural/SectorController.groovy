@@ -333,7 +333,7 @@ class SectorController {
 		def listaDescuentosInstance = ListaDescuentos.get(params.id)
 		if(listaDescuentosInstance){
 			try {
-				sectorInstance.delete(flush:true)
+				listaDescuentosInstance.delete(flush:true)
 				render(contentType:"text/json"){
 					success true
 					msg "El registro se eliminó correctamente"

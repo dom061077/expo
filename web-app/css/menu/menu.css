@@ -51,8 +51,9 @@
     color: #432;
     border-left: 1px solid #e3dad1;
     border-top: 1px solid #e3dad1;
-    border-bottom: 1px solid #e3dad1;    
-    background: #f3efec url(images/menu-item-bg.png) repeat;
+    border-bottom: 1px solid #e3dad1;   
+     
+    background: #f3efec url(../../js/ext/3.3.1/resources/images/default/toolbar/bg.gif) repeat;
     font-size: 12px;
     line-height: 12px;
     padding: 10px 14px;
@@ -70,7 +71,7 @@ ux.menu ul a {
 .ux-menu a:hover,
 .ux-menu a.ux-menu-link-hover {
     border-color: #d2e3f4;
-    background: url(images/menu-item-bg-over.png) repeat;
+    background: url(../../js/ext/3.3.1/resources/images/default/toolbar/btn-over-bg.gif) repeat;
     outline: 0;
 }
 
@@ -109,7 +110,7 @@ ux.menu ul a {
     right: 10px;
     top: 14px;
     position: absolute;
-    background: url(images/menu-arrow-down.png) no-repeat;
+    background: url(../../js/ext/3.3.1/resources/images/yourtheme/button/arrow.gif) no-repeat;
     font-size: 0;
 }
 
@@ -118,7 +119,7 @@ ux.menu ul a {
     width: 6px;
     height: 8px;
     top: 13px; 
-    background: url(images/menu-arrow-right.png) no-repeat;
+    background: url(../../js/ext/3.3.1/resources/images/default/menu/menu-parent.gif) no-repeat;
 }
 
 .ext-border-box .ux-menu-arrow {

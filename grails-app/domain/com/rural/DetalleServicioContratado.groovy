@@ -11,6 +11,8 @@ class DetalleServicioContratado {
 	OrdenReserva ordenReserva
 	static belongs = [ordenReserva:OrdenReserva,lote:Lote,sector:Sector]
 	
+	static hasMany = [descuentos:DetalleServicioContratadoDescuentos]
+	
     static constraints = {
     	lote(blank:true,nullable:true)
     	sector(blank:true,nullable:true)
