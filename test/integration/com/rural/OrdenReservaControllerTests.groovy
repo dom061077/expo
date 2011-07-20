@@ -74,13 +74,19 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
         sector.addToLotes(lote)
         exposicion = new Exposicion(nombre:"Expo 2010",puntoVenta:new Integer(1))
         exposicion.addToSectores(sector)
-        exposicion.save()
+        exposicion=exposicion.save()
         
         tipoConcepto=new TipoConcepto(nombre:"descuento").save(flush:true)
         
         iva = new Iva(descripcion:"21 %",porcentaje:21).save(flush:true)
         rubro = new Rubro(nombreRubro:"RUBRO PRUEBA").save(flush:true)
         subrubro = new SubRubro(nombreSubrubro:"SUBRUBRO NUEVO",rubro:rubro).save()
+		
+		if(exposicion==null)
+			fail("EXPOSICION NULA, NO SE GUARDO CORRECTAMENTE")
+		sector = Sector.findByNombre("EMPRENDIMIENTOS PRODUCTIVOS")	
+		assertNotNull(sector)
+		assertTrue(sector.descuentos.size()==3)
     }
 
     protected void tearDown() {

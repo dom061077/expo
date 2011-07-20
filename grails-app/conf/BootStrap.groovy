@@ -54,6 +54,7 @@ class BootStrap {
      def destroy = {
      }
 	 
+	 
 	 void vencimientoOrdenes(){
 		 log.info "VERIFICANDO VENCIMIENTOS DE ORDENES DE RESERVA"
 		 java.util.Date today = new java.util.Date()
