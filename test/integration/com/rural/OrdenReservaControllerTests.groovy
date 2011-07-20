@@ -9,6 +9,7 @@ import org.springframework.security.context.SecurityContextHolder as SCH
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken
 import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUserImpl 
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken
+import java.text.SimpleDateFormat;
  
 
 
@@ -48,7 +49,27 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 		}
         
         empresa = new Empresa(nombre:"empresa de prueba",usuario:usuario).save(flush:true)
-        sector = new Sector(nombre:"EMPRENDIMIENTOS PRODUCTIVOS",porcentaje:15)
+		def df = new SimpleDateFormat("dd/MM/yy")
+		def date 
+		
+        sector = new Sector(nombre:"EMPRENDIMIENTOS PRODUCTIVOS",precio: new Double(4500))
+
+		date = df.parse("30/07/2011")
+		def listaDescuentosInstance = new ListaDescuentos(porcentaje:new Double(30)
+				,fechaVencimiento:new java.sql.Date(date.getTime()))
+		sector.addToDescuentos(listaDescuentosInstance)
+		
+		
+		date = df.parse("20/08/2011")
+		listaDescuentosInstance = new ListaDescuentos(porcentaje:new Double(25)
+				,fechaVencimiento:new java.sql.Date(date.getTime()))
+		sector.addToDescuentos(listaDescuentosInstance)
+		
+		date = df.parse("05/10/2011")
+		listaDescuentosInstance = new ListaDescuentos(porcentaje:new Double(20)
+				,fechaVencimiento:new java.sql.Date(date.getTime()))
+		sector.addToDescuentos(listaDescuentosInstance)
+				
         lote = new Lote(nombre:"LOTE 8",precio:4000)
         sector.addToLotes(lote)
         exposicion = new Exposicion(nombre:"Expo 2010",puntoVenta:new Integer(1))
