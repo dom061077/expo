@@ -7,6 +7,7 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import java.text.SimpleDateFormat
 import com.rural.enums.TipoNotaEnum
 import com.rural.enums.TipoGeneracionEnum
+import java.util.Collection
 
 
 
@@ -14,7 +15,6 @@ class OrdenReservaException extends RuntimeException{
 	
 	String message
 	OrdenReserva ordenReserva
-	
 	
 	public OrdenReservaException(String message,OrdenReserva ord){
 		super(message)
@@ -34,6 +34,18 @@ class OrdenReservaService {
 		log.info "INGRESANDO AL METODO generaOrdenReserva DE OrdenReservaService"
 		log.info "PARAMETROS: $ord, $empresa"
 		log.debug "CANTIDAD DETALLES SERVICIO CONTRATADO: ${ord.detalle?.size()}"
+		def precio=0
+		
+		Collection.metaClass.eachWithPeek = { closure ->
+			def last = null
+			delegate?.each { current ->
+				if (last) closure(last, current)
+				last = current
+			}
+			if (last) closure(last, null)
+		}
+
+		
     	ord.otrosconceptos.each{
     		ord.subTotal+=it.subTotal
 			ord.subTotalsindesc+=it.subTotal
@@ -46,24 +58,24 @@ class OrdenReservaService {
     	
     	if(!empresaInstance)
     		throw new OrdenReservaException("Ocurrio un error. No se guardo la empresa")
-    	
-    	//if(!empresaInstance.subrubro.save())
-    	//	throw new OrdenReservaException("Error al guardar el subrubro",ord)
-    	log.debug "SUBTOTAL DE ORDE DE RESERVA ANTES DE ITERAR EL DETALLE: "+ord.subTotal+" Y SUBTOTALSININTERES: "+ord.subTotalsindesc
-	    ord.detalle.each{
-				log.debug "DETALLE SERVICIO CONTRATADO "
-				log.debug "PORCENTAJE DE DESCUENTO DEL SECTOR: "+it.sector.porcentaje
-				log.debug "PRECIO DEL LOTE: "+it.lote.nombre+" "+it.lote.precio
-				log.debug "TIENE VENCIMIENTO"
-				it.subTotal = it.lote.precio - it.lote.precio * it.sector?.porcentaje/100
-				it.subTotalsindesc=it.lote.precio
-				ord.subTotal = ord.subTotal + it.subTotal
-				ord.subTotalsindesc=ord.subTotalsindesc+it.subTotalsindesc
+			
+    	ord.detalle.eachWithPeek{current, peek->
+			log.debug "CURRENT: ${current?.class}, Next: ${peek?.class}"
+		}
+	    ord.detalle.each{det->
+				precio=det.lote.precio
+				if(precio==0)
+					precio=det.sector.precio
+				det.subTotal = precio - precio * det.sector?.porcentaje/100
+				det.subTotalsindesc = precio
+				ord.subTotal = ord.subTotal + det.subTotal
+				ord.subTotalsindesc=ord.subTotalsindesc+det.subTotalsindesc
+				it.sector.descuentos.eachWithPeek{current,peek->
+					desc.addToDescuentos(new DetalleServicioContratadoDescuentos(porcentaje:desc.porcentaje,fechaVencimiento:desc.fechaVencimiento,subTotal:desc.subTotal))
+				}
     		}
-    	log.debug "DESPUES DE ITERAR EL DETALLE EL SUBTOTAL ES:"+ord.subTotal	
     	ord.ivaGral = ord.subTotal*(ord.porcentajeResIns > 0 ? ord.porcentajeResIns : ord.porcentajeResNoIns)/100
 		log.debug "IVA GRAL: "+ord.ivaGral
-    	//ord.ivaRni = ord.subTotal*ord.porcentajeResNoIns/100	
     	ord.ivaRni=ord.subTotal+ord.ivaGral
     	if(ord.ivaRniCheck)
     		ord.ivaSujNoCateg=ord.ivaRni*10.5/100
