@@ -2,6 +2,7 @@ package com.rural
 // http://www.grails.org/doc/1.0.x/guide/17.%20Deployment.html
 import java.util.Locale
 import java.sql.Date
+import java.util.Calendar
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import java.text.SimpleDateFormat
@@ -28,6 +29,40 @@ class OrdenReservaService {
 	
 	def messageSource
 	
+	void asignarDescuentosSubtotal(def detalle){
+		log.info "INGRESANDO AL METODO asignarDescuentosSubtotal DEL SERVICIO OrdenReservaService"
+		def difSubTotal
+		def difDesc
+		def primerDesc=0
+		def todayCal = Calendar.getInstance()
+		def sf = new SimpleDateFormat("yyyy-MM-dd")
+		def fecha =  java.sql.Date.valueOf(sf.format(todayCal.getTime()))
+		if(detalle.lote?.precio){
+			log.debug "PRECIO DE LOTE APLICADO: ${detalle.lote.precio}"
+			detalle.subTotalsindesc = detalle.lote.precio
+		}else{
+			log.debug "PRECIO DE SECTOR APLICADO: ${detalle.sector.precio}"
+			detalle.subTotalsindesc = detalle.sector.precio
+		}
+		detalle.sector.descuentos.each{
+			log.debug "ORDEN DE DESCUENTO: ${it.fechaVencimiento}"
+		}
+		detalle.sector.descuentos.eachWithPeek{current,peek->
+			log.debug "ORDEN DE DESCUNTO: ${current.fechaVencimiento}, siguiente: ${peek?.fechaVencimiento}"
+			primerDesc=current.porcentaje
+			if(current.fechaVencimiento.compareTo(fecha)>=0){
+				difDesc = current.porcentaje - (peek?.porcentaje==null?0:peek.porcentaje)
+				difSubTotal = detalle.subTotal*difDesc/100
+				detalle.addToDescuentos(new DetalleServicioContratadoDescuentos(porcentaje:difDesc
+						,fechaVencimiento:current.fechaVencimiento,subTotal:difSubTotal))
+			}
+		}
+		detalle.subTotal = detalle.subTotalsindesc - detalle.subTotalsindesc * primerDesc/100
+		log.info "CANTIDAD DE DESCUENTOS AGREGADOS AL DETALLE DEL SERVICIO CONTRATADO: "+detalle.descuentos.size()
+		log.info "DESCUENTO APLICADO: ${primerDesc}"
+		log.info "SUBTOTAL DEL DETALLE: ${detalle.subTotal}"
+		log.info "SUBTOTAL SIN DESCUENTO DEL DETALLE: ${detalle.subTotalsindesc}"
+	}
 	
 
     OrdenReserva generarOrdenReserva(OrdenReserva ord,Empresa empresa) {
@@ -63,16 +98,18 @@ class OrdenReservaService {
 			log.debug "CURRENT: ${current?.class}, Next: ${peek?.class}"
 		}
 	    ord.detalle.each{det->
-				precio=det.lote.precio
+				
+				/*precio=det.lote.precio
 				if(precio==0)
 					precio=det.sector.precio
 				det.subTotal = precio - precio * det.sector?.porcentaje/100
 				det.subTotalsindesc = precio
 				ord.subTotal = ord.subTotal + det.subTotal
+				ord.subTotalsindesc=ord.subTotalsindesc+det.subTotalsindesc*/
+				asignarDescuentosSubtotal(det)
+				ord.subTotal = ord.subTotal + det.subTotal
 				ord.subTotalsindesc=ord.subTotalsindesc+det.subTotalsindesc
-				it.sector.descuentos.eachWithPeek{current,peek->
-					desc.addToDescuentos(new DetalleServicioContratadoDescuentos(porcentaje:desc.porcentaje,fechaVencimiento:desc.fechaVencimiento,subTotal:desc.subTotal))
-				}
+
     		}
     	ord.ivaGral = ord.subTotal*(ord.porcentajeResIns > 0 ? ord.porcentajeResIns : ord.porcentajeResNoIns)/100
 		log.debug "IVA GRAL: "+ord.ivaGral
