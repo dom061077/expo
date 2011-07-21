@@ -14,5 +14,6 @@ class DetalleServicioContratadoDescuentos {
 		fechaVencimiento( unique:'detalleServicioContratado')
 		porcentaje(min:1d,max:100d)
 		detalleServicioContratado(nullable:true)
+		notadcDetalle(nullable:true)
     }
 }
