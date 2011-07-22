@@ -44,19 +44,27 @@ class OrdenReservaService {
 			log.debug "PRECIO DE SECTOR APLICADO: ${detalle.sector.precio}"
 			detalle.subTotalsindesc = detalle.sector.precio
 		}
-		detalle.sector.descuentos.each{
-			log.debug "ORDEN DE DESCUENTO: ${it.fechaVencimiento}"
+
+		def listDescuentos = ListaDescuentos.createCriteria().list(){
+			sector{
+				eq("id",detalle.sector.id)
+			}
+			order("fechaVencimiento","asc")
+			
 		}
-		detalle.sector.descuentos.eachWithPeek{current,peek->
-			log.debug "ORDEN DE DESCUNTO: ${current.fechaVencimiento}, siguiente: ${peek?.fechaVencimiento}"
-			primerDesc=current.porcentaje
+		
+		primerDesc=listDescuentos[0].porcentaje
+		listDescuentos.eachWithPeek{current,peek->
+			
 			if(current.fechaVencimiento.compareTo(fecha)>=0){
+				log.debug "DESCUENTO ITERADO: actual: ${current.fechaVencimiento} porcentaje: ${current.porcentaje}, siguiente: ${peek?.fechaVencimiento} porcentaje: ${peek?.porcentaje}"
 				difDesc = current.porcentaje - (peek?.porcentaje==null?0:peek.porcentaje)
 				difSubTotal = detalle.subTotal*difDesc/100
 				detalle.addToDescuentos(new DetalleServicioContratadoDescuentos(porcentaje:difDesc
 						,fechaVencimiento:current.fechaVencimiento,subTotal:difSubTotal))
 			}
 		}
+				
 		detalle.subTotal = detalle.subTotalsindesc - detalle.subTotalsindesc * primerDesc/100
 		log.info "CANTIDAD DE DESCUENTOS AGREGADOS AL DETALLE DEL SERVICIO CONTRATADO: "+detalle.descuentos.size()
 		log.info "DESCUENTO APLICADO: ${primerDesc}"
