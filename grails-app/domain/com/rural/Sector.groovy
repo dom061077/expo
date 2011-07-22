@@ -8,6 +8,10 @@ class Sector {
 	static hasMany = [lotes:Lote,descuentos:ListaDescuentos]
     static constraints = {
 		precio(nullable:true,blank:true)
-		descuentos(sort:'fechaVencimiento')
+		
     }
+	
+	static mapping = {
+		descuentos(sort:'fechaVencimiento')
+	}
 }
