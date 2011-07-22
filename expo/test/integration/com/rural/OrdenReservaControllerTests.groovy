@@ -139,13 +139,15 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			assertEquals(ordenreservaInstance.empresa.razonSocial,"EMPRESA NUEVA RAZON SOCIAL")
 			assertEquals(ordenreservaInstance.numero,1)
 			assertEquals(ordenreservaInstance.total,3993)
+			def listPorcentaje = [5,5,20]
+			def listSubtotales = [200,200,800]
+			def listVencimientos = []
 			ordenreservaInstance.detalle.each{
-				assertEquals(it.descuentos.size(),1)
-				it.descuentos{desc->
-					assertEquals(desc.porcentaje,5)
-					assertEquals(desc.fechaVencimiento,new java.sql.Date())
-					assertEquals(desc.subTotal,)
-				}
+				assertEquals(it.descuentos.size(),3)
+				fail("ESTRUCTURA DEL HASHSET: "+it.descuentos)
+				assertEquals(it.descuentos[0]["porcentaje"],5)
+				//assertEquals(desc.fechaVencimiento,new java.sql.Date())
+				assertEquals(it.descuentos[0]["subTotal"],200)
 			}
 			
 		
