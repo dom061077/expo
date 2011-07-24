@@ -18,4 +18,9 @@ class DetalleServicioContratado {
     	sector(blank:true,nullable:true)
 		subTotalsindesc(blank:true,nullable:true)
     }
+	
+	static mapping={
+		descuentos(sort:'fechaVencimiento',order:'asc')
+	}
+	
 }
