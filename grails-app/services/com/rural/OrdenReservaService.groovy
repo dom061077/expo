@@ -58,8 +58,10 @@ class OrdenReservaService {
 			
 			if(current.fechaVencimiento.compareTo(fecha)>=0){
 				log.debug "DESCUENTO ITERADO: actual: ${current.fechaVencimiento} porcentaje: ${current.porcentaje}, siguiente: ${peek?.fechaVencimiento} porcentaje: ${peek?.porcentaje}"
+				
 				difDesc = current.porcentaje - (peek?.porcentaje==null?0:peek.porcentaje)
 				difSubTotal = detalle.subTotal*difDesc/100
+				log.debug "Diferencia de descuento: ${difDesc}"
 				detalle.addToDescuentos(new DetalleServicioContratadoDescuentos(porcentaje:difDesc
 						,fechaVencimiento:current.fechaVencimiento,subTotal:difSubTotal))
 			}
