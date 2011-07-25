@@ -10,12 +10,12 @@ import org.springframework.security.providers.UsernamePasswordAuthenticationToke
 import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUserImpl 
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken
 import java.text.SimpleDateFormat;
-import org.apache.commons.logging.LogFactory
+import org.apache.log4j.*
 
 
 
 class OrdenReservaControllerTests extends GrailsUnitTestCase {
-	private static def logger = LoggerFactory.getLogger(OrdenReservaControllerTests.class)
+	
 	
 	def ordenReservaService
 	def authenticateService
@@ -31,9 +31,17 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	def subrubro = null
 	def df
 	boolean transactional = true	
+	def logger
 	
     protected void setUp() {
-        super.setUp()
+       super.setUp()
+	   BasicConfigurator.configure()
+	   LogManager.rootLogger.level = Level.DEBUG
+	   log = LogManager.getLogger(OrdenReservaControllerTests.getClass())
+
+	   // use groovy metaClass to put the log into your class
+	   
+	   
 	   usuario = Person.findByUsername("admin2")
        if(!usuario){
 		    usuario = new Person(username:"admin2",userRealName:"Administrador",passwd:"sdjflasf",email:"admin@noexiste.com.ar")
@@ -152,16 +160,13 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			def i=0
 			ordenreservaInstance.detalle.each{
 				it.descuentos.each{desc->
-					logger.debug "Porcentaje: "+desc.porcentaje
-					logger.debug "Subtotal: "+desc.subTotal
-					logger.debug "fecha vencimiento: "+desc.fechaVencimiento
 					//assertEquals(desc.porcentaje,listPorcentaje[i])
 					//assertEquals(desc.subTotal,listSubtotales[i])
 					//assertEquals(desc.fechaVencimiento,listVencimientos[i])
 					i++
 				}
 			}
-			
+			log.debug "HOLA!!!!"
 		
 	}
 
