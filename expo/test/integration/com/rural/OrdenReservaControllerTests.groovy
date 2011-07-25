@@ -35,9 +35,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	
     protected void setUp() {
        super.setUp()
-	   BasicConfigurator.configure()
-	   LogManager.rootLogger.level = Level.DEBUG
-	   log = LogManager.getLogger(OrdenReservaControllerTests.getClass())
+	   logger = LogManager.getLogger(OrdenReservaControllerTests.getClass())
 
 	   // use groovy metaClass to put the log into your class
 	   
@@ -160,13 +158,16 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			def i=0
 			ordenreservaInstance.detalle.each{
 				it.descuentos.each{desc->
+					logger.info("PORCENTAJE: "+desc.porcentaje)
+					logger.info("SUBTOTAL: "+desc.subTotal)
+					logger.info("FECHA DE VENCIMIENTO: "+desc.fechaVencimiento)
 					//assertEquals(desc.porcentaje,listPorcentaje[i])
 					//assertEquals(desc.subTotal,listSubtotales[i])
 					//assertEquals(desc.fechaVencimiento,listVencimientos[i])
 					i++
 				}
 			}
-			log.debug "HOLA!!!!"
+			
 		
 	}
 
