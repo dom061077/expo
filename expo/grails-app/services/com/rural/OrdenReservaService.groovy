@@ -37,13 +37,6 @@ class OrdenReservaService {
 		def todayCal = Calendar.getInstance()
 		def sf = new SimpleDateFormat("yyyy-MM-dd")
 		def fecha =  java.sql.Date.valueOf(sf.format(todayCal.getTime()))
-		if(detalle.lote?.precio){
-			log.debug "PRECIO DE LOTE APLICADO: ${detalle.lote.precio}"
-			detalle.subTotalsindesc = detalle.lote.precio
-		}else{
-			log.debug "PRECIO DE SECTOR APLICADO: ${detalle.sector.precio}"
-			detalle.subTotalsindesc = detalle.sector.precio
-		}
 
 		def listDescuentos = ListaDescuentos.createCriteria().list(){
 			sector{
@@ -52,8 +45,21 @@ class OrdenReservaService {
 			order("fechaVencimiento","asc")
 			
 		}
+		primerDesc=listDescuentos[0]?.porcentaje
+		if(primerDesc==null)
+			primerDesc=0
+		if(detalle.lote?.precio){
+			log.debug "PRECIO DE LOTE APLICADO: ${detalle.lote.precio}"
+			detalle.subTotalsindesc = detalle.lote.precio
+			detalle.subTotal = detalle.lote.precio - detalle.lote.precio*primerDesc/100
+		}else{
+			log.debug "PRECIO DE SECTOR APLICADO: ${detalle.sector.precio}"
+			detalle.subTotalsindesc = detalle.sector.precio
+			detalle.subTotal = detalle.sector.precio - detalle.sector.precio*primerDesc/100
 		
-		primerDesc=listDescuentos[0].porcentaje
+		}
+
+		
 		listDescuentos.eachWithPeek{current,peek->
 			
 			if(current.fechaVencimiento.compareTo(fecha)>=0){
@@ -68,7 +74,7 @@ class OrdenReservaService {
 		}
 				
 		detalle.subTotal = detalle.subTotalsindesc - detalle.subTotalsindesc * primerDesc/100
-		log.info "CANTIDAD DE DESCUENTOS AGREGADOS AL DETALLE DEL SERVICIO CONTRATADO: "+detalle.descuentos.size()
+		log.info "CANTIDAD DE DESCUENTOS AGREGADOS AL DETALLE DEL SERVICIO CONTRATADO: "+detalle.descuentos?.size()
 		log.info "DESCUENTO APLICADO: ${primerDesc}"
 		log.info "SUBTOTAL DEL DETALLE: ${detalle.subTotal}"
 		log.info "SUBTOTAL SIN DESCUENTO DEL DETALLE: ${detalle.subTotalsindesc}"
