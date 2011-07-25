@@ -217,7 +217,8 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 			if(ordenreservaInstance.subTotal!=3305)
 				fail("SubTotal erroneo: deberia ser 3305 pero resultó en: $ordenreservaInstance.subTotal")
 			if(ordenreservaInstance.total!=3999.05)
-				fail("SubTotal erroneo: deberia ser 3999.05 pero resultó en: $ordenreservaInstance.total")    }		
+				fail("SubTotal erroneo: deberia ser 3999.05 pero resultó en: $ordenreservaInstance.total")    
+	}		
     
     /*void testGenerarOrdenAddSubRubro(){
     		assertNotNull(authenticateService.userDomain())
