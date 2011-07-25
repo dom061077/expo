@@ -1403,17 +1403,7 @@ Ext.onReady(function(){
 				id:'datosserviciocontratadoId',
 				monitorValid:true,
 				width:600,
-				items:[gridDetalleServicioContratado
-						,{
-							xtype:'datefield',
-							fieldLabel:'Fecha vencimiento',
-							allowBlank:false,
-							msgTarget:'under',
-							width:150,
-							name:'fechaVencimientoOrden',
-							id:'fechaVencimientoOrdenId'
-						}
-				]
+				items:[gridDetalleServicioContratado]
 			}),
 			new Ext.ux.Wiz.Card({
 				title:'Otros Conceptos',

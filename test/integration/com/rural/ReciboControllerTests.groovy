@@ -10,6 +10,8 @@ import org.springframework.security.providers.UsernamePasswordAuthenticationToke
 import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUserImpl 
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken
 import java.text.SimpleDateFormat
+import org.apache.log4j.*
+
 
 import org.apache.commons.logging.LogFactory
 
@@ -27,10 +29,17 @@ class ReciboControllerTests extends GrailsUnitTestCase {
 	def sectorSinDesc = null
 	def iva = null
 	def lote = null
-	boolean transactional = true	
+	boolean transactional = true
+	def df
+	def logger
+	def rubro
+	def subrubro
+	def ordenreservaInstance
+
 	
     protected void setUp() {
         super.setUp()
+		logger = LogManager.getLogger(OrdenReservaControllerTests.getClass())
 		usuario = Person.findByUsername("admin2")
 		if(!usuario){
 	        usuario = new Person(username:"admin2",
@@ -55,7 +64,8 @@ class ReciboControllerTests extends GrailsUnitTestCase {
 		}
         
         empresa = new Empresa(nombre:"empresa de prueba",usuario:usuario).save(flush:true)
-        sector = new Sector(nombre:"EMPRENDIMIENTOS PRODUCTIVOS",porcentaje:15)
+
+		/*sector = new Sector(nombre:"EMPRENDIMIENTOS PRODUCTIVOS",porcentaje:15)
 		sectorSinDesc = new Sector(nombre:"PABELLON 2",porcentaje:0)
 		
         lote = new Lote(nombre:"LOTE 8",precio:4000)
@@ -69,7 +79,46 @@ class ReciboControllerTests extends GrailsUnitTestCase {
 			fail("ERROR EN VALIDACION DE exposicion, "+exposicion.errors.allErrors)
         exposicion.addToSectores(sector)
 		exposicion.addToSectores(sectorSinDesc)
-        exposicion = exposicion.save(flush:true)
+        exposicion = exposicion.save(flush:true)*/
+		df = new SimpleDateFormat("dd/MM/yy")
+		def date
+		
+		sector = new Sector(nombre:"EMPRENDIMIENTOS PRODUCTIVOS",precio: new Double(4500))
+
+		date = df.parse("30/10/2011")
+		def listaDescuentosInstance = new ListaDescuentos(porcentaje:new Double(20)
+				,fechaVencimiento:new java.sql.Date(date.getTime()))
+		sector.addToDescuentos(listaDescuentosInstance)
+		
+		
+		date = df.parse("20/08/2011")
+		listaDescuentosInstance = new ListaDescuentos(porcentaje:new Double(25)
+				,fechaVencimiento:new java.sql.Date(date.getTime()))
+		sector.addToDescuentos(listaDescuentosInstance)
+		
+		date = df.parse("30/07/2011")
+		listaDescuentosInstance = new ListaDescuentos(porcentaje:new Double(30)
+				,fechaVencimiento:new java.sql.Date(date.getTime()))
+		sector.addToDescuentos(listaDescuentosInstance)
+				
+		lote = new Lote(nombre:"LOTE 8",precio:4000)
+		sector.addToLotes(lote)
+		exposicion = new Exposicion(nombre:"Expo 2010",puntoVenta:new Integer(1))
+		exposicion.addToSectores(sector)
+		exposicion=exposicion.save()
+		
+		//tipoConcepto=new TipoConcepto(nombre:"descuento").save(flush:true)
+		
+		iva = new Iva(descripcion:"21 %",porcentaje:21).save(flush:true)
+		rubro = new Rubro(nombreRubro:"RUBRO PRUEBA").save(flush:true)
+		subrubro = new SubRubro(nombreSubrubro:"SUBRUBRO NUEVO",rubro:rubro).save()
+		
+		if(exposicion==null)
+			fail("EXPOSICION NULA, NO SE GUARDO CORRECTAMENTE")
+		sector = Sector.findByNombre("EMPRENDIMIENTOS PRODUCTIVOS")
+		assertNotNull(sector)
+		assertTrue(sector.descuentos.size()==3)
+
         
         tipoconcepto=new TipoConcepto(nombre:"descuento").save(flush:true)              
     }
@@ -77,10 +126,73 @@ class ReciboControllerTests extends GrailsUnitTestCase {
     protected void tearDown() {
         super.tearDown()
     }
+	
+	private void ordenReservaControllerCall(){
+		def ordenreservaController = new OrdenReservaController()
+		ordenreservaController.ordenReservaService=ordenReservaService
+		ordenreservaController.authenticateService=authenticateService
+		ordenreservaController.params.expo=exposicion
+		ordenreservaController.params.anio=2010
+		//ordenreservaController.params.usuario=usuario
+		ordenreservaController.params.empresa=new Empresa(subrubro:subrubro)
+		ordenreservaController.params.empresa.nombre="empresa nueva"
+		ordenreservaController.params.empresa.razonSocial="empresa nueva razon social"
+		ordenreservaController.params.detallejson="[{lote_id:$lote.id,sector_id:$sector.id,subTotal:1900}]"
+		ordenreservaController.params.otrosconceptosjson="[{descripcion:'interes',subTotal:500}]"
+		ordenreservaController.params.observacion="OBSERVACION"
+		ordenreservaController.params.porcentajeResIns=iva.id
+		ordenreservaController.params.porcentajeResNoIns=0
+		ordenreservaController.params.productosjson="[{descripcion:'QUESOS Y QUESILLOS'},{descripcion:'MEMBRILLO'}]"
+		
+		/*
+		ordenreservaController.params.put("empresa.nombre","empresa nueva")
+		ordenreservaController.params.put("empresa.razonSocial","empresa nueva razon social")
+		ordenreservaController.params.put("detallejson","[{lote_id:$lote.id,subTotal:1900}]")
+		ordenreservaController.params.put("otrosconceptosjson","[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]")
+		ordenreservaController.params.put("observacion","OBSERVACION ")
+		ordenreservaController.params.put("porcentajeResIns",21)
+		ordenreservaController.params.put("porcentajeResNoIns",0)
+		ordenreservaController.params.put("productosjson","[{descripcion:'QUESOS Y QUESILLOS'},{descripcion:'MEMBRILLO'}]")
+		*/
+		//fail("ERROR "+ordenreservaController.class)
+		
+		ordenreservaController.generarordenreserva()
+		def respuesta = ordenreservaController.response.contentAsString
+		//fail("RESPUESTA JSON "+ordenreservaController.response.contentAsString)
+		def respuestaJson = grails.converters.JSON.parse(respuesta)
+		ordenreservaInstance = OrdenReserva.get(respuestaJson.ordenid)
+		
+		assertTrue(ordenreservaInstance.empresa.nombre.equals("EMPRESA NUEVA"))
+		assertNotNull(ordenreservaInstance)
+		assertEquals(ordenreservaInstance.detalle.size(),1)
+		assertEquals(ordenreservaInstance.otrosconceptos.size(),1)
+		assertEquals(ordenreservaInstance.empresa.razonSocial,"EMPRESA NUEVA RAZON SOCIAL")
+		assertEquals(ordenreservaInstance.numero,1)
+		assertEquals(ordenreservaInstance.total,3993)
+		def listPorcentaje = [5,5,20]
+		def listSubtotales = [200,200,800]
+		def listVencimientos = [
+			 new java.sql.Date(df.parse("30/07/2011").getTime())
+			,new java.sql.Date(df.parse("20/08/2011").getTime())
+			,new java.sql.Date(df.parse("30/10/2011").getTime())]
+		def i=0
+		ordenreservaInstance.detalle.each{
+			it.descuentos.each{desc->
+				logger.info("PORCENTAJE: "+desc.porcentaje)
+				logger.info("SUBTOTAL: "+desc.subTotal)
+				logger.info("FECHA DE VENCIMIENTO: "+desc.fechaVencimiento)
+				//assertEquals(desc.porcentaje,listPorcentaje[i])
+				//assertEquals(desc.subTotal,listSubtotales[i])
+				//assertEquals(desc.fechaVencimiento,listVencimientos[i])
+				i++
+			}
+		}
+
+	}
 
     void testCreateJsonSinDebito() {
 		
-		assertNotNull(exposicion)
+		/*assertNotNull(exposicion)
 		
 		def sector = Sector.findByNombre("EMPRENDIMIENTOS PRODUCTIVOS")
 		def lote = Lote.findByNombre("LOTE 8")
@@ -113,17 +225,20 @@ class ReciboControllerTests extends GrailsUnitTestCase {
    	       assertTrue(true)
 		else
 			fail("ERROR EN EL CALCULO DEL TOTAL DE ORDEN DE RESERVA sin descuento: "+ordenReserva.totalsindesc)
-		  
+		*/  
+		
+		ordenReservaControllerCall()
+		
     	def reciboController = new ReciboController()
     	reciboController.reciboService = reciboService
-    	reciboController.params.ordenreservaid=ordenReserva.id
+    	reciboController.params.ordenreservaid=ordenreservaInstance.id
     	reciboController.params.concepto=''
     	reciboController.params.efectivo=4
     	reciboController.params.chequesjson="[{numero:'0000789',banco:'BANCO DEL TUCUMAN',importe:2000,vencimiento:'2012-10-26'},{numero:'0123456',banco:'BANCO DE LA NACION ARGENTINA',importe:900.24,vencimiento:'2011-12-30'}]"
     	reciboController.createjson()
     	def respuesta = reciboController.response.contentAsString
     	def respuestaJson = grails.converters.JSON.parse(respuesta)
-		def ordenPos = OrdenReserva.get(ordenReserva.id)
+		def ordenPos = OrdenReserva.get(ordenreservaInstance.id)
 		//if(ordenPos.total - ordenPos.credito + ordenPos.debito - ordenPos.recibo != 1814.76)
 		//fail("DATOS: ${ordenPos.total} ${ordenPos.credito} ${ordenPos.debito} ${ordenPos.recibo}")
 		assertNull(ordenPos.notas)
