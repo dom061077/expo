@@ -61,7 +61,7 @@ class OrdenReservaService {
 				
 				difDesc = current.porcentaje - (peek?.porcentaje==null?0:peek.porcentaje)
 				difSubTotal = detalle.subTotal*difDesc/100
-				log.debug "Diferencia de descuento: ${difDesc}"
+				log.debug "Diferencia de descuento: ${difDesc}, subTotal diferencia: ${difSubTotal}, subtotal de detalle:${detalle.subTotal}"
 				detalle.addToDescuentos(new DetalleServicioContratadoDescuentos(porcentaje:difDesc
 						,fechaVencimiento:current.fechaVencimiento,subTotal:difSubTotal))
 			}
