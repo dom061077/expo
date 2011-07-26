@@ -375,9 +375,9 @@ Ext.onReady(function(){
 		         {header:'Fecha Vence',dataIndex:'fechaVencimiento',width:80,type:'date'
 		         	 ,renderer:formatDate
 		        	 ,editor: new Ext.form.DateField({
-						format:'d/m/y',
-						disabledDays:[0,6],
-						disabledDaysText: 'El vencimiento no puede ser un fin de semana'
+						format:'d/m/y'
+						//,disabledDays:[0,6],
+						//disabledDaysText: 'El vencimiento no puede ser un fin de semana'
 						})
 		         }
 		],

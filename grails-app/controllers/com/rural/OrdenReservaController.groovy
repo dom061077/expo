@@ -469,7 +469,7 @@ class OrdenReservaController {
 							if(filtro["field"].equals("sector") || filtro["field"].equals("lote")){
 								co.isNotEmpty("detalle")
 							}
-							if(filtro["field"].equals("nombre")){
+							if( ["field"].equals("nombre")){
 								log.debug "LOGRO INGRESAR POR LA CONDICION DE NOMBRE"
 								co.ilike(filtro["field"],"%"+filtro["value"]+"%")
 							}
@@ -839,7 +839,10 @@ class OrdenReservaController {
         						totalCancelado=totalCancelado+it.total
         				}
         				//saldoOrd = it.ordenReserva.total - it.ordenReserva.credito - it.ordenReserva.recibo + it.ordenReserva.debito
-    					row(id:it.id+1000,ordenId:it.ordenReserva.id,numero:it.ordenReserva.numero,fechaAlta:it.ordenReserva.fechaAlta,total:it.ordenReserva.total,anio:it.ordenReserva.anio
+    					row(id:it.id+1000,ordenId:it.ordenReserva.id,numero:it.ordenReserva.numero
+								,fechaAlta:it.ordenReserva.fechaAlta
+								,total:it.ordenReserva.total
+								,anio:it.ordenReserva.anio
     							,expoNombre:it.ordenReserva.expo.nombre
 								,subTotal:it.subTotal
 								,subTotalOtrosConceptos:it.ordenReserva.subtotalOtrosConceptos
