@@ -4,6 +4,7 @@ package com.rural
 
 import grails.converters.JSON
 import org.springframework.transaction.TransactionStatus
+import java.util.Calendar
 
 class SectorController {
     
@@ -21,9 +22,10 @@ class SectorController {
 		log.info "INGRESANDO AL CLOSURE listprecios DEL CONTROLLER SectorController"
 		log.info "PARAMETROS $params"
 		def list = ListaDescuentos.createCriteria().list(){
-			sector{
-				eq("id",params.sectorId?.toLong())
-			}
+				sector{
+					eq("id",params.sectorId?.toLong())
+				}
+			order("fechaVencimiento","asc")
 		}
 		
 		render(contentType:"text/json"){
@@ -393,7 +395,6 @@ class SectorController {
     	log.info("PARAMETROS $params")
     	def sectorInstance=Sector.get(params.id)
 		params.precio = params.precio?.replace(".",",")
-		sectorInstance = null
 		if(sectorInstance){
 	    	sectorInstance.properties=params
 	    	if(!sectorInstance.hasErrors() && sectorInstance.save()){
@@ -422,12 +423,31 @@ class SectorController {
 	
 	def getdescuento = {
 		log.info("INGRESANDO AL CLOSURE getdescuento DEL CONTROLLER SectorController")
-		log.info("PARAMETROS $params") 
-		def sectorInstance = Sector.load(params.id.toLong())
-		def porc = (sectorInstance.porcentaje!=null?sectorInstance.porcentaje:0)
+		log.info("PARAMETROS $params")
+		def calendar = Calendar.getInstance()
+		def listDescuentos = ListaDescuentos.createCriteria().list(){
+			and{
+				sector{
+					eq("id",new Long(params.id.toLong()))
+				}
+				ge("fechaVencimiento",new java.sql.Date(calendar.getTime().getTime()))
+			}
+			order("fechaVencimiento","asc")
+			
+		}
+		def porc = 0
+		def vencimiento
+		def precioSector
+		if(listDescuentos){
+			porc = listDescuentos[0].porcentaje
+			vencimiento = listDescuentos[0].fechaVencimiento
+			precioSector = listDescuentos[0].sector.precio
+		}
 		render(contentType:"text/json"){
 			success true
 			porcentaje porc
+			fechaVencimiento vencimiento
+			precio precioSector
 		}
 	}
 }

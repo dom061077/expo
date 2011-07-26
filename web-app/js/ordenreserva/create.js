@@ -370,8 +370,8 @@ Ext.onReady(function(){
 				{name: 'sector_id',type:'string'},
 				{name: 'lote_id',type:'string'},
 				{name: 'precio',type:'float'},
-				
 				{name: 'descuento',type:'float'},
+				{name: 'fechaVigencia', type:'date'},
 				{name: 'subTotal', type: 'float'}
 			]
 		})
@@ -468,6 +468,9 @@ Ext.onReady(function(){
 			 					else{
 			 						if(respuesta.success){
 			 							sel.data.descuento=respuesta.porcentaje;
+			 							sel.data.fechaVencimiento=respuesta.fechaVencimiento;
+			 							sel.data.precio=respuesta.precio
+			 							sel.data.subTotal=sel.data.precio-respuesta.precio*sel.data.descuento/100;
 			 						}
 			 					}
 			 							
@@ -511,6 +514,11 @@ Ext.onReady(function(){
 				dataIndex:'descuento',
 				width:80/*,
 				editor: new Ext.form.NumberField()*/
+			},{
+				header:'Vencimiento',
+				dataIndex:'fechaVencimiento',
+				renderer: Ext.util.Format.dateRenderer('d/m/y'),
+				width:80
 			},{
 				header:'Sub-Total',
 				dataIndex:'subTotal',
@@ -557,6 +565,7 @@ Ext.onReady(function(){
 				 			lote_id:'',
 				 			precio:0,
 				 			descuento:0,
+				 			fechaVigencia:new Date(),
 				 			subTotal:0
 				 		});
 						gridDetalleServicioContratado.getStore().insert(
@@ -1645,10 +1654,10 @@ Ext.onReady(function(){
 				otrosconceptosjson:otrosconceptosjsonStr,
 				productosjson:productosjsonStr,
 				anio:datos.datoscontactoId.anio,
-				fechaVencimiento:Ext.getCmp('fechaVencimientoOrdenId').getValue(),//datos.datosserviciocontratadoId.fechaVencimientoOrden,
-				fechaVencimiento_year:Ext.getCmp('fechaVencimientoOrdenId').getValue().getFullYear(),
-				fechaVencimiento_month:Ext.getCmp('fechaVencimientoOrdenId').getValue().getMonth(),
-				fechaVencimiento_day:Ext.getCmp('fechaVencimientoOrdenId').getValue().getDate(),
+				//fechaVencimiento:Ext.getCmp('fechaVencimientoOrdenId').getValue(),//datos.datosserviciocontratadoId.fechaVencimientoOrden,
+				//fechaVencimiento_year:Ext.getCmp('fechaVencimientoOrdenId').getValue().getFullYear(),
+				//fechaVencimiento_month:Ext.getCmp('fechaVencimientoOrdenId').getValue().getMonth(),
+				//fechaVencimiento_day:Ext.getCmp('fechaVencimientoOrdenId').getValue().getDate(),
 				'expo.id':datos.datoscontactoId.exposicionid,
 				ivaGralCheck:(datos.exposicionId.resins=='on'?true:false),
 				ivaRniCheck:(datos.exposicionId.noins=='on'?true:false),
