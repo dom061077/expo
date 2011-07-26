@@ -11,6 +11,7 @@
         <title>Listado de Sectores</title>
     </head>
     <body>
+    	
         <div class="nav">
             <span class="menuButton"><g:link class="create" action="create">Alta de Sector</g:link></span>
         </div>
