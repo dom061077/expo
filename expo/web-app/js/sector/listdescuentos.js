@@ -271,12 +271,17 @@ Ext.onReady(function(){
 								title:'Error',
 								msg:msg,
 								icon:Ext.MessageBox.ERROR,
-								buttons:Ext.MessageBox.OK
+								buttons:Ext.MessageBox.OK,
+								fn: function(button){
+									listdescuentosStore.load({
+										params:{'sectorId':sectorId}
+									});
+								}
 							});
 						}
-						listdescuentosStore.load({
-							params:{'sectorId':sectorId}
-						});
+						//listdescuentosStore.load({
+						//	params:{'sectorId':sectorId}
+						//});
 					}					
 				},
 				failure:function(resp,opt){
