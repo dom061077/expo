@@ -203,9 +203,9 @@ class OrdenReservaService {
     }
 	
 	
-	void verificarVencimiento(def orden){
+	void verificarVencimiento(def detalleServContDesc){
 		log.info "INGRESANDO AL CLOSURE verificarVencimiento DEL SERVICE OrdenReservaService"
-		log.info "ORDEN: $orden"
+		log.info "Detalle Servicio Contratado Descuento: $detalleServContDesc"
 		
 		def notad
 		def notadDetalle
@@ -214,7 +214,40 @@ class OrdenReservaService {
 		log.info "OPERACION CON FECHA: "+java.sql.Date.valueOf(sdf.format(today))
 		//def todaysql = java.sql.Date.valueOf(sdf.format(today)) //new java.sql.Date(today.getTime())
 		boolean debitoCreado = false
-		
+		def ordenReserva=detalleServContDesc.detalleServicioContratado.ordenReserva
+		notad = new NotaDC(fechaAlta:java.sql.Date.valueOf(sdf.format(today))
+			, ordenReserva:orden,tipoGen:TipoGeneracionEnum.TIPOGEN_AUTOMATICA
+			,tipo:TipoNotaEnum.NOTA_DEBITO
+			,monto:"0".toDouble()
+			,subTotal:"0".toDouble(),ivaGral:"0".toDouble(),ivaRni:"0".toDouble(),ivaSujNoCateg:"0".toDouble())
+		notadDetalle = new NotadcDetalle(descripcion:"Quita de Descuento del ${detalleServContDesc}% (${detalleServContDesc.porcentajeActual}% menos ${detalleServContDesc.porcentajeSig}) por Sector ${detalleServContDesc.detalleServicioContratado.sector.nombre}"
+					,subTotal:detalleServContDesc.subTotal)
+		notad.addToDetalle(notadDetalle)
+		notad.subTotal = notadDetalle.subTotal
+		notad.ivaGral =  notad.subTotal*(orden.porcentajeResIns > 0 ? orden.porcentajeResIns : orden.porcentajeResNoIns)/100
+		log.debug "CALCULO DE IVA GRAL: "+notad.ivaGral
+		if(orden.ivaRniCheck)
+			notad.ivaSujNoCateg=notad.ivaRni*10.5/100
+		notad.total=notad.subTotal+notad.ivaGral+notad.ivaSujNoCateg
+		notad.total=Math.round(notad.total*Math.pow(10,2))/Math.pow(10,2)
+		if(notad.subTotal>0){
+			log.info "SUBTOTAL MAYOR A CERO"
+			if(notad.save()){
+				log.info "NOTA DEBITO SALVADA"
+				orden.addToNotas(notad)
+				if(orden.save())
+					log.info "SE GENERO UNA NOTA DE DEBITO de ${notad.total} PARA LA ORDEN CON ID: ${orden.id}"
+				else
+					log.info "Se produjo un error al agregar una nota como detalle de la orden de reserva"
+				
+			}else{
+				log.info "ERRORES DE NOTA DE DEBITO: "+notad.errors.allErrors
+				
+			}
+		}else
+			log.error "SUBTOTAL DE NOTA DE DEBITO IGUAL A CERO"
+
+		/*
 		log.debug "ANTES DEL IF orden.fechaVencimiento"
 		if(orden.fechaVencimiento){
 			orden.notas.each{
@@ -259,7 +292,7 @@ class OrdenReservaService {
 			}
 		}else{
 			log.info "FECHA DE VENCIMIENTO NO VALIDA"
-		}
+		}*/
 		
 	}
 
