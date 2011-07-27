@@ -5,6 +5,8 @@ import java.sql.Date
 class DetalleServicioContratadoDescuentos {
 	Double subTotal=0
 	Double porcentaje
+	Double porcentajeActual
+	Double procentajeSig
 	Date fechaVencimiento
 	DetalleServicioContratado detalleServicioContratado
 	NotadcDetalle notadcDetalle
