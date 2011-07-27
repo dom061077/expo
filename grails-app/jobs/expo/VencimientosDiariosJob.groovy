@@ -14,17 +14,24 @@ class VencimientosDiariosJob {
 		def orden
 		//ordenReservaService.verificarVencim(orden)
 
-		 log.debug "VERIFICANDO VENCIMIENTOS DE ORDENES DE RESERVA"
+		 log.debug "VERIFICANDO VENCIMIENTOS DE DESCUENTOS DE ORDENES DE RESERVA"
 		 java.util.Date today = new java.util.Date()
 		 def sdf = new SimpleDateFormat("yyyy-MM-dd")
 		 
-		 def ordenes = OrdenReserva.createCriteria().list(){
+		 def descuentosVencidos = DetalleServicioContratadoDescuentos.createCriteria().list(){
 			 and{
 				 lt("fechaVencimiento",java.sql.Date.valueOf(sdf.format(today)))
-				 eq("anulada",Boolean.parseBoolean("false"))
+				 detalleServicioContratado{
+					 ordenReserva{
+						 eq("anulada",Boolean.parseBoolean("false"))
+					 }
+				 }
+				 lt("porcentaje","0".toDouble())
+				 lt("subTotal","0".toDouble())
+				 IsNull(notadcDetalle)
 			 }
 		 }
-		 log.debug "ORDENES DE RESERVA CON VECIMIENTOS: "+ordenes.size()
+		 log.debug "ORDENES DE RESERVA CON VECIMIENTOS: "+descuentosVencidos.size()
 		 log.debug "ORDENES: $ordenes"
 		
 		 ordenes.each {
