@@ -147,7 +147,7 @@ class NotaDCController {
 			total	totalNotas
 			rows{
 				notas.each{
-					row(id:it.id,fechaAlta:it.fechaAlta,nombre:it.ordenReserva.nombre,numero:it.numero,total:it.total,tipo:it.tipo,tipoGen:it.tipoGen.name,numeroordenreserva:it.ordenReserva.numero,expo:it.ordenReserva.expo.nombre)
+					row(id:it.id,fechaAlta:it.fechaAlta,nombre:it.ordenReserva.nombre,numero:it.numero,total:it.total,tipo:it.tipo.name,tipoGen:it.tipoGen.name,numeroordenreserva:it.ordenReserva.numero,expo:it.ordenReserva.expo.nombre)
 				}
 			} 
 		}
@@ -174,7 +174,41 @@ class NotaDCController {
 		}
 	}
 	
+	def reporte = {
+		log.info"INGRESANDO AL CLOSURE reporte"
+		log.info "PARAMETROS: $params"
+		def notadc = NotaDC.load(params.id.toLong())
+		def listlogos = Logo.createCriteria().list(){
+			and{
+				expo{
+					eq("id",recibo.ordenReserva.expo.id)
+				}
+				eq("anio",recibo.ordenReserva.anio)
+			}
+		}
+		def logo
+		listlogos.each{
+			logo = it
+		}
+		//------------------------------------------------------------------------------------
 
+		String pathtofile = servletContext.getRealPath("/reports/images")+"/"+recibo.ordenReserva.expo.nombre.trim()+recibo.ordenReserva.anio+".jpg"
+		if(logo?.image){
+			FileOutputStream foutput = new FileOutputStream(new File(pathtofile))
+			foutput.write(logo?.image)
+			foutput.flush()
+		}
+		
+		log.debug("Empresa del Recibo: "+recibo.ordenReserva.empresa.nombre)
+		List reciboList = new ArrayList()
+		reciboList.add(recibo)
+		String reportsDirPath = servletContext.getRealPath("/reports/");
+		params.put("reportsDirPath", reportsDirPath);
+		params.put("logo",recibo.ordenReserva.expo.nombre.trim()+recibo.ordenReserva.anio+".jpg")
+		log.debug("Parametros: $params")
+		chain(controller:'jasper',action:'index',model:[data:reciboList],params:params)
+
+	}
 	
 }
 
