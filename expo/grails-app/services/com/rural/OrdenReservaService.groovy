@@ -214,13 +214,13 @@ class OrdenReservaService {
 		log.info "OPERACION CON FECHA: "+java.sql.Date.valueOf(sdf.format(today))
 		//def todaysql = java.sql.Date.valueOf(sdf.format(today)) //new java.sql.Date(today.getTime())
 		boolean debitoCreado = false
-		def ordenReserva=detalleServContDesc.detalleServicioContratado.ordenReserva
+		def orden=detalleServContDesc.detalleServicioContratado.ordenReserva
 		notad = new NotaDC(fechaAlta:java.sql.Date.valueOf(sdf.format(today))
 			, ordenReserva:orden,tipoGen:TipoGeneracionEnum.TIPOGEN_AUTOMATICA
 			,tipo:TipoNotaEnum.NOTA_DEBITO
 			,monto:"0".toDouble()
 			,subTotal:"0".toDouble(),ivaGral:"0".toDouble(),ivaRni:"0".toDouble(),ivaSujNoCateg:"0".toDouble())
-		notadDetalle = new NotadcDetalle(descripcion:"Quita de Descuento del ${detalleServContDesc}% (${detalleServContDesc.porcentajeActual}% menos ${detalleServContDesc.porcentajeSig}) por Sector ${detalleServContDesc.detalleServicioContratado.sector.nombre}"
+		notadDetalle = new NotadcDetalle(descripcion:"Quita de Descuento del ${detalleServContDesc.porcentaje}% (${detalleServContDesc.porcentajeActual}% menos ${detalleServContDesc.porcentajeSig}) por Sector ${detalleServContDesc.detalleServicioContratado.sector.nombre}"
 					,subTotal:detalleServContDesc.subTotal)
 		notad.addToDetalle(notadDetalle)
 		notad.subTotal = notadDetalle.subTotal
