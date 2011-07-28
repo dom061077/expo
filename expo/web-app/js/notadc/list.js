@@ -89,7 +89,7 @@ Ext.onReady(function(){
         				var sel = sm.getSelected();
         				if (sm.hasSelection()){
 
-							open('reporte?target=_blank&_format=PDF&_name=recibo&_file=nota&id='+sel.data.id+"&totalletras="+sel.data.totalletras
+							open('reporte?target=_blank&_format=PDF&_name=notadc&_file=notadc&id='+sel.data.id+"&totalletras="+sel.data.totalletras
     						+'&sort='+sort+'&dir='+dir							
 							,'_blank')
         				}
