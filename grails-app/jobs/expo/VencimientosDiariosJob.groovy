@@ -1,6 +1,6 @@
 package expo
 
-import com.rural.OrdenReserva
+import com.rural.DetalleServicioContratadoDescuentos
 import java.text.SimpleDateFormat
 import com.rural.OrdenReservaService
 
@@ -11,8 +11,6 @@ class VencimientosDiariosJob {
 	def startDelay = 30 * 1000
 
     def execute() {
-		def orden
-		//ordenReservaService.verificarVencim(orden)
 
 		 log.debug "VERIFICANDO VENCIMIENTOS DE DESCUENTOS DE ORDENES DE RESERVA"
 		 java.util.Date today = new java.util.Date()
@@ -26,15 +24,15 @@ class VencimientosDiariosJob {
 						 eq("anulada",Boolean.parseBoolean("false"))
 					 }
 				 }
-				 lt("porcentaje","0".toDouble())
-				 lt("subTotal","0".toDouble())
-				 IsNull(notadcDetalle)
+				 gt("porcentaje","0".toDouble())
+				 gt("subTotal","0".toDouble())
+				 isNull("notadcDetalle")
 			 }
 		 }
-		 log.debug "ORDENES DE RESERVA CON VECIMIENTOS: "+descuentosVencidos.size()
-		 log.debug "ORDENES: $ordenes"
+		 log.info "ORDENES DE RESERVA CON VECIMIENTOS: "+descuentosVencidos.size()
+
 		
-		 ordenes.each {
+		 descuentosVencidos.each {
 			  
 		 	ordenReservaService.verificarVencimiento(it)
 			log.info "SE EJECUTO EL SERVICIO... "

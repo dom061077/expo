@@ -52,9 +52,11 @@
    */
   def levels = [:]
   levels.'warn' = ['org.jgroups']
-  levels.'info' = ['org.apache', 'org.quartz', 'org.jboss', 'org.springframework', 'org.codehaus', 'org.mortbay'] +
+  levels.'info' = ['org.apache', 'org.jboss', 'org.springframework', 'org.codehaus', 'org.mortbay'] +
           ['groovy', 'grails']
-  levels.'debug' = ['org.quartz']
+  
+  levels.'debug' = ['grails.app.jobs','org.quartz']
+  levels.'info'	=['grails.app.task.InventoryIndexJob']
 
   levels.each {level, packages ->
     packages.each {
