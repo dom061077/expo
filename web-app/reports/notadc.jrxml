@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" language="groovy" pageWidth="595" pageHeight="842" columnWidth="567" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="14">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="328"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="totalletras" class="java.lang.String"/>
+	<parameter name="reportsDirPath" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<field name="numero" class="java.lang.Long"/>
+	<field name="fechaAlta" class="java.util.Date"/>
+	<field name="total" class="java.lang.Double"/>
+	<field name="ordenReserva.razonSocial" class="java.lang.String"/>
+	<field name="cheques" class="java.util.Collection"/>
+	<field name="usuario.userRealName" class="java.lang.String"/>
+	<field name="ordenReserva.detalle" class="java.util.Collection"/>
+	<field name="ordenReserva.otrosconceptos" class="java.util.Collection"/>
+	<field name="puntoVenta" class="java.lang.Integer"/>
+	<variable name="subtotaldetalleotrosconceptos" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="814" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="10" y="366" width="544" height="167"/>
+			</rectangle>
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="10" y="643" width="544" height="167"/>
+			</rectangle>
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="10" y="-2" width="544" height="82"/>
+			</rectangle>
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="10" y="86" width="544" height="167"/>
+			</rectangle>
+			<rectangle radius="10">
+				<reportElement x="425" y="502" width="118" height="25"/>
+			</rectangle>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement x="441" y="620" width="96" height="13"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{fechaAlta}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="372" y="284" width="29" height="33"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="446" y="63" width="40" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[FECHA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="64" width="203" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[C.U.I.T.:  30-53329835-0  l  Ing. Brutos:  Exento  l  Inicio Act.: 05/11/1980]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="188" y="97" width="58" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Recibimos  de]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="249" y="124" width="293" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[que se aplica a los conceptos enunciados al  margen, según el siguiente detalle:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="431" y="227" width="52" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL $]]></text>
+			</staticText>
+			<subreport runToBottom="true">
+				<reportElement x="78" y="151" width="459" height="32"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{cheques})]]></dataSourceExpression>
+				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"notadcdetalle.jasper")]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="160" y="5" width="203" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ORIGINAL - CLIENTE]]></text>
+			</staticText>
+			<line>
+				<reportElement x="226" y="224" width="100" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<image>
+				<reportElement x="23" y="199" width="50" height="50"/>
+				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="-1" y="265" width="560" height="1" forecolor="#000000"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="2" y="543" width="560" height="1" forecolor="#000000"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="160" y="28" width="203" height="25"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Camino del Perú  Nº 1050 - Cevil Redondo - Tucumán - (4105)
+Tel./ Fax: (0381) - 4347777/6146/6258
+www.srt.org.ar - informes@srt.org.ar]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="322" y="111" width="220" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{totalletras}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="308" y="97" width="234" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.razonSocial}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement mode="Transparent" x="479" y="227" width="58" height="13"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="160" y="54" width="203" height="10"/>
+				<textElement textAlignment="Center">
+					<font fontName="Bookman Old Style" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[I.V.A RESPONSABLE INSCRIPTO]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="442" y="44" width="95" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement x="441" y="63" width="96" height="13"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{fechaAlta}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="372" y="5" width="29" height="33"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="372" y="6" width="29" height="33"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[X]]></text>
+			</staticText>
+			<image onErrorType="Icon">
+				<reportElement x="20" y="5" width="130" height="71"/>
+				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath}+"/images/",$P{logo})]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="446" y="44" width="21" height="14"/>
+				<textElement>
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Nº:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="111" width="72" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[la suma de Pesos:
+]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="17" y="-298" width="544" height="82"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="459" y="5" width="60" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Bookman Old Style" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RECIBO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="459" y="21" width="60" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Documento No Válido como Factura]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="307" width="203" height="25"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Camino del Perú  Nº 1050 - Cevil Redondo - Tucumán - (4105)
+Tel./ Fax: (0381) - 4347777/6146/6258
+www.srt.org.ar - informes@srt.org.ar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="284" width="203" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DUPLICADO - CONTADURÍA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="343" width="203" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[C.U.I.T.:  30-53329835-0  l  Ing. Brutos:  Exento  l  Inicio Act.: 05/11/1980]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="333" width="203" height="10"/>
+				<textElement textAlignment="Center">
+					<font fontName="Bookman Old Style" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[I.V.A RESPONSABLE INSCRIPTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="16" width="203" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sociedad Rural de Tucumán]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="459" y="284" width="60" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Bookman Old Style" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RECIBO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="446" y="323" width="21" height="14"/>
+				<textElement>
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Nº:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement x="441" y="342" width="96" height="13"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{fechaAlta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="372" y="285" width="29" height="33"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[X]]></text>
+			</staticText>
+			<image onErrorType="Icon">
+				<reportElement x="20" y="284" width="130" height="71"/>
+				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath}+"/images/",$P{logo})]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="446" y="342" width="40" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[FECHA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="295" width="203" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sociedad Rural de Tucumán]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="372" y="562" width="29" height="33"/>
+			</rectangle>
+			<textField>
+				<reportElement x="442" y="322" width="95" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="446" y="601" width="21" height="14"/>
+				<textElement>
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Nº:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="442" y="600" width="95" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
+			</textField>
+			<image onErrorType="Icon">
+				<reportElement x="20" y="562" width="130" height="71"/>
+				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath}+"/images/",$P{logo})]]></imageExpression>
+			</image>
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="10" y="555" width="544" height="82"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="160" y="621" width="203" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[C.U.I.T.:  30-53329835-0  l  Ing. Brutos:  Exento  l  Inicio Act.: 05/11/1980]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="611" width="203" height="10"/>
+				<textElement textAlignment="Center">
+					<font fontName="Bookman Old Style" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[I.V.A RESPONSABLE INSCRIPTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="562" width="203" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRIPLICADO - DEPTO. EXPO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="585" width="203" height="25"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Camino del Perú  Nº 1050 - Cevil Redondo - Tucumán - (4105)
+Tel./ Fax: (0381) - 4347777/6146/6258
+www.srt.org.ar - informes@srt.org.ar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="372" y="563" width="29" height="33"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[X]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="459" y="562" width="60" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Bookman Old Style" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RECIBO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="446" y="620" width="40" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[FECHA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="573" width="203" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Bookman Old Style" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sociedad Rural de Tucumán]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="11" y="278" width="544" height="82"/>
+			</rectangle>
+			<textField pattern="#,##0.00">
+				<reportElement mode="Transparent" x="479" y="507" width="58" height="13"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="249" y="404" width="293" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[que se aplica a los conceptos enunciados al  margen, según el siguiente detalle:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="308" y="377" width="234" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.razonSocial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="322" y="391" width="220" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{totalletras}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="431" y="507" width="52" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL $]]></text>
+			</staticText>
+			<line>
+				<reportElement x="226" y="504" width="100" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="445" y="418" width="43" height="13"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Efectivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="391" width="72" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[la suma de Pesos:
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="377" width="58" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Recibimos  de]]></text>
+			</staticText>
+			<subreport runToBottom="true">
+				<reportElement x="78" y="435" width="459" height="32"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{cheques})]]></dataSourceExpression>
+				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"cheques.jasper")]]></subreportExpression>
+			</subreport>
+			<image>
+				<reportElement x="23" y="479" width="50" height="50"/>
+				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
+			</image>
+			<textField pattern="#,##0.00">
+				<reportElement x="487" y="418" width="49" height="13"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{efectivo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="308" y="654" width="234" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.razonSocial}]]></textFieldExpression>
+			</textField>
+			<rectangle radius="10">
+				<reportElement x="425" y="779" width="118" height="25"/>
+			</rectangle>
+			<subreport runToBottom="true">
+				<reportElement x="78" y="712" width="459" height="32"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{cheques})]]></dataSourceExpression>
+				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"cheques.jasper")]]></subreportExpression>
+			</subreport>
+			<textField pattern="#,##0.00">
+				<reportElement mode="Transparent" x="479" y="784" width="58" height="13"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="250" y="668" width="72" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[la suma de Pesos:
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="654" width="58" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Recibimos  de]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="487" y="695" width="49" height="13"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{efectivo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="249" y="681" width="293" height="11"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[que se aplica a los conceptos enunciados al  margen, según el siguiente detalle:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="431" y="784" width="52" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL $]]></text>
+			</staticText>
+			<image>
+				<reportElement x="23" y="756" width="50" height="50"/>
+				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="322" y="668" width="220" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{totalletras}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="445" y="695" width="43" height="13"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Efectivo]]></text>
+			</staticText>
+			<line>
+				<reportElement x="226" y="781" width="100" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="425" y="222" width="118" height="25"/>
+			</rectangle>
+			<textField>
+				<reportElement x="217" y="225" width="118" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{usuario.userRealName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="218" y="505" width="118" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{usuario.userRealName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="218" y="782" width="118" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{usuario.userRealName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="459" y="300" width="60" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Documento No Válido como Factura]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="459" y="574" width="60" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Documento No Válido como Factura]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="492" y="418" width="8" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="492" y="695" width="8" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="459" y="44" width="35" height="15"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{puntoVenta}+10000).toString().substring(1,5)+"-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="459" y="322" width="35" height="15"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{puntoVenta}+10000).toString().substring(1,5)+"-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="459" y="600" width="35" height="15"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{puntoVenta}+10000).toString().substring(1,5)+"-"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
