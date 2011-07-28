@@ -181,32 +181,35 @@ class NotaDCController {
 		def listlogos = Logo.createCriteria().list(){
 			and{
 				expo{
-					eq("id",recibo.ordenReserva.expo.id)
+					eq("id",notadc.ordenReserva.expo.id)
 				}
-				eq("anio",recibo.ordenReserva.anio)
+				eq("anio",notadc.ordenReserva.anio)
 			}
 		}
 		def logo
 		listlogos.each{
 			logo = it
 		}
+		
+		notadc.detalle.each{
+			
+		}
 		//------------------------------------------------------------------------------------
 
-		String pathtofile = servletContext.getRealPath("/reports/images")+"/"+recibo.ordenReserva.expo.nombre.trim()+recibo.ordenReserva.anio+".jpg"
+		String pathtofile = servletContext.getRealPath("/reports/images")+"/"+notadc.ordenReserva.expo.nombre.trim()+notadc.ordenReserva.anio+".jpg"
 		if(logo?.image){
 			FileOutputStream foutput = new FileOutputStream(new File(pathtofile))
 			foutput.write(logo?.image)
 			foutput.flush()
 		}
 		
-		log.debug("Empresa del Recibo: "+recibo.ordenReserva.empresa.nombre)
-		List reciboList = new ArrayList()
-		reciboList.add(recibo)
+		List notadcList = new ArrayList()
+		notadcList.add(notadc)
 		String reportsDirPath = servletContext.getRealPath("/reports/");
 		params.put("reportsDirPath", reportsDirPath);
-		params.put("logo",recibo.ordenReserva.expo.nombre.trim()+recibo.ordenReserva.anio+".jpg")
+		params.put("logo",notadc.ordenReserva.expo.nombre.trim()+notadc.ordenReserva.anio+".jpg")
 		log.debug("Parametros: $params")
-		chain(controller:'jasper',action:'index',model:[data:reciboList],params:params)
+		chain(controller:'jasper',action:'index',model:[data:notadcList],params:params)
 
 	}
 	
