@@ -220,7 +220,7 @@ class OrdenReservaService {
 			,tipo:TipoNotaEnum.NOTA_DEBITO
 			,monto:"0".toDouble()
 			,subTotal:"0".toDouble(),ivaGral:"0".toDouble(),ivaRni:"0".toDouble(),ivaSujNoCateg:"0".toDouble())
-		notadDetalle = new NotadcDetalle(descripcion:"Quita de Descuento del ${detalleServContDesc.porcentaje}% (${detalleServContDesc.porcentajeActual}% menos ${detalleServContDesc.porcentajeSig}) por Sector ${detalleServContDesc.detalleServicioContratado.sector.nombre}"
+		notadDetalle = new NotadcDetalle(descripcion:"Quita de Descuento del ${detalleServContDesc.porcentaje}% (${detalleServContDesc.porcentajeActual}% menos ${detalleServContDesc.porcentajeSig}%) por Sector ${detalleServContDesc.detalleServicioContratado.sector.nombre}"
 					,subTotal:detalleServContDesc.subTotal)
 		notad.addToDetalle(notadDetalle)
 		notad.subTotal = notadDetalle.subTotal
@@ -235,9 +235,11 @@ class OrdenReservaService {
 			if(notad.save()){
 				log.info "NOTA DEBITO SALVADA"
 				orden.addToNotas(notad)
-				if(orden.save())
+				detalleServContDesc.notadcDetalle=notadDetalle
+				if(orden.save()){
+					
 					log.info "SE GENERO UNA NOTA DE DEBITO de ${notad.total} PARA LA ORDEN CON ID: ${orden.id}"
-				else
+				}else
 					log.info "Se produjo un error al agregar una nota como detalle de la orden de reserva"
 				
 			}else{
