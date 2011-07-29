@@ -491,7 +491,7 @@ class OrdenReservaController {
 								fechasql = new java.sql.Date(fecha.getTime())
 								
 								log.debug "FECHA FORMATEADA: ${fecha} desde ${filtro["value"]}"
-								co."${filtro.comparison}"(filtro["field"],fecha)
+								co."${filtro.comparison}"(filtro["field"],fechasql)
 							}
 
 							co.expo{

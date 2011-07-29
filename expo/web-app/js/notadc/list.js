@@ -14,7 +14,7 @@ Ext.onReady(function(){
 		        	 dataIndex: 'nombre'
 		         },{
 		        	type:'string',
-		        	dataIndex:'razonSocial'
+		        	dataIndex:'expo'
 		         },{
 		        	type:'numeric',
 		        	dataIndex:'numero'
@@ -69,8 +69,8 @@ Ext.onReady(function(){
 			{header:"Fecha Alta",dataIndex:'fechaAlta',width:90,renderer: Ext.util.Format.dateRenderer('d/m/y'),sortable:true},
 			{header:"Nro.Nota",dataIndex:'numero',width:100,renderer:notaRender,sortable:true},
 			{header:"Total",dataIndex:'total',width:90,renderer:currencyRender},
-			{header:"Tipo",dataIndex:'tipo',width:250,sortable:true},			
-			{header:"Creación",dataIndex:'tipoGen',width:250,sortable:true},			
+			{header:"Tipo",dataIndex:'tipo',width:90,sortable:true},			
+			{header:"Creación",dataIndex:'tipoGen',width:90,sortable:true},			
 			{header:"Nro.Orden de Reserva",dataIndex:'numeroordenreserva',width:100,renderer:notaRender,sortable:true},
 			{header:"Exposición",dataIndex:'expo',width:100,sortable:true},			
 			{header:"Total Letras",dataIndex:'totalletras',width:100,hidden:true}

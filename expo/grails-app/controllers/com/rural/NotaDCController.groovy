@@ -131,18 +131,80 @@ class NotaDCController {
 	def listjson = {
 		log.info "INGRESANDO AL CLOSURE listjson DEL CONTROLLER NotaDCController"
 		log.info "PARAMETROS ${params}"
-		def pagingconfig = [
-			max: params.limit as Integer ?:10,
-			offset: params.start as Integer ?:0
-		]
+		def filtros
+		java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy")
+		java.util.Date fecha
+		java.sql.Date fechasql
+
+		try{
+			filtros = JSON.parse(params.filter)
+		}catch(Exception e){
+			log.debug "ERROR EN PARSEO DE FILTROS: "+e.message
+		}
+		def criteria = NotaDC.createCriteria()
+		def criteriacount = NotaDC.createCriteria()
 		
-		def notas = NotaDC.list(pagingconfig)
+		def closurenotadc = {
+			firstResult(params.start.toInteger())
+			maxResults(params.limit.toInteger())
+			criteria.eq("anulada",Boolean.parseBoolean(params.soloanuladas))
+			filtros.each{filtro->
+				if(filtro["field"].equals("numero")){
+					criteria.eq("numero",filtro["value"].toLong())
+				}
+				if(filtro["field"].equals("fechaAlta")){
+					fecha = df.parse(filtro["value"])
+					fechasql = new java.sql.Date(fecha.getTime())
+					criteria."${filtro.comparison}"(filtro["field"],fechasql)
+				}
+				if(filtro["field"].equals("nombre")){
+					criteria.ordenReserva(){
+						criteria.ilike("nombre","%${filtro["value"]}%")
+					}
+				}
+				if(filtro["field"].equals("expo")){
+					criteria.ordenReserva(){
+						criteria.expo(){
+							criteria.ilike("nombre","%${filtro["value"]}%")
+						}
+					}
+				}
+			}
+		}
+		
+		def closurecount = {
+			criteriacount.eq("anulada",Boolean.parseBoolean(params.soloanuladas))
+			filtros.each{filtro->
+				if(filtro["field"].equals("numero")){
+					criteriacount.eq("numero",filtro["value"].toLong())
+				}
+				if(filtro["field"].equals("fechaAlta")){
+					fecha = df.parse(filtro["value"])
+					fechasql = new java.sql.Date(fecha.getTime())
+					criteriacount."${filtro.comparison}"(filtro["field"],fechasql)
+				}
+				if(filtro["field"].equals("nombre")){
+					criteriacount.ordenReserva(){
+						criteriacount.ilike("nombre","%${filtro["value"]}%")
+					}
+				}
+				if(filtro["field"].equals("expo")){
+					criteriacount.ordenReserva(){
+						criteriacount.expo(){
+							criteriacount.ilike("nombre","%${filtro["value"]}%")
+						}
+					}
+				}
+			}
+
+			criteriacount.projections{
+				rowCount()
+			}
+		}
 		
 		
-		//fields:['id','fechaAlta','numero','nombre','total','numeroordenreserva','expo'],
-		
-		def totalNotas = notas.size()
-		
+		def totalNotas = criteriacount.get(closurecount)
+		def notas = criteria.list(closurenotadc)
 		render(contentType:"text/json"){
 			total	totalNotas
 			rows{
