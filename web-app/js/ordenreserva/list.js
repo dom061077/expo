@@ -320,25 +320,7 @@ Ext.onReady(function(){
 			},{
 				text:'Quitar Filtros'
 				,handler: function(){
-        			var sm = grid.getSelectionModel();
-        			var sel = sm.getSelected();
-        			if (sm.hasSelection()){
-        				if((sel.data.total-sel.data.credito-sel.data.recibo+sel.data.debito)==0)
-        					Ext.MessageBox.show({
-        						title:'Mensaje',
-        						msg:'No puede generar un recibo de una Orden de Reserva con saldo Cero',
-        						buttons:Ext.MessageBox.OK
-        					});
-        				else 
-        					window.location='../recibo/create?ordenreservaId='+sel.data.ordenId;	
-        			}else{
-        				Ext.MessageBox.show({
-        					title:'Advertencia',
-        					msg:'Seleccione una fila de la grilla para generar el recibo',
-        					icon:Ext.MessageBox.WARNING,
-        					buttons:Ext.MessageBox.OK
-        				});	
-        			}
+					grid.filters.clearFilters();
         		}
 			},{
 				text:'Notas',

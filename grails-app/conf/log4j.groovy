@@ -54,6 +54,7 @@
   levels.'warn' = ['org.jgroups']
   levels.'info' = ['org.apache', 'org.jboss', 'org.springframework', 'org.codehaus', 'org.mortbay'] +
           ['groovy', 'grails']
+ // levels.'debug' = ['org.quartz','grails.app.jobs','grails.app.task.InventoryIndexJob']
   
  // levels.'debug' = ['grails.app.jobs','org.quartz']
  // levels.'info'	=['grails.app.task.InventoryIndexJob']
@@ -69,12 +70,20 @@
   /**
    * Category - shared definition by custom groupping
    */
-  def app = ['grails.app']
+  def app = ['grails.app','org.quartz']
   app.each {
-    'category'(name: it, additivity: 'true') {
-      'priority'(value: 'TRACE'); 'appender-ref'('ref': "APP_LOG"); 'appender-ref'('ref': "CONSOLE")}
+	if(it.equals('grails.app'))  
+    	'category'(name: it, additivity: 'true') {
+			'priority'(value: 'TRACE');  'appender-ref'('ref': "CONSOLE")}
+	else
+    	'category'(name: it, additivity: 'false') {
+			'priority'(value: 'INFO');  'appender-ref'('ref': "APP_LOG")}
+	
   }
 
+
+  
+  
   def orm = ['org.springframework.transaction', 'org.springframework.orm', 'org.apache.openjpa', 'openjpa', 'org.h2', 'h2database']
   orm.each {
     'category'(name: it, additivity: 'false') { 'priority'(value: 'INFO'); 'appender-ref'('ref': "ORM_LOG")}
