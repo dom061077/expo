@@ -55,8 +55,8 @@
   levels.'info' = ['org.apache', 'org.jboss', 'org.springframework', 'org.codehaus', 'org.mortbay'] +
           ['groovy', 'grails']
   
-  levels.'debug' = ['grails.app.jobs','org.quartz']
-  levels.'info'	=['grails.app.task.InventoryIndexJob']
+ // levels.'debug' = ['grails.app.jobs','org.quartz']
+ // levels.'info'	=['grails.app.task.InventoryIndexJob']
 
   levels.each {level, packages ->
     packages.each {

@@ -51,14 +51,26 @@
   <category name='org.jgroups' additivity='false'>
     <priority value='WARN' />
   </category>
-  <category name='grails.app.task.InventoryIndexJob' additivity='false'>
+  <category name='org.apache' additivity='false'>
     <priority value='INFO' />
   </category>
-  <category name='grails.app.jobs' additivity='false'>
-    <priority value='DEBUG' />
+  <category name='org.jboss' additivity='false'>
+    <priority value='INFO' />
   </category>
-  <category name='org.quartz' additivity='false'>
-    <priority value='DEBUG' />
+  <category name='org.springframework' additivity='false'>
+    <priority value='INFO' />
+  </category>
+  <category name='org.codehaus' additivity='false'>
+    <priority value='INFO' />
+  </category>
+  <category name='org.mortbay' additivity='false'>
+    <priority value='INFO' />
+  </category>
+  <category name='groovy' additivity='false'>
+    <priority value='INFO' />
+  </category>
+  <category name='grails' additivity='false'>
+    <priority value='INFO' />
   </category>
   <category name='grails.app' additivity='true'>
     <priority value='TRACE' />
