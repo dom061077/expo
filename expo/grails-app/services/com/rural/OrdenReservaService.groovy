@@ -230,6 +230,7 @@ class OrdenReservaService {
 			notad.ivaSujNoCateg=notad.ivaRni*10.5/100
 		notad.total=notad.subTotal+notad.ivaGral+notad.ivaSujNoCateg
 		notad.total=Math.round(notad.total*Math.pow(10,2))/Math.pow(10,2)
+		throw new OrdenReservaException("ERROR!!!!!",null)
 		if(notad.subTotal>0){
 			log.info "SUBTOTAL MAYOR A CERO"
 			if(notad.save()){
