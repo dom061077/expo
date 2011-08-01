@@ -469,7 +469,7 @@ class OrdenReservaController {
 							if(filtro["field"].equals("sector") || filtro["field"].equals("lote")){
 								co.isNotEmpty("detalle")
 							}
-							if( ["field"].equals("nombre")){
+							if( filtro["field"].equals("nombre")){
 								log.debug "LOGRO INGRESAR POR LA CONDICION DE NOMBRE"
 								co.ilike(filtro["field"],"%"+filtro["value"]+"%")
 							}
