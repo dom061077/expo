@@ -236,6 +236,28 @@ class NotaDCController {
 		}
 	}
 	
+	def anularnota = {
+		log.info "INGRESANDO AL CLOSURE anularnota"
+		log.info "PARAMETROS: $params"
+		def notaDCInstance = NotaDC.get(params.id)
+		notaDCInstance.anulada=Boolean.TRUE
+		if(notaDCInstance.save()){
+			log.info "NOTA CON ID: ${notaDCInstance.id} ANULADA CORRECTAMENTE"	
+			render(contentType:"text/json"){
+				success true
+			}
+		}else{
+			log.error "ERROR AL ANULAR LA NOTA CON ID: ${notaDCInstance.id}"
+			render(contentType:"text/json"){
+				success false
+				errors{
+					
+				}
+				
+			}
+		}
+	}
+	
 	def reporte = {
 		log.info"INGRESANDO AL CLOSURE reporte"
 		log.info "PARAMETROS: $params"
