@@ -183,14 +183,14 @@ class ListaPreciosController {
 			}
 		}else{
 			g.eachError(bean:listaPreciosInstance){
-				log.debug "ERROR: ${it}"
+				log.error "ERROR: ${it}"
 			}
-			log.debug "ERRORES ENCONTRADOS: "+listaPreciosInstance.errors.allErrors
+			log.error "ERRORES ENCONTRADOS: "+listaPreciosInstance.errors.allErrors
 			render(contentType:"text/json"){
 				success false
 				errors{
 					g.eachError(bean:listaPreciosInstance){
-						title g.message(code:it)
+						title g.message(error:it)
 					}
 				}
 			}

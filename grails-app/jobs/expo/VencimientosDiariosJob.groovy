@@ -1,6 +1,6 @@
 package expo
 
-//import com.rural.DetalleServicioContratadoDescuentos
+import com.rural.DetalleServicioContratadoDescuentos
 import java.text.SimpleDateFormat
 import com.rural.OrdenReservaService
 
@@ -26,7 +26,14 @@ class VencimientosDiariosJob {
 				 }
 				 gt("porcentaje","0".toDouble())
 				 gt("subTotal","0".toDouble())
-				 isNull("notadcDetalle")
+				 or{
+					 isNull("notadcDetalle")
+					 notadcDetalle{
+						 notadc{
+							 eq("anulada",Boolean.parseBoolean("true"))
+						 }
+					 }
+				 }
 			 }
 		 }
 		 log.info "ORDENES DE RESERVA CON VECIMIENTOS: "+descuentosVencidos.size()

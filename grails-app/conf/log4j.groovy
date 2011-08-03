@@ -67,20 +67,24 @@
     }
   }
 
+  
+  
+  
   /**
    * Category - shared definition by custom groupping
    */
   def app = ['grails.app','org.quartz']
   app.each {
-	if(it.equals('grails.app'))  
     	'category'(name: it, additivity: 'true') {
-			'priority'(value: 'TRACE');  'appender-ref'('ref': "CONSOLE")}
-	else
-    	'category'(name: it, additivity: 'false') {
-			'priority'(value: 'INFO');  'appender-ref'('ref': "APP_LOG")}
-	
+			'priority'(value: 'TRACE');'appender-ref'('ref':"APP_LOG");  'appender-ref'('ref': "CONSOLE")}
   }
+  
 
+
+  //app.each{
+//	  'category'(name: it, additivity: 'false') {
+//		  'priority'(value: 'INFO');  'appender-ref'('ref': "APP_LOG")}
+//  }
 
   
   

@@ -74,11 +74,13 @@
   </category>
   <category name='grails.app' additivity='true'>
     <priority value='TRACE' />
+    <appender-ref ref='APP_LOG' />
     <appender-ref ref='CONSOLE' />
   </category>
-  <category name='org.quartz' additivity='false'>
-    <priority value='INFO' />
+  <category name='org.quartz' additivity='true'>
+    <priority value='TRACE' />
     <appender-ref ref='APP_LOG' />
+    <appender-ref ref='CONSOLE' />
   </category>
   <category name='org.springframework.transaction' additivity='false'>
     <priority value='INFO' />
