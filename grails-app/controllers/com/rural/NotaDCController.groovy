@@ -6,6 +6,7 @@ import grails.converters.JSON
 
 class NotaDCController {
 	def ordenReservaService
+	def authenticateService
 	    
     def index = { redirect(action:list,params:params) }
 
@@ -88,7 +89,7 @@ class NotaDCController {
     def create = {
         def notaDCInstance = new NotaDC()
         notaDCInstance.properties = params
-        return ['notaDCInstance':notaDCInstance]
+        return ['notaDCInstance':notaDCInstance,'ordenreservaId':params.ordenreservaId]
     }
 
     def save = {
@@ -105,27 +106,56 @@ class NotaDCController {
 	def savejson = {
 		log.info "INGRESANDO AL CLOSURE savejson DEL CONTROLLER NotaDCController"
 		log.info "PARAMETROS ${params}"
-		
-		def retorno = ordenReservaService(params.ordenReservaId.toLong(),Enum.valueOf(TipoNotaEnum,params.tipo))
-		if(retorno instanceof OrdenReserva){
-
-			render retorno.errors.allErrors.collect {
-				message(error:it,encodeAs:'HTML')
-			} as JSON
-			
-			
-		}else{
-			render(contentType:"text/json"){
-				success true
-				notaId retorno
+		def retorno
+		def notaDCInstance = new NotaDC(params)
+		notaDCInstance.usuario = authenticateService.userDomain()
+		def detalleJson = grails.converters.JSON.parse(params.detallejson)
+		detalleJson.each{
+			notaDCinstance.addToDetalle(new NotadcDetalle(descripcion:it.descripcion,subTotal:it.importe))
+		}
+		try{
+			retorno = ordenReservaService.generarnota(param.ordenReserva.id.toLong(),notaDCInstance)
+			if(retorno instanceof Long){
+				 render(contentType:"text/json"){
+					 success true
+					 notaId retorno
+				 }	
+			}else{
+				render(contentType:"text/json"){
+					success false
+					errors{
+						g.eachError(bean:retorno){
+							title g.message(error:it)
+						}
+					}
+				}
 			}
+		}catch(OrdenReservaException e){
+			render(contentType:"text/json"){
+				success false
+				errors{
+					title g.message(code:e.message)
+				}
+			}
+			return
 		}
 	}
 	
 	def showjson = {
 		log.info "INGRESANDO AL CLOSURE showjson DEL CONTROLLER NotaDCController"
 		log.info "PARAMETROS ${params}"
-	
+		def ordenReserva = OrdenReserva.get(params.id)
+		if(ordenReserva){
+			render(contentType:"text/json"){
+				success true
+				data('ordenReserva.id':ordenReserva.id,'ordenReserva.numero':ordenReserva.numero,'ordenReserva.nombre':ordenReserva.nombre
+						,'ordenReserva.razonSocial':ordenReserva.razonSocial
+						,'saldo':(ordenReserva.total - ordenReserva.credito - ordenReserva.recibo + ordenReserva.debito))
+			}	
+		}else{
+			
+		}
+		
 	}
 	
 	def listjson = {
@@ -167,6 +197,11 @@ class NotaDCController {
 						criteria.expo(){
 							criteria.ilike("nombre","%${filtro["value"]}%")
 						}
+					}
+				}
+				if(filtro["field"].equals("numeroordenreserva")){
+					criteria.ordenReserva(){
+						criteria."${filtro.comparison}"("numero",filtro["value"].toLong())
 					}
 				}
 			}
@@ -240,7 +275,17 @@ class NotaDCController {
 		log.info "INGRESANDO AL CLOSURE anularnota"
 		log.info "PARAMETROS: $params"
 		def notaDCInstance = NotaDC.get(params.id)
-		notaDCInstance.anulada=Boolean.TRUE
+		if(notaDCInstance)
+			notaDCInstance.anulada=Boolean.TRUE
+		else{
+			render(contentType:"text/json"){
+				success false
+				errors{
+					title g.message(code:"com.rural.noexiste",args:["La Nota",params.id])
+				}
+			}
+			return
+		}	
 		if(notaDCInstance.save()){
 			log.info "NOTA CON ID: ${notaDCInstance.id} ANULADA CORRECTAMENTE"	
 			render(contentType:"text/json"){
@@ -251,7 +296,7 @@ class NotaDCController {
 			render(contentType:"text/json"){
 				success false
 				errors{
-					
+					title g.message(code:"com.rural.NotaDC.anulacion.error")
 				}
 				
 			}
