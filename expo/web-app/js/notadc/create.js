@@ -100,37 +100,52 @@ Ext.onReady(function(){
 		title:'Alta de Nota',
 		frame:true,
 		items:[
+		       
 		       {
-		    	   xtype:'hidden',
-		    	   name:'ordenReserva.id',
-		    	   allowBlank:true,
-		    	   id:'ordenReservaId'
-		       },{
-		    	   xtype:'textfield',
-		    	   name:'monto',
-		    	   allowBlank:false,
-		    	   id:'montoId',
-		    	   fieldLabel:'Orden de reserva numero',
-		    	   disabled:true,
-		    	   msgTarget:'under'
-		       },{
-		    	   xtype:'textfield',
-		    	   name:'nombre',
-		    	   id:'nombreid',
-		    	   disabled:true,
-		    	   fieldLabel:'Nombre de Comercial'
-		       },{
-		    	   xtype:'textfield',
-		    	   name:'razonSocial',
-		    	   fieldLabel:'Razón Social',
-		    	   disabled:true,
-		    	   id:'razonSocialId'
-		       },{
-		    	   xtype:'textfield',
-		    	   name:'saldo',
-		    	   fieldLabel:'Saldo',
-		    	   id:'saldoId',
-		    	   disabled:true
+		    	   xtype:'fieldset',
+		    	   checkboxToggle:true,
+		    	   title: 'Informacion de la Orden de Reserva',
+		    	   defaultType : 'textfield',
+		    	   collapsed:false,
+		    	   defaults:{
+		    		 // anchor: '100%'
+		    	   },
+		    	   items:[
+		   		       {
+				    	   xtype:'hidden',
+				    	   name:'ordenReserva.id',
+				    	   allowBlank:true,
+				    	   id:'ordenReservaId'
+				       },{
+				    	   xtype:'textfield',
+				    	   name:'ordenReserva.numero',
+				    	   allowBlank:false,
+				    	   id:'ordenReservaNumero',
+				    	   fieldLabel:'Orden Nro.',
+				    	   disabled:true,
+				    	   msgTarget:'under'
+				       },{
+				    	   xtype:'textfield',
+				    	   name:'ordenReserva.nombre',
+				    	   id:'nombreid',
+				    	   disabled:true,
+				    	   fieldLabel:'Nombre Comercial',
+				    	   width : 350 
+				       },{
+				    	   xtype:'textfield',
+				    	   name:'ordenReserva.razonSocial',
+				    	   fieldLabel:'Razón Social',
+				    	   disabled:true,
+				    	   id:'razonSocialId',
+				    	   width: 350
+				       },{
+				    	   xtype:'textfield',
+				    	   name:'saldo',
+				    	   fieldLabel:'Saldo',
+				    	   id:'saldoId',
+				    	   disabled:true
+				       }		    	          
+		    	   ]
 		       },{
 		    	   xtype:'combo',
 		    	   fieldLabel:'Tipo de Nota',
@@ -151,7 +166,8 @@ Ext.onReady(function(){
 		    	   allowBlank:true,
 		    	   name:'detallejson',
 		    	   id:'detallejsonId'
-		       },grid,
+		       }		       
+		       ,grid,
 		],
 	    buttons:[
 	             {
@@ -244,14 +260,15 @@ Ext.onReady(function(){
 	
 	
 	formNotadc.load({
-		url:'createjson',
+		url:'showjson',
 		params:{
 			'id':ordenreservaId
 		},
 		success: function(f,a){
-			Ext.getCmp('nombreempresaId').setValue(a.result.data.nombreempresa);
-			Ext.getCmp('numeroordenId').setValue(a.result.data.numero);
-			Ext.getCmp('saldoordenId').setValue(a.result.data.saldoorden);
+			//Ext.getCmp('nombreempresaId').setValue(a.result.data.nombreempresa);
+			//Ext.getCmp('numeroordenId').setValue(a.result.data.numero);
+			//Ext.getCmp('saldoordenId').setValue(a.result.data.saldoorden);
+			
 		},
 		failure: function (thisform,action){
    				alert(action);

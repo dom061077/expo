@@ -309,4 +309,44 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
    		assertTrue(respuestaJson.success)
    		assertTrue(respuestaJson.rows.size()>0)
    }
+   
+   
+   void testGenerarNotaDC(){
+	   def ordenreservaController = new OrdenReservaController()
+	   ordenreservaController.ordenReservaService=ordenReservaService
+	   ordenreservaController.authenticateService=authenticateService
+	   ordenreservaController.params.id=empresa.id
+	   ordenreservaController.params.expo=exposicion
+	   ordenreservaController.params.anio=2010
+	   //ordenreservaController.params.usuario=usuario
+	   empresa.subrubro=subrubro
+	   ordenreservaController.params.empresa=empresa
+	   ordenreservaController.params.empresa.nombre="empresa modificada"
+	   ordenreservaController.params.empresa.razonSocial="empresa modificada razon social"
+	   ordenreservaController.params.detallejson="[{lote_id:$lote.id,sector_id:$sector.id,subTotal:1900}]"
+	   ordenreservaController.params.otrosconceptosjson="[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]"
+	   ordenreservaController.params.observacion="OBSERVACION "
+	   ordenreservaController.params.porcentajeResIns=iva.id
+	   //ordenreservaController.params.ivaRniCheck=true
+	   ordenreservaController.params.fechaVencimiento="10/10/2009"
+	   ordenreservaController.params.fechaVencimiento_year="2009"
+	   ordenreservaController.params.fechaVencimiento_month="10"
+	   ordenreservaController.params.fechaVencimiento_day="10"
+				   
+	   
+	   ordenreservaController.params.porcentajeResNoIns=0
+	   ordenreservaController.params.observacion='NINGUNA'
+	   ordenreservaController.params.productosjson="[{descripcion:'QUESOS Y QUESILLOS'},{descripcion:'MEMBRILLO'}]"
+	   ordenreservaController.request.getAttribute("org.codehaus.groovy.grails.WEB_REQUEST").informParameterCreationListeners()
+	   ordenreservaController.generarordenreserva()
+   	   def notaDCController = new NotaDCController()
+	   notaDCController.ordenReservaService = orderReservaService
+	   notaDCController.authenticateService = authenticateSerivice
+	   def ordenReservaInstance = OrdenReserva.findByNombre("empresa modificada")
+	   notaDCController.params.ordenReserva.id = ordenReservaInstance.id
+	   notaDCController.params.detallejson = "[{descripcion:'descuento de prueba',importe:250,cantidad:1}]"
+	   notaDCController.params.tipo = "NOTA_DEBITO"  
+	   notaDCController.savejson()
+	   assertEquals(NotaDC.count(),1)
+   }
 }

@@ -2,9 +2,13 @@
 <%@ page import="com.rural.NotaDC" %>
 <html>
     <head>
+    	<script type="text/javascript">
+    		var ordenreservaId = <% out << "${ordenreservaId}" %> ;
+    	</script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
         <script type="text/javascript" src='${resource(dir:'js/notadc/', file:'create.js')}'></script>
+        
         <title>Alta Nota Débito/Crédito</title>         
     </head>
     <body>

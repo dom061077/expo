@@ -304,7 +304,7 @@ class OrdenReservaService {
 		
 		def ordenReservaInstance = OrdenReserva.get(ordenId)
 		if(!ordenReservaInstance)
-			return null
+			throw new OrdenReservaException("com.rural.noexiste",ordenReservaInstance)
 		ordenReservaInstance.addToNotas(nota)
 		if(!ordenReservaInstance.validate() && ordenReservaInstance.save())
 			return nota.id
