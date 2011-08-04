@@ -1,0 +1,7 @@
+para importar tablibs para usar con la consola
+
+import com.rural.*
+import grails.util.GrailsWebUtil
+GrailsWebUtil.bindMockWebRequest ctx
+
+def g = ctx.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib')
