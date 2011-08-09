@@ -69,7 +69,7 @@ class OrdenReservaService {
 				difSubTotal = detalle.subTotal*difDesc/100
 				log.debug "Diferencia de descuento: ${difDesc}, subTotal diferencia: ${difSubTotal}, subtotal de detalle:${detalle.subTotal}"
 				detalle.addToDescuentos(new DetalleServicioContratadoDescuentos(porcentaje:difDesc
-						,fechaVencimiento:current.fechaVencimiento,subTotal:difSubTotal,porcentajeActual:current.porcentaje,porcentajeSig:peek.porcentaje))
+						,fechaVencimiento:current.fechaVencimiento,subTotal:difSubTotal,porcentajeActual:current?.porcentaje,porcentajeSig:peek?.porcentaje))
 			}
 		}
 				
@@ -300,7 +300,7 @@ class OrdenReservaService {
 
 	def generarnota(Long ordenId,NotaDC nota){
 		log.info "INGRESANDO AL PROCEDIMIENTO generarnota DEL SERVICIO OrdenReservaService"
-		log.info "PARAMETROS, orden: $ordenId, tipo: $tipo"
+		log.info "PARAMETROS, orden: $ordenId, nota: $nota"
 		
 		def ordenReservaInstance = OrdenReserva.get(ordenId)
 		if(!ordenReservaInstance)
