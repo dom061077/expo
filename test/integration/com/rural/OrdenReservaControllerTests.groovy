@@ -124,21 +124,9 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	    	ordenreservaController.params.porcentajeResNoIns=0
 	    	ordenreservaController.params.productosjson="[{descripcion:'QUESOS Y QUESILLOS'},{descripcion:'MEMBRILLO'}]"
 			
-	    	/*
-	    	ordenreservaController.params.put("empresa.nombre","empresa nueva")
-	    	ordenreservaController.params.put("empresa.razonSocial","empresa nueva razon social")
-	    	ordenreservaController.params.put("detallejson","[{lote_id:$lote.id,subTotal:1900}]")
-	    	ordenreservaController.params.put("otrosconceptosjson","[{descripcion:'descuento 5%',subTotal:-95,id:$tipoConcepto.id}]")
-	    	ordenreservaController.params.put("observacion","OBSERVACION ")
-	    	ordenreservaController.params.put("porcentajeResIns",21)
-	    	ordenreservaController.params.put("porcentajeResNoIns",0)
-	    	ordenreservaController.params.put("productosjson","[{descripcion:'QUESOS Y QUESILLOS'},{descripcion:'MEMBRILLO'}]")
-	    	*/
-	    	//fail("ERROR "+ordenreservaController.class)
 	    	
 	    	ordenreservaController.generarordenreserva()
 			def respuesta = ordenreservaController.response.contentAsString
-			//fail("RESPUESTA JSON "+ordenreservaController.response.contentAsString)
 			def respuestaJson = grails.converters.JSON.parse(respuesta)
 			def ordenreservaInstance = OrdenReserva.get(respuestaJson.ordenid)
 			
@@ -340,9 +328,11 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	   ordenreservaController.request.getAttribute("org.codehaus.groovy.grails.WEB_REQUEST").informParameterCreationListeners()
 	   ordenreservaController.generarordenreserva()
    	   def notaDCController = new NotaDCController()
-	   notaDCController.ordenReservaService = orderReservaService
-	   notaDCController.authenticateService = authenticateSerivice
+	   notaDCController.ordenReservaService = ordenReservaService
+	   notaDCController.authenticateService = authenticateService
 	   def ordenReservaInstance = OrdenReserva.findByNombre("empresa modificada")
+	   assertNotNull(ordenReservaInstance)
+	   notaDCController.params.ordenReserva=new OrdenReserva()
 	   notaDCController.params.ordenReserva.id = ordenReservaInstance.id
 	   notaDCController.params.detallejson = "[{descripcion:'descuento de prueba',importe:250,cantidad:1}]"
 	   notaDCController.params.tipo = "NOTA_DEBITO"  

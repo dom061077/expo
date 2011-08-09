@@ -32,8 +32,8 @@ class OrdenReserva {
 	Float porcentajeResIns=0
 	Float porcentajeResNoIns=0
 	String observacion
-	Double subtotalDetalle
-	Double subtotalOtrosConceptos
+	Double subtotalDetalle=0
+	Double subtotalOtrosConceptos=0
 	Double debito=0
 	Double credito=0
 	//Double saldo
@@ -119,8 +119,8 @@ class OrdenReserva {
 		   
     
     static mapping = {
-    	subtotalDetalle formula:"(select sum(d.sub_total) from detalle_servicio_contratado d where d.orden_reserva_id=id)"
-		subtotalOtrosConceptos formula:"(select sum(o.sub_total) from otros_conceptos o where o.orden_reserva_id=id)"
+    	subtotalDetalle formula:"(select IF(sum(d.sub_total) IS NULL,0,sum(d.sub_total)) from detalle_servicio_contratado d where d.orden_reserva_id=id)"
+		subtotalOtrosConceptos formula:"(select IF(sum(o.sub_total) IS NULL,0,sum(o.sub_total)) from otros_conceptos o where o.orden_reserva_id=id)"
 		debito formula:"(select IF(sum(ndc.total) IS NULL,0,sum(ndc.total)) from notadc ndc where ndc.orden_reserva_id=id and ndc.anulada=0 and ndc.tipo='"+TipoNotaEnum.NOTA_DEBITO+"')"
 		credito formula:"(select IF(sum(ndc.total) IS NULL,0,sum(ndc.total)) from notadc ndc where ndc.orden_reserva_id=id and ndc.anulada=0 and ndc.tipo='"+TipoNotaEnum.NOTA_CREDITO+"')"
 		recibo formula:"(select IF(sum(r.total) IS NULL,0,sum(r.total)) from recibo r where r.anulado=0 and r.orden_reserva_id=id)"

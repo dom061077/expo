@@ -18,6 +18,7 @@ import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass;
 import com.rural.utils.FilterUtils;
 import java.text.SimpleDateFormat
 import java.sql.Date 
+import java.util.ArrayList
 
 import jxl.*
 import jxl.write.Label
@@ -827,13 +828,26 @@ class OrdenReservaController {
     	log.debug("Objecto list devuelo por el closure consultar: "+list.size())
     	Double totalCancelado=0
     	Double saldoOrd=0
+		ArrayList cabecerasMostradas = new ArrayList()
     	def flagdetalle = false
+		def mostrarTotal = false
     	render(contentType:"text/json"){
     		rows{
     			list.each{
     				totalCancelado=0
+					
     				
     				if(it instanceof DetalleServicioContratado){
+						if(cabecerasMostradas.indexOf(it.ordenReserva)<0){
+							cabecerasMostradas.add(it.ordenReserva)
+							mostrarTotal=true
+						}else{
+							mostrarTotal=false
+						}
+								
+								
+						
+						
         				it.ordenReserva.recibos.each{ 
         					if(!it.anulado)
         						totalCancelado=totalCancelado+it.total
@@ -841,35 +855,43 @@ class OrdenReservaController {
         				//saldoOrd = it.ordenReserva.total - it.ordenReserva.credito - it.ordenReserva.recibo + it.ordenReserva.debito
     					row(id:it.id+1000,ordenId:it.ordenReserva.id,numero:it.ordenReserva.numero
 								,fechaAlta:it.ordenReserva.fechaAlta
-								,total:it.ordenReserva.total
+								,total:(mostrarTotal?it.ordenReserva.total: 0)
 								,anio:it.ordenReserva.anio
     							,expoNombre:it.ordenReserva.expo.nombre
-								,subTotal:it.subTotal
-								,subTotalOtrosConceptos:it.ordenReserva.subtotalOtrosConceptos
-								,debito:it.ordenReserva.debito
-								,credito:it.ordenReserva.credito
-								,recibo:it.ordenReserva.recibo
-								,saldo:saldoOrd
+								,subTotal:(mostrarTotal?it.subTotal:0)
+								,subTotalOtrosConceptos:(mostrarTotal?it.ordenReserva.subtotalOtrosConceptos:0)
+								,debito:(mostrarTotal?it.ordenReserva.debito:0)									
+								,credito:(mostrarTotal?it.ordenReserva.credito:0)
+								,recibo:(mostrarTotal?it.ordenReserva.recibo:0)
+								,saldo:(mostrarTotal?saldoOrd:0)
         						,sector:(it.sector==null?'':it.sector.nombre)
         						,lote: (it.lote==null?'':it.lote.nombre)
         						,nombre:it.ordenReserva.nombre
 								,razonSocial:it.ordenReserva.razonSocial)
         				
     				}else{
+						if(cabecerasMostradas.indexOf(it)<0){
+							cabecerasMostradas.add(it)
+							mostrarTotal=true	
+						}else{
+							mostrarTotal=false
+						}
         				it.recibos.each{r-> 
         					if(!r.anulado){
         						totalCancelado=totalCancelado+r.total
         					}
         				}
         				//saldoOrd=it.total - it.credito - it.recibo + it.debito
-    					row(id:it.id,ordenId:it.id,numero:it.numero,fechaAlta:it.fechaAlta,total:it.total,anio:it.anio,expoNombre:it.expo.nombre
+    					row(id:it.id,ordenId:it.id,numero:it.numero,fechaAlta:it.fechaAlta
+								,total:(mostrarTotal?it.total:0)
+								,anio:it.anio,expoNombre:it.expo.nombre
         						,sector:""
 								,subTotal:0
-								,subTotalOtrosConceptos:it.subtotalOtrosConceptos
-								,debito:it.debito
-								,credito:it.credito
-								,recibo:it.recibo
-								,saldo:saldoOrd
+								,subTotalOtrosConceptos:(mostrarTotal?it.subtotalOtrosConceptos:0)
+								,debito:(mostrarTotal?it.debito:0)
+								,credito:(mostrarTotal?it.credito:0)
+								,recibo:(mostrarTotal?it.recibo:0)
+								,saldo:(mostrarTotal?saldoOrd:0)
         						,lote:""
         						,nombre:it.nombre
 								,razonSocial:it.razonSocial)
@@ -935,6 +957,8 @@ class OrdenReservaController {
 		def saldo
 		def ordenes
 		def flagdetalle
+		ArrayList cabecerasMostradas = new ArrayList()
+		def mostrarTotal = false
 		
 		List list = consultar2(params)	   	
 	     response.setHeader("Content-disposition", "attachment")
@@ -993,31 +1017,38 @@ class OrdenReservaController {
 	    					if(!it.anulado)
 	    						totalCancelado=totalCancelado+it.total
 	    				}*/
+						if(cabecerasMostradas.indexOf(it.ordenReserva)<0){
+							cabecerasMostradas.add(it.ordenReserva)
+							mostrarTotal=true
+						}else{
+							mostrarTotal=false
+						}
+						
 	    				saldo=it.ordenReserva.total-it.ordenReserva.recibo-it.ordenReserva.credito+it.ordenReserva.debito
 						
     					sheet.addCell(new Label(0,fil,it.ordenReserva.empresa.nombre))
     					sheet.addCell(new Label(1,fil,it.sector?.nombre))    					
     					sheet.addCell(new Label(2,fil,it.lote?.nombre)) 
-						sheet.addCell(new Number(3,fil,(it.ordenReserva.subtotalDetalle==null? 0 : it.ordenReserva.subtotalDetalle) ))
-						sheet.addCell(new Number(4,fil,(it.ordenReserva.subtotalOtrosConceptos == null? 0 : it.ordenReserva.subtotalOtrosConceptos)))
-    					sheet.addCell(new Number(5,fil,it.ordenReserva.total))
-    					sheet.addCell(new Number(6,fil,it.ordenReserva.debito))
-						sheet.addCell(new Number(7,fil,it.ordenReserva.credito))
-						sheet.addCell(new Number(8,fil,it.ordenReserva.recibo))
-    					sheet.addCell(new Number(9,fil,saldo))
+						sheet.addCell(new Number(3,fil,(mostrarTotal?it.ordenReserva.subtotalDetalle:0) ))
+						sheet.addCell(new Number(4,fil,(mostrarTotal?it.ordenReserva.subtotalOtrosConceptos:0)))
+    					sheet.addCell(new Number(5,fil,(mostrarTotal?it.ordenReserva.total:0)))
+    					sheet.addCell(new Number(6,fil,(mostrarTotal?it.ordenReserva.debito:0)))
+						sheet.addCell(new Number(7,fil,(mostrarTotal?it.ordenReserva.credito:0)))
+						sheet.addCell(new Number(8,fil,(mostrarTotal?it.ordenReserva.recibo:0)))
+    					sheet.addCell(new Number(9,fil,(mostrarTotal?saldo:0)))
     					sheet.addCell(new Label(10,fil,it.ordenReserva.expo.nombre))
     					sheet.addCell(new Number(11,fil,it.ordenReserva.anio))
     					sheet.addCell(new Number(12,fil,it.ordenReserva.numero))
     					sheet.addCell(new DateTime(13,fil,it.ordenReserva.fechaAlta,dateFormat))
-						sheet.addCell(new Label(14,fil,it.ordenReserva.empresa.razonSocial))
-						sheet.addCell(new Label(15,fil,it.ordenReserva.empresa.cuit))
-						sheet.addCell(new Label(16,fil,it.ordenReserva.empresa.direccion))
-						sheet.addCell(new Label(17,fil,it.ordenReserva.empresa.email))
-						sheet.addCell(new Label(18,fil,it.ordenReserva.empresa.nombreRepresentante))
-						sheet.addCell(new Label(19,fil,it.ordenReserva.empresa.dniRep))
-						sheet.addCell(new Label(20,fil,it.ordenReserva.empresa.telefonoRepresentante1))
-						sheet.addCell(new Label(21,fil,it.ordenReserva.empresa.telefonoRepresentante2))
-						sheet.addCell(new Label(22,fil,it.ordenReserva.empresa.telefonoRepresentante3))
+						sheet.addCell(new Label(14,fil,it.ordenReserva.razonSocial))
+						sheet.addCell(new Label(15,fil,it.ordenReserva.cuit))
+						sheet.addCell(new Label(16,fil,it.ordenReserva.direccion))
+						sheet.addCell(new Label(17,fil,it.ordenReserva.email))
+						sheet.addCell(new Label(18,fil,it.ordenReserva.nombreRepresentante))
+						sheet.addCell(new Label(19,fil,it.ordenReserva.dniRep))
+						sheet.addCell(new Label(20,fil,it.ordenReserva.telefonoRepresentante1))
+						sheet.addCell(new Label(21,fil,it.ordenReserva.telefonoRepresentante2))
+						sheet.addCell(new Label(22,fil,it.ordenReserva.telefonoRepresentante3))
 						sheet.addCell(new Label(23,fil,it.ordenReserva.empresa.sitioWeb))
 						sheet.addCell(new Label(24,fil,it.ordenReserva.empresa.subrubro?.rubro?.nombreRubro))
 						sheet.addCell(new Label(25,fil,it.ordenReserva.empresa.subrubro?.nombreSubrubro))
@@ -1032,18 +1063,25 @@ class OrdenReservaController {
     						if(!r.anulado)
     							totalCancelado=totalCancelado+r.total
     					}*/
+						if(cabecerasMostradas.indexOf(it)<0){
+							cabecerasMostradas.add(it)
+							mostrarTotal=true
+						}else{
+							mostrarTotal=false
+						}
+					
     					saldo=it.total-it.recibo-it.credito+it.debito
 						
     					sheet.addCell(new Label(0,fil,it.nombre))
     					sheet.addCell(new Label(1,fil,""))    					
     					sheet.addCell(new Label(2,fil,""))
-						sheet.addCell(new Number(3,fil,(it.subtotalDetalle==null? 0 : it.subtotalDetalle)))
-						sheet.addCell(new Number(4,fil,(it.subtotalOtrosConceptos==null? 0 : it.subtotalOtrosConceptos)))
-    					sheet.addCell(new Number(5,fil,it.total))
-    					sheet.addCell(new Number(6,fil,it.debito)) 
-						sheet.addCell(new Number(7,fil,it.credito))
-						sheet.addCell(new Number(8,fil,it.recibo))
-    					sheet.addCell(new Number(9,fil,saldo))
+						sheet.addCell(new Number(3,fil,(mostrarTotal?it.subtotalDetalle:0)))
+						sheet.addCell(new Number(4,fil,(mostrarTotal?it.subtotalOtrosConceptos:0)))
+    					sheet.addCell(new Number(5,fil,(mostrarTotal?it.total:0)))
+    					sheet.addCell(new Number(6,fil,(mostrarTotal?it.debito:0))) 
+						sheet.addCell(new Number(7,fil,(mostrarTotal?it.credito:0)))
+						sheet.addCell(new Number(8,fil,(mostrarTotal?it.recibo:0)))
+    					sheet.addCell(new Number(9,fil,(mostrarTotal?saldo:0)))
     					sheet.addCell(new Label(10,fil,it.expo.nombre))
     					sheet.addCell(new Number(11,fil,it.anio))
     					sheet.addCell(new Number(12,fil,it.numero))

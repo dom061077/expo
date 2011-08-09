@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="567" leftMargin="14" rightMargin="14" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="359"/>
+	<property name="ireport.y" value="451"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
 	</parameter>
@@ -25,22 +25,16 @@
 	<detail>
 		<band height="800" splitType="Stretch">
 			<rectangle radius="10">
-				<reportElement mode="Transparent" x="10" y="368" width="544" height="152"/>
+				<reportElement mode="Transparent" x="10" y="284" width="544" height="236"/>
 			</rectangle>
 			<rectangle radius="10">
-				<reportElement mode="Transparent" x="10" y="645" width="544" height="152"/>
+				<reportElement mode="Transparent" x="10" y="560" width="544" height="237"/>
 			</rectangle>
 			<rectangle radius="10">
-				<reportElement mode="Transparent" x="10" y="0" width="544" height="82"/>
-			</rectangle>
-			<rectangle radius="10">
-				<reportElement mode="Transparent" x="10" y="88" width="544" height="152"/>
+				<reportElement mode="Transparent" x="10" y="5" width="544" height="235"/>
 			</rectangle>
 			<rectangle radius="10">
 				<reportElement x="425" y="492" width="118" height="25"/>
-			</rectangle>
-			<rectangle radius="10">
-				<reportElement mode="Transparent" x="11" y="280" width="544" height="82"/>
 			</rectangle>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
 				<reportElement x="441" y="620" width="96" height="13"/>
@@ -49,9 +43,6 @@
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{fechaAlta}]]></textFieldExpression>
 			</textField>
-			<rectangle>
-				<reportElement x="372" y="284" width="29" height="33"/>
-			</rectangle>
 			<staticText>
 				<reportElement x="446" y="63" width="40" height="13"/>
 				<textElement verticalAlignment="Middle">
@@ -60,7 +51,7 @@
 				<text><![CDATA[FECHA:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="160" y="64" width="203" height="13"/>
+				<reportElement x="17" y="64" width="203" height="13"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
@@ -79,14 +70,14 @@
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"notadcdetalle.jasper")]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="160" y="5" width="203" height="12"/>
+				<reportElement x="17" y="5" width="203" height="12"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Bookman Old Style" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ORIGINAL - CLIENTE]]></text>
 			</staticText>
 			<image>
-				<reportElement x="23" y="189" width="50" height="50"/>
+				<reportElement x="274" y="189" width="50" height="50"/>
 				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
 			</image>
 			<line>
@@ -102,7 +93,7 @@
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="160" y="28" width="203" height="25"/>
+				<reportElement x="17" y="28" width="203" height="25"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Tahoma" size="6" isBold="true"/>
 				</textElement>
@@ -135,7 +126,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="160" y="54" width="203" height="10"/>
+				<reportElement x="17" y="54" width="203" height="10"/>
 				<textElement textAlignment="Center">
 					<font fontName="Bookman Old Style" size="8" isBold="true"/>
 				</textElement>
@@ -155,18 +146,8 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{fechaAlta}]]></textFieldExpression>
 			</textField>
-			<rectangle>
-				<reportElement x="372" y="5" width="29" height="33"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="372" y="6" width="29" height="33"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="20" isBold="true"/>
-				</textElement>
-				<text><![CDATA[X]]></text>
-			</staticText>
 			<image onErrorType="Icon">
-				<reportElement x="20" y="5" width="130" height="71"/>
+				<reportElement x="233" y="5" width="130" height="71"/>
 				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath}+"/images/",$P{logo})]]></imageExpression>
 			</image>
 			<staticText>
@@ -180,14 +161,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<reportElement mode="Transparent" x="17" y="-298" width="544" height="82"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="459" y="21" width="60" height="24"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="6" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Documento No Válido como Factura]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="160" y="307" width="203" height="25"/>
+				<reportElement x="17" y="307" width="203" height="25"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Tahoma" size="6" isBold="true"/>
 				</textElement>
@@ -196,28 +170,28 @@ Tel./ Fax: (0381) - 4347777/6146/6258
 www.srt.org.ar - informes@srt.org.ar]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="160" y="284" width="203" height="12"/>
+				<reportElement x="17" y="284" width="203" height="12"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Bookman Old Style" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[DUPLICADO - CONTADURÍA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="160" y="343" width="203" height="13"/>
+				<reportElement x="17" y="343" width="203" height="13"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
 				<text><![CDATA[C.U.I.T.:  30-53329835-0  l  Ing. Brutos:  Exento  l  Inicio Act.: 05/11/1980]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="160" y="333" width="203" height="10"/>
+				<reportElement x="17" y="333" width="203" height="10"/>
 				<textElement textAlignment="Center">
 					<font fontName="Bookman Old Style" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[I.V.A RESPONSABLE INSCRIPTO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="160" y="16" width="203" height="12"/>
+				<reportElement x="17" y="16" width="203" height="12"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Bookman Old Style" size="9" isBold="true"/>
 				</textElement>
@@ -237,15 +211,8 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{fechaAlta}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="372" y="285" width="29" height="33"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="20" isBold="true"/>
-				</textElement>
-				<text><![CDATA[X]]></text>
-			</staticText>
 			<image onErrorType="Icon">
-				<reportElement x="20" y="284" width="130" height="71"/>
+				<reportElement x="233" y="286" width="130" height="71"/>
 				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath}+"/images/",$P{logo})]]></imageExpression>
 			</image>
 			<staticText>
@@ -256,15 +223,12 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[FECHA:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="160" y="295" width="203" height="12"/>
+				<reportElement x="17" y="295" width="203" height="12"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Bookman Old Style" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Sociedad Rural de Tucumán]]></text>
 			</staticText>
-			<rectangle>
-				<reportElement x="372" y="562" width="29" height="33"/>
-			</rectangle>
 			<textField>
 				<reportElement x="442" y="322" width="95" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
@@ -287,48 +251,38 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[($F{numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
 			</textField>
 			<image onErrorType="Icon">
-				<reportElement x="20" y="562" width="130" height="71"/>
+				<reportElement x="233" y="562" width="130" height="71"/>
 				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath}+"/images/",$P{logo})]]></imageExpression>
 			</image>
-			<rectangle radius="10">
-				<reportElement mode="Transparent" x="10" y="557" width="544" height="82"/>
-			</rectangle>
 			<staticText>
-				<reportElement x="160" y="621" width="203" height="13"/>
+				<reportElement x="17" y="621" width="203" height="13"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
 				<text><![CDATA[C.U.I.T.:  30-53329835-0  l  Ing. Brutos:  Exento  l  Inicio Act.: 05/11/1980]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="160" y="611" width="203" height="10"/>
+				<reportElement x="17" y="611" width="203" height="10"/>
 				<textElement textAlignment="Center">
 					<font fontName="Bookman Old Style" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[I.V.A RESPONSABLE INSCRIPTO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="160" y="562" width="203" height="12"/>
+				<reportElement x="17" y="562" width="203" height="12"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Bookman Old Style" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TRIPLICADO - DEPTO. EXPO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="160" y="585" width="203" height="25"/>
+				<reportElement x="17" y="585" width="203" height="25"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Tahoma" size="6" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Camino del Perú  Nº 1050 - Cevil Redondo - Tucumán - (4105)
 Tel./ Fax: (0381) - 4347777/6146/6258
 www.srt.org.ar - informes@srt.org.ar]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="372" y="563" width="29" height="33"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="20" isBold="true"/>
-				</textElement>
-				<text><![CDATA[X]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="446" y="620" width="40" height="13"/>
@@ -338,7 +292,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[FECHA:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="160" y="573" width="203" height="12"/>
+				<reportElement x="17" y="573" width="203" height="12"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Bookman Old Style" size="9" isBold="true"/>
 				</textElement>
@@ -378,7 +332,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"notadcdetalle.jasper")]]></subreportExpression>
 			</subreport>
 			<image>
-				<reportElement x="23" y="469" width="50" height="50"/>
+				<reportElement x="274" y="470" width="50" height="50"/>
 				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
 			</image>
 			<textField>
@@ -418,23 +372,9 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[TOTAL $]]></text>
 			</staticText>
 			<image>
-				<reportElement x="23" y="746" width="50" height="50"/>
+				<reportElement x="274" y="746" width="50" height="50"/>
 				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
 			</image>
-			<staticText>
-				<reportElement x="459" y="300" width="60" height="24"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="6" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Documento No Válido como Factura]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="459" y="574" width="60" height="24"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="6" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Documento No Válido como Factura]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="459" y="44" width="35" height="15"/>
 				<textElement>

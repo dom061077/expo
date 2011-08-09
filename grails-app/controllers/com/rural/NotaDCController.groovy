@@ -109,18 +109,22 @@ class NotaDCController {
 		def retorno
 		def notaDCInstance = new NotaDC(params)
 		notaDCInstance.usuario = authenticateService.userDomain()
+		notaDCInstance.fechaAlta = new java.sql.Date((new java.util.Date()).getTime())
 		def detalleJson = grails.converters.JSON.parse(params.detallejson)
 		detalleJson.each{
-			notaDCinstance.addToDetalle(new NotadcDetalle(descripcion:it.descripcion,subTotal:it.importe))
+			notaDCInstance.addToDetalle(new NotadcDetalle(descripcion:it.descripcion,subTotal:it.importe))
 		}
 		try{
-			retorno = ordenReservaService.generarnota(param.ordenReserva.id.toLong(),notaDCInstance)
+			log.debug "INSTANCIA DE NOTA ANTES DE LLAMAR AL SERVICIO: ${notaDCInstance.detalle.size()}"
+			retorno = ordenReservaService.generarnota(params.ordenReserva.id.toLong(),notaDCInstance)
 			if(retorno instanceof Long){
+				 log.info("NOTA DE DEBITO CREADA CON ID: $retorno")
 				 render(contentType:"text/json"){
 					 success true
 					 notaId retorno
 				 }	
 			}else{
+				log.error("ERROR AL CREAR LA NOTA DE DEBITO: "+retorno.errors.allErrors)
 				render(contentType:"text/json"){
 					success false
 					errors{
@@ -132,6 +136,7 @@ class NotaDCController {
 			}
 		}catch(OrdenReservaException e){
 			render(contentType:"text/json"){
+				log.error ("EXCEPCION EN EL SERVICIO DE LA ORDEN DE RESERVA: "+e.message)
 				success false
 				errors{
 					title g.message(code:e.message)
