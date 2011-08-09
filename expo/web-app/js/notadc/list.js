@@ -125,7 +125,7 @@ Ext.onReady(function(){
 																},
 																success: function(resp,opt){
 																	var respuesta = Ext.decode(resp.responseText);
-																	
+																	var msg='';
 																	if(respuesta){
 																		if(respuesta.loginredirect)
 																			window.location='../logout/index';
@@ -140,13 +140,21 @@ Ext.onReady(function(){
 																							window.location='list'
 																					}
 																				});
-																			else	
+																			else{
+																		    	if (respuesta.errors){
+																		    		for (var i=0; i<respuesta.errors.length;i++){
+																		    			msg=msg+respuesta.errors[i].title+'\r\n';	
+																    				}
+																    				
+															    				}
+
 																				Ext.Msg.show({
 																					title:"Error",
-																					msg:respuesta.msg,
+																					msg:msg,
 																					icon:Ext.MessageBox.ERROR,
 																					buttons:Ext.MessageBox.OK
 																				});
+																			}
 																		}
 																	}
 																	
