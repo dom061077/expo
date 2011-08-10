@@ -1,8 +1,8 @@
 package com.rural.enums
 
 public enum TipoNotaEnum {
-	NOTA_DEBITO("Comprobante de Crédito"),
-	NOTA_CREDITO("Comprobante de Débito")
+	NOTA_DEBITO("Comprobante de Débito"),
+	NOTA_CREDITO("Comprobante de Crédito")
 	
 	String name
 	

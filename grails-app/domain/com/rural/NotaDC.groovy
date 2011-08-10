@@ -17,7 +17,7 @@ class NotaDC {
 	Date fechaAlta
 	Boolean anulada = false
 	
-	Double subTotal
+	Double subTotal=0
 	Double ivaGral=0
 	Double ivaRni=0/*es el resultado subtotal neto + ivaGral*/
 	Double ivaSujNoCateg=0 /*es mayor a cero cuando la condicion de IVA es ivaRniCheck true*/
@@ -32,15 +32,16 @@ class NotaDC {
 		puntoVenta(blank:true,nullable:true)
     }
 	def sigNumero(){
-		/*def c = OrdenReserva.createCriteria()
+		/*def c = NotaDC.createCriteria()
 		def lastNum = c.get{
 			projections{
 				max("numero")
 			}
 			
 		}
-		return lastNum ? lastNum+1 : 1    */
-		def max = OrdenReserva.executeQuery("select max(numero)+1 from NotaDC n where n.tipo = ?",[tipo])[0]
+		return lastNum ? lastNum+1 : 1
+		    */
+		def max = NotaDC.executeQuery("select max(numero)+1 from NotaDC n where  n.tipo=?",[tipo])[0]
 		if (max == null) {
 			max = 1
 		}
