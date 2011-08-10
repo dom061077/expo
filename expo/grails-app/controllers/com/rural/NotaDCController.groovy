@@ -110,9 +110,11 @@ class NotaDCController {
 		def notaDCInstance = new NotaDC(params)
 		notaDCInstance.usuario = authenticateService.userDomain()
 		notaDCInstance.fechaAlta = new java.sql.Date((new java.util.Date()).getTime())
+		notaDCInstance.tipoGen = TipoGeneracionEnum.TIPOGEN_MANUAL
 		def detalleJson = grails.converters.JSON.parse(params.detallejson)
 		detalleJson.each{
 			notaDCInstance.addToDetalle(new NotadcDetalle(descripcion:it.descripcion,subTotal:it.importe))
+			notaDCInstance.subTotal = notaDCInstance.subTotal + it.importe
 		}
 		try{
 			log.debug "INSTANCIA DE NOTA ANTES DE LLAMAR AL SERVICIO: ${notaDCInstance.detalle.size()}"
@@ -124,7 +126,11 @@ class NotaDCController {
 					 notaId retorno
 				 }	
 			}else{
-				log.error("ERROR AL CREAR LA NOTA DE DEBITO: "+retorno.errors.allErrors)
+				
+				g.eachError(bean:retorno){
+					log.error("ERROR AL CREAR LA NOTA DE DEBITO: "+it)
+				}
+
 				render(contentType:"text/json"){
 					success false
 					errors{

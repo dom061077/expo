@@ -300,21 +300,29 @@ class OrdenReservaService {
 
 	def generarnota(Long ordenId,NotaDC nota){
 		log.info "INGRESANDO AL PROCEDIMIENTO generarnota DEL SERVICIO OrdenReservaService"
-		log.info "PARAMETROS, orden: $ordenId, nota: $nota"
+		log.info "PARAMETROS, orden: $ordenId, nota con subtotal: ${nota.subTotal}"
 		
 		def ordenReservaInstance = OrdenReserva.get(ordenId)
 		if(!ordenReservaInstance)
 			throw new OrdenReservaException("com.rural.noexiste",ordenReservaInstance)
-		ordenReservaInstance.addToNotas(nota)
-		if(!ordenReservaInstance.validate() && ordenReservaInstance.save())
+
+		nota.ivaGral = nota.subTotal*(ordenReservaInstance.porcentajeResIns > 0 ? ordenReservaInstance.porcentajeResIns : ordenReservaInstance.porcentajeResNoIns)/100
+		nota.ivaRni = nota.subTotal+nota.ivaGral
+		if(ordenReservaInstance.ivaRniCheck)
+			nota.ivaSujNoCateg=nota.ivaRni*10.5/100
+		log.info "TOTAL GRAL FORMADO POR subTotal: "+nota.subTotal+", ivaGral: "+nota.ivaGral+" ivaSujNoCateg: "+nota.ivaSujNoCateg
+		
+		nota.total=nota.subTotal+nota.ivaGral+nota.ivaSujNoCateg
+	
+						
+		//ordenReservaInstance.addToNotas(nota)
+		nota.ordenReserva = ordenReservaInstance
+		if(nota.validate() && nota.save())
 			return nota.id
 		else
-			return ordenReservaInstance	
+			return nota	
 	}
 	
-	void tirarmensaje(){
-		log.info "MENSAJE DESDE METODO"
-	}
 
 	
 }

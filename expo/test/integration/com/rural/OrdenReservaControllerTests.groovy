@@ -332,11 +332,13 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	   notaDCController.authenticateService = authenticateService
 	   def ordenReservaInstance = OrdenReserva.findByNombre("empresa modificada")
 	   assertNotNull(ordenReservaInstance)
-	   notaDCController.params.ordenReserva=new OrdenReserva()
+	   notaDCController.params.tipo="NOTA_DEBITO"
+	   notaDCController.params.ordenReserva= new OrdenReserva()
 	   notaDCController.params.ordenReserva.id = ordenReservaInstance.id
 	   notaDCController.params.detallejson = "[{descripcion:'descuento de prueba',importe:250,cantidad:1}]"
 	   notaDCController.params.tipo = "NOTA_DEBITO"  
 	   notaDCController.savejson()
 	   assertEquals(NotaDC.count(),1)
+	   def notaDCInstance = NotaDC.
    }
 }
