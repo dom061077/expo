@@ -3,6 +3,8 @@ package com.rural
 import grails.test.*
 import com.rural.seguridad.*
 import com.rural.*
+import com.rural.enums.TipoNotaEnum
+import com.rural.enums.TipoGeneracionEnum
 import org.springframework.security.GrantedAuthority
 import org.springframework.security.GrantedAuthorityImpl
 import org.springframework.security.context.SecurityContextHolder as SCH
@@ -327,6 +329,7 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	   ordenreservaController.params.productosjson="[{descripcion:'QUESOS Y QUESILLOS'},{descripcion:'MEMBRILLO'}]"
 	   ordenreservaController.request.getAttribute("org.codehaus.groovy.grails.WEB_REQUEST").informParameterCreationListeners()
 	   ordenreservaController.generarordenreserva()
+	   ordenreservaController.response.reset()
    	   def notaDCController = new NotaDCController()
 	   notaDCController.ordenReservaService = ordenReservaService
 	   notaDCController.authenticateService = authenticateService
@@ -339,6 +342,12 @@ class OrdenReservaControllerTests extends GrailsUnitTestCase {
 	   notaDCController.params.tipo = "NOTA_DEBITO"  
 	   notaDCController.savejson()
 	   assertEquals(NotaDC.count(),1)
-	   def notaDCInstance = NotaDC.
+	   def respuesta = notaDCController.response.contentAsString
+	   def json = grails.converters.JSON.parse(respuesta)
+	   assertTrue(json.success)
+	   assertEquals(json.notaId,1)
+	   def notaDCInstance = NotaDC.get(json.notaId.toLong())
+	   assertEquals(notaDCInstance.tipo,TipoNotaEnum.NOTA_DEBITO)
+	   
    }
 }
