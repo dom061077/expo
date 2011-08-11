@@ -18,22 +18,23 @@
 	<field name="puntoVenta" class="java.lang.Integer"/>
 	<field name="detalle" class="java.util.Collection"/>
 	<field name="tipo.name" class="java.lang.String"/>
+	<field name="ordenReserva.numero" class="java.lang.Long"/>
 	<variable name="subtotaldetalleotrosconceptos" class="java.lang.Double"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
 		<band height="800" splitType="Stretch">
-			<rectangle radius="10">
+			<rectangle radius="0">
 				<reportElement mode="Transparent" x="10" y="284" width="544" height="236"/>
 			</rectangle>
-			<rectangle radius="10">
+			<rectangle radius="0">
 				<reportElement mode="Transparent" x="10" y="560" width="544" height="237"/>
 			</rectangle>
-			<rectangle radius="10">
+			<rectangle radius="0">
 				<reportElement mode="Transparent" x="10" y="5" width="544" height="235"/>
 			</rectangle>
-			<rectangle radius="10">
+			<rectangle radius="0">
 				<reportElement x="425" y="492" width="118" height="25"/>
 			</rectangle>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
@@ -58,14 +59,14 @@
 				<text><![CDATA[C.U.I.T.:  30-53329835-0  l  Ing. Brutos:  Exento  l  Inicio Act.: 05/11/1980]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="48" y="97" width="42" height="11"/>
+				<reportElement x="48" y="87" width="42" height="11"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<text><![CDATA[Expositor:]]></text>
 			</staticText>
 			<subreport runToBottom="true">
-				<reportElement x="36" y="139" width="500" height="10"/>
+				<reportElement x="43" y="131" width="500" height="10"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalle})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"notadcdetalle.jasper")]]></subreportExpression>
 			</subreport>
@@ -102,13 +103,13 @@ Tel./ Fax: (0381) - 4347777/6146/6258
 www.srt.org.ar - informes@srt.org.ar]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="94" y="97" width="234" height="11"/>
+				<reportElement x="94" y="87" width="234" height="11"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.razonSocial}]]></textFieldExpression>
 			</textField>
-			<rectangle radius="10">
+			<rectangle radius="0">
 				<reportElement mode="Transparent" x="425" y="212" width="118" height="25"/>
 			</rectangle>
 			<staticText>
@@ -306,7 +307,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="94" y="377" width="234" height="11"/>
+				<reportElement x="94" y="364" width="234" height="11"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
@@ -320,14 +321,14 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[TOTAL $]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="48" y="377" width="42" height="11"/>
+				<reportElement x="48" y="364" width="42" height="11"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<text><![CDATA[Expositor:]]></text>
 			</staticText>
 			<subreport runToBottom="true">
-				<reportElement x="36" y="415" width="500" height="10"/>
+				<reportElement x="43" y="411" width="500" height="10"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalle})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"notadcdetalle.jasper")]]></subreportExpression>
 			</subreport>
@@ -336,17 +337,17 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<imageExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"rural.png")]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="94" y="654" width="234" height="11"/>
+				<reportElement x="94" y="644" width="234" height="11"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{ordenReserva.razonSocial}]]></textFieldExpression>
 			</textField>
-			<rectangle radius="10">
+			<rectangle radius="0">
 				<reportElement x="425" y="769" width="118" height="25"/>
 			</rectangle>
 			<subreport runToBottom="true">
-				<reportElement x="36" y="712" width="500" height="10"/>
+				<reportElement x="44" y="693" width="500" height="10"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{detalle})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"notadcdetalle.jasper")]]></subreportExpression>
 			</subreport>
@@ -358,7 +359,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="48" y="654" width="42" height="11"/>
+				<reportElement x="48" y="644" width="42" height="11"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -416,6 +417,52 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 					<font fontName="Bookman Old Style" size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{tipo.name}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="10" y="83" width="544" height="1"/>
+			</line>
+			<line>
+				<reportElement x="10" y="361" width="544" height="1"/>
+			</line>
+			<line>
+				<reportElement x="10" y="641" width="544" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="48" y="103" width="80" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Orden de Reserva Nº:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="10" y="117" width="544" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="133" y="103" width="100" height="11"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Long"><![CDATA[($F{puntoVenta}+10000).toString().substring(1,5)+"-"+($F{numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="10" y="396" width="544" height="1"/>
+			</line>
+			<line>
+				<reportElement x="10" y="677" width="544" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="48" y="383" width="80" height="11"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Orden de Reserva Nº:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="133" y="383" width="100" height="11"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Long"><![CDATA[($F{puntoVenta}+10000).toString().substring(1,5)+"-"+($F{numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
