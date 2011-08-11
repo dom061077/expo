@@ -120,7 +120,7 @@ class NotaDCController {
 			log.debug "INSTANCIA DE NOTA ANTES DE LLAMAR AL SERVICIO: ${notaDCInstance.detalle.size()}"
 			retorno = ordenReservaService.generarnota(params.ordenReserva.id.toLong(),notaDCInstance)
 			if(retorno instanceof Long){
-				 log.info("NOTA DE DEBITO CREADA CON ID: $retorno")
+				 log.info("NOTA DE "+notaDCInstance.tipo+" CREADA CON ID: $retorno DEL TIPO "+notaDCInstance.tipoGen)
 				 render(contentType:"text/json"){
 					 success true
 					 notaId retorno
