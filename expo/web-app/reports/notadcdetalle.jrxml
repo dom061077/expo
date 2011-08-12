@@ -9,10 +9,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="9" splitType="Stretch">
-			<rectangle>
-				<reportElement x="2" y="0" width="508" height="9"/>
-			</rectangle>
+		<band height="11" splitType="Stretch">
 			<textField>
 				<reportElement x="8" y="0" width="273" height="9"/>
 				<textElement>
@@ -27,6 +24,12 @@
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotal}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement x="1" y="10" width="508" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
 		</band>
 	</detail>
 </jasperReport>

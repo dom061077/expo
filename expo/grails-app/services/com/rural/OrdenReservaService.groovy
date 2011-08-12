@@ -225,6 +225,7 @@ class OrdenReservaService {
 		notad.addToDetalle(notadDetalle)
 		notad.subTotal = notadDetalle.subTotal
 		notad.ivaGral =  notad.subTotal*(orden.porcentajeResIns > 0 ? orden.porcentajeResIns : orden.porcentajeResNoIns)/100
+		notad.ivaRni = notad.subTotal+notad.ivaGral 
 		log.debug "CALCULO DE IVA GRAL: "+notad.ivaGral
 		if(orden.ivaRniCheck)
 			notad.ivaSujNoCateg=notad.ivaRni*10.5/100
