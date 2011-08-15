@@ -260,6 +260,9 @@ class OrdenReservaController {
     		log.debug(it)
     		log.debug(it.sector?.nombre)
     		log.debug(it.lote?.nombre)
+			it.descuentos.each{ descuento ->
+				log.debug "${descuento.porcentaje}"
+			}
     	}
     	ordenReservaInstance.otrosconceptos.each{
     		log.debug(it.subTotal)

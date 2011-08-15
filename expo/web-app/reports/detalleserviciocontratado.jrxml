@@ -3,10 +3,18 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\danielmedina\\Documents\\workspace-sts-2.6.0.SR1\\expo\\web-app\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="reportsDirPath" class="java.lang.String"/>
 	<field name="subTotal" class="java.lang.Double"/>
 	<field name="sector.nombre" class="java.lang.String"/>
 	<field name="lote.nombre" class="java.lang.String"/>
-	<variable name="subTotalDetalle" class="java.lang.Double" calculation="Sum">
+	<field name="descuentos" class="java.util.Collection"/>
+	<field name="subTotalsindesc" class="java.lang.Double"/>
+	<field name="porcentajeDesc" class="java.lang.Double"/>
+	<field name="fechaVencimiento" class="java.sql.Date"/>
+	<variable name="subTotalDetalle" class="java.lang.Double" resetType="None" calculation="Sum">
 		<variableExpression><![CDATA[$F{subTotal}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
@@ -14,7 +22,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="13" splitType="Stretch">
+		<band height="26" splitType="Stretch">
 			<staticText>
 				<reportElement x="445" y="0" width="9" height="13"/>
 				<textElement verticalAlignment="Middle">
@@ -55,8 +63,35 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="false"/>
 				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotalsindesc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="13" width="364" height="13">
+					<printWhenExpression><![CDATA[$F{porcentajeDesc}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Descuento del "+($F{porcentajeDesc}).toString()+" valido hasta el "+($F{fechaVencimiento}).toString()]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="469" y="13" width="61" height="13">
+					<printWhenExpression><![CDATA[$F{porcentajeDesc}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="9"/>
+				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotal}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="445" y="13" width="9" height="13">
+					<printWhenExpression><![CDATA[$F{porcentajeDesc}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<summary>
