@@ -1,11 +1,13 @@
 package com.rural
 
-
+import java.sql.Date
 
 class DetalleServicioContratado {
 
 	Double subTotal=0
 	Double subTotalsindesc=0
+	Double porcentajeDesc = 0
+	Date fechaVencimiento
 	Lote lote
 	Sector sector
 	OrdenReserva ordenReserva
