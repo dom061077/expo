@@ -39,8 +39,11 @@ class OrdenReservaService {
 		def fecha =  java.sql.Date.valueOf(sf.format(todayCal.getTime()))
 
 		def listDescuentos = ListaDescuentos.createCriteria().list(){
-			sector{
-				eq("id",detalle.sector.id)
+			and{
+				sector{
+					eq("id",detalle.sector.id)
+				}
+				ge("fechaVencimiento",fecha)
 			}
 			order("fechaVencimiento","asc")
 			
@@ -68,6 +71,7 @@ class OrdenReservaService {
 				difDesc = current.porcentaje - (peek?.porcentaje==null?0:peek.porcentaje)
 				difSubTotal = detalle.subTotal*difDesc/100
 				log.debug "Diferencia de descuento: ${difDesc}, subTotal diferencia: ${difSubTotal}, subtotal de detalle:${detalle.subTotal}"
+				detalle.porcentajeDesc = current.porcentaje
 				detalle.addToDescuentos(new DetalleServicioContratadoDescuentos(porcentaje:difDesc
 						,fechaVencimiento:current.fechaVencimiento,subTotal:difSubTotal,porcentajeActual:current?.porcentaje,porcentajeSig:peek?.porcentaje))
 			}
