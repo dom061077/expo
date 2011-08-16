@@ -340,6 +340,8 @@ class NotaDCController {
 		notadc.detalle.each{
 			
 		}
+		
+		log.debug "Usuario: "+notadc.usuario?.userRealName
 		//------------------------------------------------------------------------------------
 
 		String pathtofile = servletContext.getRealPath("/reports/images")+"/"+notadc.ordenReserva.expo.nombre.trim()+notadc.ordenReserva.anio+".jpg"

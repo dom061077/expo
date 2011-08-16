@@ -323,7 +323,7 @@ Ext.onReady(function(){
 					grid.filters.clearFilters();
         		}
 			},{
-				text:'Notas',
+				text:'Comprobantes Débito/Crédito',
 				handler: function(){
         			var sm = grid.getSelectionModel();
         			var sel = sm.getSelected();
