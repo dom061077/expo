@@ -3,6 +3,8 @@ package com.rural
 import java.sql.Date
 
 class ListaDescuentos {
+	static auditable = true
+	
 	Sector sector
 	Double porcentaje
 	Date fechaVencimiento

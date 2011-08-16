@@ -7,6 +7,8 @@ import com.rural.seguridad.Person
 import java.sql.Date
 
 class NotaDC {
+	static auditable = true
+	
 	Integer puntoVenta
 	Person usuario
 	Long numero

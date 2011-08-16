@@ -34,6 +34,7 @@ class OrdenReservaService {
 		def difSubTotal
 		def difDesc
 		def primerDesc=0
+		def primeraFechaVencimiento
 		def todayCal = Calendar.getInstance()
 		def sf = new SimpleDateFormat("yyyy-MM-dd")
 		def fecha =  java.sql.Date.valueOf(sf.format(todayCal.getTime()))
@@ -49,6 +50,7 @@ class OrdenReservaService {
 			
 		}
 		primerDesc=listDescuentos[0]?.porcentaje
+		primeraFechaVencimiento=listDescuentos[0]?.fechaVencimiento
 		if(primerDesc==null)
 			primerDesc=0
 		if(detalle.lote?.precio){
@@ -71,13 +73,14 @@ class OrdenReservaService {
 				difDesc = current.porcentaje - (peek?.porcentaje==null?0:peek.porcentaje)
 				difSubTotal = detalle.subTotal*difDesc/100
 				log.debug "Diferencia de descuento: ${difDesc}, subTotal diferencia: ${difSubTotal}, subtotal de detalle:${detalle.subTotal}"
-				detalle.porcentajeDesc = current.porcentaje
 				detalle.addToDescuentos(new DetalleServicioContratadoDescuentos(porcentaje:difDesc
 						,fechaVencimiento:current.fechaVencimiento,subTotal:difSubTotal,porcentajeActual:current?.porcentaje,porcentajeSig:peek?.porcentaje))
 			}
 		}
 				
 		detalle.subTotal = detalle.subTotalsindesc - detalle.subTotalsindesc * primerDesc/100
+		detalle.porcentajeDesc = primerDesc
+		detalle.fechaVencimiento = primeraFechaVencimiento
 		log.info "CANTIDAD DE DESCUENTOS AGREGADOS AL DETALLE DEL SERVICIO CONTRATADO: "+detalle.descuentos?.size()
 		log.info "DESCUENTO APLICADO: ${primerDesc}"
 		log.info "SUBTOTAL DEL DETALLE: ${detalle.subTotal}"
@@ -114,10 +117,10 @@ class OrdenReservaService {
     	if(!empresaInstance)
     		throw new OrdenReservaException("Ocurrio un error. No se guardo la empresa")
 			
-    	ord.detalle.eachWithPeek{current, peek->
+    	ord.detalle?.eachWithPeek{current, peek->
 			log.debug "CURRENT: ${current?.class}, Next: ${peek?.class}"
 		}
-	    ord.detalle.each{det->
+	    ord.detalle?.each{det->
 				
 				/*precio=det.lote.precio
 				if(precio==0)

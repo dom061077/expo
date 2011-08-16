@@ -108,7 +108,7 @@
 				            <li>
 				                <a href="#">Operaciones de Administrador</a>
 				                <ul>
-										<li><g:link controller="lote" action="listprecios">Lista de precios por Lote</g:link>
+										<li><g:link controller="lote" action="listprecios">Tarifario de Lotes</g:link>
 										<li><g:link controller="sector" action="listdescuentos">Descuentos por Sectores</g:link>						
 										<li><g:link controller="sector">Sectores</g:link> </li>
 										<li><g:link controller="vendedor">Vendedores </g:link> </li>
