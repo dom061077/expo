@@ -435,9 +435,17 @@ class SectorController {
 			order("fechaVencimiento","asc")
 			
 		}
+
 		def porc = 0
 		def vencimiento
 		def precioSector
+
+				
+		if(!listDescuentos){
+			precioSector = Sector.load(params.id.toLong()).precio
+		}
+
+		
 		if(listDescuentos){
 			porc = listDescuentos[0].porcentaje
 			vencimiento = listDescuentos[0].fechaVencimiento

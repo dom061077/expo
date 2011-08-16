@@ -19,6 +19,7 @@ class DetalleServicioContratado {
     	lote(blank:true,nullable:true)
     	sector(blank:true,nullable:true)
 		subTotalsindesc(blank:true,nullable:true)
+		fechaVencimiento(blank:true,nullable:true)
     }
 	
 	static mapping={

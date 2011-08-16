@@ -10,7 +10,7 @@ Ext.onReady(function(){
 				editor: new Ext.form.TextField({
 					allowBlank:false
 				})
-			},{
+			/*},{
 				header: 'Cantidad',
 				dataIndex:'cantidad',
 				width:90,
@@ -19,6 +19,7 @@ Ext.onReady(function(){
 					//allowNegative:false,
 					maxValue:1000000
 				})
+				*/
 			},{
 				header: 'Importe',
 				dataIndex:'importe',
@@ -40,7 +41,7 @@ Ext.onReady(function(){
 			record:'banco',
 			fields:[
 				{name: 'descripcion',type:'string'},
-				{name: 'cantidad',type:'numeric'},
+				//{name: 'cantidad',type:'numeric'},
 				{name: 'importe', type: 'string'}
 			]
 		})
@@ -181,7 +182,7 @@ Ext.onReady(function(){
 	 			 		var flagerrordetalle=false;
 	 			 		store.data.each(
 	 			 			function(rec){
-	 			 				if(rec.data.descripcion.trim()=='' || !rec.data.cantidad>0
+	 			 				if(rec.data.descripcion.trim()==''
 	 			 						|| !rec.data.importe>0){
 	 			 					flagerrordetalle=true;
 	 			 					return false;
@@ -209,14 +210,16 @@ Ext.onReady(function(){
 	 			 			return false;
 	 			 		}
 	 			 		
-	 			 		if(saldo<totalnota){
+	 			 		/*if(saldo<totalnota){
 	 			 			Ext.MessageBox.show({
 	 			 				title:'Error',
 	 			 				msg:'',
 	 			 				icon:Ext.MessageBox.ERROR,
 	 			 				buttons:Ext.MessageBox.OK
-	 			 			});
-	 			 		}else{
+	 			 			});*/
+	 			 		//}else{
+	 			 			detallejsonStr = Ext.encode(detallejsonArr);
+	 			 			Ext.getCmp('detallejsonId').setValue(detallejsonStr);
 	 			 			formNotadc.getForm().submit({
 	 			 				success: function(f,a){
 	 			 					if(a.result.success){
@@ -231,7 +234,7 @@ Ext.onReady(function(){
 	 			 								//window.location='../ordenReserva/list';
 	 			 							}
 	 			 						});
-	 			 						//window.location='reporte?target=_blank&_format=PDF&_name=nota&_file=nota&id='+a.result.id+"&totalletras="+a.result.totalletras;		    			 						
+	 			 						window.location='reporte?target=_blank&_format=PDF&_name=nota&_file=notadc&id='+a.result.notaId+"&totalletras="+a.result.totalletras;		    			 						
 	 			 					}else{
 	 			 						Ext.MessageBox.show({
 	 			 							title:'Error',
@@ -245,7 +248,7 @@ Ext.onReady(function(){
 	 			 					
 	 			 				}
 	 			 			});
-	 			 		}
+	 			 		//}
 	 			 			
 	             	}	
 	             },{
