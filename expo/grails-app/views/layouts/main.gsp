@@ -99,15 +99,16 @@
 			            <li><a href="#">Ventas</a>
 			            	<ul>
 			            		<li><g:link controller="ordenReserva" action="list">Orden de Reserva </g:link></li>
+			            		<li><g:link controller="ordenReserva" action="createesquemaant">Alta sin descuentos de Sectores </g:link></li>
 								<li><g:link controller="recibo" action="list">Recibo </g:link></li>					
-								<li><g:link controller="notaDC" action="list">Notas </g:link></li>
+								<li><g:link controller="notaDC" action="list">Comprobantes de Débito/Crédito</g:link></li>
 			            	</ul>
 			            </li>
 			            <g:ifAllGranted role="ROLE_ADMIN">
 				            <li>
 				                <a href="#">Operaciones de Administrador</a>
 				                <ul>
-										<li><g:link controller="lote" action="listprecios">Lista de precios</g:link>
+										<li><g:link controller="lote" action="listprecios">Lista de precios por Lote</g:link>
 										<li><g:link controller="sector" action="listdescuentos">Descuentos por Sectores</g:link>						
 										<li><g:link controller="sector">Sectores</g:link> </li>
 										<li><g:link controller="vendedor">Vendedores </g:link> </li>
