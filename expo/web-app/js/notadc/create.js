@@ -167,7 +167,7 @@ Ext.onReady(function(){
 		    	   name:'detallejson',
 		    	   id:'detallejsonId'
 		       }		       
-		       ,grid,
+		       ,grid
 		],
 	    buttons:[
 	             {
@@ -271,7 +271,22 @@ Ext.onReady(function(){
 			
 		},
 		failure: function (thisform,action){
-   				alert(action);
+				var msg='';
+				if(!action.result.success){
+   					if (action.result.errors){
+						    		for (var i=0; i<action.result.errors.length;i++){
+						    			msg=msg+action.result.errors[i].title+'\r\n';	
+				    				}
+				    				Ext.Msg.alert(msg);
+				    				Ext.MessageBox.show({
+								    	title:'Error',
+								    	msg:'Seleccione un rubro antes de agregar el Sub-Rubro',
+								    	buttons:Ext.MessageBox.OK,
+								   		icon:Ext.MessageBox.ERROR
+								   });
+			    				}
+   					
+				}
 		}
 	});
 	
