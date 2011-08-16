@@ -164,6 +164,12 @@ class NotaDCController {
 						,'saldo':(ordenReserva.total - ordenReserva.credito - ordenReserva.recibo + ordenReserva.debito))
 			}	
 		}else{
+			render(contentType:"text/json"){
+				success false
+				errors{
+					title "No Existe la orden de reserva"
+				}
+			}
 			
 		}
 		
