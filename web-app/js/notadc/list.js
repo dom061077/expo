@@ -79,7 +79,7 @@ Ext.onReady(function(){
 		height:450,
 		width:750,
 		loadMask:true,
-		title:"Notas",
+		title:"Comprobantes Débito/Crédito",
         tbar:[{
         		icon: imagePath+'/pdf.gif'
         		,cls:'x-btn-text-icon'
@@ -220,8 +220,8 @@ Ext.onReady(function(){
             	pageSize: 30,
             	store: notaStore,
             	displayInfo:true,
-            	displayMsg: 'Visualizando notas {0} - {1} de {2}',
-            	emptyMsg: 'No hay notas para visualizar'
+            	displayMsg: 'Visualizando comprobantes {0} - {1} de {2}',
+            	emptyMsg: 'No hay comprobantes para visualizar'
 			})
 		
 	});
@@ -237,7 +237,7 @@ Ext.onReady(function(){
 		url:'search',
 		renderTo:'formulario_extjs',
 		id:'formSearchId',
-		title:'Notas',
+		title:'Comprobantes',
 		width:800,
 		frame:true,
 		items:[
