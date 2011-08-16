@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="567" leftMargin="14" rightMargin="14" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="70"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
 	</parameter>
@@ -480,6 +480,146 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 					<font fontName="Bookman Old Style" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ivaSujNoCateg}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="472" y="464" width="79" height="13"/>
+				<textElement textAlignment="Right">
+					<font fontName="Bookman Old Style" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="472" y="474" width="79" height="13"/>
+				<textElement textAlignment="Right">
+					<font fontName="Bookman Old Style" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ivaGral}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="472" y="484" width="79" height="13"/>
+				<textElement textAlignment="Right">
+					<font fontName="Bookman Old Style" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ivaRni}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="472" y="494" width="79" height="13"/>
+				<textElement textAlignment="Right">
+					<font fontName="Bookman Old Style" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ivaSujNoCateg}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="391" y="464" width="76" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[SUBTOTAL  $:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="474" width="76" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[I.V.A TASA GENERAL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="484" width="76" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[SUBTOTAL $:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="494" width="76" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[I.V.A  NO RESP.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="507" width="52" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL $]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="785" width="52" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL $]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="774" width="76" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[I.V.A  NO RESP.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="764" width="76" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[SUBTOTAL $:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="754" width="76" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[I.V.A TASA GENERAL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="744" width="76" height="13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Bookman Old Style" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[SUBTOTAL  $:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="472" y="774" width="79" height="13"/>
+				<textElement textAlignment="Right">
+					<font fontName="Bookman Old Style" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ivaSujNoCateg}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="472" y="764" width="79" height="13"/>
+				<textElement textAlignment="Right">
+					<font fontName="Bookman Old Style" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ivaRni}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="472" y="754" width="79" height="13"/>
+				<textElement textAlignment="Right">
+					<font fontName="Bookman Old Style" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ivaGral}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="472" y="744" width="79" height="13"/>
+				<textElement textAlignment="Right">
+					<font fontName="Bookman Old Style" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement mode="Transparent" x="472" y="507" width="58" height="13"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement mode="Transparent" x="472" y="785" width="58" height="13"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
