@@ -3,6 +3,8 @@ package com.rural
 import java.sql.Date
 
 class ListaPrecios {
+	static auditable = true
+	
 	Double precio
 	Integer anio
 	Sector sector

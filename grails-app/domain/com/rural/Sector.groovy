@@ -1,6 +1,8 @@
 package com.rural
 
 class Sector {
+	static auditable = true
+	
 	String nombre
 	Exposicion expo
 	Double precio

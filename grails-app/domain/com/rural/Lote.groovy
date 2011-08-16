@@ -1,6 +1,8 @@
 package com.rural
 
 class Lote {
+	static auditable = true
+	
 	String nombre
 	Sector sector
 	Double precio

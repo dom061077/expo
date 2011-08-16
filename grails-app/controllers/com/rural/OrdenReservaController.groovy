@@ -1029,7 +1029,7 @@ class OrdenReservaController {
 						
 	    				saldo=it.ordenReserva.total-it.ordenReserva.recibo-it.ordenReserva.credito+it.ordenReserva.debito
 						
-    					sheet.addCell(new Label(0,fil,it.ordenReserva.empresa.nombre))
+    					sheet.addCell(new Label(0,fil,it.ordenReserva.nombre))
     					sheet.addCell(new Label(1,fil,it.sector?.nombre))    					
     					sheet.addCell(new Label(2,fil,it.lote?.nombre)) 
 						sheet.addCell(new Number(3,fil,(mostrarTotal?it.ordenReserva.subtotalDetalle:0) ))

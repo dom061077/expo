@@ -14,7 +14,7 @@
 	<field name="subTotalsindesc" class="java.lang.Double"/>
 	<field name="porcentajeDesc" class="java.lang.Double"/>
 	<field name="fechaVencimiento" class="java.sql.Date"/>
-	<variable name="subTotalDetalle" class="java.lang.Double" resetType="None" calculation="Sum">
+	<variable name="subTotalDetalle" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{subTotal}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
@@ -22,91 +22,91 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="26" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="445" y="0" width="9" height="13"/>
+				<reportElement x="445" y="0" width="9" height="11"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="0" width="40" height="13"/>
+				<reportElement x="1" y="0" width="40" height="11"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[SECTOR:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="204" y="0" width="47" height="13"/>
+				<reportElement x="204" y="0" width="47" height="11"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[LOTE Nº:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="45" y="0" width="159" height="13"/>
+				<reportElement x="45" y="0" width="159" height="11"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[($F{sector.nombre}==null?"":$F{sector.nombre})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="251" y="0" width="114" height="13"/>
+				<reportElement x="251" y="0" width="114" height="11"/>
 				<textElement>
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[($F{lote.nombre}==null?"":$F{lote.nombre})]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="469" y="0" width="61" height="13"/>
+				<reportElement x="469" y="0" width="61" height="11"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="10" isBold="false"/>
+					<font fontName="Arial" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotalsindesc}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1" y="13" width="364" height="13">
+				<reportElement x="1" y="11" width="364" height="9">
 					<printWhenExpression><![CDATA[$F{porcentajeDesc}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement>
-					<font fontName="Arial" size="9"/>
+					<font fontName="Arial" size="7"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Descuento del "+($F{porcentajeDesc}).toString()+" valido hasta el "+($F{fechaVencimiento}).toString()]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="469" y="13" width="61" height="13">
+				<reportElement x="469" y="11" width="61" height="9">
 					<printWhenExpression><![CDATA[$F{porcentajeDesc}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right">
-					<font fontName="Arial" size="9"/>
+					<font fontName="Arial" size="7"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotal}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="445" y="13" width="9" height="13">
+				<reportElement x="445" y="11" width="9" height="9">
 					<printWhenExpression><![CDATA[$F{porcentajeDesc}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="9" isBold="false"/>
+					<font fontName="Arial" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 		</band>
 	</detail>
 	<summary>
-		<band height="17">
+		<band height="11">
 			<staticText>
-				<reportElement x="386" y="3" width="70" height="13"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom">
+				<reportElement x="386" y="0" width="70" height="11"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="Arial" size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[SUBTOTAL  $]]></text>
 			</staticText>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="469" y="3" width="61" height="13"/>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font fontName="Arial" size="10" isBold="true"/>
+				<reportElement x="469" y="0" width="61" height="11"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$V{subTotalDetalle}]]></textFieldExpression>
 			</textField>

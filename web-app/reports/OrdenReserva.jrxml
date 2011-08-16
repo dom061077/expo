@@ -440,7 +440,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[DATOS DEL SERVICIO CONTRATADO]]></text>
 			</staticText>
 			<subreport isUsingCache="false" runToBottom="false">
-				<reportElement x="7" y="24" width="533" height="14"/>
+				<reportElement x="7" y="21" width="533" height="14"/>
 				<subreportParameter name="reportsDirPath">
 					<subreportParameterExpression><![CDATA[$P{reportsDirPath}]]></subreportParameterExpression>
 				</subreportParameter>

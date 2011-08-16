@@ -165,7 +165,7 @@ Ext.onReady(function(){
 		renderTo:'listaprecios_extjs',
 		frame:true,
 		items:gridprecios,
-		title:'Precios de Lotes'
+		title:'Tarifario de Lotes'
 	});
 	
 	
