@@ -407,10 +407,12 @@ Ext.onReady(function(){
 					 					else{
 					 						if(respuesta.success){
 					 							if(sel.data.descuento>0){
-					 								sel.data.precio=respuesta.precio
+					 								sel.data.precio=respuesta.precio;
 					 								sel.data.subTotal=sel.data.precio-respuesta.precio*sel.data.descuento/100;
-					 							}else
+					 							}else{
 					 								sel.data.subTotal=respuesta.precio
+					 								sel.data.precio = respuesta.precio;
+					 							}
 					 							
 					 						}
 					 					}
