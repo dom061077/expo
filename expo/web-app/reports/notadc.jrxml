@@ -386,7 +386,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 			</line>
 			<textField>
 				<reportElement x="133" y="103" width="100" height="11"/>
-				<textElement>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[($F{ordenReserva.puntoVenta}+10000).toString().substring(1,5)+"-"+($F{ordenReserva.numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
@@ -406,7 +406,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="133" y="383" width="100" height="11"/>
-				<textElement>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[($F{ordenReserva.puntoVenta}+10000).toString().substring(1,5)+"-"+($F{ordenReserva.numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
@@ -420,7 +420,7 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="133" y="663" width="100" height="11"/>
-				<textElement>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[($F{ordenReserva.puntoVenta}+10000).toString().substring(1,5)+"-"+($F{ordenReserva.numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
@@ -642,6 +642,36 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				</textElement>
 				<text><![CDATA[Conceptos:]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="48" y="214" width="100" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{usuario.userRealName}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="48" y="214" width="100" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="48" y="494" width="100" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{usuario.userRealName}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="48" y="494" width="100" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="48" y="771" width="100" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{usuario.userRealName}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="48" y="771" width="100" height="1"/>
+			</line>
 		</band>
 	</detail>
 </jasperReport>

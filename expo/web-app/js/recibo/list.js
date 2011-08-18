@@ -16,10 +16,12 @@ Ext.onReady(function(){
 		        	dataIndex:'razonSocial'
 		         },{
 		        	type:'numeric',
-		        	dataIndex:'numero'
+		        	dataIndex:'numero',
+		        	updateTask:2000,
 		         },{
 		        	type:'numeric',
-		        	dataIndex:'numeroordenreserva'
+		        	dataIndex:'numeroordenreserva',
+		        	updateTask:2000,
 		         },{
 		        	type:'string',
 		        	dataIndex:'expo'
