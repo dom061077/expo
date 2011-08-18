@@ -9,7 +9,7 @@ Ext.onReady(function(){
 		totalProperty: 'total',
 		//reader:reader,
 		//groupField:'nombre',
-		autoLoad:true,
+		//autoLoad:true,
 		remoteSort:true,
 		root: 'rows',
 		url:'listjson',
@@ -44,6 +44,7 @@ Ext.onReady(function(){
         // encode and local configuration options defined previously for easier reuse
         encode: true, // json encode the filter query
         local: false,   // defaults to false (remote filtering)
+        //autoReload: false,
         menuFilterText:'Filtro',
         emptyText:'Ingrese Filtro...',
         filters: [{
@@ -53,6 +54,7 @@ Ext.onReady(function(){
         }, {	
             type: 'string',
             dataIndex: 'nombre'
+            //,updateBuffer:2000
         }, {	
             type: 'string',
             dataIndex: 'razonSocial'
@@ -86,6 +88,7 @@ Ext.onReady(function(){
         },{
         	type:'numeric',
         	dataIndex:'anio',
+        	updateTask:2000,
         	menuItemCfgs:{
         		emptyText:'Ingrese Filtro...'
         	}
@@ -96,6 +99,7 @@ Ext.onReady(function(){
         },{
         	type:'numeric',
         	dataIndex:'numero',
+        	updateTask:2000,
         	menuItemCfgs:{
         		emptyText:'Ingrese Filtro...'
         	}
@@ -322,6 +326,12 @@ Ext.onReady(function(){
 				,handler: function(){
 					grid.filters.clearFilters();
         		}
+			},{
+				text:'Mostrar Todo'
+				,handler: function(){
+					grid.filters.clearFilters();
+					ordenStore.load();
+				}	
 			},{
 				text:'Comprobantes Débito/Crédito',
 				handler: function(){

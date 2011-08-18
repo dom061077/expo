@@ -124,9 +124,10 @@ Ext.ux.grid.filter.StringFilter = Ext.extend(Ext.ux.grid.filter.Filter, {
         if (k == e.RETURN && field.isValid()) {
             e.stopEvent();
             this.menu.hide(true);
+            this.updateTask.delay(this.updateBuffer);
             return;
         }
         // restart the timer
-        this.updateTask.delay(this.updateBuffer);
+        //this.updateTask.delay(this.updateBuffer); //MODIFICADO POR DOM
     }
 });
