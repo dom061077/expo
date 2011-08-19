@@ -59,11 +59,16 @@ class OrdenReservaService {
 			detalle.subTotal = detalle.lote.precio - detalle.lote.precio*primerDesc/100
 		}else{
 			log.debug "PRECIO DE SECTOR APLICADO: ${detalle.sector.precio}"
-			detalle.subTotalsindesc = detalle.sector.precio
-			detalle.subTotal = detalle.sector.precio - detalle.sector.precio*primerDesc/100
+			if(detalle.sector?.precio){
+				detalle.subTotalsindesc = detalle.sector.precio
+				detalle.subTotal = detalle.sector.precio - detalle.sector.precio*primerDesc/100
+			}else{
+				detalle.subTotalsindesc = detalle.subTotal
+			}
 		
 		}
 
+	
 		
 		listDescuentos.eachWithPeek{current,peek->
 			
