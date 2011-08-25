@@ -192,6 +192,7 @@ class ReciboController {
 						g.eachError(bean:e.recibo){
 							title g.message(error:it)
 						}
+						title e.message
 				}
 			}
 			return
@@ -342,8 +343,13 @@ class ReciboController {
 				rowCount()
 			}
 		}
-		totalRecibos = criteriacount.get(closurecount)
-		recibos = criteria.list(closurerecibo)
+		
+		
+		if(filtros){
+			totalRecibos = criteriacount.get(closurecount)
+			recibos = criteria.list(closurerecibo)
+		}
+		
 		log.debug("Cantidad de recibos consultados: $totalRecibos")
 		int entero
 		Double totalaux
@@ -354,7 +360,7 @@ class ReciboController {
 		render(contentType:"text/json"){
 			total	totalRecibos
 			rows{
-				recibos.each{
+				recibos?.each{
 					entero = it.total.intValue()
 					totalaux = (it.total - entero)*100
 					decimal = totalaux.intValue()

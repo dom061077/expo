@@ -17,11 +17,11 @@ Ext.onReady(function(){
 		         },{
 		        	type:'numeric',
 		        	dataIndex:'numero',
-		        	updateTask:2000,
-		         },{
+		        	updateTask:2000
+		         },{ 
 		        	type:'numeric',
 		        	dataIndex:'numeroordenreserva',
-		        	updateTask:2000,
+		        	updateTask:2000
 		         },{
 		        	type:'string',
 		        	dataIndex:'expo'
@@ -31,7 +31,7 @@ Ext.onReady(function(){
 	
 	
 	var reciboStore = new Ext.data.JsonStore({
-		autoLoad:true,
+		//autoLoad:true,
 		totalProperty:'total',
 		remoteSort:true,
 		root:'rows',
@@ -208,9 +208,10 @@ Ext.onReady(function(){
             	}
         		
         	},{
-        		text:'Quitar Filtros'
+        		text:'Mostrar Todo'
 				,handler: function(){
 					grid.filters.clearFilters();
+					reciboStore.load();
 				}
         	}
 		],

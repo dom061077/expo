@@ -54,8 +54,13 @@ class ReciboService {
     			}
     			recibo.total=recibo.total+efectivo
     			recibo.total=Math.round(recibo.total*Math.pow(10,2))/Math.pow(10,2);
-				saldo = ord.total + totalDebitos - totalCreditos - totalRecibos 
+
 				
+				totalDebitos = Math.round(totalDebitos*Math.pow(10,2))/Math.pow(10,2);
+				totalCreditos = Math.round(totalCreditos*Math.pow(10,2))/Math.pow(10,2);
+				totalRecibos = Math.round(totalRecibos*Math.pow(10,2))/Math.pow(10,2);
+				saldo = ord.total + totalDebitos - totalCreditos - totalRecibos 
+				saldo = Math.round(saldo*Math.pow(10,2))/Math.pow(10,2); 
 				
     			if (recibo.total>saldo)
     				throw new ReciboException('El total ('+recibo.total+') de recibo supera el total ('+saldo+') pendiente de pago de la orden de reserva',recibo)
