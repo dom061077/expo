@@ -321,17 +321,18 @@ Ext.onReady(function(){
     					+'&sort='+sort+'&dir='+dir
     					,'_blank')
             	}
-			},{
+			/*},{
 				text:'Quitar Filtros'
 				,handler: function(){
 					grid.filters.clearFilters();
         		}
+        		
 			},{
 				text:'Mostrar Todo'
 				,handler: function(){
 					grid.filters.clearFilters();
 					ordenStore.load();
-				}	
+				}*/	
 			},{
 				text:'Comprobantes Débito/Crédito',
 				handler: function(){

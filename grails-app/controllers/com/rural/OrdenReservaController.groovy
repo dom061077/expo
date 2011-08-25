@@ -461,112 +461,115 @@ class OrdenReservaController {
 		def co = OrdenReserva.createCriteria()
 		
 		
-				
-		ordenes=co.list({
-					//def metaProperty
-					and{
-						co.isEmpty("detalle")
-						co.eq("anulada",Boolean.parseBoolean(params.soloanuladas))
-						filtros.each{filtro->
-							log.debug "FILTRO: ${filtro["field"]}"
-							//[field:nombre, value:oooo, type:string]
-							if(filtro["field"].equals("sector") || filtro["field"].equals("lote")){
-								co.isNotEmpty("detalle")
-							}
-							if( filtro["field"].equals("nombre")){
-								log.debug "LOGRO INGRESAR POR LA CONDICION DE NOMBRE"
-								co.ilike(filtro["field"],"%"+filtro["value"]+"%")
-							}
-							
-							if(filtro["field"].equals("razonSocial")){
-								log.debug "LOGRO INGRESAR POR LA CONDICION DE NOMBRE"
-								co.ilike(filtro["field"],"%"+filtro["value"]+"%")
-							}
-
-							
-							if(filtro["field"].equals("numero")){
-								co."${filtro["comparison"]}"(filtro["field"],filtro["value"].toLong())
-							}
-							if(filtro.field.equals("anio")){
-								co."${filtro["comparison"]}"(filtro["field"],filtro["value"].toInteger())
-							}
-							if(filtro["field"].equals("fechaAlta")){
-								fecha = df.parse(filtro["value"])
-								fechasql = new java.sql.Date(fecha.getTime())
-								
-								log.debug "FECHA FORMATEADA: ${fecha} desde ${filtro["value"]}"
-								co."${filtro.comparison}"(filtro["field"],fechasql)
-							}
-
-							co.expo{
-								if(filtro["field"].equals("expoNombre")){
-									co.ilike("nombre","%"+filtro["value"]+"%")
-								}
-							}
-						}
-				
-					}
-					/*for(i=0;i<params.campos?.size()-1;i++){
-						campo=params.campos[i]
-						log.debug "Condiciones: "+params.condiciones
-						condicion=params.condiciones[i]
-						valorSearch=params.searchString[i]
+		if(filtros){		
+			ordenes=co.list({
+						//def metaProperty
 						and{
 							co.isEmpty("detalle")
-							co.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
-
-							if(!campo?.trim().equals("") && !condicion.trim().equals("") && !valorSearch.trim().equals("")){
-										metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,OrdenReserva,campo)
-										if(campo?.contains(".")){
-											campoToken=campo?.tokenize(".")
-											log.debug "POR QUE ESTA TRAYENDO ALGO QUE PARECE NULL: ${metaProperty}"
-											if(!metaProperty){
-												
-												metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,DetalleServicioContratado,campo)
-												valorSearch=parseValue(valorSearch,metaProperty,params,condicion)
-												co.detalle(){	
+							co.eq("anulada",Boolean.parseBoolean(params.soloanuladas))
+							filtros.each{filtro->
+								log.debug "FILTRO: ${filtro["field"]}"
+								//[field:nombre, value:oooo, type:string]
+								if(filtro["field"].equals("sector") || filtro["field"].equals("lote")){
+									co.isNotEmpty("detalle")
+								}
+								if( filtro["field"].equals("nombre")){
+									log.debug "LOGRO INGRESAR POR LA CONDICION DE NOMBRE"
+									co.ilike(filtro["field"],"%"+filtro["value"]+"%")
+								}
+								
+								if(filtro["field"].equals("razonSocial")){
+									log.debug "LOGRO INGRESAR POR LA CONDICION DE NOMBRE"
+									co.ilike(filtro["field"],"%"+filtro["value"]+"%")
+								}
+	
+								
+								if(filtro["field"].equals("numero")){
+									co."${filtro["comparison"]}"(filtro["field"],filtro["value"].toLong())
+								}
+								if(filtro.field.equals("anio")){
+									co."${filtro["comparison"]}"(filtro["field"],filtro["value"].toInteger())
+								}
+								if(filtro["field"].equals("fechaAlta")){
+									fecha = df.parse(filtro["value"])
+									fechasql = new java.sql.Date(fecha.getTime())
+									
+									log.debug "FECHA FORMATEADA: ${fecha} desde ${filtro["value"]}"
+									co."${filtro.comparison}"(filtro["field"],fechasql)
+								}
+	
+								co.expo{
+									if(filtro["field"].equals("expoNombre")){
+										co.ilike("nombre","%"+filtro["value"]+"%")
+									}
+								}
+							}
+					
+						}
+						/*for(i=0;i<params.campos?.size()-1;i++){
+							campo=params.campos[i]
+							log.debug "Condiciones: "+params.condiciones
+							condicion=params.condiciones[i]
+							valorSearch=params.searchString[i]
+							and{
+								co.isEmpty("detalle")
+								co.eq("anulada", Boolean.parseBoolean(params.soloanuladas) )
+	
+								if(!campo?.trim().equals("") && !condicion.trim().equals("") && !valorSearch.trim().equals("")){
+											metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,OrdenReserva,campo)
+											if(campo?.contains(".")){
+												campoToken=campo?.tokenize(".")
+												log.debug "POR QUE ESTA TRAYENDO ALGO QUE PARECE NULL: ${metaProperty}"
+												if(!metaProperty){
+													
+													metaProperty=FilterUtils.getNestedMetaProperty(grailsApplication,DetalleServicioContratado,campo)
+													valorSearch=parseValue(valorSearch,metaProperty,params,condicion)
+													co.detalle(){	
+														co."${campoToken[0]}"(){
+															if(condicion.equals("ilike2"))
+																co.not{
+																	co.ilike(campoToken[1],valorSearch)	
+																}
+															else
+																co."${condicion}"(campoToken[1],valorSearch)
+																
+														}
+													}
+												}else{
+													log.debug "META PROPERTY ENCONTRADA ${metaProperty}"
+													valorSearch=parseValue(valorSearch,metaProperty, params,condicion)
+													log.debug "CampoToken[0]: ${campoToken[0]} CampoToken[1]: ${campoToken[1]}, valorSearch:${valorSearch}"
 													co."${campoToken[0]}"(){
 														if(condicion.equals("ilike2"))
 															co.not{
-																co.ilike(campoToken[1],valorSearch)	
+																co.ilike(campoToken[1],valorSearch)
 															}
 														else
-															co."${condicion}"(campoToken[1],valorSearch)
-															
+															co."${condicion}"(campoToken[1],valorSearch) 
 													}
 												}
 											}else{
-												log.debug "META PROPERTY ENCONTRADA ${metaProperty}"
-												valorSearch=parseValue(valorSearch,metaProperty, params,condicion)
-												log.debug "CampoToken[0]: ${campoToken[0]} CampoToken[1]: ${campoToken[1]}, valorSearch:${valorSearch}"
-												co."${campoToken[0]}"(){
-													if(condicion.equals("ilike2"))
-														co.not{
-															co.ilike(campoToken[1],valorSearch)
+												log.debug "INGRESA POR EL ELSE DEBIDO A QUE EL CAMPO NO ES ANIDADO: campo: ${campo}, condicion: ${condicion}"
+												valorSearch=parseValue(valorSearch,metaProperty,params,condicion)
+												if(condicion.equals("ilike2"))
+													co.not{
+															co.ilike campo, valorSearch
 														}
-													else
-														co."${condicion}"(campoToken[1],valorSearch) 
-												}
+												else
+													co."${condicion}"(campo,valorSearch)
 											}
-										}else{
-											log.debug "INGRESA POR EL ELSE DEBIDO A QUE EL CAMPO NO ES ANIDADO: campo: ${campo}, condicion: ${condicion}"
-											valorSearch=parseValue(valorSearch,metaProperty,params,condicion)
-											if(condicion.equals("ilike2"))
-												co.not{
-														co.ilike campo, valorSearch
-													}
-											else
-												co."${condicion}"(campo,valorSearch)
-										}
-										
-							}
-						}//end del and
-					}//end del for
-					*/
-					
-			})
-		listgral.addAll(ordenes)
-		log.debug "CANTIDAD DE ORDENES DESDE LA CABECERA: ${ordenes.size()}"
+											
+								}
+							}//end del and
+						}//end del for
+						*/
+						
+				})//end de co.list
+				listgral.addAll(ordenes)
+			}//end del if filters
+		
+		
+		log.debug "CANTIDAD DE ORDENES DESDE LA CABECERA: ${ordenes?.size()}"
 		def cd=DetalleServicioContratado.createCriteria()
 		def closureDetalle={
 			log.debug "CLOSURE DE DETALLE"
@@ -688,10 +691,12 @@ class OrdenReservaController {
 			}//end del for*/
 			
 		}//end del closureDetalle
-		
-		detalles=cd.list(closureDetalle)
-		log.debug "CANTIDAD DE ORDENES DESDE EL DETALLE: ${detalles.size()}"
-		listgral.addAll(detalles)	
+		if(filtros){
+			detalles=cd.list(closureDetalle)
+			listgral.addAll(detalles)
+			
+		}
+		log.debug "CANTIDAD DE ORDENES DESDE EL DETALLE: ${detalles?.size()}"
 
 		if(params.sort){
 			if(params.sort=="nombre"){
@@ -836,7 +841,7 @@ class OrdenReservaController {
 		def mostrarTotal = false
     	render(contentType:"text/json"){
     		rows{
-    			list.each{
+    			list?.each{
     				totalCancelado=0
 					
     				
@@ -904,7 +909,7 @@ class OrdenReservaController {
 
     			}
     		}
-   			total list.size()
+   			total list?.size()
     	}
     }
 

@@ -260,7 +260,18 @@ Ext.onReady(function (){
 			 					}
 			 				},
 			 				failure: function(f,a){
-			 					
+			 					var msg='';
+			 					if (a.result.errors){
+						    		for (var i=0; i<a.result.errors.length;i++){
+						    			msg=msg+a.result.errors[i].title+'\r\n';	
+				    				}
+			    				}			 					
+		 						Ext.MessageBox.show({
+		 							title:'Error',
+		 							msg:msg,
+		 							icon:Ext.MessageBox.ERROR,
+		 							buttons:Ext.MessageBox.OK
+		 						});			 					
 			 				}
 			 			});
 			 			}

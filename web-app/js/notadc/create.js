@@ -161,6 +161,7 @@ Ext.onReady(function(){
 		    	   displayField:'name',
 		    	   valueField:'id',
 		    	   hiddenName:'tipo',
+		    	   allowBlank:false,
 		    	   hiddenField:'id'
 		       },{
 		    	   xtype:'hidden',

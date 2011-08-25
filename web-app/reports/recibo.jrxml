@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" language="groovy" pageWidth="595" pageHeight="842" columnWidth="567" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="14">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="391"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\exporural\\expo\\web-app\\reports\\"]]></defaultValueExpression>
 	</parameter>
@@ -20,6 +20,7 @@
 	<field name="ordenReserva.detalle" class="java.util.Collection"/>
 	<field name="ordenReserva.otrosconceptos" class="java.util.Collection"/>
 	<field name="puntoVenta" class="java.lang.Integer"/>
+	<field name="ordenReserva.numero" class="java.lang.Long"/>
 	<variable name="subtotaldetalleotrosconceptos" class="java.lang.Double"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -632,8 +633,8 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[Documento No Válido como Factura]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="36" y="115" width="192" height="25"/>
-				<textElement verticalAlignment="Middle">
+				<reportElement x="36" y="122" width="192" height="20"/>
+				<textElement verticalAlignment="Top">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{concepto}]]></textFieldExpression>
@@ -664,15 +665,18 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 			<rectangle radius="10">
 				<reportElement mode="Transparent" x="23" y="377" width="214" height="96"/>
 			</rectangle>
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="24" y="654" width="214" height="96"/>
+			</rectangle>
 			<textField>
-				<reportElement mode="Transparent" x="36" y="395" width="192" height="25"/>
+				<reportElement mode="Transparent" x="36" y="402" width="192" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement mode="Transparent" x="37" y="725" width="192" height="22"/>
+				<reportElement mode="Transparent" x="36" y="725" width="192" height="22"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ordenReserva.otrosconceptos})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"recibootrosconceptos.jasper")]]></subreportExpression>
 			</subreport>
@@ -684,14 +688,14 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<text><![CDATA[DETALLE]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="37" y="672" width="192" height="25"/>
+				<reportElement mode="Transparent" x="36" y="679" width="192" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement mode="Transparent" x="37" y="699" width="192" height="24"/>
+				<reportElement mode="Transparent" x="36" y="699" width="192" height="24"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ordenReserva.detalle})]]></dataSourceExpression>
 				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"reciboserviciocontratado.jasper")]]></subreportExpression>
 			</subreport>
@@ -701,9 +705,6 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 					<pen lineStyle="Solid"/>
 				</graphicElement>
 			</line>
-			<rectangle radius="10">
-				<reportElement mode="Transparent" x="24" y="654" width="214" height="96"/>
-			</rectangle>
 			<staticText>
 				<reportElement x="492" y="138" width="8" height="13"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
@@ -745,6 +746,27 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 					<font fontName="Arial"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[($F{puntoVenta}+10000).toString().substring(1,5)+"-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="36" y="113" width="192" height="10"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Ord.Nº: "+($F{ordenReserva.numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="36" y="393" width="192" height="10"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Ord.Nº: "+($F{ordenReserva.numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="36" y="669" width="192" height="10"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Ord.Nº: "+($F{ordenReserva.numero}+100000000).toString().substring(1,9)]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
