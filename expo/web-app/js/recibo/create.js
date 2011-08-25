@@ -244,13 +244,20 @@ Ext.onReady(function (){
 			 							}
 			 						});
 			 						window.location='reporte?target=_blank&_format=PDF&_name=recibo&_file=recibo&id='+a.result.id+"&totalletras="+a.result.totalletras;			 				
-			 					}else
+			 					}else{
+			 					
+									if (a.result.errors){
+							    		for (var i=0; i<a.result.errors.length;i++){
+							    			msg=msg+a.result.errors[i].title+'\r\n';	
+					    				}
+				    				}			 					
 			 						Ext.MessageBox.show({
 			 							title:'Error',
-			 							msg:a.result.message,
+			 							msg:msg,
 			 							icon:Ext.MessageBox.ERROR,
 			 							buttons:Ext.MessageBox.OK
 			 						});
+			 					}
 			 				},
 			 				failure: function(f,a){
 			 					

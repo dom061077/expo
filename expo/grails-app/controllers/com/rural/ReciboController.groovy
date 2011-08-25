@@ -184,10 +184,15 @@ class ReciboController {
 		try{
 			recibo = reciboService.generarRecibo(new Long(params.ordenreservaid),params.concepto,efectivo,cheques,authenticateService.userDomain())
 		}catch(ReciboException e){
-			log.error "ERROR: "+g.message(code:"com.rural.Recibo.saldo.error")
+			log.error "ERROR: "+e.recibo.errors.allErrors
+			log.error "MENSAJE: "+e.message
 			render(contentType:"text/json"){
 				success false
-				message g.message(code:"com.rural.Recibo.saldo.error")
+				errors{
+						g.eachError(bean:e.recibo){
+							title g.message(error:it)
+						}
+				}
 			}
 			return
 		}
