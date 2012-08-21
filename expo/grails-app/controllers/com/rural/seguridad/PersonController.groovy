@@ -62,17 +62,19 @@ class PersonController {
 		]
 		
 		def totalUsuarios = Person.createCriteria().count{
-			or{
-				like('username','%'+params?.searchCriteria+'%')
-				like('userRealName','%'+params?.searchCriteria+'%')
-			}
+			if(params.searchCriteria)
+				or{
+					ilike('username','%'+params?.searchCriteria+'%')
+					ilike('userRealName','%'+params?.searchCriteria+'%')
+				}
 		}		
 		
 		def usuarios = Person.createCriteria().list(pagingConfig){
-			or{
-				like('username','%'+params?.searchCriteria+'%')
-				like('userRealName','%'+params?.searchCriteria+'%')
-			}				
+			if(params.searchCriteria)
+				or{
+					ilike('username','%'+params?.searchCriteria+'%')
+					ilike('userRealName','%'+params?.searchCriteria+'%')
+				}				
 		}
 		
 		render(contentType:"text/json"){

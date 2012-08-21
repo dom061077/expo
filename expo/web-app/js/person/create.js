@@ -140,7 +140,19 @@ Ext.onReady(function(){
 									}
 	        					});
 	        					
-	        				}
+	        				},
+		        			failure: function(form, action) {
+		        		        switch (action.failureType) {
+		        		            case Ext.form.Action.CLIENT_INVALID:
+		        		                Ext.Msg.alert('Fallo', 'Algunos campos tienen valores incorrectos');
+		        		                break;
+		        		            case Ext.form.Action.CONNECT_FAILURE:
+		        		                Ext.Msg.alert('Fallo', 'Error de comunicacion Ajax');
+		        		                break;
+		        		            case Ext.form.Action.SERVER_INVALID:
+		        		               Ext.Msg.alert('Fallo', action.result.msg);
+		        		       }
+		        		    }	        			
 	        			});   		
 	        	   }	
 	           },{

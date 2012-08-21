@@ -45,6 +45,7 @@ Ext.onReady(function(){
 						items:{
 							xtype:'textfield',
 							id:'searchCriteriaId',
+							name:'searchCriteria',
 							fieldLabel:'Texto a Buscar',
 							anchor:'0'
 						}
@@ -57,7 +58,7 @@ Ext.onReady(function(){
 							listeners:{
 								click:function(){
 									usuariosStore.load({
-										params:{'start':0,'limit':10,'searchCriteria':Ext.getCmp('searchCriteriaId').value}
+										params:{'start':0,'limit':10,'searchCriteria':document.getElementById('searchCriteriaId').value}
 									});									
 								}
 							}

@@ -29,6 +29,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>.link_to_grails_plugins</name>
+			<type>2</type>
+			<locationURI>GRAILS_ROOT/1.3.9/projects/expo/plugins</locationURI>
+		</link>
+		<link>
 			<name>acegi-0.5.2-grails-app-conf</name>
 			<type>2</type>
 			<locationURI>GRAILS_ROOT/1.3.5/projects/expo/plugins/acegi-0.5.2/grails-app/conf</locationURI>
