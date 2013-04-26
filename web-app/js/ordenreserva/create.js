@@ -803,6 +803,12 @@ Ext.onReady(function(){
 		fields:['id','nombre']
 	});
 	
+	var anioexposicionStore = new Ext.data.JsonStore({
+		root:'rows',
+		url:'../exposicion/listjsonanioexpo',
+		fields:['anio']
+	});
+	
 	exposicionStore.load();
 	
 //datos store del combo provincia y localidad
@@ -1379,12 +1385,22 @@ Ext.onReady(function(){
 												allowBlank:false,
 												listeners: {
 														'select': function(cmb,rec,idx){
+															
+															var aniocombo = Ext.getCmp('idAnio');
+															//lote.clearValue();
+															aniocombo.store.load({
+																params:{'expoId':Ext.getCmp('exposicionCombo').hiddenField.value}
+															});
+															
+															
+															
 															var sector = Ext.getCmp('comboboxSectorId');
 															//lote.clearValue();
 															sector.store.load({
 																params:{'exposicion_id':Ext.getCmp('exposicionCombo').hiddenField.value}
 															});
 															sector.enable();
+															
 														}
 													}
 												},
@@ -1392,17 +1408,18 @@ Ext.onReady(function(){
 												 id:'idAnio',
 												 fieldLabel:'Año',
 												 name:'anio',
-												 displayField:'descripcion',
-												 valueField:'id',
+												 displayField:'anio',
+												 valueField:'anio',
 												 mode:'local',
 												 width:100,
 												 forceSelection:true,
 												 allowBlank:false,
 												 msgTarget:'under',
-												 store: new Ext.data.SimpleStore({
+												 /*store: new Ext.data.SimpleStore({
 												 	fields:['id','descripcion'],
-												 	data : [['2010','2010'],['2011','2011'],['2012','2012']]
-												 })
+												 	data : [['2010','2010'],['2011','2011'],['2012','2012'],['2013','2013'],['2014','2014'],['2015','2015'],['2016','2016'],['2017','2017'],['2012','2012']]
+												 })*/
+												 store: anioexposicionStore
 												 },{
 													  xtype:'textarea',
 													  fieldLabel:'Observación',
