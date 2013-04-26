@@ -22,6 +22,27 @@ class ExposicionController {
     	log.debug("PARAMETROS $params")
     	return[id:params.id]
     }	
+	
+	def listjsonanioexpo = {
+		log.info("INGRESANDO AL MENTODO listjsonanioexpo DEL CONTROLADOR ExposicionController")
+		log.debug("PARAMETROS $params")
+		def logos = Logo.createCriteria().list{
+			expo {
+				eq("id",Long.parseLong(params.expoId))
+			}
+			order("anio","asc")
+		}
+		log.debug "CANTIDAD DE LOGOS: "+logos.size()
+		render(contentType:'text/json'){
+			sucess 'true'
+			total logos.size()
+			rows{
+				logos.each {
+					row(anio: it.anio) 
+				}
+			}
+		}
+	}
     
     def listjson = {
     	log.info("INGRESANDO AL METODO listjson DEL CONTROLADOR ExposicionController")
