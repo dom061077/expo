@@ -142,7 +142,7 @@ class OrdenReservaService {
     	ord.ivaGral = ord.subTotal*(ord.porcentajeResIns > 0 ? ord.porcentajeResIns : ord.porcentajeResNoIns)/100
 		log.debug "IVA GRAL: "+ord.ivaGral
     	ord.ivaRni=ord.subTotal+ord.ivaGral
-    	if(ord.ivaRniCheck)
+    	if(ord.ivaRniCheck && ord.porcentajeResIns>=0)//modificacion clave para determinar el porcentaje de iva cuando la expo es exenta
     		ord.ivaSujNoCateg=ord.ivaRni*10.5/100
 		log.debug "TOTAL GRAL FORMADO POR subTotal: "+ord.subTotal+", ivaGral: "+ord.ivaGral+" ivaSujNoCateg: "+ord.ivaSujNoCateg
 		log.debug "TOTAL GRAL SIN DESCUENTOS FORMADO POR subTotalsindesc: "+ord.subTotalsindesc+", ivaGral: "+ord.ivaGral+" ivaSujNoCateg: "+ord.ivaSujNoCateg	
@@ -151,7 +151,7 @@ class OrdenReservaService {
 		def ivaGralSindesc = ord.subTotalsindesc*(ord.porcentajeResIns > 0 ? ord.porcentajeResIns : ord.porcentajeResNoIns)/100
 		
 		def ivaSujNoCategSindesc= 0
-		if(ord.ivaRniCheck)
+		if(ord.ivaRniCheck && ord.porcentajeResIns>=0)//modificacion clave para determinar el porcentaje de iva cuando la expo es exenta
 			ivaSujNoCategSindesc = ord.ivaRni*10.5/100 
 		ord.totalsindesc = ord.subTotalsindesc+ivaGralSindesc+ivaSujNoCategSindesc
     	ord.total=Math.round(ord.total*Math.pow(10,2))/Math.pow(10,2);
@@ -239,7 +239,7 @@ class OrdenReservaService {
 		notad.ivaGral =  notad.subTotal*(orden.porcentajeResIns > 0 ? orden.porcentajeResIns : orden.porcentajeResNoIns)/100
 		notad.ivaRni = notad.subTotal+notad.ivaGral 
 		log.debug "CALCULO DE IVA GRAL: "+notad.ivaGral
-		if(orden.ivaRniCheck)
+		if(orden.ivaRniCheck && orden.porcentajeResIns>=0)
 			notad.ivaSujNoCateg=notad.ivaRni*10.5/100
 		notad.total=notad.subTotal+notad.ivaGral+notad.ivaSujNoCateg
 		notad.total=Math.round(notad.total*Math.pow(10,2))/Math.pow(10,2)
@@ -321,7 +321,7 @@ class OrdenReservaService {
 
 		nota.ivaGral = nota.subTotal*(ordenReservaInstance.porcentajeResIns > 0 ? ordenReservaInstance.porcentajeResIns : ordenReservaInstance.porcentajeResNoIns)/100
 		nota.ivaRni = nota.subTotal+nota.ivaGral
-		if(ordenReservaInstance.ivaRniCheck)
+		if(ordenReservaInstance.ivaRniCheck && ordenReservaInstance.porcentajeResIns>=0)
 			nota.ivaSujNoCateg=nota.ivaRni*10.5/100
 		log.info "TOTAL GRAL FORMADO POR subTotal: "+nota.subTotal+", ivaGral: "+nota.ivaGral+" ivaSujNoCateg: "+nota.ivaSujNoCateg
 		
