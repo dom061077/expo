@@ -203,6 +203,10 @@ class OrdenReservaService {
     boolean anularOrdenReserva(Long id){
     	def ordenReservaInstance = OrdenReserva.get(id)
     	if (ordenReservaInstance){
+			if(ordenReservaInstance.recibo>0){
+				throw new OrdenReservaException("No se puede anular la orden de reserva porque tiene recibos asociados",ordenReservaInstance)
+			}
+			
     		ordenReservaInstance.anulada = true
 			ordenReservaInstance.notas.each { 
 				it.anulada = true	

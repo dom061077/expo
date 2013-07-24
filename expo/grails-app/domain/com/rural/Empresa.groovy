@@ -3,6 +3,8 @@ package com.rural
 import com.rural.seguridad.*;
 
 class Empresa {
+	
+	
 	//datos comerciales
 	String nombreRepresentante
 	String direccion
