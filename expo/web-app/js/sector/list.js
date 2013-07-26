@@ -5,7 +5,8 @@ Ext.onReady(function(){
 	var loteId;
 	var dslotemodel= Ext.data.Record.create([
 		'id',
-		'nombre'
+		'nombre',
+		'habilitado'
 	]);
 	
 	var descEdit = new Ext.form.TextField({
@@ -180,7 +181,8 @@ Ext.onReady(function(){
 		],
 		columns:[
 			{header:'Id de Lote',dataIndex:'id',hidden:true},
-			{header:'Nro. de Lote',dataIndex:'nombre',width:150,editor:descEdit}
+			{header:'Nro. de Lote',dataIndex:'nombre',width:150,editor:descEdit},
+			{header:'Habilitado',dataIndex:'habilitado',width:60,xtype}ESTABA AQUI
 		]
 	});
 	 
@@ -199,10 +201,11 @@ Ext.onReady(function(){
 
 	var sectorStore = new Ext.data.JsonStore({
 		autoLoad:true,
+		remoteSort:true,
 		totalProperty:'total',
 		root:'rows',
 		url:'listtodosjson',
-		fields:['id','nombre','expoId','exposicion'],
+		fields:['id','nombre','expoId','exposicion','habilitado'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -234,13 +237,15 @@ Ext.onReady(function(){
 		store:sectorStore,
 		columns:[
 			{header:"id",dataIndex:"id",hidden:true},
-			{header:"Nombre",dataIndex:"nombre",width:200},
+			{header:"Nombre",dataIndex:"nombre",width:200,sortable:true},
 			{header:"Id Expo",dataIndex:"expoId",width:200,hidden:true},
-			{header:"Exposición",dataIndex:"exposicion",width:200}			
+			{header:"Exposición",dataIndex:"exposicion",width:180,sortable:true},
+			{xtype: 'checkcolumn',header:"Habilitado",dataIndex:"habilitado",width:60,sortable:false,processEvent:function(){return false;}}
 		],
 		stripRows:true,
 		height:250,
 		width:460,
+		loadMask:true,
 		title:"Sectores",
 		tbar:[
 			{
@@ -264,7 +269,7 @@ Ext.onReady(function(){
 						});
 					}
 				}
-			},{
+			}/*,{
 				text:'Lista de precios'
 				,handler: function(){
 					loteId=null;
@@ -282,7 +287,7 @@ Ext.onReady(function(){
 						
 					}
 				}
-			}
+			}*/
 		],
 		bbar: new Ext.PagingToolbar({
 				pageSize:10,

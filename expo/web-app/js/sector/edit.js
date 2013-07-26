@@ -84,6 +84,11 @@ Ext.onReady(function(){
 				id:'nombreId',
 				fieldLabel:'Nombre'
 			},{
+				 xtype:'checkbox',
+				 id:'hibilitadoId',
+				 name:'habilitado',
+				 fieldLabel:'Habilitado'
+			},{
 				xtype:'hidden',
 				allowBlank:true,
 				name:'lotesjson',

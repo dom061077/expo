@@ -6,6 +6,7 @@ class Lote {
 	String nombre
 	Sector sector
 	Double precio
+	boolean habilitado = true
 	static belongsTo = [sector:Sector]
     static constraints = {
 		precio(blank:true,nullable:true)

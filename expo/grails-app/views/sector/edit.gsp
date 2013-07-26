@@ -12,7 +12,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
         <title>Modificación de Sector</title>
-		<script type="text/javascript" src='${resource(dir:'js/sector',file:'edit.js')}'></script>        
+		<script type="text/javascript" src='${resource(dir:'js/sector',file:'edit.js')+'?id='+randomlink}'></script>        
     </head>
     <body>
         <div class="nav">

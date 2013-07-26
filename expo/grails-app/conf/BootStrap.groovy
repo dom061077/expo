@@ -16,6 +16,8 @@ import groovy.sql.Sql
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.apache.commons.io.FileUtils;
 import java.text.SimpleDateFormat
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import groovy.sql.Sql
 
 /*   class BootStrap {
 esto es para fixear el error:
@@ -42,9 +44,11 @@ class BootStrap {
      				case Environment.DEVELOPMENT:
      					createUserIfRequired()			 
      					createAdminUserIfRequired()
+ 					    modificacionUnicaSectoresLotes()
      					break;
      				case Environment.PRODUCTION:
-     					createAdminUserIfRequired()
+     					//createAdminUserIfRequired()
+					 	modificacionUnicaSectoresLotes()
      					break;
      				//case Environment.TEST:
      				//	createAdminUserIfRequired()
@@ -54,6 +58,15 @@ class BootStrap {
      def destroy = {
      }
 	 
+	 
+	 void modificacionUnicaSectoresLotes(){
+		def sql = Sql.newInstance(ConfigurationHolder.config.dataSource.url,
+			 ConfigurationHolder.config.dataSource.username,
+			 ConfigurationHolder.config.dataSource.password,
+			 ConfigurationHolder.config.dataSource.driverClassName)
+	 	sql.execute("update sector set habilitado = true where habilitado is null")
+		sql.execute("update lote set habilitado = true where habilitado is null")
+	 }
 	 
 	 void vencimientoOrdenes(){
 		 log.info "VERIFICANDO VENCIMIENTOS DE ORDENES DE RESERVA"
