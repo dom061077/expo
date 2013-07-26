@@ -135,9 +135,7 @@ class SectorController {
     	log.debug("PARAMETROS INGRESADOS: $params")
 		def pagingConfig = [
 			max: params.limit as Integer ?: 10,
-			offset: params.start as Integer ?: 0,
-			sort: 'nombre',
-			order: 'asc'
+			offset: params.start as Integer ?: 0
 		]
 		
     	def c = Sector.createCriteria()
@@ -148,6 +146,14 @@ class SectorController {
     			}
     			like('nombre','%'+params.searchCriteria+'%')
     		}
+			if(params.sort){
+				if(params.sort.equals("exposicion")){
+					expo{
+						order("nombre",params.dir.toString().toLowerCase())
+					}
+				}else
+					order(params.sort,params.dir.toString().toLowerCase())
+			}
     	}
 		def totalSectores = Sector.createCriteria().get{
 					projections{
@@ -165,7 +171,7 @@ class SectorController {
     		total totalSectores
     		rows{
     			sectores.each{
-    				row(id:it.id,nombre:it.nombre,expoId:it.expo.id,exposicion:it.expo.nombre)
+    				row(id:it.id,nombre:it.nombre,expoId:it.expo.id,exposicion:it.expo.nombre,habilitado:it.habilitado)
     			}
     		}
     	}
@@ -179,12 +185,13 @@ class SectorController {
     		expo{
     			eq('id',new Long(params.exposicion_id))
     		}
+			eq("habilitado",true)
     	}
 		def totalSectores = Sector.createCriteria().count(){
     		expo{
     			eq('id',new Long(params.exposicion_id))
     		}
-
+			eq("habilitado",true)
 		}
     	render(contentType:"text/json"){
     		total totalSectores
@@ -197,8 +204,10 @@ class SectorController {
     }
 
     def list = {
-        params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
-        [ sectorInstanceList: Sector.list( params ), sectorInstanceTotal: Sector.count() ]
+        //params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
+        //[ sectorInstanceList: Sector.list( params ), sectorInstanceTotal: Sector.count() ]
+		Random randomLink = new Random()
+		[randomlink:randomLink.nextInt(100000)]
     }
 
     def show = {
@@ -246,7 +255,8 @@ class SectorController {
         else {
             return [ sectorInstance : sectorInstance ]
         }*/
-        return[id:params.id]
+		Random randomLink = new Random()
+        return[id:params.id,randomlink:randomLink.nextInt(100000)]
     }
 
     def update = {
@@ -301,7 +311,8 @@ class SectorController {
     		success true
     		data(id: sectorInstance.id,
     		nombre: sectorInstance.nombre,
-    		exposicionId: sectorInstance.expo.id)
+    		exposicionId: sectorInstance.expo.id,
+			habilitado: sectorInstance.habilitado)
     	}
     	
     }
@@ -395,6 +406,11 @@ class SectorController {
     	log.info("PARAMETROS $params")
     	def sectorInstance=Sector.get(params.id)
 		params.precio = params.precio?.replace(".",",")
+		if(params.habilitado.equals("on"))
+			params.habilitado = true
+		else
+			params.habilitado = false
+		
 		if(sectorInstance){
 	    	sectorInstance.properties=params
 	    	if(!sectorInstance.hasErrors() && sectorInstance.save()){

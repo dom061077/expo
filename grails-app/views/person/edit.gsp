@@ -6,7 +6,7 @@
 	%>
 	<meta name="layout" content="main" />
 	<title>Modificar Usuario</title>
-	<script type="text/javascript" src='${resource(dir:'js/person',file:'edit.js')}'</script>	
+	<script type="text/javascript" src='${resource(dir:'js/person',file:'edit.js')}'></script>	
 </head>
 
 <body>

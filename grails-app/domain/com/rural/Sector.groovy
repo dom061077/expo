@@ -6,6 +6,7 @@ class Sector {
 	String nombre
 	Exposicion expo
 	Double precio
+	boolean habilitado = true
 	static belongsTo = [expo:Exposicion]
 	static hasMany = [lotes:Lote,descuentos:ListaDescuentos]
     static constraints = {

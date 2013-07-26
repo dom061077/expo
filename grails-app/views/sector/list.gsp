@@ -6,8 +6,9 @@
         <meta name="layout" content="main" />
         <link rel="stylesheet" href="${resource(dir:'js/ext/3.3.1/plugins/ux/css',file:'RowEditor.css')}" />
         <script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux',file:'RowEditor.js')}'></script>
+        <script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/ux',file:'CheckColumn.js')}'></script>
         
-		<script type="text/javascript" src='${resource(dir:'js/sector',file:'list.js')}'></script>        
+		<script type="text/javascript" src='${resource(dir:'js/sector',file:'list.js')+'?id='+randomlink}'></script>        
         <title>Listado de Sectores</title>
     </head>
     <body>
