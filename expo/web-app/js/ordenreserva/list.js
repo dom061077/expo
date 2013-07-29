@@ -144,6 +144,8 @@ Ext.onReady(function(){
 					{header:"Id Orden",dataIndex:'ordenId',width:200,sortable:false,hidden:true},
 					{header:"Empresa",dataIndex:'nombre',width:200,sortable:true},
 					{header:"Razón Social",dataIndex:'razonSocial',width:200,sortable:false},
+					{header:"Exposición",dataIndex:'expoNombre',width:200,sortable:true},
+					{header:"Año",dataIndex:'anio',width:80},					
 					{header:"Sector",dataIndex:'sector',width:200,sortable:true},
 					{header:"Lote",dataIndex:'lote',width:100,hidden:false,sortable:true},
 					{header:"Sub Total",dataIndex:'subTotal',width:100,renderer:customCurrency},					
@@ -156,8 +158,6 @@ Ext.onReady(function(){
 						var saldo = record.data.total - record.data.credito - record.data.recibo + record.data.debito
 						return Ext.util.Format.number(saldo,'0.000,00/i');
 					}},					
-					{header:"Exposición",dataIndex:'expoNombre',width:200,sortable:true},
-					{header:"Año",dataIndex:'anio',width:80},					
 					{header:"id",dataIndex:"id",hidden:true},
 					{header:"Número Orden",dataIndex:"numero",width:80,renderer:ordenRender,sortable:true},
 					{header:"Fecha",dataIndex:'fechaAlta',width:80,renderer: Ext.util.Format.dateRenderer('d/m/y'),sortable:true}
@@ -165,7 +165,7 @@ Ext.onReady(function(){
 		stripeRows: true,
 		loadMask:true,
 		height:400,
-		width:800,
+		width:850,
 		title:'Ordenes de Reserva',
         tbar:[{
         		icon: imagePath+'/pdf.gif'
