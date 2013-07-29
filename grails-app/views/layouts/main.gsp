@@ -5,7 +5,7 @@
 
         <link rel="stylesheet" href="${resource(dir:'css',file:'style.css')}" />
         <link rel="stylesheet" href="${resource(dir:'js/ext/3.3.1/resources/css',file:'ext-all.css')}" />
-        <link rel="stylesheet" href="${resource(dir:'js/ext/3.3.1/resources/css',file:'tabs.css')}" />
+<%--        <link rel="stylesheet" href="${resource(dir:'js/ext/3.3.1/resources/css',file:'tabs.css')}" />--%>
 
 
         <link rel="stylesheet" href="${resource(dir:'css/menu',file:'menu.css')}" type="text/css" media="screen, projection"/>

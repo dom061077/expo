@@ -182,7 +182,7 @@ Ext.onReady(function(){
 		columns:[
 			{header:'Id de Lote',dataIndex:'id',hidden:true},
 			{header:'Nro. de Lote',dataIndex:'nombre',width:150,editor:descEdit},
-			{header:'Habilitado',dataIndex:'habilitado',width:60,xtype}ESTABA AQUI
+			{header:'Habilitado',dataIndex:'habilitado',width:60}
 		]
 	});
 	 
