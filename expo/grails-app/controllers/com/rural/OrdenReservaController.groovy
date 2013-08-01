@@ -45,7 +45,7 @@ class OrdenReservaController {
     def list = {
         params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
 		Random randomLink = new Random()
-        [ ordenReservaInstanceList: OrdenReserva.list( params ), ordenReservaInstanceTotal: OrdenReserva.count(),randomlink:randomLink ]
+        [ ordenReservaInstanceList: OrdenReserva.list( params ), ordenReservaInstanceTotal: OrdenReserva.count(),randomlink:randomLink.nextInt(100000) ]
     }
 
     def showtorecibo = {
@@ -137,7 +137,8 @@ class OrdenReservaController {
         ordenReservaInstance.properties = params
         return ['ordenReservaInstance':ordenReservaInstance]*/
         log.info("INGRESANDO AL METODO create DEL CONTROLADOR OrdenReservaController")
-        
+		Random randomLink = new Random()
+        return [randomlink:randomLink.nextInt(100000)]
     }
 
     def save = {
