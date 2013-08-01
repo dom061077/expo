@@ -30,7 +30,7 @@ class ExposicionController {
 			expo {
 				eq("id",Long.parseLong(params.expoId))
 			}
-			order("anio","asc")
+			order("anio","desc")
 		}
 		log.debug "CANTIDAD DE LOGOS: "+logos.size()
 		render(contentType:'text/json'){

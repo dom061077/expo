@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
         <title>Alta Orden de Reserva</title>
-        <ext:stylesheet dir="plugins/wizard/resources/css" file="ext-ux-wiz.css"/>
+<%--        <ext:stylesheet dir="plugins/wizard/resources/css" file="ext-ux-wiz.css"/>--%>
         <ext:javascript dir="plugins/wizard" file="CardLayout.js"/>
         <ext:javascript dir="plugins/wizard" file="Wizard.js"/>
         <ext:javascript dir="plugins/wizard" file="Header.js"/>        
@@ -13,7 +13,7 @@
 
 
         
-       	<script type="text/javascript" src='${resource(dir:'js/ordenreserva',file:'create.js')}'></script>
+       	<script type="text/javascript" src='${resource(dir:'js/ordenreserva',file:'create.js')+'?id='+randomlink}'></script>
 
                  
     </head>
