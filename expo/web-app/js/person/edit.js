@@ -74,8 +74,8 @@ Ext.onReady(function(){
 					msgTarget:'under',
 					name:'passwd',
 					fieldLabel:'Contraseña',
-					maxLength:'15',
-					minLength:'5'
+					//maxLength:'15',
+					minLength:'6'
 				},{
 					layout:'column',
 					anchor:'0',
@@ -224,6 +224,7 @@ Ext.onReady(function(){
 			Ext.getCmp('idComboroles').hiddenField.value=a.result.data.authorityId
 			Ext.getCmp('idComboroles').setValue(a.result.data.authorityDesc);
 			Ext.getCmp('idComboroles').hiddenField.value=a.result.data.authorityId
+			Ext.getCmp('passwdId').value = a.result.data.passwd;
 			
 		}
 	});

@@ -104,7 +104,7 @@ class PersonController {
 						,authorityId:authority?.id
 						,description:usuarioInstance.description
 						,authorityDesc:authority?.description
-						,passwd:'')
+						,passwd:usuarioInstance.passwd)
 			}
 		}else{
 			log.debug("Instancia de usuario no encontrada, renderizando json");
@@ -249,7 +249,8 @@ class PersonController {
 		return buildPersonModel(person)*/
 		log.info("INGRESANDO AL METODO edit DEL CONTROLLER PersonController")
 		log.debug("Parametros $params")
-		return [id:params.id]
+		Random randomLink = new Random()
+		return [id:params.id,randomlink:randomLink.nextInt(100000)]
 	}
 
 	/**
