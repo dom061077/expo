@@ -405,11 +405,14 @@ class SectorController {
     	log.info("INGRESANDO AL METODO updatejson DEL CONTROLLER SectorController")
     	log.info("PARAMETROS $params")
     	def sectorInstance=Sector.get(params.id)
-		params.precio = params.precio?.replace(".",",")
-		if(params.habilitado.equals("on"))
-			params.habilitado = true
-		else
-			params.habilitado = false
+		if (params.precio)
+			params.precio = params.precio?.replace(".",",")
+		else{
+			if(params.habilitado.equals("on"))
+				params.habilitado = true
+			else
+				params.habilitado = false
+		}
 		
 		if(sectorInstance){
 	    	sectorInstance.properties=params
