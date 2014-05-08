@@ -13,7 +13,7 @@ Ext.onReady(function(){
 		remoteSort:true,
 		root: 'rows',
 		url:'listjson',
-		fields:['id','ordenId','numero','fechaAlta','subTotal','subTotalOtrosConceptos','total','debito','credito','recibo','saldo','anio','expoNombre','nombre','razonSocial','sector','lote'],
+		fields:['id','ordenId','numero','fechaAlta','subTotal','subTotalOtrosConceptos','total','debito','credito','recibo','saldo','anio','expoNombre','nombre','razonSocial','usuario','vendedor','sector','lote'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -104,6 +104,13 @@ Ext.onReady(function(){
         		emptyText:'Ingrese Filtro...'
         	}
         },{
+        	type: 'string',
+        	dataIndex: 'usuario'
+        },{
+        	type: 'string',
+        	dataIndex: 'vendedor'
+        	
+        },{
         	type:'date',
         	dateFormat:'d/m/Y',
         	dataIndex:'fechaAlta',
@@ -160,6 +167,8 @@ Ext.onReady(function(){
 					}},					
 					{header:"id",dataIndex:"id",hidden:true},
 					{header:"Número Orden",dataIndex:"numero",width:80,renderer:ordenRender,sortable:true},
+					{header:"Usuario",dataIndex:'usuario',width:200,sortable:false},
+					{header:"Vendedor",dataIndex:'vendedor',width:200,sortable:false},					
 					{header:"Fecha",dataIndex:'fechaAlta',width:80,renderer: Ext.util.Format.dateRenderer('d/m/y'),sortable:true}
 			],
 		stripeRows: true,
