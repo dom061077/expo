@@ -499,6 +499,20 @@ class OrdenReservaController {
 									log.debug "FECHA FORMATEADA: ${fecha} desde ${filtro["value"]}"
 									co."${filtro.comparison}"(filtro["field"],fechasql)
 								}
+								
+								if(filtro["field"].equals("usuario")){
+									co.usuario{
+										co.ilike("userRealName","%"+filtro["value"]+"%")
+									}
+								}
+								
+								if(filtro["field"].equals("vendedor")){
+									co.vendedor{
+										co.ilike("nombre","%"+filtro["value"]+"%")
+									}
+								}
+								
+								
 	
 								co.expo{
 									if(filtro["field"].equals("expoNombre")){
@@ -611,6 +625,18 @@ class OrdenReservaController {
 								cd.ilike("nombre","%"+filtro["value"]+"%")
 							}
 						}
+						if(filtro["field"].equals("usuario")){
+							cd.usuario{
+								ilike("userRealName","%"+filtro["value"]+"%")
+							}
+						}
+						if(filtro["field"].equals("vendedor")){
+							cd.vendedor{
+								ilike("nombre","%"+filtro["value"]+"%")
+							}
+						}
+
+
 					}
 					if(filtro["field"].equals("sector")){
 						cd.sector{
@@ -877,7 +903,9 @@ class OrdenReservaController {
         						,sector:(it.sector==null?'':it.sector.nombre)
         						,lote: (it.lote==null?'':it.lote.nombre)
         						,nombre:it.ordenReserva.nombre
-								,razonSocial:it.ordenReserva.razonSocial)
+								,razonSocial:it.ordenReserva.razonSocial
+								,usuario: it.ordenReserva.usuario.userRealName
+								,vendedor: it.ordenReserva.vendedor.nombre)
         				
     				}else{
 						if(cabecerasMostradas.indexOf(it)<0){
@@ -904,7 +932,10 @@ class OrdenReservaController {
 								,saldo:(mostrarTotal?saldoOrd:0)
         						,lote:""
         						,nombre:it.nombre
-								,razonSocial:it.razonSocial)
+								,razonSocial:it.razonSocial
+								,usuario: it.usuario.userRealName
+								,vendedor: it.vendedor.nombre)
+
 								       				
     				}
     				
@@ -986,36 +1017,38 @@ class OrdenReservaController {
 	 		 sheet.addCell(new Label(3,fil,(Boolean.parseBoolean(params.anulada)?"SOLO ORDENES ANULADAS":"") ))
 	 		 fil=fil+1
 	 	 }
-	 	 sheet.addCell(new Label(0, fil, "Nombre Comercial"))
-	 	 sheet.addCell(new Label(1, fil, "Sector"))
-	 	 sheet.addCell(new Label(2, fil, "Lote"))
-		 sheet.addCell(new Label(3, fil, "Sub-Total"))
-		 sheet.addCell(new Label(4, fil, "\$ Otros Conceptos"))
-		 sheet.addCell(new Label(5, fil, "\$ Total"))
-	 	 sheet.addCell(new Label(6, fil, "\$ Debitos"))
-		 sheet.addCell(new Label(7, fil, "\$ Creditos"))
-		 sheet.addCell(new Label(8, fil, "\$ Recibos"))
-	 	 sheet.addCell(new Label(9, fil, "Saldo"))
- 	 	 sheet.addCell(new Label(10, fil, "Exposición"))
-	 	 sheet.addCell(new Label(11, fil, "Año")) 	 	 
-	 	 sheet.addCell(new Label(12, fil, "Número de Orden"))
-	 	 sheet.addCell(new Label(13, fil, "Fecha Alta"))	 	 
-	 	 sheet.addCell(new Label(14, fil, "Razón Social"))
-		 sheet.addCell(new Label(15,fil, "C.U.I.T"))
-		 sheet.addCell(new Label(16,fil, "Dirección"))
-		 sheet.addCell(new Label(17,fil, "E-mail")) 
-		 sheet.addCell(new Label(18,fil, "Nombre Representante"))
-		 sheet.addCell(new Label(19,fil, "D.N.I Representante"))
-		 sheet.addCell(new Label(20,fil, "Telefono 1 Representante"))
-		 sheet.addCell(new Label(21,fil, "Telefono 2 Representante"))
-		 sheet.addCell(new Label(22,fil, "Telefono 3 Representante"))
-		 sheet.addCell(new Label(23,fil, "Sitio Web"))
-		 sheet.addCell(new Label(24,fil, "Rubro"))
-		 sheet.addCell(new Label(25,fil, "Sub-Rubro"))
-		 sheet.addCell(new Label(26,fil, "Vendedor"))
-		 sheet.addCell(new Label(28,fil, "Provincia"))
-		 sheet.addCell(new Label(29,fil, "Localidad"))
-		 sheet.addCell(new Label(30,fil, "Observacion"))
+		 sheet.addCell(new Label(0, fil, "Usuario"))
+		 sheet.addCell(new Label(1, fil, "Vendedor"))
+	 	 sheet.addCell(new Label(2, fil, "Nombre Comercial"))
+	 	 sheet.addCell(new Label(3, fil, "Sector"))
+	 	 sheet.addCell(new Label(4, fil, "Lote"))
+		 sheet.addCell(new Label(5, fil, "Sub-Total"))
+		 sheet.addCell(new Label(6, fil, "\$ Otros Conceptos"))
+		 sheet.addCell(new Label(7, fil, "\$ Total"))
+	 	 sheet.addCell(new Label(8, fil, "\$ Debitos"))
+		 sheet.addCell(new Label(9, fil, "\$ Creditos"))
+		 sheet.addCell(new Label(10, fil, "\$ Recibos"))
+	 	 sheet.addCell(new Label(11, fil, "Saldo"))
+ 	 	 sheet.addCell(new Label(12, fil, "Exposición"))
+	 	 sheet.addCell(new Label(13, fil, "Año")) 	 	 
+	 	 sheet.addCell(new Label(14, fil, "Número de Orden"))
+	 	 sheet.addCell(new Label(15, fil, "Fecha Alta"))	 	 
+	 	 sheet.addCell(new Label(16, fil, "Razón Social"))
+		 sheet.addCell(new Label(17,fil, "C.U.I.T"))
+		 sheet.addCell(new Label(18,fil, "Dirección"))
+		 sheet.addCell(new Label(19,fil, "E-mail")) 
+		 sheet.addCell(new Label(20,fil, "Nombre Representante"))
+		 sheet.addCell(new Label(21,fil, "D.N.I Representante"))
+		 sheet.addCell(new Label(22,fil, "Telefono 1 Representante"))
+		 sheet.addCell(new Label(23,fil, "Telefono 2 Representante"))
+		 sheet.addCell(new Label(24,fil, "Telefono 3 Representante"))
+		 sheet.addCell(new Label(25,fil, "Sitio Web"))
+		 sheet.addCell(new Label(26,fil, "Rubro"))
+		 sheet.addCell(new Label(27,fil, "Sub-Rubro"))
+		 sheet.addCell(new Label(28,fil, "Vendedor"))
+		 sheet.addCell(new Label(29,fil, "Provincia"))
+		 sheet.addCell(new Label(30,fil, "Localidad"))
+		 sheet.addCell(new Label(31,fil, "Observacion"))
 		 DateFormat customDateFormat = new DateFormat ("d/m/yy h:mm") 
 		 WritableCellFormat dateFormat = new WritableCellFormat (customDateFormat)                    
 		 fil=fil+1
@@ -1036,36 +1069,40 @@ class OrdenReservaController {
 						
 	    				saldo=it.ordenReserva.total-it.ordenReserva.recibo-it.ordenReserva.credito+it.ordenReserva.debito
 						
-    					sheet.addCell(new Label(0,fil,it.ordenReserva.nombre))
-    					sheet.addCell(new Label(1,fil,it.sector?.nombre))    					
-    					sheet.addCell(new Label(2,fil,it.lote?.nombre)) 
-						sheet.addCell(new Number(3,fil,(mostrarTotal?it.ordenReserva.subtotalDetalle:0) ))
-						sheet.addCell(new Number(4,fil,(mostrarTotal?it.ordenReserva.subtotalOtrosConceptos:0)))
-    					sheet.addCell(new Number(5,fil,(mostrarTotal?it.ordenReserva.total:0)))
-    					sheet.addCell(new Number(6,fil,(mostrarTotal?it.ordenReserva.debito:0)))
-						sheet.addCell(new Number(7,fil,(mostrarTotal?it.ordenReserva.credito:0)))
-						sheet.addCell(new Number(8,fil,(mostrarTotal?it.ordenReserva.recibo:0)))
-    					sheet.addCell(new Number(9,fil,(mostrarTotal?saldo:0)))
-    					sheet.addCell(new Label(10,fil,it.ordenReserva.expo.nombre))
-    					sheet.addCell(new Number(11,fil,it.ordenReserva.anio))
-    					sheet.addCell(new Number(12,fil,it.ordenReserva.numero))
-    					sheet.addCell(new DateTime(13,fil,it.ordenReserva.fechaAlta,dateFormat))
-						sheet.addCell(new Label(14,fil,it.ordenReserva.razonSocial))
-						sheet.addCell(new Label(15,fil,it.ordenReserva.cuit))
-						sheet.addCell(new Label(16,fil,it.ordenReserva.direccion))
-						sheet.addCell(new Label(17,fil,it.ordenReserva.email))
-						sheet.addCell(new Label(18,fil,it.ordenReserva.nombreRepresentante))
-						sheet.addCell(new Label(19,fil,it.ordenReserva.dniRep))
-						sheet.addCell(new Label(20,fil,it.ordenReserva.telefonoRepresentante1))
-						sheet.addCell(new Label(21,fil,it.ordenReserva.telefonoRepresentante2))
-						sheet.addCell(new Label(22,fil,it.ordenReserva.telefonoRepresentante3))
-						sheet.addCell(new Label(23,fil,it.ordenReserva.empresa.sitioWeb))
-						sheet.addCell(new Label(24,fil,it.ordenReserva.empresa.subrubro?.rubro?.nombreRubro))
-						sheet.addCell(new Label(25,fil,it.ordenReserva.empresa.subrubro?.nombreSubrubro))
-						sheet.addCell(new Label(26,fil,it.ordenReserva.empresa.vendedor.nombre))
-						sheet.addCell(new Label(27,fil,it.ordenReserva.empresa.localidad?.provincia?.nombre))
-						sheet.addCell(new Label(28,fil,it.ordenReserva.empresa.localidad?.nombreLoc))
-						sheet.addCell(new Label(29,fil,it.ordenReserva.observacion))
+						sheet.addCell(new Label(0,fil,it.ordenReserva.usuario.userRealName))
+						sheet.addCell(new Label(1,fil,it.ordenReserva.vendedor.nombre))
+						
+						
+    					sheet.addCell(new Label(2,fil,it.ordenReserva.nombre))
+    					sheet.addCell(new Label(3,fil,it.sector?.nombre))    					
+    					sheet.addCell(new Label(4,fil,it.lote?.nombre)) 
+						sheet.addCell(new Number(5,fil,(mostrarTotal?it.ordenReserva.subtotalDetalle:0) ))
+						sheet.addCell(new Number(6,fil,(mostrarTotal?it.ordenReserva.subtotalOtrosConceptos:0)))
+    					sheet.addCell(new Number(7,fil,(mostrarTotal?it.ordenReserva.total:0)))
+    					sheet.addCell(new Number(8,fil,(mostrarTotal?it.ordenReserva.debito:0)))
+						sheet.addCell(new Number(9,fil,(mostrarTotal?it.ordenReserva.credito:0)))
+						sheet.addCell(new Number(10,fil,(mostrarTotal?it.ordenReserva.recibo:0)))
+    					sheet.addCell(new Number(11,fil,(mostrarTotal?saldo:0)))
+    					sheet.addCell(new Label(12,fil,it.ordenReserva.expo.nombre))
+    					sheet.addCell(new Number(13,fil,it.ordenReserva.anio))
+    					sheet.addCell(new Number(14,fil,it.ordenReserva.numero))
+    					sheet.addCell(new DateTime(15,fil,it.ordenReserva.fechaAlta,dateFormat))
+						sheet.addCell(new Label(16,fil,it.ordenReserva.razonSocial))
+						sheet.addCell(new Label(17,fil,it.ordenReserva.cuit))
+						sheet.addCell(new Label(18,fil,it.ordenReserva.direccion))
+						sheet.addCell(new Label(19,fil,it.ordenReserva.email))
+						sheet.addCell(new Label(20,fil,it.ordenReserva.nombreRepresentante))
+						sheet.addCell(new Label(21,fil,it.ordenReserva.dniRep))
+						sheet.addCell(new Label(22,fil,it.ordenReserva.telefonoRepresentante1))
+						sheet.addCell(new Label(23,fil,it.ordenReserva.telefonoRepresentante2))
+						sheet.addCell(new Label(24,fil,it.ordenReserva.telefonoRepresentante3))
+						sheet.addCell(new Label(25,fil,it.ordenReserva.empresa.sitioWeb))
+						sheet.addCell(new Label(26,fil,it.ordenReserva.empresa.subrubro?.rubro?.nombreRubro))
+						sheet.addCell(new Label(27,fil,it.ordenReserva.empresa.subrubro?.nombreSubrubro))
+						sheet.addCell(new Label(28,fil,it.ordenReserva.empresa.vendedor.nombre))
+						sheet.addCell(new Label(29,fil,it.ordenReserva.empresa.localidad?.provincia?.nombre))
+						sheet.addCell(new Label(30,fil,it.ordenReserva.empresa.localidad?.nombreLoc))
+						sheet.addCell(new Label(31,fil,it.ordenReserva.observacion))
 						
     					fil=fil+1    					    					    					    					    					    					    					
     				}else{
@@ -1082,36 +1119,39 @@ class OrdenReservaController {
 					
     					saldo=it.total-it.recibo-it.credito+it.debito
 						
-    					sheet.addCell(new Label(0,fil,it.nombre))
-    					sheet.addCell(new Label(1,fil,""))    					
-    					sheet.addCell(new Label(2,fil,""))
-						sheet.addCell(new Number(3,fil,(mostrarTotal?it.subtotalDetalle:0)))
-						sheet.addCell(new Number(4,fil,(mostrarTotal?it.subtotalOtrosConceptos:0)))
-    					sheet.addCell(new Number(5,fil,(mostrarTotal?it.total:0)))
-    					sheet.addCell(new Number(6,fil,(mostrarTotal?it.debito:0))) 
-						sheet.addCell(new Number(7,fil,(mostrarTotal?it.credito:0)))
-						sheet.addCell(new Number(8,fil,(mostrarTotal?it.recibo:0)))
-    					sheet.addCell(new Number(9,fil,(mostrarTotal?saldo:0)))
-    					sheet.addCell(new Label(10,fil,it.expo.nombre))
-    					sheet.addCell(new Number(11,fil,it.anio))
-    					sheet.addCell(new Number(12,fil,it.numero))
-    					sheet.addCell(new DateTime (13,fil,it.fechaAlta,dateFormat))
-						sheet.addCell(new Label(14,fil,it.razonSocial))
-						sheet.addCell(new Label(15,fil,it.cuit))
-						sheet.addCell(new Label(16,fil,it.direccion))
-						sheet.addCell(new Label(17,fil,it.email))
-						sheet.addCell(new Label(18,fil,it.nombreRepresentante))
-						sheet.addCell(new Label(19,fil,it.dniRep))
-						sheet.addCell(new Label(20,fil,it.telefonoRepresentante1))
-						sheet.addCell(new Label(21,fil,it.telefonoRepresentante2))
-						sheet.addCell(new Label(22,fil,it.telefonoRepresentante3))
-						sheet.addCell(new Label(23,fil,it.empresa.sitioWeb))
-						sheet.addCell(new Label(24,fil,it.empresa.subrubro?.rubro?.nombreRubro))
-						sheet.addCell(new Label(25,fil,it.empresa.subrubro?.nombreSubrubro))
-						sheet.addCell(new Label(26,fil,it.empresa.vendedor.nombre))
-						sheet.addCell(new Label(27,fil,it.empresa.localidad?.provincia?.nombre))
-						sheet.addCell(new Label(28,fil,it.empresa.localidad?.nombreLoc))
-						sheet.addCell(new Label(29,fil,it.observacion))
+						sheet.addCell(new Label(0,fil,it.usuario.userRealName))
+						sheet.addCell(new Label(1,fil,it.vendedor.nombre))
+						
+    					sheet.addCell(new Label(2,fil,it.nombre))
+    					sheet.addCell(new Label(3,fil,""))    					
+    					sheet.addCell(new Label(4,fil,""))
+						sheet.addCell(new Number(5,fil,(mostrarTotal?it.subtotalDetalle:0)))
+						sheet.addCell(new Number(6,fil,(mostrarTotal?it.subtotalOtrosConceptos:0)))
+    					sheet.addCell(new Number(7,fil,(mostrarTotal?it.total:0)))
+    					sheet.addCell(new Number(8,fil,(mostrarTotal?it.debito:0))) 
+						sheet.addCell(new Number(9,fil,(mostrarTotal?it.credito:0)))
+						sheet.addCell(new Number(10,fil,(mostrarTotal?it.recibo:0)))
+    					sheet.addCell(new Number(11,fil,(mostrarTotal?saldo:0)))
+    					sheet.addCell(new Label(12,fil,it.expo.nombre))
+    					sheet.addCell(new Number(13,fil,it.anio))
+    					sheet.addCell(new Number(14,fil,it.numero))
+    					sheet.addCell(new DateTime (15,fil,it.fechaAlta,dateFormat))
+						sheet.addCell(new Label(16,fil,it.razonSocial))
+						sheet.addCell(new Label(17,fil,it.cuit))
+						sheet.addCell(new Label(18,fil,it.direccion))
+						sheet.addCell(new Label(19,fil,it.email))
+						sheet.addCell(new Label(20,fil,it.nombreRepresentante))
+						sheet.addCell(new Label(21,fil,it.dniRep))
+						sheet.addCell(new Label(22,fil,it.telefonoRepresentante1))
+						sheet.addCell(new Label(23,fil,it.telefonoRepresentante2))
+						sheet.addCell(new Label(24,fil,it.telefonoRepresentante3))
+						sheet.addCell(new Label(25,fil,it.empresa.sitioWeb))
+						sheet.addCell(new Label(26,fil,it.empresa.subrubro?.rubro?.nombreRubro))
+						sheet.addCell(new Label(27,fil,it.empresa.subrubro?.nombreSubrubro))
+						sheet.addCell(new Label(28,fil,it.empresa.vendedor.nombre))
+						sheet.addCell(new Label(29,fil,it.empresa.localidad?.provincia?.nombre))
+						sheet.addCell(new Label(30,fil,it.empresa.localidad?.nombreLoc))
+						sheet.addCell(new Label(31,fil,it.observacion))
 
     					fil=fil+1    					    					    					    					    					    					    					
     				}
