@@ -410,8 +410,10 @@ Ext.onReady(function(){
 					 								sel.data.precio=respuesta.precio;
 					 								sel.data.subTotal=sel.data.precio-respuesta.precio*sel.data.descuento/100;
 					 							}else{
-					 								sel.data.subTotal=respuesta.precio
-					 								sel.data.precio = respuesta.precio;
+					 								if (respuesta.precio>0){
+					 									sel.data.subTotal=respuesta.precio
+					 									sel.data.precio = respuesta.precio;
+					 								}
 					 							}
 					 							
 					 						}
