@@ -25,7 +25,7 @@ environments {
 	}
 	production {
 		dataSource {
-			dbCreate = "update"
+			//dbCreate = "update"
 			url = "jdbc:mysql://localhost/expo"
 		}
 	}
