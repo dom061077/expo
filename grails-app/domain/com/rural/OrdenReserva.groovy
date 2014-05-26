@@ -78,6 +78,22 @@ class OrdenReserva {
 	
 	//-------fin datos persistidos del expositor-----
 	
+	//-------------------datos trasient--------------
+	
+	List<DetalleServicioContratadoDescuentos> getDescAplicadosEnFecha(){
+		
+	}
+	
+	Double getTotalConDescuentos(){
+		def totalOrden = total
+		def subTotalOrden = 0
+		List<Double> porcentajes = new ArrayList<Double>();
+		detalle.each{ det->
+			det.descuentos.each{ desc->
+				if
+			}	
+		}
+	}
 	
 	static belongsTo = [empresa:Empresa,usuario:Person,expo:Exposicion] 
 

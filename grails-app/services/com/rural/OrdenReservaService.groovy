@@ -92,6 +92,61 @@ class OrdenReservaService {
 		log.info "SUBTOTAL SIN DESCUENTO DEL DETALLE: ${detalle.subTotalsindesc}"
 	}
 	
+	
+	def vincularDescuentosConDetalle(def detalle){
+		log.info "INGRESANDO AL METODO vincularDescuentosConDetalle DEL SERVICIO OrdenReservaService"
+		def difSubTotal
+		def difDesc
+		def primerDesc=0
+		def primeraFechaVencimiento
+		def todayCal = Calendar.getInstance()
+		def sf = new SimpleDateFormat("yyyy-MM-dd")
+		def fecha =  java.sql.Date.valueOf(sf.format(todayCal.getTime()))
+
+		def listDescuentos = ListaDescuentos.createCriteria().list(){
+			and{
+				sector{
+					eq("id",detalle.sector.id)
+				}
+				ge("fechaVencimiento",fecha)
+			}
+			order("fechaVencimiento","asc")
+			
+		}
+		primerDesc=listDescuentos[0]?.porcentaje
+		primeraFechaVencimiento=listDescuentos[0]?.fechaVencimiento
+		if(primerDesc==null)
+			primerDesc=0
+		if(detalle.lote?.precio){
+			log.debug "PRECIO DE LOTE APLICADO: ${detalle.lote.precio}"
+			detalle.subTotalsindesc = detalle.lote.precio
+			detalle.subTotal = detalle.lote.precio - detalle.lote.precio*primerDesc/100
+		}else{
+			log.debug "PRECIO DE SECTOR APLICADO: ${detalle.sector.precio}"
+			if(detalle.sector?.precio){
+				detalle.subTotalsindesc = detalle.sector.precio
+				detalle.subTotal = detalle.sector.precio - detalle.sector.precio*primerDesc/100
+			}else{
+				detalle.subTotalsindesc = detalle.subTotal
+			}
+		
+		}
+
+	
+		
+		listDescuentos.eachWithPeek{current,peek->
+			
+			if(current.fechaVencimiento.compareTo(fecha)>=0){
+				log.debug "DESCUENTO ITERADO: actual: ${current.fechaVencimiento} porcentaje: ${current.porcentaje}, siguiente: ${peek?.fechaVencimiento} porcentaje: ${peek?.porcentaje}"
+				
+				detalle.addToDescuentos(new DetalleServicioContratadoDescuentos(porcentaje:current.porcentaje
+						,fechaVencimiento:current.fechaVencimiento,subTotal:0,porcentajeActual:current?.porcentaje,porcentajeSig:peek?.porcentaje))
+			}
+		}
+				
+
+	}
+	
 
     OrdenReserva generarOrdenReserva(OrdenReserva ord,Empresa empresa) {
 		log.info "INGRESANDO AL METODO generaOrdenReserva DE OrdenReservaService"
