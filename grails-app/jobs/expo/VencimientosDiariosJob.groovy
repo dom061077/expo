@@ -11,7 +11,7 @@ class VencimientosDiariosJob {
 	def startDelay = 30 * 1000
 
     def execute() {
-
+/*
 		 log.debug "VERIFICANDO VENCIMIENTOS DE DESCUENTOS DE ORDENES DE RESERVA"
 		 java.util.Date today = new java.util.Date()
 		 def sdf = new SimpleDateFormat("yyyy-MM-dd")
@@ -45,5 +45,6 @@ class VencimientosDiariosJob {
 			log.info "SE EJECUTO EL SERVICIO... "
 		 }
 		 log.info "TERMINO LA EJECUCION"
+		 */
     }
 }
