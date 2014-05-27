@@ -22,7 +22,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="26" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="6ae85aad-41a2-48a0-a564-7d8cc55fd2dd" x="445" y="0" width="9" height="11"/>
 				<textElement verticalAlignment="Middle">
@@ -65,15 +65,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{subTotalsindesc}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="f4c158b8-9199-4305-a920-c56f929f48ba" x="1" y="11" width="364" height="9">
-					<printWhenExpression><![CDATA[$F{porcentajeDesc}>0]]></printWhenExpression>
-				</reportElement>
-				<textElement>
-					<font fontName="Arial" size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Descuento del "+($F{porcentajeDesc}).toString()+" valido hasta el "+($F{fechaVencimiento}).toString()]]></textFieldExpression>
-			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement uuid="edfe4650-1558-4f5e-bf37-a510cbf63a41" x="469" y="11" width="61" height="9">
 					<printWhenExpression><![CDATA[$F{porcentajeDesc}>0]]></printWhenExpression>
@@ -92,6 +83,14 @@
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
+			<subreport isUsingCache="false" runToBottom="false">
+				<reportElement uuid="1be79b11-789a-46cb-80fc-e3e429ca1b36" x="1" y="11" width="326" height="14"/>
+				<subreportParameter name="reportsDirPath">
+					<subreportParameterExpression><![CDATA[$P{reportsDirPath}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{descuentos})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[new File($P{reportsDirPath},"detalleserviciocontratado.jasper")]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 	<summary>

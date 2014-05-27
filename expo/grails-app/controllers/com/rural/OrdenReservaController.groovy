@@ -899,7 +899,9 @@ class OrdenReservaController {
 								,debito:(mostrarTotal?it.ordenReserva.debito:0)									
 								,credito:(mostrarTotal?it.ordenReserva.credito:0)
 								,recibo:(mostrarTotal?it.ordenReserva.recibo:0)
+								,totalcondesc:(mostrarTotal?it.ordenReserva.totalConDescuentos:0)
 								,saldo:(mostrarTotal?saldoOrd:0)
+								,saldocondescuento:(mostrarTotal?it.ordenReserva.totalConDescuentos-it.ordenReserva.recibo-it.ordenReserva.credito+it.ordenReserva.debito:0)
         						,sector:(it.sector==null?'':it.sector.nombre)
         						,lote: (it.lote==null?'':it.lote.nombre)
         						,nombre:it.ordenReserva.nombre
@@ -929,7 +931,9 @@ class OrdenReservaController {
 								,debito:(mostrarTotal?it.debito:0)
 								,credito:(mostrarTotal?it.credito:0)
 								,recibo:(mostrarTotal?it.recibo:0)
+								,totalcondesc:(mostrarTotal?it.totalConDescuentos:0)
 								,saldo:(mostrarTotal?saldoOrd:0)
+								,saldocondescuento:(mostrarTotal?it.totalConDescuentos-it.recibo-it.credito+it.debito:0)
         						,lote:""
         						,nombre:it.nombre
 								,razonSocial:it.razonSocial

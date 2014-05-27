@@ -370,8 +370,8 @@ Ext.onReady(function(){
 				{name: 'sector_id',type:'string'},
 				{name: 'lote_id',type:'string'},
 				{name: 'precio',type:'float'},
-				{name: 'descuento',type:'float'},
-				{name: 'fechaVigencia', type:'date'},
+				//{name: 'descuento',type:'float'},
+				//{name: 'fechaVigencia', type:'date'},
 				{name: 'subTotal', type: 'float'}
 			]
 		})
@@ -406,15 +406,16 @@ Ext.onReady(function(){
 					 						window.location='../logout/index';
 					 					else{
 					 						if(respuesta.success){
-					 							if(sel.data.descuento>0){
-					 								sel.data.precio=respuesta.precio;
-					 								sel.data.subTotal=sel.data.precio-respuesta.precio*sel.data.descuento/100;
-					 							}else{
+					 							//if(sel.data.precio>0){
+					 							//	sel.data.precio=respuesta.precio;
+					 								//linea anulada por cambios en los descuentos
+					 							//	sel.data.subTotal=sel.data.precio;//-respuesta.precio*sel.data.descuento/100;
+					 							//}else{
 					 								if (respuesta.precio>0){
 					 									sel.data.subTotal=respuesta.precio
 					 									sel.data.precio = respuesta.precio;
 					 								}
-					 							}
+					 							//}
 					 							
 					 						}
 					 					}
@@ -442,6 +443,7 @@ Ext.onReady(function(){
 		valueField: 'id',
 		hiddenName:'sector_id',
 		hiddenField:'id',
+		triggerAction:'all',
 		listeners: {
 			'select': function(cmb,rec,idx){
 				var lote = Ext.getCmp('comboboxLoteId')
@@ -471,10 +473,11 @@ Ext.onReady(function(){
 			 						window.location='../logout/index';
 			 					else{
 			 						if(respuesta.success){
-			 							sel.data.descuento=respuesta.porcentaje;
-			 							sel.data.fechaVencimiento=respuesta.fechaVencimiento;
+			 							//---anulado por cambios en el descuento de sectores
+			 							//sel.data.descuento=respuesta.porcentaje;
+			 							//sel.data.fechaVencimiento=respuesta.fechaVencimiento;
 			 							sel.data.precio=respuesta.precio
-			 							sel.data.subTotal=sel.data.precio-respuesta.precio*sel.data.descuento/100;
+			 							sel.data.subTotal=sel.data.precio;//-respuesta.precio*sel.data.descuento/100;
 			 						}
 			 					}
 			 							
@@ -513,16 +516,15 @@ Ext.onReady(function(){
 				//editor: new Ext.form.NumberField({
 				//	allowBlank:false
 				//})
-			},{
+			/*},{
 				header:'Descuento %',
 				dataIndex:'descuento',
-				width:80/*,
-				editor: new Ext.form.NumberField()*/
+				width:80
 			},{
 				header:'Vencimiento',
 				dataIndex:'fechaVencimiento',
 				renderer: Ext.util.Format.dateRenderer('d/m/y'),
-				width:80
+				width:80*/
 			},{
 				header:'Sub-Total',
 				dataIndex:'subTotal',
@@ -559,7 +561,7 @@ Ext.onReady(function(){
 			title:'Detalle Servicio Contratado',
 			cm:cmdetalle,
 			height:200,
-			width:500,
+			width:600,
 			singleSelect:true,
 			store:storeDetalle,
 			selModel: new Ext.grid.RowSelectionModel(),
@@ -572,8 +574,8 @@ Ext.onReady(function(){
 				 			sector_id:'',
 				 			lote_id:'',
 				 			precio:0,
-				 			descuento:0,
-				 			fechaVigencia:new Date(),
+				 			//descuento:0,
+				 			//fechaVigencia:new Date(),
 				 			subTotal:0
 				 		});
 						gridDetalleServicioContratado.getStore().insert(
@@ -1067,6 +1069,7 @@ Ext.onReady(function(){
 					  name:'monotributo'
 					 },{
 					  xtype:'combo',
+					  triggerAction:'all',
 					  fieldLabel:'I.V.A',
 					  id:'resinsValorCmbId',
 					  name:'resinsValorCmb',
@@ -1119,6 +1122,7 @@ Ext.onReady(function(){
 							name:'telefono2'
 						},{
 								        		xtype: 'combo',
+								        		triggerAction:'all',
 								        		fieldLabel: 'Provincia',
 								        		id:'idProvincia',
 								        		name: 'provinciaFiscal',
@@ -1144,6 +1148,7 @@ Ext.onReady(function(){
 								        		}
 								        	},{
 								        		xtype: 'combo',
+								        		triggerAction:'all',
 								        		id: 'idLocalidad',
 								        		fieldLabel: 'Localidad',
 								        		allowBlank: false,
@@ -1219,6 +1224,7 @@ Ext.onReady(function(){
 								        		name:'sitioWeb'
 								        	},{
 								        		xtype: 'combo',
+								        		triggerAction:'all',
 								        		fieldLabel:'Rubro de Empresa',
 								        		id:'idRubro',
 								        		allowBlank:false,
@@ -1253,6 +1259,7 @@ Ext.onReady(function(){
 								        			border:false,
 								        			items:
 										        		{xtype: 'combo',
+								        				triggerAction:'all',
 										        		fieldLabel:'Sub-Rubro de Empresa',
 										        		id:'idSubrubro',
 										        		store:subrubroStore,
@@ -1296,6 +1303,7 @@ Ext.onReady(function(){
 								        		]
 									          },{
 									        		xtype: 'combo',
+									        		triggerAction:'all',
 									        		id: 'idVendedor',
 									        		fieldLabel:'Vendedor',
 									        		allowBlank: false,
@@ -1369,6 +1377,7 @@ Ext.onReady(function(){
 								        		name: 'telefonoRepresentante3'
 								        	},{
 												xtype:'combo',
+												triggerAction:'all',
 												fieldLabel:'Exposición',
 												name:'exposicionField',
 												hiddenName:'expo_id',
@@ -1407,6 +1416,7 @@ Ext.onReady(function(){
 													}
 												},
 												{xtype:'combo',
+												 triggerAction:'all',
 												 id:'idAnio',
 												 fieldLabel:'Año',
 												 name:'anio',

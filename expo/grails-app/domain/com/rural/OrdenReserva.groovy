@@ -90,6 +90,7 @@ class OrdenReserva {
 		return total - totalConDescuentos 
 	}
 	
+	
 	List<DetalleServicioContratadoDescuentos> getDescAplicadosEnFecha(){
 		List<DetalleServicioContratadoDescuentos> porcentajesDesc = new ArrayList<DetalleServicioContratadoDescuentos>();
 		detalle.each{ det->
@@ -130,7 +131,7 @@ class OrdenReserva {
 		def ivaGralLocal = subTotalOrden *(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100
 
 		def ivaRniLocal= subTotalOrden + ivaGralLocal
-		def ivaSujNoCategLocal
+		def ivaSujNoCategLocal=0
 		
 		if(ivaRniCheck && porcentajeResIns>=0)//modificacion clave para determinar el porcentaje de iva cuando la expo es exenta
 			ivaSujNoCategLocal=ivaRniLocal*10.5/100

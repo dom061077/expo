@@ -13,7 +13,7 @@ Ext.onReady(function(){
 		remoteSort:true,
 		root: 'rows',
 		url:'listjson',
-		fields:['id','ordenId','numero','fechaAlta','subTotal','subTotalOtrosConceptos','total','debito','credito','recibo','saldo','anio','expoNombre','nombre','razonSocial','usuario','vendedor','sector','lote'],
+		fields:['id','ordenId','numero','fechaAlta','subTotal','subTotalOtrosConceptos','total','totalcondesc','debito','credito','recibo','saldo','saldocondescuento','anio','expoNombre','nombre','razonSocial','usuario','vendedor','sector','lote'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -158,17 +158,19 @@ Ext.onReady(function(){
 					{header:"Sub Total",dataIndex:'subTotal',width:100,renderer:customCurrency},					
 					{header:"$Otros Concep.",dataIndex:'subTotalOtrosConceptos',width:100,renderer:customCurrency},					
 					{header:"Total",dataIndex:'total',width:80,renderer:customCurrency,sortable:false},
-					{header:"Débitos",dataIndex:'debito',width:100,renderer:customCurrency},
-					{header:"Créditos",dataIndex:'credito',width:100,renderer:customCurrency},					
-					{header:"Recibos",dataIndex:'recibo',width:100,renderer:customCurrency},					
+					{header:"Débitos",dataIndex:'debito',width:80,renderer:customCurrency},
+					{header:"Créditos",dataIndex:'credito',width:80,renderer:customCurrency},					
+					{header:"Recibos",dataIndex:'recibo',width:80,renderer:customCurrency},					
+					{header:"Tot.con Desc.",dataIndex:'totalcondesc',width:80,renderer:customCurrency},
+					{header:"Saldo con Desc.",dataIndex:'saldocondescuento',width:80,renderer:customCurrency},
 					{header:"Saldo",dataIndex:'saldo',width:80,renderer:function(val,meta,record){
 						var saldo = record.data.total - record.data.credito - record.data.recibo + record.data.debito
 						return Ext.util.Format.number(saldo,'0.000,00/i');
 					}},					
 					{header:"id",dataIndex:"id",hidden:true},
 					{header:"Número Orden",dataIndex:"numero",width:80,renderer:ordenRender,sortable:true},
-					{header:"Usuario",dataIndex:'usuario',width:200,sortable:false},
-					{header:"Vendedor",dataIndex:'vendedor',width:200,sortable:false},					
+					{header:"Usuario",dataIndex:'usuario',width:150,sortable:false},
+					{header:"Vendedor",dataIndex:'vendedor',width:150,sortable:false},					
 					{header:"Fecha",dataIndex:'fechaAlta',width:80,renderer: Ext.util.Format.dateRenderer('d/m/y'),sortable:true}
 			],
 		stripeRows: true,
@@ -426,7 +428,7 @@ Ext.onReady(function(){
 		renderTo:'ordenreserva_form',
 		id:'formSearchId',
 		title:'Ordenes de Reserva',
-		width:850,
+		width:880,
 		frame:true,
 		items:[	
 				{
