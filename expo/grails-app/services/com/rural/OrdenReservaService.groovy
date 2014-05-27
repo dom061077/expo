@@ -120,12 +120,12 @@ class OrdenReservaService {
 		if(detalle.lote?.precio){
 			log.debug "PRECIO DE LOTE APLICADO: ${detalle.lote.precio}"
 			detalle.subTotalsindesc = detalle.lote.precio
-			detalle.subTotal = detalle.lote.precio - detalle.lote.precio*primerDesc/100
+			detalle.subTotal = detalle.lote.precio //- detalle.lote.precio*primerDesc/100
 		}else{
 			log.debug "PRECIO DE SECTOR APLICADO: ${detalle.sector.precio}"
 			if(detalle.sector?.precio){
 				detalle.subTotalsindesc = detalle.sector.precio
-				detalle.subTotal = detalle.sector.precio - detalle.sector.precio*primerDesc/100
+				detalle.subTotal = detalle.sector.precio //- detalle.sector.precio*primerDesc/100
 			}else{
 				detalle.subTotalsindesc = detalle.subTotal
 			}
