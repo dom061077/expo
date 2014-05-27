@@ -136,12 +136,12 @@ class OrdenReservaService {
 		
 		listDescuentos.eachWithPeek{current,peek->
 			
-			if(current.fechaVencimiento.compareTo(fecha)>=0){
-				log.debug "DESCUENTO ITERADO: actual: ${current.fechaVencimiento} porcentaje: ${current.porcentaje}, siguiente: ${peek?.fechaVencimiento} porcentaje: ${peek?.porcentaje}"
+			//if(current.fechaVencimiento.compareTo(fecha)>=0){
+			//	log.debug "DESCUENTO ITERADO: actual: ${current.fechaVencimiento} porcentaje: ${current.porcentaje}, siguiente: ${peek?.fechaVencimiento} porcentaje: ${peek?.porcentaje}"
 				
 				detalle.addToDescuentos(new DetalleServicioContratadoDescuentos(porcentaje:current.porcentaje
 						,fechaVencimiento:current.fechaVencimiento,subTotal:0,porcentajeActual:current?.porcentaje,porcentajeSig:peek?.porcentaje))
-			}
+			//}
 		}
 				
 
@@ -189,7 +189,7 @@ class OrdenReservaService {
 				det.subTotalsindesc = precio
 				ord.subTotal = ord.subTotal + det.subTotal
 				ord.subTotalsindesc=ord.subTotalsindesc+det.subTotalsindesc*/
-				asignarDescuentosSubtotal(det)
+				vincularDescuentosConDetalle(det)
 				ord.subTotal = ord.subTotal + det.subTotal
 				ord.subTotalsindesc=ord.subTotalsindesc+det.subTotalsindesc
 

@@ -1,6 +1,7 @@
 package com.rural
 
 import java.sql.Date
+import java.text.SimpleDateFormat
 
 class DetalleServicioContratadoDescuentos {
 	Double subTotal=0
@@ -10,6 +11,15 @@ class DetalleServicioContratadoDescuentos {
 	Date fechaVencimiento
 	DetalleServicioContratado detalleServicioContratado
 	NotadcDetalle notadcDetalle
+	
+	static transients = ['leyendaDesc']
+	
+	String getLeyendaDesc(){
+		def format = new SimpleDateFormat("dd/MM/yyyy")
+		def strDate = format.format(fechaVencimiento.getTime())
+		def numFormat = String.format("%.2f", porcentaje);
+		return "Descuento del "+numFormat+" válido hasta "+strDate;
+	}
 	
 	static belongsTo = [detalleServicioContratado:DetalleServicioContratado]
     static constraints = {
