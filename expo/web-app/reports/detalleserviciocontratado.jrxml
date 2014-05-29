@@ -22,7 +22,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="27" splitType="Stretch">
+		<band height="21" splitType="Stretch">
 			<staticText>
 				<reportElement x="444" y="0" width="9" height="11"/>
 				<textElement verticalAlignment="Middle">
@@ -31,28 +31,28 @@
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="0" width="40" height="11"/>
+				<reportElement x="1" y="0" width="40" height="10"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[SECTOR:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="204" y="0" width="47" height="11"/>
+				<reportElement x="204" y="0" width="47" height="10"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[LOTE Nº:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="45" y="0" width="159" height="11"/>
+				<reportElement x="45" y="0" width="159" height="10"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[($F{sector.nombre}==null?"":$F{sector.nombre})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="251" y="0" width="114" height="11"/>
+				<reportElement x="251" y="0" width="114" height="10"/>
 				<textElement>
 					<font fontName="Arial" size="8" isBold="true"/>
 				</textElement>
