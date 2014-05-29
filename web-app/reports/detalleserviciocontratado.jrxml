@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="detalleserviciocontratado" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenResourceMissingType="Empty" uuid="edf38e3e-302e-4598-8fb2-81bbc0540a3f">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="detalleserviciocontratado" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenResourceMissingType="Empty">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -22,60 +22,60 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="26" splitType="Stretch">
+		<band height="27" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="6ae85aad-41a2-48a0-a564-7d8cc55fd2dd" x="445" y="0" width="9" height="11"/>
+				<reportElement x="444" y="0" width="9" height="11"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="9" isBold="false"/>
+					<font fontName="Arial" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="e61ca2ea-e963-4e53-8a10-6804942837ae" x="1" y="0" width="40" height="11"/>
+				<reportElement x="1" y="0" width="40" height="11"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="9" isBold="false"/>
+					<font fontName="Arial" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[SECTOR:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="8f6d2258-2028-4236-ad5a-045ae9435915" x="204" y="0" width="47" height="11"/>
+				<reportElement x="204" y="0" width="47" height="11"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="9" isBold="false"/>
+					<font fontName="Arial" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[LOTE Nº:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="6f68a39e-fdd9-430f-b401-a28696b508e1" x="45" y="0" width="159" height="11"/>
+				<reportElement x="45" y="0" width="159" height="11"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="9" isBold="true"/>
+					<font fontName="Arial" size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{sector.nombre}==null?"":$F{sector.nombre})]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{sector.nombre}==null?"":$F{sector.nombre})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="3629ede0-b779-4073-aec2-940bd2a111bc" x="251" y="0" width="114" height="11"/>
+				<reportElement x="251" y="0" width="114" height="11"/>
 				<textElement>
-					<font fontName="Arial" size="9" isBold="true"/>
+					<font fontName="Arial" size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{lote.nombre}==null?"":$F{lote.nombre})]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{lote.nombre}==null?"":$F{lote.nombre})]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement uuid="bc37cbb8-2978-4d2a-9388-31d559e03b35" x="469" y="0" width="61" height="11"/>
+				<reportElement x="469" y="0" width="61" height="11"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="9" isBold="false"/>
+					<font fontName="Arial" size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{subTotalsindesc}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotalsindesc}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement uuid="edfe4650-1558-4f5e-bf37-a510cbf63a41" x="469" y="11" width="61" height="9">
+				<reportElement x="469" y="11" width="61" height="9">
 					<printWhenExpression><![CDATA[$F{porcentajeDesc}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right">
 					<font fontName="Arial" size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{subTotal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotal}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="f4769bf0-9f3f-4707-ac67-fabd565bdd29" x="445" y="11" width="9" height="9">
+				<reportElement x="445" y="11" width="9" height="9">
 					<printWhenExpression><![CDATA[$F{porcentajeDesc}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -83,31 +83,28 @@
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
-			<subreport isUsingCache="false" runToBottom="false">
-				<reportElement uuid="1be79b11-789a-46cb-80fc-e3e429ca1b36" x="1" y="11" width="326" height="14"/>
-				<subreportParameter name="reportsDirPath">
-					<subreportParameterExpression><![CDATA[$P{reportsDirPath}]]></subreportParameterExpression>
-				</subreportParameter>
+			<subreport>
+				<reportElement x="2" y="10" width="363" height="7"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{descuentos})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[new File($P{reportsDirPath},"detalleserviciocontratado.jasper")]]></subreportExpression>
+				<subreportExpression class="java.io.File"><![CDATA[new File($P{reportsDirPath},"detalleserviciocontratadodesc.jasper")]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
 	<summary>
 		<band height="11">
 			<staticText>
-				<reportElement uuid="8956d1b5-cbac-4adf-ba63-c834780bac1c" x="386" y="0" width="70" height="11"/>
+				<reportElement x="386" y="0" width="70" height="11"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="Arial" size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[SUBTOTAL  $]]></text>
 			</staticText>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement uuid="363e40e6-1418-42d0-a9eb-4e774febaa4c" x="469" y="0" width="61" height="11"/>
+				<reportElement x="469" y="0" width="61" height="11"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{subTotalDetalle}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{subTotalDetalle}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
