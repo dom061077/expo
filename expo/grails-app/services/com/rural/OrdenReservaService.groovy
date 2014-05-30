@@ -133,14 +133,14 @@ class OrdenReservaService {
 		}
 
 	
-		
+		def subTotalDesc=0
 		listDescuentos.eachWithPeek{current,peek->
 			
 			//if(current.fechaVencimiento.compareTo(fecha)>=0){
 			//	log.debug "DESCUENTO ITERADO: actual: ${current.fechaVencimiento} porcentaje: ${current.porcentaje}, siguiente: ${peek?.fechaVencimiento} porcentaje: ${peek?.porcentaje}"
-				
+				subTotalDesc = detalle.subTotal - detalle.subTotal * current?.porcentaje/100
 				detalle.addToDescuentos(new DetalleServicioContratadoDescuentos(porcentaje:current.porcentaje
-						,fechaVencimiento:current.fechaVencimiento,subTotal:0,porcentajeActual:current?.porcentaje,porcentajeSig:peek?.porcentaje))
+						,fechaVencimiento:current.fechaVencimiento,subTotal:subTotalDesc,porcentajeActual:current?.porcentaje,porcentajeSig:peek?.porcentaje))
 			//}
 		}
 				
@@ -328,7 +328,7 @@ class OrdenReservaService {
 				if(it.tipo==TipoNotaEnum.NOTA_DEBITO && it.tipoGen== TipoGeneracionEnum.TIPOGEN_AUTOMATICA )
 					debitoCreado=true
 			}
-			log.debug "ANTES DEL IF QUE COMPARA LA FECHA DE VENCIMIENTO CON LA FECHA DE HOY Y EL TAMAÑO DEL DETALLE"
+			log.debug "ANTES DEL IF QUE COMPARA LA FECHA DE VENCIMIENTO CON LA FECHA DE HOY Y EL TAMAï¿½O DEL DETALLE"
 			if(orden.fechaVencimiento<java.sql.Date.valueOf(sdf.format(today)) && orden.detalle.size() && debitoCreado==false){
 					log.debug "DENTRO DEL IF QUE COMPARA LA FECHA DE VENCIMIENTO CON EL DIA DE HOY"
 					notad = new NotaDC(fechaAlta:java.sql.Date.valueOf(sdf.format(today)), ordenReserva:orden,tipoGen:TipoGeneracionEnum.TIPOGEN_AUTOMATICA,tipo:TipoNotaEnum.NOTA_DEBITO,monto:"0".toDouble()
