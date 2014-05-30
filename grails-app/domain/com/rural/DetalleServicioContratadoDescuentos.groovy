@@ -18,7 +18,7 @@ class DetalleServicioContratadoDescuentos {
 		def format = new SimpleDateFormat("dd/MM/yyyy")
 		def strDate = format.format(fechaVencimiento.getTime())
 		def numFormat = String.format("%.2f", porcentaje);
-		return "Descuento del "+numFormat+" v·lido hasta "+strDate;
+		return "Descuento del "+numFormat+" v√°lido hasta "+strDate;
 	}
 	
 	static belongsTo = [detalleServicioContratado:DetalleServicioContratado]
