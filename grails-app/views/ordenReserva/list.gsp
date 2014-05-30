@@ -15,6 +15,7 @@
 		<script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/filter',file:'Filter.js')}'></script>		
 		<script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/filter',file:'BooleanFilter.js')}'></script>		
 		<script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/filter',file:'DateFilter.js')}'></script>
+        <script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux',file:'RowExpander.js')}'></script>
 		
 		<script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/filter',file:'ListFilter.js')}'></script>
 		<script type="text/javascript" src='${resource(dir:'js/ext/3.3.1/plugins/ux/gridfilters/filter',file:'NumericFilter.js')}'></script>

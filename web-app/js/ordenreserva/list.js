@@ -3,7 +3,21 @@ Ext.onReady(function(){
 	var sort;
 	var dir;
 
+    var expander = new Ext.ux.grid.RowExpander({
+        tpl : new Ext.Template(
+            '<p><b>Company:</b> {company}</p><br>',
+            '<p><b>Summary:</b> {desc}</p>'
+        )
+    });
 
+    var expander = new xg.RowExpander({
+        remoteDataMethod : getMyStuff
+    });
+
+    function getMyStuff(record,index){
+        //	Using JQuery to 'load' the expanded row with content pulled remotely
+        $('#remData'+index).load('tester.html');
+    };
 	
 	var ordenStore = new Ext.data.JsonStore({
 		totalProperty: 'total',
@@ -13,7 +27,7 @@ Ext.onReady(function(){
 		remoteSort:true,
 		root: 'rows',
 		url:'listjson',
-		fields:['id','ordenId','numero','fechaAlta','subTotal','subTotalOtrosConceptos','total','totalcondesc','debito','credito','recibo','saldo','saldocondescuento','anio','expoNombre','nombre','razonSocial','usuario','vendedor','sector','lote'],
+		fields:[expander,'id','ordenId','numero','fechaAlta','subTotal','subTotalOtrosConceptos','total','totalcondesc','debito','credito','recibo','saldo','saldocondescuento','anio','expoNombre','nombre','razonSocial','usuario','vendedor','sector','lote'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -143,11 +157,12 @@ Ext.onReady(function(){
 	
 	var grid = new Ext.grid.GridPanel({
 		store:ordenStore,
-		plugins:[filters],
+		plugins:[filters,expander],
 		//collapsible: true,
         //animCollapse: false,
 		//view: new Ext.grid.GroupingView(),
 		columns:[
+
 					{header:"Id Orden",dataIndex:'ordenId',width:200,sortable:false,hidden:true},
 					{header:"Empresa",dataIndex:'nombre',width:200,sortable:true},
 					{header:"Razón Social",dataIndex:'razonSocial',width:200,sortable:false},
