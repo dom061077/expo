@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="detalleserviciocontratadodesc" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="205"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="porcentaje" class="java.lang.Double"/>
 	<field name="fechaVencimiento" class="java.sql.Date"/>
@@ -20,13 +20,13 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{leyendaDesc}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="444" y="0" width="4" height="7"/>
+				<reportElement x="443" y="0" width="4" height="7"/>
 				<textElement>
 					<font fontName="Arial" size="6"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="469" y="0" width="61" height="7"/>
 				<textElement textAlignment="Right">
 					<font fontName="Arial" size="6"/>

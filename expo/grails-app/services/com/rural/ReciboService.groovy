@@ -19,6 +19,8 @@ class ReciboException extends RuntimeException{
 
 class ReciboService {
 
+    def authenticateService
+
     boolean transactional = true
 
     Recibo generarRecibo(Long ordId,String concepto,Double efectivo,cheques,Person user) {
@@ -27,7 +29,7 @@ class ReciboService {
 			Double totalDebitos=0
 			Double totalCreditos=0
 			Double totalRecibos=0
-			
+			/*
 			//-------obtengo total recibos---
     		ord.recibos.each{
     			if(it.anulado==false)
@@ -43,7 +45,8 @@ class ReciboService {
 						totalDebitos = totalDebitos + it.total	
 				}
 			}
-			
+			*/
+            saldo = ord.saldoConDescuento
     		
     		if(ord){
     			def recibo = new Recibo(fechaAlta:new Date(),ordenReserva:ord,efectivo:efectivo,concepto:concepto,total:0,usuario:user)
@@ -54,19 +57,46 @@ class ReciboService {
     			}
     			recibo.total=recibo.total+efectivo
     			recibo.total=Math.round(recibo.total*Math.pow(10,2))/Math.pow(10,2);
-
+                recibo.ordenReserva = ord
 				
-				totalDebitos = Math.round(totalDebitos*Math.pow(10,2))/Math.pow(10,2);
+				/*totalDebitos = Math.round(totalDebitos*Math.pow(10,2))/Math.pow(10,2);
 				totalCreditos = Math.round(totalCreditos*Math.pow(10,2))/Math.pow(10,2);
 				totalRecibos = Math.round(totalRecibos*Math.pow(10,2))/Math.pow(10,2);
-				saldo = ord.total + totalDebitos - totalCreditos - totalRecibos 
-				saldo = Math.round(saldo*Math.pow(10,2))/Math.pow(10,2); 
+				saldo = ord.total + totalDebitos - totalCreditos - totalRecibos
+				 */
+				saldo = Math.round(saldo*Math.pow(10,2))/Math.pow(10,2);     
+                recibo.total = Math.round(recibo.total*Math.pow(10,2))/Math.pow(10,2);
+                def difParaNotaDC =  Math.round((ord.total-ord.totalConDescuentos)*Math.pow(10,2))/Math.pow(10,2)
+
 				
     			if (recibo.total>saldo)
     				throw new ReciboException('El total ('+recibo.total+') de recibo supera el total ('+saldo+') pendiente de pago de la orden de reserva',recibo)
     			if(recibo.save()){
-					verificarVencimiento(ord,recibo,user)
-    				return recibo
+					//verificarVencimiento(ord,recibo,user)
+                    //Genero nota de crédito por la diferencia del descuento
+                    log.info "DIFERENCIA PARA LA NOTA DE CREDITO DE DESCUENTO: "+difParaNotaDC
+                    log.info "Saldo de Orden xxx: "+saldo
+                    log.info "Total del recibo yyyyyy: "+recibo.total
+                    if((saldo-recibo.total<1)&& (difParaNotaDC>1)){
+                        log.info "INGRESA A LA GENERACION DE LA NOTA DE CREDITO"
+                        def notaDCInstance = new NotaDC()
+                        notaDCInstance.usuario = authenticateService.userDomain()
+                        notaDCInstance.ordenReserva = ord
+                        notaDCInstance.fechaAlta = new java.sql.Date((new java.util.Date()).getTime())
+                        notaDCInstance.tipoGen = TipoGeneracionEnum.TIPOGEN_AUTOMATICA
+                        notaDCInstance.tipo = TipoNotaEnum.NOTA_CREDITO
+                        notaDCInstance.addToDetalle(new NotadcDetalle(descripcion:"Descuento en sector por pago antes de vencimiento",subTotal:difParaNotaDC))
+                        notaDCInstance.subTotal = difParaNotaDC
+                        notaDCInstance.total = difParaNotaDC
+                        if(notaDCInstance.save()){
+                            recibo.concepto=recibo.concepto+". Se generó nota de Credito por descuento"
+                            recibo.save()
+                            log.info "Se generó nota de crédito por descuentos"
+                            return recibo
+                        }else
+                            throw new ReciboException('El recibo no se pudo crear por un error en la generación de Nota de Crédito Automática de descuentos',recibo)
+                    } else
+                        return recibo
     			}else{
     				throw new ReciboException('El recibo no se pudo crear por un error de validacion',recibo)
     			}

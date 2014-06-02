@@ -923,6 +923,7 @@ class OrdenReservaController {
     							,expoNombre:it.ordenReserva.expo.nombre
 								,subTotal:(mostrarTotal?it.ordenReserva.subTotal:0)
 								,subTotalOtrosConceptos:(mostrarTotal?it.ordenReserva.subtotalOtrosConceptos:0)
+                                ,subTotalConDescuento:(mostrarTotal?it.ordenReserva.subTotalConDescuento:0)
 								,debito:(mostrarTotal?it.ordenReserva.debito:0)									
 								,credito:(mostrarTotal?it.ordenReserva.credito:0)
 								,recibo:(mostrarTotal?it.ordenReserva.recibo:0)
@@ -955,6 +956,7 @@ class OrdenReservaController {
 								,anio:it.anio,expoNombre:it.expo.nombre
         						,sector:""
 								,subTotal:0
+                                ,subTotalConDescuento:0
 								,subTotalOtrosConceptos:(mostrarTotal?it.subtotalOtrosConceptos:0)
 								,debito:(mostrarTotal?it.debito:0)
 								,credito:(mostrarTotal?it.credito:0)

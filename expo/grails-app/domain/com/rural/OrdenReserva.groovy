@@ -82,8 +82,64 @@ class OrdenReserva {
 	//-------fin datos persistidos del expositor-----
 	
 	//-------------------datos trasient--------------
-	static transients = ['totalConDescuentos','descAplicadosEnFecha','difTotalDesc','descuentosPorFecha','saldo','saldoConDescuento']
+	static transients = ['totalConDescuentos','subTotalConDescuento','descAplicadosEnFecha','difTotalDesc','descuentosPorFecha','saldo','saldoConDescuento']
     
+    Double getSubTotalConDescuento(){
+        def todayCal = Calendar.getInstance()
+        def sf = new SimpleDateFormat("yyyy-MM-dd")
+        def fecha =  java.sql.Date.valueOf(sf.format(todayCal.getTime()))
+        def subTotalOrden = 0
+        if(detalle.size()>0){
+            List<DetalleServicioContratadoDescuentos> porcentajesDesc = new ArrayList<DetalleServicioContratadoDescuentos>();
+            detalle.each{ det->
+                det.descuentos.sort{a,b-> a.fechaVencimiento.compareTo(b.fechaVencimiento)}
+                det.descuentos.each{ desc->
+                    if(desc.fechaVencimiento.compareTo(fecha)>=0){
+                        porcentajesDesc.add(desc);
+                        return
+                    }
+                }
+            }
+
+            subTotalOrden = subTotal
+
+            porcentajesDesc.each{desc ->
+                subTotalOrden = subTotalOrden - desc.detalleServicioContratado.subTotalsindesc*desc.porcentaje/100
+            }
+        }
+
+        return subTotalOrden
+
+    }
+    
+    /*Double getSubTotalConDescuento(){
+        def todayCal = Calendar.getInstance()
+        def sf = new SimpleDateFormat("yyyy-MM-dd")
+        def fecha =  java.sql.Date.valueOf(sf.format(todayCal.getTime()))
+
+
+        def subTotalOrden = 0
+        if(detalle.size()>0){
+            List<DetalleServicioContratadoDescuentos> porcentajesDesc = new ArrayList<DetalleServicioContratadoDescuentos>();
+            detalle.each{ det->
+                det.descuentos.sort{a,b-> a.fechaVencimiento.compareTo(b.fechaVencimiento)}
+                det.descuentos.each{ desc->
+                    if(desc.fechaVencimiento.compareTo(fecha)>=0){
+                        porcentajesDesc.add(desc);
+                        return
+                    }
+                }
+            }
+
+            subTotalOrden = subTotal
+
+            porcentajesDesc.each{desc ->
+                subTotalOrden = subTotalOrden - desc.detalleServicioContratado.subTotalsindesc*desc.porcentaje/100
+            }
+        }
+        return subTotalOrden
+    }*/
+
     Double getSaldo(){
         return total - recibo - credito + debito
     }
@@ -141,32 +197,35 @@ class OrdenReserva {
 		
 		def totalOrden = total
         if(detalle.size()>0){
-		def subTotalOrden = 0
-		List<DetalleServicioContratadoDescuentos> porcentajesDesc = new ArrayList<DetalleServicioContratadoDescuentos>();
-		detalle.each{ det->
-			det.descuentos.each{ desc->
-				if(desc.fechaVencimiento.compareTo(fecha)>=0){
-					porcentajesDesc.add(desc);
-				}
-			}	
-		}
-		
-		detalle.each {
-			subTotalOrden = subTotalOrden + it.subTotalsindesc
-		}
-		
-		porcentajesDesc.each{desc ->
-			subTotalOrden = subTotalOrden - desc.detalleServicioContratado.subTotalsindesc*desc.porcentaje/100
-		}
-		
-		def ivaGralLocal = subTotalOrden *(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100
+            def subTotalOrden = 0
+            List<DetalleServicioContratadoDescuentos> porcentajesDesc = new ArrayList<DetalleServicioContratadoDescuentos>();
+            detalle.each{ det->
+                det.descuentos.sort{a,b-> a.fechaVencimiento.compareTo(b.fechaVencimiento)}
+                det.descuentos.each{ desc->
+                    if(desc.fechaVencimiento.compareTo(fecha)>=0){
+                        porcentajesDesc.add(desc);
+                        return
+                    }
+                }
+            }
 
-		def ivaRniLocal= subTotalOrden + ivaGralLocal
-		def ivaSujNoCategLocal=0
-		
-		if(ivaRniCheck && porcentajeResIns>=0)//modificacion clave para determinar el porcentaje de iva cuando la expo es exenta
-			ivaSujNoCategLocal=ivaRniLocal*10.5/100
-		totalOrden=subTotalOrden+ivaGralLocal+ivaSujNoCategLocal
+            //detalle.each {
+            //    subTotalOrden = subTotalOrden + it.subTotalsindesc
+            //}
+            subTotalOrden = subTotal
+
+            porcentajesDesc.each{desc ->
+                subTotalOrden = subTotalOrden - desc.detalleServicioContratado.subTotalsindesc*desc.porcentaje/100
+            }
+
+            def ivaGralLocal = subTotalOrden *(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100
+
+            def ivaRniLocal= subTotalOrden + ivaGralLocal
+            def ivaSujNoCategLocal=0
+
+            if(ivaRniCheck && porcentajeResIns>=0)//modificacion clave para determinar el porcentaje de iva cuando la expo es exenta
+                ivaSujNoCategLocal=ivaRniLocal*10.5/100
+            totalOrden=subTotalOrden+ivaGralLocal+ivaSujNoCategLocal
         }
 		totalOrden = Math.round(totalOrden*Math.pow(10,2))/Math.pow(10,2);
 
