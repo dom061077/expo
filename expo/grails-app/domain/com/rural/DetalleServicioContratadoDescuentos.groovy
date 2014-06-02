@@ -12,8 +12,12 @@ class DetalleServicioContratadoDescuentos {
 	DetalleServicioContratado detalleServicioContratado
 	NotadcDetalle notadcDetalle
 	
-	static transients = ['leyendaDesc']
-	
+	static transients = ['leyendaDesc','montoDescontado']
+
+    Double getMontoDescontado(){
+        detalleServicioContratado.subTotal-subTotal
+    }
+
 	String getLeyendaDesc(){
 		def format = new SimpleDateFormat("dd/MM/yyyy")
 		def strDate = format.format(fechaVencimiento.getTime())

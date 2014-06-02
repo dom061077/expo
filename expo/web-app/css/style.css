@@ -169,4 +169,36 @@ background: #85ACF7 url('/expo/images/hidr.jpg');
 .x-date-middle {
 padding-top: 2px; padding-bottom: 2px;
 width: 130px; / * FF3 * /
-} 
+}
+
+
+
+.descuento td
+{
+    color: #FF8E1C;
+    border-bottom: 1px dotted #aeb3b6;
+    padding-right: 0.5em;
+
+}
+
+.descuento tbody tr.odd
+{
+    border-bottom: 1px dotted #aeb3b6;
+}
+
+.descuento tbody tr:hover td
+{
+    background-color: #FFCC99;
+}
+
+.descuento td.number
+{
+    text-align: right
+}
+
+.descuento tbody tr:hover td,tbody tr:hover th, tbody tr:hover a
+{
+    color: #fff !important;
+}
+
+.descuento th{background: #AAAAFF;color: #FFFFFF;font-size:11px;font-weight: bold;padding: 6px;border:2px groove #C8C8F2;line-height: 1.5em;white-space: nowrap;font-family: verdana,arial,helvetica,sans-serif;}

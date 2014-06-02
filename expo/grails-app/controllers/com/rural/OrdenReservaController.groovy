@@ -56,7 +56,8 @@ class OrdenReservaController {
     		if(!it.anulado)
     			saldo = saldo - it.total
     	}*/
-		def saldo =ordenReserva.total - (ordenReserva.credito==null?0:ordenReserva.credito) - (ordenReserva.recibo==null?0:ordenReserva.recibo) + (ordenReserva.debito==null?0:ordenReserva.debito)
+        saldo = 0
+		saldo =ordenReserva.total - (ordenReserva.credito==null?0:ordenReserva.credito) - (ordenReserva.recibo==null?0:ordenReserva.recibo) + (ordenReserva.debito==null?0:ordenReserva.debito)
     	render(contentType : "text/json"){
     		success true
     		data(nombreempresa:ordenReserva.empresa.nombre,numero 	:		ordenReserva.numero,
@@ -280,7 +281,7 @@ class OrdenReservaController {
     	ordenList.add(ordenReservaInstance)
     	ordenList.add(ordenReservaInstance)    	
     	ordenList.add(ordenReservaInstance)
-		//-------recuperacion de desde la instancia de logo correspondiente a la exposicion y al año de la Orden
+		//-------recuperacion de desde la instancia de logo correspondiente a la exposicion y al aï¿½o de la Orden
 		def listlogos = Logo.createCriteria().list(){
 			and{
 				expo{
@@ -867,6 +868,7 @@ class OrdenReservaController {
 		ArrayList cabecerasMostradas = new ArrayList()
     	def flagdetalle = false
 		def mostrarTotal = false
+        def detalleDescHtml=""
     	render(contentType:"text/json"){
     		rows{
     			list?.each{
@@ -882,7 +884,31 @@ class OrdenReservaController {
 						}
 								
 								
-						
+						detalleDescHtml="<i><b>Esta Orden no tiene Descuentos</b></i>"
+
+                        if(it.ordenReserva.descuentosPorFecha.size()>0){
+
+                           def totalFinal = 0
+                           detalleDescHtml="<table class='descuento'> <tbody>"
+                            detalleDescHtml=detalleDescHtml+"<thead>"
+                           detalleDescHtml=detalleDescHtml+"<tr >"
+                           detalleDescHtml=detalleDescHtml+"<th>Hasta la Fecha</th>"
+                           detalleDescHtml=detalleDescHtml+"<th>DescripciÃ³n del Descuento</th>"
+                           detalleDescHtml=detalleDescHtml+"<th>% Total a Descontar</th>"
+                           detalleDescHtml=detalleDescHtml+"<th>Monto Total a Descontar</th>"
+                           detalleDescHtml=detalleDescHtml+"</tr>"
+                            detalleDescHtml=detalleDescHtml+"</thead>"
+                           it.ordenReserva.descuentosPorFecha.each{desc->
+
+                               detalleDescHtml = detalleDescHtml + "<tr class=\"odd\">"
+                               detalleDescHtml = detalleDescHtml + "<td>${new SimpleDateFormat("dd/MM/yyyy").format(desc.fecha.getTime())}</td>"
+                               detalleDescHtml = detalleDescHtml + "<td>${desc.descripcion}</td>"
+                               detalleDescHtml = detalleDescHtml + "<td class='number'>${String.format("%.2f",desc.porcentaje)}</td>"
+                               detalleDescHtml = detalleDescHtml + "<td class='number'>${String.format("%.2f",desc.montoDescontado)}</td>"
+                               detalleDescHtml = detalleDescHtml + "</tr>"
+                           }
+                           detalleDescHtml=detalleDescHtml+"</tbody></table>"
+                        }
 						
         				it.ordenReserva.recibos.each{ 
         					if(!it.anulado)
@@ -894,14 +920,15 @@ class OrdenReservaController {
 								,total:(mostrarTotal?it.ordenReserva.total: 0)
 								,anio:it.ordenReserva.anio
     							,expoNombre:it.ordenReserva.expo.nombre
-								,subTotal:(mostrarTotal?it.subTotal:0)
+								,subTotal:(mostrarTotal?it.ordenReserva.subTotal:0)
 								,subTotalOtrosConceptos:(mostrarTotal?it.ordenReserva.subtotalOtrosConceptos:0)
 								,debito:(mostrarTotal?it.ordenReserva.debito:0)									
 								,credito:(mostrarTotal?it.ordenReserva.credito:0)
 								,recibo:(mostrarTotal?it.ordenReserva.recibo:0)
 								,totalcondesc:(mostrarTotal?it.ordenReserva.totalConDescuentos:0)
-								,saldo:(mostrarTotal?saldoOrd:0)
-								,saldocondescuento:(mostrarTotal?it.ordenReserva.totalConDescuentos-it.ordenReserva.recibo-it.ordenReserva.credito+it.ordenReserva.debito:0)
+                                ,saldo:(mostrarTotal?it.ordenReserva.saldo:0)//,saldo:(mostrarTotal?saldoOrd:0)
+								,saldocondescuento:(mostrarTotal?it.ordenReserva.saldoConDescuento:0)//,saldocondescuento:(mostrarTotal?it.ordenReserva.totalConDescuentos-it.ordenReserva.recibo-it.ordenReserva.credito+it.ordenReserva.debito:0)
+                                ,detalledesc:(mostrarTotal?detalleDescHtml:"")
         						,sector:(it.sector==null?'':it.sector.nombre)
         						,lote: (it.lote==null?'':it.lote.nombre)
         						,nombre:it.ordenReserva.nombre
@@ -932,8 +959,9 @@ class OrdenReservaController {
 								,credito:(mostrarTotal?it.credito:0)
 								,recibo:(mostrarTotal?it.recibo:0)
 								,totalcondesc:(mostrarTotal?it.totalConDescuentos:0)
-								,saldo:(mostrarTotal?saldoOrd:0)
-								,saldocondescuento:(mostrarTotal?it.totalConDescuentos-it.recibo-it.credito+it.debito:0)
+								,saldo: (mostrarTotal?it.saldo:0)//,saldo:(mostrarTotal?saldoOrd:0)
+								,saldocondescuento: (mostrarTotal?it.saldoConDescuento:0)//,saldocondescuento:(mostrarTotal?(it.totalConDescuentos-it.recibo-it.credito+it.debito<0?0:it.totalConDescuentos-it.recibo-it.credito+it.debito):0)
+                                ,detalledesc:"<i><b>Esta Orden no tiene Descuentos</b></i>"
         						,lote:""
         						,nombre:it.nombre
 								,razonSocial:it.razonSocial
@@ -1033,13 +1061,13 @@ class OrdenReservaController {
 		 sheet.addCell(new Label(9, fil, "\$ Creditos"))
 		 sheet.addCell(new Label(10, fil, "\$ Recibos"))
 	 	 sheet.addCell(new Label(11, fil, "Saldo"))
- 	 	 sheet.addCell(new Label(12, fil, "Exposición"))
-	 	 sheet.addCell(new Label(13, fil, "Año")) 	 	 
-	 	 sheet.addCell(new Label(14, fil, "Número de Orden"))
+ 	 	 sheet.addCell(new Label(12, fil, "Exposiciï¿½n"))
+	 	 sheet.addCell(new Label(13, fil, "Aï¿½o")) 	 	 
+	 	 sheet.addCell(new Label(14, fil, "Nï¿½mero de Orden"))
 	 	 sheet.addCell(new Label(15, fil, "Fecha Alta"))	 	 
-	 	 sheet.addCell(new Label(16, fil, "Razón Social"))
+	 	 sheet.addCell(new Label(16, fil, "Razï¿½n Social"))
 		 sheet.addCell(new Label(17,fil, "C.U.I.T"))
-		 sheet.addCell(new Label(18,fil, "Dirección"))
+		 sheet.addCell(new Label(18,fil, "Direcciï¿½n"))
 		 sheet.addCell(new Label(19,fil, "E-mail")) 
 		 sheet.addCell(new Label(20,fil, "Nombre Representante"))
 		 sheet.addCell(new Label(21,fil, "D.N.I Representante"))
