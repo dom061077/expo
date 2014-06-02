@@ -56,8 +56,9 @@ class OrdenReservaController {
     		if(!it.anulado)
     			saldo = saldo - it.total
     	}*/
-        saldo = 0
-		saldo =ordenReserva.total - (ordenReserva.credito==null?0:ordenReserva.credito) - (ordenReserva.recibo==null?0:ordenReserva.recibo) + (ordenReserva.debito==null?0:ordenReserva.debito)
+        def saldo = 0
+		//saldo =ordenReserva.total - (ordenReserva.credito==null?0:ordenReserva.credito) - (ordenReserva.recibo==null?0:ordenReserva.recibo) + (ordenReserva.debito==null?0:ordenReserva.debito)
+        saldo = ordenReserva.saldoConDescuento
     	render(contentType : "text/json"){
     		success true
     		data(nombreempresa:ordenReserva.empresa.nombre,numero 	:		ordenReserva.numero,
