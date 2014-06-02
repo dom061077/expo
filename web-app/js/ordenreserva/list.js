@@ -30,7 +30,7 @@ Ext.onReady(function(){
 		remoteSort:true,
 		root: 'rows',
 		url:'listjson',
-		fields:['id','ordenId','numero','fechaAlta','subTotal','subTotalOtrosConceptos','total','totalcondesc','debito','credito','recibo','saldo','saldocondescuento','detalledesc','anio','expoNombre','nombre','razonSocial','usuario','vendedor','sector','lote'],
+		fields:['id','ordenId','numero','fechaAlta','subTotal','subTotalConDescuento','subTotalOtrosConceptos','total','totalcondesc','debito','credito','recibo','saldo','saldocondescuento','detalledesc','anio','expoNombre','nombre','razonSocial','usuario','vendedor','sector','lote'],
 		listeners: {
             loadexception: function(proxy, store, response, e) {
 	                    var jsonObject = Ext.util.JSON.decode(response.responseText);
@@ -165,22 +165,22 @@ Ext.onReady(function(){
         //animCollapse: false,
 		//view: new Ext.grid.GroupingView(),
 		columns:[
-                    expander,
-					{header:"Id Orden",dataIndex:'ordenId',width:200,sortable:false,hidden:true},
-					{header:"Empresa",dataIndex:'nombre',width:200,sortable:true},
+            expander,
+            {header:"Id Orden",dataIndex:'ordenId',width:200,sortable:false,hidden:true},
+            {header:"Empresa",dataIndex:'nombre',width:200,sortable:true},
             {header:"Sub Total",dataIndex:'subTotal',width:100,renderer:customCurrency},
+            {header:"Sub Total Con Desc.",dataIndex:'subTotalConDescuento',width:100,renderer:customCurrency},
             {header:"$Otros Concep.",dataIndex:'subTotalOtrosConceptos',width:100,renderer:customCurrency},
             {header:"Total",dataIndex:'total',width:80,renderer:customCurrency,sortable:false},
+            {header:"Tot.con Desc.",dataIndex:'totalcondesc',width:80,renderer:customCurrency},
+            {header:"Saldo",dataIndex:'saldo',width:80/*,renderer:function(val,meta,record){
+             var saldo = record.data.total - record.data.credito - record.data.recibo + record.data.debito
+             return Ext.util.Format.number(saldo,'0.000,00/i');
+             }*/},
             {header:"Débitos",dataIndex:'debito',width:80,renderer:customCurrency},
             {header:"Créditos",dataIndex:'credito',width:80,renderer:customCurrency},
             {header:"Recibos",dataIndex:'recibo',width:80,renderer:customCurrency},
-            {header:"Tot.con Desc.",dataIndex:'totalcondesc',width:80,renderer:customCurrency},
-            {header:"Saldo con Desc.",dataIndex:'saldocondescuento',width:80,renderer:customCurrency},
-            {header:"Saldo",dataIndex:'saldo',width:80,renderer:function(val,meta,record){
-                var saldo = record.data.total - record.data.credito - record.data.recibo + record.data.debito
-                return Ext.util.Format.number(saldo,'0.000,00/i');
-            }},
-
+            //{header:"Saldo con Desc.",dataIndex:'saldocondescuento',width:80,renderer:customCurrency},
             {header:"Razón Social",dataIndex:'razonSocial',width:200,sortable:false},
 					{header:"Exposición",dataIndex:'expoNombre',width:200,sortable:true},
 					{header:"Año",dataIndex:'anio',width:80},					
