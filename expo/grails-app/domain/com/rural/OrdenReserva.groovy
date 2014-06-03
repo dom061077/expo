@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat
 
 import com.rural.enums.TipoNotaEnum
 import com.rural.util.DescuentoPorFecha
+import com.rural.utils.Util
 
 class OrdenReserva {
 	static auditable = true
@@ -86,7 +87,7 @@ class OrdenReserva {
                         ,'ivaRniCalc','ivaSujNoCategCalc','descuentosPorFecha','saldo','saldoConDescuento']
     Double getIvaSujNoCategCalc(){
         if(ivaRniCheck && porcentajeResIns>=0)
-            return (Double)Math.round(ivaRni*10.5/100)
+            return (Double)Util.redondear(ivaRni*10.5/100,0)
         return 0
     }
 
@@ -97,7 +98,7 @@ class OrdenReserva {
     Double getIvaGralCalc(){
         def ivaReturn = subTotal*(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100
 
-        return (Double)Math.round(ivaReturn)
+        return (Double)Util.redondear(ivaReturn,0)
     }
 
     Double getSubTotalConDescuento(){
@@ -126,7 +127,7 @@ class OrdenReserva {
             }
         }
 
-        return (Double)Math.round(subTotalOrden)
+        return (Double)Util.redondear(subTotalOrden,0)
 
     }
     
@@ -243,13 +244,13 @@ class OrdenReserva {
                 ivaSujNoCategLocal=ivaRniLocal*10.5/100
             totalOrden=subTotalOrden+ivaGralLocal+ivaSujNoCategLocal
         }*/
-        def ivaGralLocal = (Double)Math.round(subTotalConDescuento *(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100)
+        def ivaGralLocal = (Double)Util.redondear(subTotalConDescuento *(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100,0)
 
         def ivaRniLocal= subTotalConDescuento + ivaGralLocal
         def ivaSujNoCategLocal=0
 
         if(ivaRniCheck && porcentajeResIns>=0)//modificacion clave para determinar el porcentaje de iva cuando la expo es exenta
-            ivaSujNoCategLocal=(Double)Math.round(ivaRniLocal*10.5/100)
+            ivaSujNoCategLocal=(Double)Util.redondear(ivaRniLocal*10.5/100,0)
         def totalOrden = subTotalConDescuento+ivaGralLocal+ivaSujNoCategLocal
 
 		//totalOrden = Math.round(totalOrden*Math.pow(10,2))/Math.pow(10,2);
