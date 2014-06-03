@@ -19,20 +19,6 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{leyendaDesc}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="443" y="0" width="4" height="7"/>
-				<textElement>
-					<font fontName="Arial" size="6"/>
-				</textElement>
-				<text><![CDATA[$]]></text>
-			</staticText>
-			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="469" y="0" width="61" height="7"/>
-				<textElement textAlignment="Right">
-					<font fontName="Arial" size="6"/>
-				</textElement>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{subTotal}]]></textFieldExpression>
-			</textField>
 		</band>
 	</detail>
 </jasperReport>

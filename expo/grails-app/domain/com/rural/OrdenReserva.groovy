@@ -93,10 +93,12 @@ class OrdenReserva {
             List<DetalleServicioContratadoDescuentos> porcentajesDesc = new ArrayList<DetalleServicioContratadoDescuentos>();
             detalle.each{ det->
                 det.descuentos.sort{a,b-> a.fechaVencimiento.compareTo(b.fechaVencimiento)}
+
                 det.descuentos.each{ desc->
-                    if(desc.fechaVencimiento.compareTo(fecha)>=0){
-                        porcentajesDesc.add(desc);
-                        return
+                    if(!porcentajesDesc.find {it.detalleServicioContratado.equals(desc.detalleServicioContratado)}){
+                       if(desc.fechaVencimiento.compareTo(fecha)>=0){
+                          porcentajesDesc.add(desc);
+                       }
                     }
                 }
             }
@@ -190,7 +192,7 @@ class OrdenReserva {
 	}
 	
 	Double getTotalConDescuentos(){
-		def todayCal = Calendar.getInstance()
+		/*def todayCal = Calendar.getInstance()
 		def sf = new SimpleDateFormat("yyyy-MM-dd")
 		def fecha =  java.sql.Date.valueOf(sf.format(todayCal.getTime()))
 
@@ -209,16 +211,14 @@ class OrdenReserva {
                 }
             }
 
-            //detalle.each {
-            //    subTotalOrden = subTotalOrden + it.subTotalsindesc
-            //}
             subTotalOrden = subTotal
 
             porcentajesDesc.each{desc ->
                 subTotalOrden = subTotalOrden - desc.detalleServicioContratado.subTotalsindesc*desc.porcentaje/100
             }
 
-            def ivaGralLocal = subTotalOrden *(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100
+
+         def ivaGralLocal = subTotalOrden *(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100
 
             def ivaRniLocal= subTotalOrden + ivaGralLocal
             def ivaSujNoCategLocal=0
@@ -226,11 +226,18 @@ class OrdenReserva {
             if(ivaRniCheck && porcentajeResIns>=0)//modificacion clave para determinar el porcentaje de iva cuando la expo es exenta
                 ivaSujNoCategLocal=ivaRniLocal*10.5/100
             totalOrden=subTotalOrden+ivaGralLocal+ivaSujNoCategLocal
-        }
-		totalOrden = Math.round(totalOrden*Math.pow(10,2))/Math.pow(10,2);
+        }*/
+        def ivaGralLocal = subTotalConDescuento *(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100
 
+        def ivaRniLocal= subTotalConDescuento + ivaGralLocal
+        def ivaSujNoCategLocal=0
+
+        if(ivaRniCheck && porcentajeResIns>=0)//modificacion clave para determinar el porcentaje de iva cuando la expo es exenta
+            ivaSujNoCategLocal=ivaRniLocal*10.5/100
+        def totalOrden = subTotalConDescuento+ivaGralLocal+ivaSujNoCategLocal
+
+		totalOrden = Math.round(totalOrden*Math.pow(10,2))/Math.pow(10,2);
 		return totalOrden
-		
 	}
 	
 	static belongsTo = [empresa:Empresa,usuario:Person,expo:Exposicion] 

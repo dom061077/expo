@@ -615,23 +615,23 @@ www.srt.org.ar - informes@srt.org.ar]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA["Por "+$F{vendedor.nombre}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="8" y="389" width="43" height="13"/>
+				<reportElement x="8" y="382" width="43" height="13"/>
 				<textElement>
-					<font fontName="Tahoma" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nota:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="38" y="389" width="506" height="23"/>
+				<reportElement x="38" y="382" width="506" height="23"/>
 				<textElement>
-					<font fontName="Tahoma" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Expresamos nuestro total consentimiento y conformidad con las disposiciones del Reglamento General de Exposición de la Sociedad Rural de Tucumán.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="7" y="353" width="531" height="37"/>
+				<reportElement x="7" y="353" width="531" height="30"/>
 				<textElement textAlignment="Justified">
-					<font fontName="Tahoma" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[El expositor conviene acatar todas las normas establecidas por la Organización en relación a la participación en la muestra. Será susceptible de multas quien realice transgresiones al Reglamento General de Exposiciones de la SRT y anexos (incumplimiento de horarios, de formas de exposición de productos, volumen sonido dentro del stand, etc).]]></text>
 			</staticText>
