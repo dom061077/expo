@@ -194,20 +194,20 @@ class OrdenReservaService {
 				ord.subTotalsindesc=ord.subTotalsindesc+det.subTotalsindesc
 
     		}
-    	ord.ivaGral = ord.subTotal*(ord.porcentajeResIns > 0 ? ord.porcentajeResIns : ord.porcentajeResNoIns)/100
+    	ord.ivaGral = ord.ivaGralCalc //ord.ivaGral = ord.subTotal*(ord.porcentajeResIns > 0 ? ord.porcentajeResIns : ord.porcentajeResNoIns)/100
 		log.debug "IVA GRAL: "+ord.ivaGral
-    	ord.ivaRni=ord.subTotal+ord.ivaGral
-    	if(ord.ivaRniCheck && ord.porcentajeResIns>=0)//modificacion clave para determinar el porcentaje de iva cuando la expo es exenta
-    		ord.ivaSujNoCateg=ord.ivaRni*10.5/100
+    	ord.ivaRni = ord.ivaRniCalc//ord.ivaRni=ord.subTotal+ord.ivaGral
+    	//if(ord.ivaRniCheck && ord.porcentajeResIns>=0)//modificacion clave para determinar el porcentaje de iva cuando la expo es exenta
+    	ord.ivaSujNoCateg = ord.ivaSujNoCategCalc//	ord.ivaSujNoCateg=ord.ivaRni*10.5/100
 		log.debug "TOTAL GRAL FORMADO POR subTotal: "+ord.subTotal+", ivaGral: "+ord.ivaGral+" ivaSujNoCateg: "+ord.ivaSujNoCateg
 		log.debug "TOTAL GRAL SIN DESCUENTOS FORMADO POR subTotalsindesc: "+ord.subTotalsindesc+", ivaGral: "+ord.ivaGral+" ivaSujNoCateg: "+ord.ivaSujNoCateg	
     	ord.total=ord.subTotal+ord.ivaGral+ord.ivaSujNoCateg
 		
-		def ivaGralSindesc = ord.subTotalsindesc*(ord.porcentajeResIns > 0 ? ord.porcentajeResIns : ord.porcentajeResNoIns)/100
-		
-		def ivaSujNoCategSindesc= 0
-		if(ord.ivaRniCheck && ord.porcentajeResIns>=0)//modificacion clave para determinar el porcentaje de iva cuando la expo es exenta
-			ivaSujNoCategSindesc = ord.ivaRni*10.5/100 
+		def ivaGralSindesc = ord.ivaGralCalc //= ord.subTotalsindesc*(ord.porcentajeResIns > 0 ? ord.porcentajeResIns : ord.porcentajeResNoIns)/100
+
+        def ivaSujNoCategSindesc = ord.ivaSujNoCategCalc//def ivaSujNoCategSindesc= 0
+		//if(ord.ivaRniCheck && ord.porcentajeResIns>=0)//modificacion clave para determinar el porcentaje de iva cuando la expo es exenta
+		//	ivaSujNoCategSindesc = ord.ivaRni*10.5/100 
 		ord.totalsindesc = ord.subTotalsindesc+ivaGralSindesc+ivaSujNoCategSindesc
     	ord.total=Math.round(ord.total*Math.pow(10,2))/Math.pow(10,2);
 		ord.totalsindesc = Math.round(ord.totalsindesc*Math.pow(10,2))/Math.pow(10,2);
