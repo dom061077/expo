@@ -82,8 +82,24 @@ class OrdenReserva {
 	//-------fin datos persistidos del expositor-----
 	
 	//-------------------datos trasient--------------
-	static transients = ['totalConDescuentos','subTotalConDescuento','descAplicadosEnFecha','difTotalDesc','descuentosPorFecha','saldo','saldoConDescuento']
-    
+	static transients = ['totalConDescuentos','subTotalConDescuento','descAplicadosEnFecha','difTotalDesc','ivaGralCalc'
+                        ,'ivaRniCalc','ivaSujNoCategCalc','descuentosPorFecha','saldo','saldoConDescuento']
+    Double getIvaSujNoCategCalc(){
+        if(ivaRniCheck && porcentajeResIns>=0)
+            return (Double)Math.round(ivaRni*10.5/100)
+        return 0
+    }
+
+    Double getIvaRniCalc(){
+        return subTotal + ivaGralCalc
+    }
+
+    Double getIvaGralCalc(){
+        def ivaReturn = subTotal*(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100
+
+        return (Double)Math.round(ivaReturn)
+    }
+
     Double getSubTotalConDescuento(){
         def todayCal = Calendar.getInstance()
         def sf = new SimpleDateFormat("yyyy-MM-dd")
@@ -110,7 +126,7 @@ class OrdenReserva {
             }
         }
 
-        return subTotalOrden
+        return (Double)Math.round(subTotalOrden)
 
     }
     
@@ -227,16 +243,16 @@ class OrdenReserva {
                 ivaSujNoCategLocal=ivaRniLocal*10.5/100
             totalOrden=subTotalOrden+ivaGralLocal+ivaSujNoCategLocal
         }*/
-        def ivaGralLocal = subTotalConDescuento *(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100
+        def ivaGralLocal = (Double)Math.round(subTotalConDescuento *(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100)
 
         def ivaRniLocal= subTotalConDescuento + ivaGralLocal
         def ivaSujNoCategLocal=0
 
         if(ivaRniCheck && porcentajeResIns>=0)//modificacion clave para determinar el porcentaje de iva cuando la expo es exenta
-            ivaSujNoCategLocal=ivaRniLocal*10.5/100
+            ivaSujNoCategLocal=(Double)Math.round(ivaRniLocal*10.5/100)
         def totalOrden = subTotalConDescuento+ivaGralLocal+ivaSujNoCategLocal
 
-		totalOrden = Math.round(totalOrden*Math.pow(10,2))/Math.pow(10,2);
+		//totalOrden = Math.round(totalOrden*Math.pow(10,2))/Math.pow(10,2);
 		return totalOrden
 	}
 	

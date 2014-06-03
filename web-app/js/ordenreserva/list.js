@@ -173,10 +173,12 @@ Ext.onReady(function(){
             {header:"$Otros Concep.",dataIndex:'subTotalOtrosConceptos',width:100,renderer:customCurrency},
             {header:"Total",dataIndex:'total',width:80,renderer:customCurrency,sortable:false},
             {header:"Tot.con Desc.",dataIndex:'totalcondesc',width:80,renderer:customCurrency},
-            {header:"Saldo",dataIndex:'saldo',width:80/*,renderer:function(val,meta,record){
-             var saldo = record.data.total - record.data.credito - record.data.recibo + record.data.debito
-             return Ext.util.Format.number(saldo,'0.000,00/i');
-             }*/},
+            {header:"Saldo",dataIndex:'saldo',width:80,renderer:function(val,meta,record){
+             //var saldo = record.data.total - record.data.credito - record.data.recibo + record.data.debito
+             //return Ext.util.Format.number(saldo,'0.000,00/i');
+                var saldo = record.data.saldo;
+                return Ext.util.Format.number(saldo,'0.000,00/i');
+            }},
             {header:"Débitos",dataIndex:'debito',width:80,renderer:customCurrency},
             {header:"Créditos",dataIndex:'credito',width:80,renderer:customCurrency},
             {header:"Recibos",dataIndex:'recibo',width:80,renderer:customCurrency},
