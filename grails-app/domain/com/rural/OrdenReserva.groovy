@@ -91,7 +91,7 @@ class OrdenReserva {
     }
     
     Double getRedondeo(){
-        return total - (Double)Util.redondear(total,0)
+        return  (Double)Util.redondear(total,0) - total
     }
 
     Double getIvaSujNoCategCalc(){
