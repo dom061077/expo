@@ -84,10 +84,19 @@ class OrdenReserva {
 	
 	//-------------------datos trasient--------------
 	static transients = ['totalConDescuentos','subTotalConDescuento','descAplicadosEnFecha','difTotalDesc','ivaGralCalc'
-                        ,'ivaRniCalc','ivaSujNoCategCalc','descuentosPorFecha','saldo','saldoConDescuento']
+                        ,'ivaRniCalc','ivaSujNoCategCalc','descuentosPorFecha','saldo','saldoConDescuento','redondeo','totalFinal']
+
+    Double getTotalFinal(){
+        return (Double)Util.redondear(total,0)
+    }
+    
+    Double getRedondeo(){
+        return total - (Double)Util.redondear(total,0)
+    }
+
     Double getIvaSujNoCategCalc(){
         if(ivaRniCheck && porcentajeResIns>=0)
-            return (Double)Util.redondear(ivaRni*10.5/100,0)
+            return ivaRni*10.5/100
         return 0
     }
 
@@ -98,7 +107,7 @@ class OrdenReserva {
     Double getIvaGralCalc(){
         def ivaReturn = subTotal*(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100
 
-        return (Double)Util.redondear(ivaReturn,0)
+        return ivaReturn
     }
 
     Double getSubTotalConDescuento(){
@@ -127,7 +136,7 @@ class OrdenReserva {
             }
         }
 
-        return (Double)Util.redondear(subTotalOrden,0)
+        return subTotalOrden
 
     }
     
@@ -244,13 +253,13 @@ class OrdenReserva {
                 ivaSujNoCategLocal=ivaRniLocal*10.5/100
             totalOrden=subTotalOrden+ivaGralLocal+ivaSujNoCategLocal
         }*/
-        def ivaGralLocal = (Double)Util.redondear(subTotalConDescuento *(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100,0)
+        def ivaGralLocal = subTotalConDescuento *(porcentajeResIns > 0 ? porcentajeResIns : porcentajeResNoIns)/100
 
         def ivaRniLocal= subTotalConDescuento + ivaGralLocal
         def ivaSujNoCategLocal=0
 
         if(ivaRniCheck && porcentajeResIns>=0)//modificacion clave para determinar el porcentaje de iva cuando la expo es exenta
-            ivaSujNoCategLocal=(Double)Util.redondear(ivaRniLocal*10.5/100,0)
+            ivaSujNoCategLocal=ivaRniLocal*10.5/100
         def totalOrden = subTotalConDescuento+ivaGralLocal+ivaSujNoCategLocal
 
 		//totalOrden = Math.round(totalOrden*Math.pow(10,2))/Math.pow(10,2);
