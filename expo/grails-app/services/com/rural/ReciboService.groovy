@@ -49,6 +49,8 @@ class ReciboService {
             saldo = ord.saldoConDescuento
     		
     		if(ord){
+                //if (ord.anulada==false)
+                //    throw new ReciboException('La orden está anulada y no se puede generar ningún recibo',null)
     			def recibo = new Recibo(fechaAlta:new Date(),ordenReserva:ord,efectivo:efectivo,concepto:concepto,total:0,usuario:user)
     			
     			cheques.each{
@@ -89,7 +91,7 @@ class ReciboService {
                         notaDCInstance.subTotal = difParaNotaDC
                         notaDCInstance.total = difParaNotaDC
                         if(notaDCInstance.save()){
-                            recibo.concepto=recibo.concepto+". Se generó nota de Credito por descuento"
+                            recibo.concepto=recibo.concepto+". Se generó nota de Credito Nro.:${notaDCInstance.numero} por descuento"
                             recibo.save()
                             log.info "Se generó nota de crédito por descuentos"
                             return recibo

@@ -179,10 +179,11 @@ Ext.onReady(function(){
                 var saldo = record.data.saldo;
                 return Ext.util.Format.number(saldo,'0.000,00/i');
             }},
+            //{header:"Saldo con Desc.",dataIndex:'saldocondescuento',width:80,renderer:customCurrency},
             {header:"Débitos",dataIndex:'debito',width:80,renderer:customCurrency},
             {header:"Créditos",dataIndex:'credito',width:80,renderer:customCurrency},
             {header:"Recibos",dataIndex:'recibo',width:80,renderer:customCurrency},
-            //{header:"Saldo con Desc.",dataIndex:'saldocondescuento',width:80,renderer:customCurrency},
+
             {header:"Razón Social",dataIndex:'razonSocial',width:200,sortable:false},
 					{header:"Exposición",dataIndex:'expoNombre',width:200,sortable:true},
 					{header:"Año",dataIndex:'anio',width:80},					

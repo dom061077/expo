@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat
 import com.rural.enums.TipoNotaEnum
 import com.rural.enums.TipoGeneracionEnum
 import java.util.Collection
+import com.rural.utils.Util
 
 
 
@@ -211,6 +212,16 @@ class OrdenReservaService {
 		ord.totalsindesc = ord.subTotalsindesc+ivaGralSindesc+ivaSujNoCategSindesc
     	ord.total=Math.round(ord.total*Math.pow(10,2))/Math.pow(10,2);
 		ord.totalsindesc = Math.round(ord.totalsindesc*Math.pow(10,2))/Math.pow(10,2);
+
+        def totalRedondeado = (Double)Util.redondear(ord.total,0)
+        ord.redondeo =  totalRedondeado - ord.total
+        ord.redondeo = Math.round(ord.redondeo*Math.pow(10,2))/Math.pow(10,2);
+
+        ord.total = totalRedondeado
+        totalRedondeado = (Double)Util.redondear(ord.totalsindesc,0)
+        ord.totalsindesc = (Double)Util.redondear(ord.totalsindesc,0)
+
+
 		ord.empresa=empresaInstance
 		ord.fechaAlta=new java.sql.Date((new java.util.Date()).getTime())
     	if(ord.validate()){

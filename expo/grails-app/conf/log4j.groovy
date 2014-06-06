@@ -73,7 +73,7 @@
   /**
    * Category - shared definition by custom groupping
    */
-  def app = ['grails.app','org.quartz']
+  def app = ['grails.app','org.quartz'/*,'net.sf.jasperreports'*/]
   app.each {
     	'category'(name: it, additivity: 'true') {
 			'priority'(value: 'TRACE');'appender-ref'('ref':"APP_LOG");  'appender-ref'('ref': "CONSOLE")}
