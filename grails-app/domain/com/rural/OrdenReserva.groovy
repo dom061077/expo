@@ -25,6 +25,7 @@ class OrdenReserva {
 	Double subTotalsindesc=0
 	Double total=0
 	Double totalsindesc=0
+    Float redondeo
 	Integer anio
 	Boolean ivaGralCheck = false
 	Boolean ivaRniCheck = false
@@ -84,15 +85,10 @@ class OrdenReserva {
 	
 	//-------------------datos trasient--------------
 	static transients = ['totalConDescuentos','subTotalConDescuento','descAplicadosEnFecha','difTotalDesc','ivaGralCalc'
-                        ,'ivaRniCalc','ivaSujNoCategCalc','descuentosPorFecha','saldo','saldoConDescuento','redondeo','totalFinal']
+                        ,'ivaRniCalc','ivaSujNoCategCalc','descuentosPorFecha','saldo','saldoConDescuento']
 
-    Double getTotalFinal(){
-        return (Double)Util.redondear(total,0)
-    }
+
     
-    Double getRedondeo(){
-        return  (Double)Util.redondear(total,0) - total
-    }
 
     Double getIvaSujNoCategCalc(){
         if(ivaRniCheck && porcentajeResIns>=0)
@@ -115,7 +111,7 @@ class OrdenReserva {
         def sf = new SimpleDateFormat("yyyy-MM-dd")
         def fecha =  java.sql.Date.valueOf(sf.format(todayCal.getTime()))
         def subTotalOrden = 0
-        if(detalle.size()>0){
+        if(detalle?.size()>0){
             List<DetalleServicioContratadoDescuentos> porcentajesDesc = new ArrayList<DetalleServicioContratadoDescuentos>();
             detalle.each{ det->
                 det.descuentos.sort{a,b-> a.fechaVencimiento.compareTo(b.fechaVencimiento)}
@@ -263,7 +259,7 @@ class OrdenReserva {
         def totalOrden = subTotalConDescuento+ivaGralLocal+ivaSujNoCategLocal
 
 		//totalOrden = Math.round(totalOrden*Math.pow(10,2))/Math.pow(10,2);
-		return totalOrden
+		return (Double) Util.redondear(totalOrden,0)
 	}
 	
 	static belongsTo = [empresa:Empresa,usuario:Person,expo:Exposicion] 
