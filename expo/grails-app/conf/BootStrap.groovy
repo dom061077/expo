@@ -42,13 +42,13 @@ class BootStrap {
      		switch (Environment.current){
      				
      				case Environment.DEVELOPMENT:
-     					createUserIfRequired()			 
-     					createAdminUserIfRequired()
- 					    modificacionUnicaSectoresLotes()
+     					//createUserIfRequired()
+     					//createAdminUserIfRequired()
+ 					    //modificacionUnicaSectoresLotes()
      					break;
      				case Environment.PRODUCTION:
      					//createAdminUserIfRequired()
-					 	modificacionUnicaSectoresLotes()
+					 	//modificacionUnicaSectoresLotes()
      					break;
      				//case Environment.TEST:
      				//	createAdminUserIfRequired()
