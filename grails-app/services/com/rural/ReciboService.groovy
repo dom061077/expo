@@ -88,7 +88,20 @@ class ReciboService {
                         notaDCInstance.tipoGen = TipoGeneracionEnum.TIPOGEN_AUTOMATICA
                         notaDCInstance.tipo = TipoNotaEnum.NOTA_CREDITO
                         notaDCInstance.addToDetalle(new NotadcDetalle(descripcion:"Descuento en sector por pago antes de vencimiento",subTotal:difParaNotaDC))
-                        notaDCInstance.subTotal = difParaNotaDC
+                        /*
+		nota.ivaGral = nota.subTotal*(ordenReservaInstance.porcentajeResIns > 0 ? ordenReservaInstance.porcentajeResIns : ordenReservaInstance.porcentajeResNoIns)/100
+		nota.ivaRni = nota.subTotal+nota.ivaGral
+		if(ordenReservaInstance.ivaRniCheck && ordenReservaInstance.porcentajeResIns>=0)
+			nota.ivaSujNoCateg=nota.ivaRni*10.5/100
+
+                        * */
+                        notaDCInstance.subTotal = 100*difParaNotaDC/121
+                        notaDCInstance.ivaGral = notaDCInstance.subTotal*(ord.porcentajeResIns > 0 ? ord.porcentajeResIns : ord.porcentajeResNoIns)/100
+                        notaDCInstance.ivaRni = notaDCInstance.subTotal+notaDCInstance.ivaGral
+                        if(ord.ivaRniCheck && ord.porcentajeResIns>=0)
+                            notaDCInstance.ivaSujNoCateg=notaDCInstance.ivaRni*10.5/100
+
+
                         notaDCInstance.total = difParaNotaDC
                         if(notaDCInstance.save()){
                             recibo.concepto=recibo.concepto+". Se generó nota de Credito Nro.:${notaDCInstance.numero} por descuento"
