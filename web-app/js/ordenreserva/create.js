@@ -1,7 +1,7 @@
 Ext.onReady(function(){
 	Ext.QuickTips.init();
 
-	//este store es para una búsqueda local de empresas
+	//este store es para una bï¿½squeda local de empresas
 	/*var empresaStore = new Ext.data.JsonStore({
 		//autoLoad:true,
 		root:'rows',
@@ -12,7 +12,7 @@ Ext.onReady(function(){
 	*/
 	
     
-/*grilla de búsqueda de empresa*/
+/*grilla de bï¿½squeda de empresa*/
 	
 	
 	
@@ -46,7 +46,7 @@ Ext.onReady(function(){
 	        //alert( "CUIT Menor a 11 Caracteres" );
 	    } else {
 	        x=i=dv=0;
-	        // Multiplico los dígitos.
+	        // Multiplico los dï¿½gitos.
 	        vec[0] = cuit.charAt(  0) * 5;
 	        vec[1] = cuit.charAt(  1) * 4;
 	        vec[2] = cuit.charAt(  2) * 3;
@@ -782,7 +782,7 @@ Ext.onReady(function(){
 				if(jsonObject.denegado)
 					Ext.MessageBox.show({
 						title:'Mensaje',
-						msg:'No está autorizado a ingresar a esta opciÃ³n'
+						msg:'No estï¿½ autorizado a ingresar a esta opciÃ³n'
 					});*/
 			}
 		}
@@ -1657,6 +1657,7 @@ Ext.onReady(function(){
 		var conn = new Ext.data.Connection();
 		conn.request({
 			url:'generarordenreserva',
+
 			method:'POST',
 			params:{
 				id:datos.exposicionId.id,
@@ -1734,11 +1735,25 @@ Ext.onReady(function(){
 				}
 			},
 			failure: function(resp,opt){
-				var respuesta = Ext.decode(resp.responseText);
+
+				var respuesta;
+                try{
+                  respuesta = Ext.decode(resp.responseText);
+                }catch(ex){
+                    Ext.MessageBox.show({
+                       title:'Error',
+                       msg:'Error en la respuesta del servidor: '+resp.responseText,
+                       icon: Ext.MessageBox.ERROR,
+                       buttons: Ext.MessageBox.OK
+
+                    });
+                    return;
+                }
 				if(respuesta.result){
 					if(respuesta.result.loginredirect==true)
 						Ext.MessageBox.show({
 							title:'Mensaje',
+                            msg:'Su sesiÃ³n de usuario a caducado',
 							icon:Ext.MessageBox.INFO,
 							buttons:Ext.MessageBox.OK,
 							fn:function(btn){
