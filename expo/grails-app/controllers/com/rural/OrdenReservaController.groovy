@@ -157,6 +157,7 @@ class OrdenReservaController {
     
     
     def generarordenreserva = {
+
     	log.info("INGRESANDO AL METODO generarordenreserva DEL CONTROLADOR OrdenReservaController")
     	log.debug("PARAMETROS DE INGRESO: "+params)
     	def iterarDetalleJson = {OrdenReserva ord, def detalle->

@@ -13,7 +13,8 @@
 
 
         
-       	<script type="text/javascript" src='${resource(dir:'js/ordenreserva',file:'create.js')+'?id='+randomlink}'></script>
+       	<!--script type="text/javascript" src='${resource(dir:'js/ordenreserva',file:'create.js')+'?id='+randomlink}'></script-->
+        <script type="text/javascript" src='${resource(dir:'js/ordenreserva',file:'create.js')}'></script>
 
                  
     </head>

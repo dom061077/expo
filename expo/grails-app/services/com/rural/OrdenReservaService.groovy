@@ -107,7 +107,7 @@ class OrdenReservaService {
 		def listDescuentos = ListaDescuentos.createCriteria().list(){
 			and{
 				sector{
-					eq("id",detalle.sector.id)
+					eq("id",detalle?.sector?.id)
 				}
 				ge("fechaVencimiento",fecha)
 			}
