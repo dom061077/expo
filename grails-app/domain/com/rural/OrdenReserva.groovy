@@ -110,7 +110,8 @@ class OrdenReserva {
         def todayCal = Calendar.getInstance()
         def sf = new SimpleDateFormat("yyyy-MM-dd")
         def fecha =  java.sql.Date.valueOf(sf.format(todayCal.getTime()))
-        def subTotalOrden = 0
+        def subTotalOrden = subTotal
+
         if(detalle?.size()>0){
             List<DetalleServicioContratadoDescuentos> porcentajesDesc = new ArrayList<DetalleServicioContratadoDescuentos>();
             detalle.each{ det->
@@ -125,7 +126,6 @@ class OrdenReserva {
                 }
             }
 
-            subTotalOrden = subTotal
 
             porcentajesDesc.each{desc ->
                 subTotalOrden = subTotalOrden - desc.detalleServicioContratado.subTotalsindesc*desc.porcentaje/100
@@ -169,7 +169,8 @@ class OrdenReserva {
     }
     
     Double getSaldoConDescuento(){
-        return totalConDescuentos - recibo - credito + debito
+        def saldoReturn = totalConDescuentos - recibo - credito + debito
+        return Util.redondear(saldoReturn,0)
     }
     
     List<DescuentoPorFecha> getDescuentosPorFecha(){

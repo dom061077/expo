@@ -28,8 +28,8 @@
         
         
         <script type="text/javascript">
-            Ext.override(Ext.data.proxy.Ajax, { timeout: 60000 });
-            Ext.override(Ext.form.action.Action, { timeout: 60 });
+            //Ext.override(Ext.data.proxy.Ajax, { timeout: 60000 });
+            //Ext.override(Ext.form.action.Action, { timeout: 60 });
 
 			function serializeform(form){
 				var serial='',values=form.getValues();
