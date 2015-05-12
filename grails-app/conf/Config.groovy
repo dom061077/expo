@@ -65,7 +65,7 @@ mail.error.subject = '[Error en sistema de ordenes de reserva]'
 mail.error.starttls = true
 mail.error.debug = false
 
-
+     /*
 // log4j configuration
 log4j = {
 
@@ -134,4 +134,4 @@ log4j = {
     }
 }
 
-
+   */
