@@ -16,6 +16,7 @@ class NotaDC {
 	TipoGeneracionEnum tipoGen
 	OrdenReserva ordenReserva
 	Double total
+    Double redondeo = new Double(0)
 	Date fechaAlta
 	Boolean anulada = false
 	

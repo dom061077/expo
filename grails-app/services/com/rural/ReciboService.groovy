@@ -4,6 +4,7 @@ package com.rural
 import com.rural.seguridad.Person
 import com.rural.enums.TipoNotaEnum
 import com.rural.enums.TipoGeneracionEnum
+import com.rural.utils.Util
 
 class ReciboException extends RuntimeException{
 	String message
@@ -103,6 +104,11 @@ class ReciboService {
 
 
                         notaDCInstance.total = difParaNotaDC
+                        def totalRedondeado = (Double)Util.redondear(notaDCInstance.total,0)
+                        notaDCInstance.redondeo = totalRedondeado - notaDCInstance.total
+                        notaDCInstance.redondeo = Math.round(notaDCInstance.redondeo*Math.pow(10,2))/Math.pow(10,2);
+                        notaDCInstance.total = totalRedondeado
+
                         if(notaDCInstance.save()){
                             recibo.concepto=recibo.concepto+". Se generó nota de Credito Nro.:${notaDCInstance.numero} por descuento"
                             recibo.save()
