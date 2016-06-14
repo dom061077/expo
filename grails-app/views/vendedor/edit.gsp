@@ -11,7 +11,7 @@
         		
         	%>
         </script>
-        <script type="text/javascript" src='${resource(dir:'js/vendedor',file:'edit.js')}'</script>         
+        <script type="text/javascript" src='${resource(dir:'js/vendedor',file:'edit.js?4')}'></script>
     </head>
     <body>
         <div class="nav">

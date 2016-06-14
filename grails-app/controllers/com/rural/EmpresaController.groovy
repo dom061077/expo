@@ -238,7 +238,7 @@ class EmpresaController {
     		if(isdeleted)
     			empIterator.remove()
     	}
-    	//-----------fin logica para agregar y eliminar expos en que se participó y en las que se participará
+    	//-----------fin logica para agregar y eliminar expos en que se participï¿½ y en las que se participarï¿½
 
     	
         if(empresaInstance) {
@@ -476,7 +476,7 @@ class EmpresaController {
     }
     
     
-    //****************************métodos para el manejo inserción a partir de archivos excel********
+    //****************************mï¿½todos para el manejo inserciï¿½n a partir de archivos excel********
     def uploadtest = {
     	log.info("INGRESANDO AL METODO uploadtest DELCONTROLADOR EmpresaController")
     	render(contentType:"text/json"){
@@ -513,7 +513,7 @@ class EmpresaController {
 			  session.setAttribute("progressMapSave",["total":sheet.rows,"salvados":0])
 			  Empresa empresa
 			  int cantErrores = 0
-			  //el archivo tendrá un fila con los nombres de columna por eso comienzo a leer desde la fila 1
+			  //el archivo tendrï¿½ un fila con los nombres de columna por eso comienzo a leer desde la fila 1
 			  Empresa.withSession{session->
 			  for(int r = 1; r < sheet.rows; r++){
 			  	subrubro=SubRubro.findByNombreSubrubro(sheet.getCell(1,r).contents)
@@ -776,6 +776,17 @@ class EmpresaController {
 	     def header = [:]
 	     header.cuit = "C.U.I.T"
 	     header.nombre = "Nombre"
+         header.razonSocial = "RazÃ³n Social"
+         header.direccion = "DirecciÃ³n"
+         header.direccionFiscal = "DirecciÃ³n Fisal"
+         header.email= "E-mail"
+         header.localidad?.nombreLoc = "Localiad"
+         header.localidad?.provincia?.nombre= "Provincia"
+         header.observaciones = "Observaciones"
+         header.telefono1 = "TÃ©lÃ©fono 1"
+         header.telefono2 = "TelÃ©fono 2"
+         header.subrubro?.nombreSubrubro = "Rubro"
+         header.vendedor?.nombre = "Vendedor"
 	     /*header.top = "Interval Top (mbsf)"
 	     header.bottom = "Interval Bottom (mbsf)"
 	     header.samplesRequested = "Samples Requested"
