@@ -313,6 +313,12 @@ class OrdenReservaService {
 			notad.ivaSujNoCateg=notad.ivaRni*10.5/100
 		notad.total=notad.subTotal+notad.ivaGral+notad.ivaSujNoCateg
 		notad.total=Math.round(notad.total*Math.pow(10,2))/Math.pow(10,2)
+                
+                def totalRedondeado = (Double)Util.redondear(notad.total,0)
+                notad.redondeo = totalRedondeado - notad.total
+                notad.redondeo = Math.round(notad.redondeo*Math.pow(10,2))/Math.pow(10,2)
+                notad.total = totalReondeado
+                
 		if(notad.subTotal>0){
 			log.info "SUBTOTAL MAYOR A CERO"
 			if(notad.save()){
@@ -397,6 +403,10 @@ class OrdenReservaService {
 		
 		nota.total=nota.subTotal+nota.ivaGral+nota.ivaSujNoCateg
 	
+                def totalRedondeado = (Double)Util.redondear(nota.total,0)
+                nota.redondeo = totalRedondeado - nota.total
+                nota.redondeo = Math.round(nota.redondeo*Math.pow(10,2))/Math.pow(10,2)
+                nota.total = totalRedondeado
 						
 		//ordenReservaInstance.addToNotas(nota)
 		nota.ordenReserva = ordenReservaInstance
