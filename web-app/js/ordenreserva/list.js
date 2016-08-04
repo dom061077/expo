@@ -381,9 +381,27 @@ Ext.onReady(function(){
         					buttons:Ext.MessageBox.OK
         				});	
         			}
-        		}
+                                }
         		
-        }]/*,
+                    },{
+                                text:'Venc. Desc.',
+                                handler:function(){
+                                    var sm = grid.getSelectionModel();
+                                    var sel = sm.getSelected();
+                                    if(sm.hasSelection()){
+                                        window.location='listvencdescuentos?id='+sel.data.ordenId;
+                                    }else{
+        				Ext.MessageBox.show({
+        					title:'Advertencia',
+        					msg:'Seleccione una fila de la grilla para ver los vencimientos',
+        					icon:Ext.MessageBox.WARNING,
+        					buttons:Ext.MessageBox.OK
+        				});	
+                                    }
+                                    
+                                }
+                    }
+                ]/*,
         bbar: new Ext.PagingToolbar({
             	pageSize: 10,
             	store: ordenStore,

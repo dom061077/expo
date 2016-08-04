@@ -10,6 +10,7 @@ class Recibo {
 	Boolean anulado = false
 	Double total
 	Double efectivo
+        
 	String concepto
 	OrdenReserva ordenReserva
 	Person usuario
