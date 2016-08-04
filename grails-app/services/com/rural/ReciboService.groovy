@@ -4,6 +4,7 @@ package com.rural
 import com.rural.seguridad.Person
 import com.rural.enums.TipoNotaEnum
 import com.rural.enums.TipoGeneracionEnum
+import com.rural.utils.Util
 
 class ReciboException extends RuntimeException{
 	String message
@@ -68,6 +69,7 @@ class ReciboService {
 				 */
 				saldo = Math.round(saldo*Math.pow(10,2))/Math.pow(10,2);     
                 recibo.total = Math.round(recibo.total*Math.pow(10,2))/Math.pow(10,2);
+                
                 def difParaNotaDC =  Math.round((ord.total-ord.totalConDescuentos)*Math.pow(10,2))/Math.pow(10,2)
 
 				

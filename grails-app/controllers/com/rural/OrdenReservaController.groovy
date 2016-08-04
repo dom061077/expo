@@ -1025,8 +1025,15 @@ class OrdenReservaController {
 	    	}
     	}*/
     }
-		
-	def export = {
+
+    def listvencdescuentos = {
+        log.info "Ingresando al método listvencdescuentos"
+        def ordenInstance = OrdenReserva.load(Long.valueOf(params.id))
+        return[ordenInstance:ordenInstance]
+    }
+    
+    
+    def export = {
 		log.info("INGRESANDO AL METODO exportexcel DEL CONTROLADOR OrdenReservaController")
 		log.debug("PARAMETROS DE INGRESO: "+params)
 		def totalOrdenes
