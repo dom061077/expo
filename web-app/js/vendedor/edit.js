@@ -129,14 +129,14 @@ Ext.onReady(function(){
 			
 	});
 	
-	Ext.getCmp('nombreid').focus();
+	//Ext.getCmp('nombreid').focus();
 	vendedor_form.load({
 		url:'showjson'
 		,params:{
 			'id':vendedorId
 		},
 		success:function(f,a){
-			Ext.getCmp('nombreid').setValue(a.result.data.nombre);
+			//Ext.getCmp('nombreid').setValue(a.result.data.nombre);
 		}
 	});
 });

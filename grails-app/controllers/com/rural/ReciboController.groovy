@@ -122,7 +122,7 @@ class ReciboController {
 		}
 		log.debug(recibo.usuario.userRealName)
 
-		//-------recuperacion de desde la instancia de logo correspondiente a la exposicion y al año de la Orden
+		//-------recuperacion de desde la instancia de logo correspondiente a la exposicion y al aï¿½o de la Orden
 		def listlogos = Logo.createCriteria().list(){
 			and{
 				expo{
@@ -177,7 +177,12 @@ class ReciboController {
 			cheques.add(new Cheque(numero:it.numero,banco:it.banco,importe:it.importe,vencimiento:fechaVence))
 		}
 		
-		Double efectivo = new Double((params.efectivo)) 
+		Double efectivo = Double.parseDouble("0")
+        try{
+           efectivo = new Double((params.efectivo))
+        }catch(Exception e){
+
+        }
 		
 		def recibo 
 		

@@ -32,7 +32,7 @@ Ext.onReady(function(){
 								,buttons:Ext.MessageBox.OK
 								,icon:Ext.MessageBox.INFO
 								,fn:function(btn){
-									window.location='create'
+									window.location='list'
 								}
 							});
 							
@@ -75,5 +75,5 @@ Ext.onReady(function(){
 			
 		]
 	});
-	Ext.getCmp('nombreid').focus();
+	//Ext.getCmp('nombreid').focus();
 });

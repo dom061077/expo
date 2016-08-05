@@ -276,6 +276,7 @@ class OrdenReservaController {
     		log.debug(it)
     	}
     	log.debug(ordenReservaInstance.expo.nombre)
+        log.debug(ordenReservaInstance.vendedor.nombre)
     	log.debug(ordenReservaInstance.usuario.userRealName)
     	log.debug(ordenReservaInstance.localidad?.nombreLoc)
     	log.debug(ordenReservaInstance.localidad?.provincia?.nombre)
