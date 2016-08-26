@@ -1033,6 +1033,81 @@ class OrdenReservaController {
         return[ordenInstance:ordenInstance]
     }
     
+    def listvencdescuentosjson = {
+        log.info "Ingresando al método listvencdescuentosjson"
+        def ordenReservaInstance = OrdenReserva.get(params.id)
+        render(contentType:"text/json"){
+                total	ordenReservaInstance?.detalle?.descuentos?.size()*ordenReservaInstance?.detalle?.size()
+                rows{
+                        ordenReservaInstance?.detalle?.each{itd->
+                            itd?.descuentos?.each{
+                                row(id:it.id
+                                    ,sector:it.detalleServicioContratado?.sector?.nombre
+                                    ,lote:it.detalleServicioContratado?.lote?.nombre
+                                    ,vencimiento:it.fechaVencimiento
+                                    ,porcentaje:it.porcentaje)
+                            }
+                        }
+                }
+        }
+        
+    }
+    
+    def updatevencjson = {
+        log.info "INGRESANDO AL METODO updatevencjson, Parametros: $params"
+        def vencInstance = DetalleServicioContratadoDescuentos.get(params.vencimientoId)
+        if(!vencInstance){
+                render(contentType:"text/json"){
+                        success false
+                        errors{
+                                title "Vencimiento no encontrado con Id: $params.id"
+                        }
+                }
+                return
+        }
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy")
+        java.util.Date vencimiento = df.parse(params.vencimiento.substring(0,10))
+        vencInstance.fechaVencimiento = new java.sql.Date(vencimiento.getTime())
+        if(vencInstance.save()){
+                render(contentType:"text/json"){
+                        success true
+                }
+            
+        }else{
+                render(contentType:"text/json"){
+                        success false
+                        errors{
+                            title "Error al guardar los cambios en el vencimiento"
+                        }
+                }
+            
+        }
+    }
+
+    def editvencjson = {
+        def vencInstance = DetalleServicioContratadoDescuentos.get(params.id)
+        if(vencInstance){
+            render(contentType:"text/json"){
+                    success true
+                    data(id:vencInstance.id,vencimiento:vencInstance.fechaVencimiento
+                        ,porcentaje:vencInstance.porcentaje
+                        ,numeroOrden:vencInstance?.detalleServicioContratado?.ordenReserva?.numero
+                        ,sector:vencInstance?.detalleServicioContratado?.sector?.nombre
+                        ,lote:vencInstance?.detalleServicioContratado?.lote?.nombre)
+            }
+            
+        }else{
+            render(contentType:"text/json"){
+                    success false
+            }
+        }
+    }
+    
+    def editvencimiento = {
+        def vencInstance = DetalleServicioContratadoDescuentos.get(params.id);
+        return[vencInstance:vencInstance]
+    }
+    
     
     def export = {
 		log.info("INGRESANDO AL METODO exportexcel DEL CONTROLADOR OrdenReservaController")
