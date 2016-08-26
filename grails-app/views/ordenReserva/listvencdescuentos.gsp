@@ -13,10 +13,14 @@
         <title>Vencimientos de Descuentos</title>
         <script type="text/javascript" src='${resource(dir:'js/ordenreserva',file:'vencdescuentos.js')}'>
         </script>        
+        <script type="text/javascript">
+            var ordenId = '<% out << "${ordenInstance.id}";%>';
+        </script>    
     </head>
     <body>
         Vencimientos de la orden N°: ${ordenInstance.numero}
         <div id="vencimientos-grid">
+            <a href="listvencdescuentos.gsp"></a>
         </div>
     </body>
 </html>

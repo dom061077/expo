@@ -16,7 +16,7 @@ class NotaDC {
 	TipoGeneracionEnum tipoGen
 	OrdenReserva ordenReserva
 	Double total
-    Double redondeo = new Double(0)
+        Double redondeo = new Double(0)
 	Date fechaAlta
 	Boolean anulada = false
 	
@@ -24,7 +24,6 @@ class NotaDC {
 	Double ivaGral=0
 	Double ivaRni=0/*es el resultado subtotal neto + ivaGral*/
 	Double ivaSujNoCateg=0 /*es mayor a cero cuando la condicion de IVA es ivaRniCheck true*/
-        Double redondeo=0
 	static belongsTo = [ordenReserva:OrdenReserva]
 	static hasMany = [detalle:NotadcDetalle]
     static constraints = {
